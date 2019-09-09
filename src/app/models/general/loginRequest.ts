@@ -1,5 +1,5 @@
 export class loginRequest {
-    Username:string;
+    user:string;
     Password:string;
-    emp_codi:number;
+    business:number;
 }

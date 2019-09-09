@@ -1,10 +1,13 @@
 import { Component, OnInit } from "@angular/core";
-import { AuthService } from "../../service/auth/auth.service";
+import { AuthService } from "../../services/auth/auth.service";
 import { Router } from "@angular/router";
 import { NgForm } from "@angular/forms";
 import { loginRequest } from "../../models/general/loginRequest";
-import { NavController } from "@ionic/angular";
-import { AlertService } from "../../service/alert/alert.service";
+import { NavController, ModalController } from "@ionic/angular";
+import { AlertService } from "../../services/alert/alert.service";
+import { SessionService } from "../../services/session/session.service";
+import { BusinessPage } from "../business/business.page";
+import { ThirdPartie } from "../../models/general/user";
 
 @Component({
   selector: "app-login",
@@ -13,33 +16,61 @@ import { AlertService } from "../../service/alert/alert.service";
 })
 export class LoginPage implements OnInit {
   loading = false;
-  showPass=false;
+  showPass = false;
   user: loginRequest = new loginRequest();
   constructor(
     private auth: AuthService,
     private router: Router,
     private _alert: AlertService,
-    private _nav: NavController
+    private _nav: NavController,
+    private _sesion: SessionService,
+    private _modal: ModalController
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
 
-  signIn() {
-    this.user.emp_codi = 1;
-    this.loading = true;
-    console.log(this.user);
-    this.auth.signIn(this.user).subscribe(resp => {
-      console.log(resp);
-      this.loading = false;
-      if (resp.result == 1) {
- 
-        this._alert.showAlert("Ingreso fallido", `${resp.errorMessage}`);
-      }
-    },err=> {
-      this.loading=false;
-      this._alert.showAlert('Error',err);
-    });
+    this.LoadBusiness();
   }
 
+  async LoadBusiness() {
+    const business = this._sesion.GetBussiness();
+    console.log(business);
+    if (business===undefined) {
+      await this.showModalBusiness();
+    }
+  }
 
+  async showModalBusiness() {
+    const modal = await this._modal.create({
+      component: BusinessPage
+    });
+
+    return await modal.present();
+  }
+
+  signIn() {
+    const businessStorage = this._sesion.GetBussiness();
+    this.user.business = businessStorage.CodigoEmpresa;
+    this.loading = true;
+    console.log(this.user);
+    this.auth.signIn(this.user).subscribe(
+      resp => {
+        console.log(resp);
+        this.loading = false;
+        if (resp.Retorno === 1) {
+          this._alert.showAlert('Ingreso fallido', `${resp.TxtError}`);
+        } else {
+          const user: ThirdPartie = resp.ObjTransaction;
+          this._alert.showAlert(
+            'Bienvenido!',
+            `Ingresaste como ${user.NombreCompleto}`
+          );
+        }
+      },
+      err => {
+        this.loading = false;
+        this._alert.showAlert('Error', err);
+      }
+    );
+  }
 }

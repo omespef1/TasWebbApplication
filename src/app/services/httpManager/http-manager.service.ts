@@ -11,7 +11,7 @@ import { retry, catchError, filter } from "rxjs/operators";
   providedIn: "root"
 })
 export class HttpManagerService {
-  baseUrl: string = "http://localhost:52471/api";
+  baseUrl: string = "http://localhost/RTASWEB/api";
   private httpOptions: {
     headers: HttpHeaders;
   };
@@ -32,7 +32,7 @@ export class HttpManagerService {
     };
 
     return this._http
-      .get<T>(`${this.baseUrl}${urlController}?emp_codi=1`, <object>options)
+      .get<T>(`${this.baseUrl}${urlController}`, <object>options)
       .pipe(
         retry(3), // reintenta la petición 3 veces
         catchError(err => this.handleError(err)) // then handle the error

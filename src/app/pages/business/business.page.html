@@ -1,0 +1,12 @@
+<app-header headerName="Seleccione su empresa">
+
+</app-header>
+
+<ion-content>
+ <ion-list>
+   <ion-item tappable *ngFor="let business of businessList" (click)="SetBusiness(business)">
+     <ion-icon slot="start" name="home"></ion-icon>
+     <ion-label>{{business.NombreEmpresa}}</ion-label>
+   </ion-item>
+ </ion-list>
+</ion-content>

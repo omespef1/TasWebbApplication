@@ -1,6 +1,6 @@
 export interface transaction {
 
-    errorMessage:string;
-    result:number;
-    Obj:any;
+    TxtError:string;
+    Retorno:number;
+    ObjTransaction:any;
 }
