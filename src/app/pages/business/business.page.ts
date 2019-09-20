@@ -32,9 +32,7 @@ export class BusinessPage implements OnInit {
     });
   }
 
-  async  SetBusiness(business: business) {
-    this._sesion.SetBusiness(business);
-    const modal = await this._modal.getTop();
-    modal.dismiss();
+   async SetBusiness(business: business) {
+    await this._modal.dismiss(business);
   }
 }

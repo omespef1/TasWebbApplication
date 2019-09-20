@@ -4,3 +4,8 @@ export interface transaction {
     Retorno:number;
     ObjTransaction:any;
 }
+
+export interface transaction {
+
+
+}

@@ -5,7 +5,7 @@ import {
   HttpErrorResponse
 } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
-import { retry, catchError, filter } from "rxjs/operators";
+import { retry, catchError, filter, map } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
@@ -30,7 +30,7 @@ export class HttpManagerService {
       headers: new HttpHeaders(headerDict),
       observe: "body"
     };
-
+console.log(`${this.baseUrl}${urlController}`);
     return this._http
       .get<T>(`${this.baseUrl}${urlController}`, <object>options)
       .pipe(
@@ -55,7 +55,9 @@ export class HttpManagerService {
     console.log(body);
     return this._http
       .post<T>(`${this.baseUrl}${urlController}`, body, <object>bodyRequest)
-      .pipe(catchError(err => this.handleError(err)));
+      .pipe(
+        catchError(err => this.handleError(err))        
+        );
   }
 
   private handleError(error: HttpErrorResponse) {

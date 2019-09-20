@@ -1,6 +1,8 @@
-export interface ThirdPartie {
+export class ThirdPartie {
     IdEmpresa: number;
     IdTercero: number;
     NombreCompleto: string;
     Identificacion: string;
+    NombreRazon:string;
+    PrimerApellido:string;
 }

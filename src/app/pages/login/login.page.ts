@@ -35,7 +35,7 @@ export class LoginPage implements OnInit {
   async LoadBusiness() {
     const business = this._sesion.GetBussiness();
     console.log(business);
-    if (business===undefined) {
+    if (business==null) {
       await this.showModalBusiness();
     }
   }
@@ -44,7 +44,10 @@ export class LoginPage implements OnInit {
     const modal = await this._modal.create({
       component: BusinessPage
     });
-
+      modal.onDidDismiss().then((resp)=>{
+       console.log(resp);
+         this._sesion.SetBusiness(resp.data);
+     })
     return await modal.present();
   }
 
@@ -57,7 +60,7 @@ export class LoginPage implements OnInit {
       resp => {
         console.log(resp);
         this.loading = false;
-        if (resp.Retorno === 1) {
+        if (resp.Retorno == 1) {
           this._alert.showAlert('Ingreso fallido', `${resp.TxtError}`);
         } else {
           const user: ThirdPartie = resp.ObjTransaction;
@@ -65,6 +68,7 @@ export class LoginPage implements OnInit {
             'Bienvenido!',
             `Ingresaste como ${user.NombreCompleto}`
           );
+          this.router.navigateByUrl('vehicle')
         }
       },
       err => {
@@ -72,5 +76,8 @@ export class LoginPage implements OnInit {
         this._alert.showAlert('Error', err);
       }
     );
+  }
+  changeBusiness(){
+    this.showModalBusiness(); 
   }
 }

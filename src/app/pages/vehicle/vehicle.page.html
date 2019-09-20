@@ -1,9 +1,44 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>vehicle</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header headerName="Conductor">
 
-<ion-content>
+</app-header>
 
+<ion-content fullscreen class="ion-padding" >
+    <ion-list lines="none">
+      <ion-list-header color="success">
+        <ion-label>Información general</ion-label>
+      </ion-list-header>
+        <ion-item>
+          <ion-icon slot="start" name="contact"></ion-icon>
+          <ion-label>Conductor</ion-label>
+           <ion-note slot="end"> {{thirdPartie.NombreRazon}} {{ thirdPartie.PrimerApellido }} </ion-note>
+        </ion-item>   
+        <ion-item>
+          <ion-icon slot="start" name="alarm"></ion-icon>
+          <ion-label>Fecha Actual</ion-label>
+          <ion-note slot="end"> {{ today | date:'dd/mm/yyyy'}}</ion-note>
+        </ion-item>        
+      </ion-list>
+
+      <ion-list lines="none" *ngFor="let vehicle of vehicles">
+        <ion-list-header color="success">
+          <ion-label>Vehículos</ion-label>
+        </ion-list-header>
+        <ion-item >
+          <ion-icon slot="start" name="car"></ion-icon>
+          <ion-label>Vehículo</ion-label>
+          <ion-note slot="end">{{vehicle.PlacaVehiculo}}</ion-note>
+        </ion-item>
+        <ion-item>
+          <ion-icon slot="start" name="stopwatch"></ion-icon>
+          <ion-label>Último kilometraje</ion-label>
+          <ion-note slot="end"> {{vehicle.Kilometraje}}</ion-note>
+        </ion-item>
+        <ion-item text-center button color="secondary" >
+          <ion-icon slot="start" name="checkmark-circle"></ion-icon>
+          Seleccionar vehículo
+        </ion-item>
+      </ion-list>
+
+
+    
 </ion-content>
