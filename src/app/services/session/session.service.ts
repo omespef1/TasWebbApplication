@@ -20,4 +20,7 @@ export class SessionService {
   GetThirdPartie(): ThirdPartie {
     return JSON.parse(localStorage.getItem('thirdPartie'));
   }
+  SetKilometerCar(kilometer:number){
+    localStorage.setItem('kilometer', kilometer.toString());
+  }
 }
