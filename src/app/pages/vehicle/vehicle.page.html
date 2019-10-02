@@ -1,10 +1,13 @@
-<app-header headerName="Conductor">
+<ion-header>
+  <ion-toolbar>
+    <ion-searchbar showCancelButton="always" debounce="500" (ionChange)="filterVehicles($event)" animated placeholder="Búsqueda por placa"></ion-searchbar>
 
-</app-header>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content fullscreen class="ion-padding" >
     <ion-list lines="none">
-      <ion-list-header color="success">
+      <ion-list-header color="primary">
         <ion-label>Información general</ion-label>
       </ion-list-header>
         <ion-item>
@@ -18,9 +21,11 @@
           <ion-note slot="end"> {{ today | date:'dd/mm/yyyy'}}</ion-note>
         </ion-item>        
       </ion-list>
-
-      <ion-list lines="none" *ngFor="let vehicle of vehicles">
-        <ion-list-header color="success">
+     <ion-item-divider>
+       <ion-label>Lista de vehículos</ion-label>
+     </ion-item-divider>
+      <ion-list lines="none" *ngFor="let vehicle of vehiclesFilter">
+        <ion-list-header color="primary">
           <ion-label>Vehículo</ion-label>
         </ion-list-header>
         <ion-item >
@@ -28,18 +33,17 @@
           <ion-label>Placa</ion-label>
           <ion-note slot="end">{{vehicle.PlacaVehiculo}}</ion-note>
         </ion-item>
-        <ion-item>
+        <!-- <ion-item>
           <ion-icon slot="start" name="stopwatch"></ion-icon>
           <ion-label>Último kilometraje</ion-label>
           <ion-note slot="end"> {{vehicle.Kilometraje}}</ion-note>
-        </ion-item>
+        </ion-item> -->
         <ion-item>
           <ion-icon slot="start" name="stopwatch"></ion-icon>        
-          <ion-input [(ngModel)]="vehicle.nuevoKilometraje" type="text" placeholder="Ingrese el kilometraje"></ion-input>
+          <ion-input [(ngModel)]="vehicle.NuevoKilometraje" type="number" placeholder="Ingrese el kilometraje"></ion-input>
         </ion-item>
-        <ion-item [disabled]="vehicle.nuevoKilometraje==0" text-center button color="secondary" (click)="checkVehicle(vehicle)" >
-          <ion-icon slot="start" name="checkmark-circle"></ion-icon>
-          Seleccionar vehículo        
+        <ion-item  text-center button color="secondary" (click)="checkVehicle(vehicle)" >
+          <ion-icon slot="start" name="checkmark-circle"></ion-icon> Seleccionar
         </ion-item>        
       </ion-list>
 

@@ -24,4 +24,10 @@ export class VehicleService {
   GetDocumentsValidation(business:business,ThirdPartie:ThirdPartie,car:vehicle){
     return this._http.Get<transaction>(`/Vehicle/ValidaDocumentos?business=${ business.CodigoEmpresa}&IdTercero=${ThirdPartie.IdTercero}&identificacion=${ThirdPartie.Identificacion}&idVehiculo=${car.IdVehiculo}`)
   }
+  GetManPendientes(business:business,vehicle:vehicle){
+    return this._http.Get<transaction>(`/Vehicle/ManPendientes?business=${business.CodigoEmpresa}&idVehiculo=${vehicle.IdVehiculo}`);
+  }
+  ArmaProtocolo(business:business,vehicle:vehicle,ThirdPartie:ThirdPartie){
+    return this._http.Get<transaction>(`/Vehicle/ArmaProtocolo?business=${business.CodigoEmpresa}&idVehiculo=${vehicle.IdVehiculo}&identificacion=${ThirdPartie.Identificacion}`);
+  }
 }
