@@ -52,9 +52,10 @@ export class LoginPage implements OnInit {
   }
 
   signIn() {
+    this.loading = true;
     const businessStorage = this._sesion.GetBussiness();
     this.user.business = businessStorage.CodigoEmpresa;
-    this.loading = true;
+    
     console.log(this.user);
     this.auth.signIn(this.user).subscribe(
       resp => {

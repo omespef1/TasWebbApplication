@@ -11,13 +11,23 @@ import { enlistment } from 'src/app/models/enlistmen/enlistmen';
 export class EnlistmentPage implements OnInit {
 
   constructor(private _service:EnlistmentService,private _sesion:SessionService) { }
-  enlistment:enlistment[]=[];
+  enlistment:enlistment[]= [];
+  loading=false;
   ngOnInit() {
     this.GetQuestions();
   }
  GetQuestions(){
+   this.loading=true;
  this._service.GetQuestions(this._sesion.GetBussiness(),this._sesion.GetThirdPartie()).subscribe(resp=>{
-   this.enlistment = this.enlistment;
+   this.loading=false;
+   if(resp.Retorno==0){
+    this.enlistment = resp.ObjTransaction;
+   }
+   
  })
+ }
+
+ Guardar(){
+
  }
 }

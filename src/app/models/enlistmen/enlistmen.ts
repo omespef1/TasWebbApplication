@@ -1,9 +1,14 @@
 export class enlistment {
+    
 IdEmpresa:number;
 Id:number;
 PNo:number;
 Pregunta:string;
-SeccioN:string;
+Seccion:string;
 Usuario:string;
 respuesta:string;
+respuestaUsuario:number;
+observaciones:string;
 }
+
+

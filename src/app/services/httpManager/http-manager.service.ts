@@ -5,7 +5,7 @@ import {
   HttpErrorResponse
 } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
-import { retry, catchError, filter, map } from "rxjs/operators";
+import { retry, catchError, filter, map, tap } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
@@ -34,8 +34,12 @@ console.log(`${this.baseUrl}${urlController}`);
     return this._http
       .get<T>(`${this.baseUrl}${urlController}`, <object>options)
       .pipe(
-        retry(3), // reintenta la petición 3 veces
-        catchError(err => this.handleError(err)) // then handle the error
+        tap(resp=>{
+          console.log(resp);
+          retry(3), // reintenta la petición 3 veces
+          catchError(err => this.handleError(err)) // then handle the error
+        })
+      
       );
 
     // return call;
@@ -56,7 +60,11 @@ console.log(`${this.baseUrl}${urlController}`);
     return this._http
       .post<T>(`${this.baseUrl}${urlController}`, body, <object>bodyRequest)
       .pipe(
-        catchError(err => this.handleError(err))        
+        tap(resp=>{
+          console.log(resp);
+          catchError(err => this.handleError(err))      
+        })
+        
         );
   }
 
