@@ -7,7 +7,7 @@ Pregunta:string;
 Seccion:string;
 Usuario:string;
 respuesta:string;
-respuestaUsuario:number;
+respuestaUsuario:string;
 observaciones:string;
 }
 

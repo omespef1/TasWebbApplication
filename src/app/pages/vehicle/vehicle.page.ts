@@ -3,7 +3,7 @@ import { ThirdPartie } from "../../models/general/user";
 import { SessionService } from "../../services/session/session.service";
 import { VehicleService } from "../../services/vehicle/vehicle.service";
 import { vehicle } from "../../models/vehicle/vehicle";
-import { Router } from "@angular/router";
+import { Router, NavigationExtras } from "@angular/router";
 import { AlertService } from "../../services/alert/alert.service";
 import { aliparam } from "src/app/models/vehicle/aliparam";
 import { async } from "@angular/core/testing";
@@ -19,6 +19,8 @@ export class VehiclePage implements OnInit {
   thirdPartie: ThirdPartie = new ThirdPartie();
   vehicles: vehicle[] = [];
   vehiclesFilter: vehicle[] = [];
+  saving=false;
+  loading=false;
 
   constructor(
     private _sesion: SessionService,
@@ -34,6 +36,7 @@ export class VehiclePage implements OnInit {
   }
 
   GetVehicleInformation() {
+    this.loading=true;
     this._vehicle
       .GetVehicleInformation(
         this._sesion.GetBussiness(),
@@ -43,11 +46,13 @@ export class VehiclePage implements OnInit {
         if (resp.Retorno == 0) {
           this.vehicles = resp.ObjTransaction;
           this.vehiclesFilter = this.vehicles;
+          this.loading=false;
         }
       });
   }
 
   checkVehicle(car: vehicle) {
+    this.saving=true;
     if(car.NuevoKilometraje!=null && car.NuevoKilometraje>0){
       this._vehicle
       .GetDocumentsValidation(
@@ -79,17 +84,25 @@ export class VehiclePage implements OnInit {
                     throw Error(resp.TxtError);
                 }
                 this._sesion.SetKilometerCar(car.NuevoKilometraje);
-                this.router.navigateByUrl("enlistment");
+                let params: NavigationExtras = {
+                  state: {
+                    car: car
+                  }
+                };
+                this.saving=false;
+                this.router.navigateByUrl("enlistment", params);
               });
             }
           });
         } catch (err) {
           console.log(err)
+          this.saving=false;
           this._alert.showAlert("error", err);
         }
       });
     
     }else {
+      this.saving=false;
         this._alert.showAlert('Error','Ingrese kilometraje del vehículo');
     }
    

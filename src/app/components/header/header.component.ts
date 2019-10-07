@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { SessionService } from '../../services/session/session.service';
 
 @Component({
   selector: 'app-header',
@@ -7,8 +8,11 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
   @Input() headerName:string;
-  constructor() { }
+  constructor(private _auth: SessionService) { }
 
   ngOnInit() {}
 
+  logged() {
+    return this._auth.GetThirdPartie() != null;
+    }
 }

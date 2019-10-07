@@ -5,67 +5,50 @@
 <ion-content fullscreen>
   <div *ngIf="!loading">
 
-
-    <div *ngFor="let question of enlistment">
-      <ng-container [ngSwitch]="question.Seccion">
-        <ion-list inset="true">
-          <div *ngSwitchCase="1">
-            <ion-list-header color="primary">
-              <ion-label>{{question.Pregunta | uppercase}} </ion-label>
-            </ion-list-header>
-          </div>
-          <div *ngSwitchCase="0">
-
-
-            <ion-radio-group [(ngModel)]="question.respuestaUsuario">
-              <ion-list-header color="secondary">
-                <ion-label>{{question.Pregunta | uppercase}}</ion-label>
+<form #enlistmentForm="ngForm" (ngSubmit)="Guardar()">
+    <div *ngFor="let question of enlistment;let i = index">
+        <ng-container [ngSwitch]="question.Seccion">
+          <ion-list inset="true">
+            <div *ngSwitchCase="1">
+              <ion-list-header color="primary">
+                <ion-label>{{question.Pregunta | uppercase}} </ion-label>
               </ion-list-header>
+            </div>
+            <div *ngSwitchCase="0">
+              <ion-radio-group [(ngModel)]="question.respuestaUsuario" required [name]="'anwser'+ i">
+                <ion-list-header color="secondary">
+                  <ion-label>{{question.Pregunta | uppercase}}</ion-label>
+                </ion-list-header>
+                <ion-item>
+                  <ion-icon color="primary" slot="end" [name]="'checkmark-circle'"></ion-icon>
+                  <ion-label>Si</ion-label>
+                  <ion-radio color="success" slot="start" value="2"></ion-radio>
+                </ion-item>
+                <ion-item>
+                  <ion-icon color="primary" slot="end" [name]="'close-circle'"></ion-icon>
+                  <ion-label>No</ion-label>
+                  <ion-radio color="danger" slot="start" value="1"></ion-radio>
+                </ion-item>
+                <ion-item>
+                  <ion-icon slot="start" name="clipboard"></ion-icon>
+                  <ion-input type="text" clearInput="true" clearOnEdit="true" multiple="true"
+                    placeholder="Ingrese los detalles aquí" [name]="'observacion' + i" [(ngModel)]="question.observaciones"></ion-input>
+                </ion-item>
+              </ion-radio-group>             
+            </div>
+          </ion-list>        
+        </ng-container>    
+      </div>
+      <ion-button [disabled]="!enlistmentForm.form.valid"  expand="block" type="submit" >
+          <ion-icon *ngIf="!saving" slot="start" name="checkmark-circle"></ion-icon>
+          <ion-spinner *ngIf="saving" slot="start"></ion-spinner>
+          GUARDAR
+      </ion-button>
+      
+</form>
 
 
-
-              <ion-item>
-                <ion-icon color="success" slot="end" [name]="'checkmark-circle'"></ion-icon>
-                <ion-label>Si</ion-label>
-                <ion-radio color="success" slot="start" value="2"></ion-radio>
-              </ion-item>
-              <ion-item>
-                <ion-icon color="danger" slot="end" [name]="'close-circle'"></ion-icon>
-                <ion-label>No</ion-label>
-                <ion-radio color="danger" slot="start" value="1"></ion-radio>
-              </ion-item>
-              <ion-item>
-                <ion-icon slot="start" name="clipboard"></ion-icon>
-                <ion-input type="text" clearInput="true" clearOnEdit="true" multiple="true"
-                  placeholder="Ingrese los detalles aquí" [(ngModel)]="question.observaciones"></ion-input>
-              </ion-item>
-            </ion-radio-group>
-            <!-- <ion-radio-group>
-            <ion-item-divider>
-              <ion-label>{{question.Pregunta | uppercase}}</ion-label>
-            </ion-item-divider>
-          
-              <ion-item *ngFor="let item of question.respuestasPosibles">
-                <ion-label>{{item.nombre}}</ion-label>
-                <ion-radio value="item.valor"></ion-radio>
-              </ion-item>          
-                               
-            </ion-radio-group> -->
-
-          </div>
-        </ion-list>
-
-
-
-
-      </ng-container>
-
-
-    </div>
-
-    <ion-button expand="block" color="primary" (click)="Guardar()">
-      <ion-icon slot="start" name="save"></ion-icon> &nbsp;Enviar
-    </ion-button>
+   
   </div>
 
   <ion-list id="skeleton" *ngIf="loading">

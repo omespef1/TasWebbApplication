@@ -22,7 +22,7 @@
           <ion-col>
             <ion-item>
               <!-- <ion-label position="stacked">Email</ion-label> -->
-              <ion-input position="fixed" required autofocus="true" name="email" clear-input type="text" placeholder="Email"
+              <ion-input position="fixed" required autofocus="true" name="email" clear-input type="text" placeholder="Usuario"
                 [(ngModel)]="user.user"></ion-input>
               <ion-icon name="person" slot="start"></ion-icon>
             </ion-item>
@@ -58,7 +58,13 @@
           </ion-col>
         </ion-row>
 
-
+       <ion-row text-center>
+         <ion-col size="12">
+            <div class="fingerprint" button tappable >
+                <img src="assets/imgs/faceiddark.svg">
+              </div>
+         </ion-col>
+       </ion-row>
         <ion-row>
           <ion-col text-center>
             <ion-label class="lbl_login_or">O</ion-label>
@@ -66,7 +72,7 @@
         </ion-row>
         <ion-row>
           <ion-col padding>
-              <ion-button class="btn-facebook"  expand="block"  >INGRESAR CON FACEBOOK</ion-button>
+              <!-- <ion-button class="btn-facebook"  expand="block"  >INGRESAR CON FACEBOOK</ion-button> -->
               <ion-button (click)="changeBusiness()"  class="btn-google" expand="block"  >CAMBIAR EMPRESA</ion-button>
              
           </ion-col>

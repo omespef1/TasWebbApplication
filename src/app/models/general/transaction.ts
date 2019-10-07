@@ -5,7 +5,9 @@ export interface transaction {
     ObjTransaction:any;
 }
 
-export interface transaction {
-
+export interface transactionID {
+    TxtError:string;
+    Retorno:number;
+    message:string;
 
 }

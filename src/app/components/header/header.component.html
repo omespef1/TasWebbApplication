@@ -1,14 +1,21 @@
 <ion-header>
-  <ion-toolbar color="primary">
-    
-      <ion-buttons slot="secondary">
+    <ion-toolbar color="primary">
         <ion-buttons slot="start">
-          <ion-back-button></ion-back-button>
-        </ion-buttons>
-          <ion-button>
-            <ion-icon slot="icon-only" name="contact"></ion-icon>
-          </ion-button>            
-        </ion-buttons>
-    <ion-title>{{headerName}}</ion-title>
-  </ion-toolbar>
-</ion-header>
+            <ion-back-button defaultHref="/" text="Atrás"></ion-back-button> 
+            
+            </ion-buttons >  
+            
+            <ion-buttons slot="end">                
+                  <ion-button (click)="goProfile()"  *ngIf="logged()">
+                    <ion-icon slot="icon-only" name="person"></ion-icon>
+                  </ion-button> 
+                  <ion-button (click)="goLogin()"  *ngIf="!logged()">
+                    <ion-icon slot="icon-only" name="lock"></ion-icon>
+                  </ion-button> 
+                    
+                              
+            </ion-buttons>
+      <ion-title>{{headerName}}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
