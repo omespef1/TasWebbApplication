@@ -7,6 +7,8 @@ import { vehicle } from "src/app/models/vehicle/vehicle";
 import { Router } from "@angular/router";
 import { ThirdPartie } from 'src/app/models/general/user';
 import { AlertService } from '../../services/alert/alert.service';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @Component({
   selector: "app-enlistment",
@@ -18,7 +20,9 @@ export class EnlistmentPage implements OnInit {
     private _service: EnlistmentService,
     private _sesion: SessionService,
     private router: Router,
-    private _alert:AlertService
+    private _alert:AlertService,
+    private camera: Camera,
+    private geolocation: Geolocation
   ) {}
   enlistment: enlistment[] = [];
   manchecklist: manchecklist;
@@ -43,6 +47,17 @@ export class EnlistmentPage implements OnInit {
   }
 
   Guardar() {
+    this.geolocation.getCurrentPosition().then((resp) => {
+       this.buildPetition( resp.coords.latitude, resp.coords.longitude);
+     }).catch((error) => {
+       console.log('Error getting location', error);
+       this.buildPetition(0, 0);
+     });
+ 
+  }
+
+
+  buildPetition(latitude: number, longitude: number ) {
     let answers : manchecklistDetalle [] = [];
     this.saving=true;
     let answer: manchecklist = {
@@ -71,11 +86,11 @@ export class EnlistmentPage implements OnInit {
            Grupo: Number(item.Seccion),
            IdEmpresa: this._sesion.GetBussiness().CodigoEmpresa,
            Respuesta: item.respuestaUsuario,
-           Resultado: ""
+           Resultado: "",
+           Check_Image : item.check_foto
          }
        );
     });
-console.log(answer);
   this._service.PostAnswer(answer).subscribe(resp=>{
     if(resp.Retorno===0){
       this._alert.showAlert('Perfecto!',`Se generó la orden ${resp.message}`);
@@ -85,5 +100,26 @@ console.log(answer);
       this._alert.showAlert('Error',resp.TxtError);
     }
   })
+  }
+
+  takePicture(answer:enlistment){
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    };
+    this.camera.getPicture(options).then((imageData) => {
+      // imageData is either a base64 encoded string or a file URI
+      // If it's base64 (DATA_URL):
+      const base64Image = 'data:image/jpeg;base64,' + imageData;
+      answer.check_foto = base64Image;
+     }, (err) => {
+      // Handle error
+     });
+  }
+
+  deletePhoto(answer:enlistment){
+   answer.check_foto = undefined;
   }
 }

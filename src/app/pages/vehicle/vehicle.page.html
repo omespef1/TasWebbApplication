@@ -1,189 +1,193 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-searchbar showCancelButton="always" debounce="500" (ionChange)="filterVehicles($event)" animated placeholder="Búsqueda por placa"></ion-searchbar>
+<app-header headerName="Vehículos">
 
-  </ion-toolbar>
-</ion-header>
+</app-header>
 
-<ion-content fullscreen class="ion-padding" >
-    <ion-list lines="none">
-      <ion-list-header color="primary">
-        <ion-label>Información general</ion-label>
-      </ion-list-header>
-        <ion-item>
-          <ion-icon slot="start" name="contact"></ion-icon>
-          <ion-label>Conductor</ion-label>
-           <ion-note slot="end"> {{thirdPartie.NombreRazon}} {{ thirdPartie.PrimerApellido }} </ion-note>
-        </ion-item>   
-        <ion-item>
-          <ion-icon slot="start" name="alarm"></ion-icon>
-          <ion-label>Fecha Actual</ion-label>
-          <ion-note slot="end"> {{ today | date:'dd/mm/yyyy'}}</ion-note>
-        </ion-item>        
-      </ion-list>
-     <ion-item-divider>
-       <ion-label>Lista de vehículos</ion-label>
-     </ion-item-divider>
-     <ion-list id="skeleton" *ngIf="loading">
-        <ion-list-header>
-          <ion-skeleton-text animated style="width: 80px"></ion-skeleton-text>
-        </ion-list-header>
-        <ion-item>
-          <ion-thumbnail slot="start">
-            <ion-skeleton-text></ion-skeleton-text>
-          </ion-thumbnail>
-          <ion-label>
-            <h3>
-              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-            </h3>
-            <p>
-              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-            </p>
-            <p>
-              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
-            </p>
-          </ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-thumbnail slot="start">
-            <ion-skeleton-text></ion-skeleton-text>
-          </ion-thumbnail>
-          <ion-label>
-            <h3>
-              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-            </h3>
-            <p>
-              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-            </p>
-            <p>
-              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
-            </p>
-          </ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-thumbnail slot="start">
-            <ion-skeleton-text></ion-skeleton-text>
-          </ion-thumbnail>
-          <ion-label>
-            <h3>
-              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-            </h3>
-            <p>
-              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-            </p>
-            <p>
-              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
-            </p>
-          </ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-thumbnail slot="start">
-            <ion-skeleton-text></ion-skeleton-text>
-          </ion-thumbnail>
-          <ion-label>
-            <h3>
-              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-            </h3>
-            <p>
-              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-            </p>
-            <p>
-              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
-            </p>
-          </ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-thumbnail slot="start">
-            <ion-skeleton-text></ion-skeleton-text>
-          </ion-thumbnail>
-          <ion-label>
-            <h3>
-              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-            </h3>
-            <p>
-              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-            </p>
-            <p>
-              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
-            </p>
-          </ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-thumbnail slot="start">
-            <ion-skeleton-text></ion-skeleton-text>
-          </ion-thumbnail>
-          <ion-label>
-            <h3>
-              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-            </h3>
-            <p>
-              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-            </p>
-            <p>
-              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
-            </p>
-          </ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-thumbnail slot="start">
-            <ion-skeleton-text></ion-skeleton-text>
-          </ion-thumbnail>
-          <ion-label>
-            <h3>
-              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-            </h3>
-            <p>
-              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-            </p>
-            <p>
-              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
-            </p>
-          </ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-thumbnail slot="start">
-            <ion-skeleton-text></ion-skeleton-text>
-          </ion-thumbnail>
-          <ion-label>
-            <h3>
-              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-            </h3>
-            <p>
-              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-            </p>
-            <p>
-              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
-            </p>
-          </ion-label>
-        </ion-item>
+<ion-content fullscreen >
+    <ion-toolbar>
+        <ion-searchbar showCancelButton="always" debounce="500" (ionChange)="filterVehicles($event)" animated placeholder="Búsqueda por placa" cancelButtonText="Cancelar"></ion-searchbar>
     
-      </ion-list>
-      <ion-list lines="none" *ngFor="let vehicle of vehiclesFilter">
-        <ion-list-header color="primary">
-          <ion-label>Vehículo</ion-label>
-        </ion-list-header>
-        <ion-item >
-          <ion-icon slot="start" name="car"></ion-icon>
-          <ion-label>Placa</ion-label>
-          <ion-note slot="end">{{vehicle.PlacaVehiculo}}</ion-note>
-        </ion-item>
-        <!-- <ion-item>
-          <ion-icon slot="start" name="stopwatch"></ion-icon>
-          <ion-label>Último kilometraje</ion-label>
-          <ion-note slot="end"> {{vehicle.Kilometraje}}</ion-note>
-        </ion-item> -->
-        <ion-item>
-          <ion-icon slot="start" name="stopwatch"></ion-icon>        
-          <ion-input [(ngModel)]="vehicle.NuevoKilometraje" type="number" clear-input placeholder="Ingrese el kilometraje"></ion-input>
-        </ion-item>
-          
+      </ion-toolbar>
+      <div class="ion-padding">
+          <ion-list lines="none">
+              <ion-list-header color="primary">
+                <ion-label>Información general</ion-label>
+              </ion-list-header>
+                <ion-item>
+                  <ion-icon slot="start" name="contact"></ion-icon>
+                  <ion-label>Conductor</ion-label>
+                   <ion-note slot="end"> {{thirdPartie.NombreRazon}} {{ thirdPartie.PrimerApellido }} </ion-note>
+                </ion-item>   
+                <ion-item>
+                  <ion-icon slot="start" name="alarm"></ion-icon>
+                  <ion-label>Fecha Actual</ion-label>
+                  <ion-note slot="end"> {{ today | date:'dd/mm/yyyy'}}</ion-note>
+                </ion-item>        
+              </ion-list>
+             <ion-item-divider>
+               <ion-label>Lista de vehículos</ion-label>
+             </ion-item-divider>
+             <ion-list id="skeleton" *ngIf="loading">
+                <ion-list-header>
+                  <ion-skeleton-text animated style="width: 80px"></ion-skeleton-text>
+                </ion-list-header>
+                <ion-item>
+                  <ion-thumbnail slot="start">
+                    <ion-skeleton-text></ion-skeleton-text>
+                  </ion-thumbnail>
+                  <ion-label>
+                    <h3>
+                      <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                    </h3>
+                    <p>
+                      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </p>
+                    <p>
+                      <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                    </p>
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-thumbnail slot="start">
+                    <ion-skeleton-text></ion-skeleton-text>
+                  </ion-thumbnail>
+                  <ion-label>
+                    <h3>
+                      <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                    </h3>
+                    <p>
+                      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </p>
+                    <p>
+                      <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                    </p>
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-thumbnail slot="start">
+                    <ion-skeleton-text></ion-skeleton-text>
+                  </ion-thumbnail>
+                  <ion-label>
+                    <h3>
+                      <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                    </h3>
+                    <p>
+                      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </p>
+                    <p>
+                      <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                    </p>
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-thumbnail slot="start">
+                    <ion-skeleton-text></ion-skeleton-text>
+                  </ion-thumbnail>
+                  <ion-label>
+                    <h3>
+                      <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                    </h3>
+                    <p>
+                      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </p>
+                    <p>
+                      <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                    </p>
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-thumbnail slot="start">
+                    <ion-skeleton-text></ion-skeleton-text>
+                  </ion-thumbnail>
+                  <ion-label>
+                    <h3>
+                      <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                    </h3>
+                    <p>
+                      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </p>
+                    <p>
+                      <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                    </p>
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-thumbnail slot="start">
+                    <ion-skeleton-text></ion-skeleton-text>
+                  </ion-thumbnail>
+                  <ion-label>
+                    <h3>
+                      <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                    </h3>
+                    <p>
+                      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </p>
+                    <p>
+                      <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                    </p>
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-thumbnail slot="start">
+                    <ion-skeleton-text></ion-skeleton-text>
+                  </ion-thumbnail>
+                  <ion-label>
+                    <h3>
+                      <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                    </h3>
+                    <p>
+                      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </p>
+                    <p>
+                      <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                    </p>
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-thumbnail slot="start">
+                    <ion-skeleton-text></ion-skeleton-text>
+                  </ion-thumbnail>
+                  <ion-label>
+                    <h3>
+                      <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                    </h3>
+                    <p>
+                      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </p>
+                    <p>
+                      <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                    </p>
+                  </ion-label>
+                </ion-item>
+            
+              </ion-list>
+              <ion-list lines="none" *ngFor="let vehicle of vehiclesFilter">
+                <ion-list-header color="primary">
+                  <ion-label>Vehículo</ion-label>
+                </ion-list-header>
+                <ion-item >
+                  <ion-icon slot="start" name="car"></ion-icon>
+                  <ion-label>Placa</ion-label>
+                  <ion-note slot="end">{{vehicle.PlacaVehiculo}}</ion-note>
+                </ion-item>
+                <!-- <ion-item>
+                  <ion-icon slot="start" name="stopwatch"></ion-icon>
+                  <ion-label>Último kilometraje</ion-label>
+                  <ion-note slot="end"> {{vehicle.Kilometraje}}</ion-note>
+                </ion-item> -->
+                <ion-item>
+                  <ion-icon slot="start" name="stopwatch"></ion-icon>        
+                  <ion-input [(ngModel)]="vehicle.NuevoKilometraje" type="number" clear-input placeholder="Ingrese el kilometraje"></ion-input>
+                </ion-item>
+                  
+                
+                <ion-item button color="secondary" (click)="checkVehicle(vehicle)">
+                    <ion-icon *ngIf="!saving" slot="start" name="checkmark-circle"></ion-icon>
+                    <ion-spinner *ngIf="saving" slot="start"></ion-spinner>
+                    SELECCIONAR
+                </ion-item>
+              </ion-list>
         
-        <ion-item button color="secondary" (click)="checkVehicle(vehicle)">
-            <ion-icon *ngIf="!saving" slot="start" name="checkmark-circle"></ion-icon>
-            <ion-spinner *ngIf="saving" slot="start"></ion-spinner>
-            SELECCIONAR
-        </ion-item>
-      </ion-list>
+      </div>
 
    
 

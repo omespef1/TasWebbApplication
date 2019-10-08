@@ -1,5 +1,7 @@
 {
   "name": "TasWebbApplication",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

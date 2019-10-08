@@ -5,8 +5,8 @@
 <ion-content fullscreen>
   <div *ngIf="!loading">
 
-<form #enlistmentForm="ngForm" (ngSubmit)="Guardar()">
-    <div *ngFor="let question of enlistment;let i = index">
+    <form #enlistmentForm="ngForm" (ngSubmit)="Guardar()">
+      <div *ngFor="let question of enlistment;let i = index">
         <ng-container [ngSwitch]="question.Seccion">
           <ion-list inset="true">
             <div *ngSwitchCase="1">
@@ -31,24 +31,40 @@
                 </ion-item>
                 <ion-item>
                   <ion-icon slot="start" name="clipboard"></ion-icon>
-                  <ion-input type="text" clearInput="true" clearOnEdit="true" multiple="true"
-                    placeholder="Ingrese los detalles aquí" [name]="'observacion' + i" [(ngModel)]="question.observaciones"></ion-input>
+                  <ion-input type="text" clearInput="true" [disabled]="question.respuestaUsuario == question.respuesta"
+                    clearOnEdit="true" multiple="true" placeholder="Ingrese los detalles aquí"
+                    [name]="'observacion' + i" [(ngModel)]="question.observaciones"></ion-input>
                 </ion-item>
-              </ion-radio-group>             
+                <ion-item>
+                  <ion-label>Evidencia</ion-label>
+                  <ion-button slot="end" (click)="takePicture(question)">
+                    <ion-icon slot="start" name="aperture"></ion-icon>
+                    Captura
+                  </ion-button>
+                </ion-item>
+                <ion-item *ngIf="question.check_foto">
+                   <ion-thumbnail>
+                     <img [src]="question.check_foto" />
+                   </ion-thumbnail>
+                   <ion-button (click)="deletePhoto()">
+                     <ion-icon slot="icon-only" name="trash"></ion-icon>
+                   </ion-button>
+                </ion-item>
+              </ion-radio-group>
             </div>
-          </ion-list>        
-        </ng-container>    
+          </ion-list>
+        </ng-container>
       </div>
-      <ion-button [disabled]="!enlistmentForm.form.valid"  expand="block" type="submit" >
-          <ion-icon *ngIf="!saving" slot="start" name="checkmark-circle"></ion-icon>
-          <ion-spinner *ngIf="saving" slot="start"></ion-spinner>
-          GUARDAR
+      <ion-button [disabled]="!enlistmentForm.form.valid" expand="block" type="submit">
+        <ion-icon *ngIf="!saving" slot="start" name="checkmark-circle"></ion-icon>
+        <ion-spinner *ngIf="saving" slot="start"></ion-spinner>
+        GUARDAR
       </ion-button>
-      
-</form>
+
+    </form>
 
 
-   
+
   </div>
 
   <ion-list id="skeleton" *ngIf="loading">

@@ -6,10 +6,12 @@ const routes: Routes = [
     path: 'tabs',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
-  { path: '', loadChildren: './pages/login/login.module#LoginPageModule' },  { path: 'business', loadChildren: './pages/business/business.module#BusinessPageModule' },
+  { path: '', loadChildren: './pages/login/login.module#LoginPageModule' },
+  { path: 'business', loadChildren: './pages/business/business.module#BusinessPageModule' },
   { path: 'vehicle', loadChildren: './pages/vehicle/vehicle.module#VehiclePageModule' },
   { path: 'settings', loadChildren: './pages/settings/settings.module#SettingsPageModule' },
-  { path: 'enlistment', loadChildren: './pages/enlistment/enlistment.module#EnlistmentPageModule' }
+  { path: 'enlistment', loadChildren: './pages/enlistment/enlistment.module#EnlistmentPageModule' },
+  { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule' }
 
 ];
 @NgModule({

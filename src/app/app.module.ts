@@ -12,12 +12,13 @@ import { AppComponent } from "./app.component";
 //Modulos
 import { ComponentsModule } from "./components/components.module";
 import { HttpClientModule } from '@angular/common/http';
+import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,
-  ComponentsModule,HttpClientModule],
+  ComponentsModule,HttpClientModule, IonicStorageModule.forRoot()],
   providers: [
     StatusBar,
     SplashScreen,

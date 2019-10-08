@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import { business } from "../../models/business/business";
 import { ThirdPartie } from "../../models/general/user";
+import { ToastController } from '@ionic/angular';
+import { stringify } from 'querystring';
 
 @Injectable({
   providedIn: "root"
@@ -22,5 +24,20 @@ export class SessionService {
   }
   SetKilometerCar(kilometer:number){
     localStorage.setItem('kilometer', kilometer.toString());
+  }
+  SetWifi(val: boolean) {
+    localStorage.setItem('wifi', JSON.stringify(val));
+  }
+  GetWifi() {
+    return JSON.parse(localStorage.getItem('wifi'));
+  }
+  SetMobile(val: boolean) {
+    localStorage.setItem('mobile', JSON.stringify(val));
+  }
+  GetMobile() {
+    return JSON.parse(localStorage.getItem('mobile'));
+  }
+  removeUser(){
+    localStorage.clear();
   }
 }

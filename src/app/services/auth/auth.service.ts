@@ -34,6 +34,7 @@ export class AuthService {
 
   async signOut() {
    // await this.storage.set("user", null);
+   this._sesion.removeUser();
     this.router.navigateByUrl("/login");
   }
 }

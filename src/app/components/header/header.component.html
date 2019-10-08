@@ -6,14 +6,9 @@
             </ion-buttons >  
             
             <ion-buttons slot="end">                
-                  <ion-button (click)="goProfile()"  *ngIf="logged()">
-                    <ion-icon slot="icon-only" name="person"></ion-icon>
-                  </ion-button> 
-                  <ion-button (click)="goLogin()"  *ngIf="!logged()">
-                    <ion-icon slot="icon-only" name="lock"></ion-icon>
-                  </ion-button> 
-                    
-                              
+                  <ion-button (click)="goSettings()"  *ngIf="logged()">
+                    <ion-icon slot="icon-only" name="cog"></ion-icon>
+                  </ion-button>                                                                   
             </ion-buttons>
       <ion-title>{{headerName}}</ion-title>
     </ion-toolbar>
