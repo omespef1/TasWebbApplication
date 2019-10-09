@@ -22,10 +22,7 @@
                   <ion-label>Fecha Actual</ion-label>
                   <ion-note slot="end"> {{ today | date:'dd/mm/yyyy'}}</ion-note>
                 </ion-item>        
-              </ion-list>
-             <ion-item-divider>
-               <ion-label>Lista de vehículos</ion-label>
-             </ion-item-divider>
+              </ion-list>             
              <ion-list id="skeleton" *ngIf="loading">
                 <ion-list-header>
                   <ion-skeleton-text animated style="width: 80px"></ion-skeleton-text>
@@ -160,37 +157,71 @@
                 </ion-item>
             
               </ion-list>
-              <ion-list lines="none" *ngFor="let vehicle of vehiclesFilter">
-                <ion-list-header color="primary">
-                  <ion-label>Vehículo</ion-label>
+            
+
+
+             <ng-container *ngFor="let vehicle of vehiclesFilter">
+
+               <ng-container *ngIf="vehicle.Sugerido==1">
+
+                <ion-list-header>
+                  <ion-label> <b>Vehículo sugerido</b></ion-label>
                 </ion-list-header>
-                <ion-item >
-                  <ion-icon slot="start" name="car"></ion-icon>
-                  <ion-label>Placa</ion-label>
-                  <ion-note slot="end">{{vehicle.PlacaVehiculo}}</ion-note>
-                </ion-item>
-                <!-- <ion-item>
-                  <ion-icon slot="start" name="stopwatch"></ion-icon>
-                  <ion-label>Último kilometraje</ion-label>
-                  <ion-note slot="end"> {{vehicle.Kilometraje}}</ion-note>
-                </ion-item> -->
-                <ion-item>
-                  <ion-icon slot="start" name="stopwatch"></ion-icon>        
-                  <ion-input [(ngModel)]="vehicle.NuevoKilometraje" type="number" clear-input placeholder="Ingrese el kilometraje"></ion-input>
-                </ion-item>
-                  
-                
-                <ion-item button color="secondary" (click)="checkVehicle(vehicle)">
-                    <ion-icon *ngIf="!saving" slot="start" name="checkmark-circle"></ion-icon>
-                    <ion-spinner *ngIf="saving" slot="start"></ion-spinner>
-                    SELECCIONAR
-                </ion-item>
-              </ion-list>
-        
+
+                    
+                <ion-list lines="none">
+                    <ion-list-header color="primary">
+                        <ion-label>Vehículo</ion-label>
+                      </ion-list-header>
+                      <ion-item >
+                        <ion-icon slot="start" name="car"></ion-icon>
+                        <ion-label>Placa</ion-label>
+                        <ion-note slot="end">{{vehicle.PlacaVehiculo}}</ion-note>
+                      </ion-item>                      
+                      <ion-item>
+                        <ion-icon slot="start" name="stopwatch"></ion-icon>        
+                        <ion-input [(ngModel)]="vehicle.NuevoKilometraje" type="number" clear-input placeholder="Ingrese el kilometraje"></ion-input>
+                      </ion-item>
+                        
+                      
+                      <ion-item button color="secondary" (click)="checkVehicle(vehicle)">
+                          <ion-icon *ngIf="!vehicle.loading" slot="start" name="checkmark-circle"></ion-icon>
+                          <ion-spinner *ngIf="vehicle.loading" slot="start"></ion-spinner>
+                          SELECCIONAR
+                      </ion-item>
+
+                  </ion-list>
+
+               </ng-container>
+
+               <ng-container *ngIf="vehicle.Sugerido==0">
+                  <ion-list-header *ngIf="expression">
+                      <ion-label>Otros Vehículos</ion-label>
+                    </ion-list-header>                   
+                  <ion-list lines="none">
+                      <ion-list-header color="primary">
+                          <ion-label>Vehículo</ion-label>
+                        </ion-list-header>
+                        <ion-item >
+                          <ion-icon slot="start" name="car"></ion-icon>
+                          <ion-label>Placa</ion-label>
+                          <ion-note slot="end">{{vehicle.PlacaVehiculo}}</ion-note>
+                        </ion-item>                      
+                        <ion-item>
+                          <ion-icon slot="start" name="stopwatch"></ion-icon>        
+                          <ion-input [(ngModel)]="vehicle.NuevoKilometraje" type="number" clear-input placeholder="Ingrese el kilometraje"></ion-input>
+                        </ion-item>
+                          
+                        
+                        <ion-item button color="secondary" (click)="checkVehicle(vehicle)">
+                            <ion-icon *ngIf="!saving" slot="start" name="checkmark-circle"></ion-icon>
+                            <ion-spinner *ngIf="saving" slot="start"></ion-spinner>
+                            SELECCIONAR
+                        </ion-item>
+  
+                    </ion-list>
+  
+                 </ng-container>
+             </ng-container>
       </div>
-
-   
-
-
-    
 </ion-content>

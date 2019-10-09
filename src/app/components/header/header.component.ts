@@ -13,9 +13,8 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {}
 
-  logged() {
-    console.log('logues es');
-    console.log(this._auth.GetThirdPartie() )
+  logged() { 
+   
     return this._auth.GetThirdPartie() != null;
     }
 

@@ -19,7 +19,6 @@ export class VehiclePage implements OnInit {
   thirdPartie: ThirdPartie = new ThirdPartie();
   vehicles: vehicle[] = [];
   vehiclesFilter: vehicle[] = [];
-  saving=false;
   loading=false;
 
   constructor(
@@ -52,7 +51,7 @@ export class VehiclePage implements OnInit {
   }
 
   checkVehicle(car: vehicle) {
-    this.saving=true;
+    car.loading=true;
     if(car.NuevoKilometraje!=null && car.NuevoKilometraje>0){
       this._vehicle
       .GetDocumentsValidation(
@@ -89,20 +88,20 @@ export class VehiclePage implements OnInit {
                     car: car
                   }
                 };
-                this.saving=false;
+                car.loading=false;
                 this.router.navigateByUrl("enlistment", params);
               });
             }
           });
         } catch (err) {
           console.log(err)
-          this.saving=false;
+          car.loading=false;
           this._alert.showAlert("error", err);
         }
       });
     
     }else {
-      this.saving=false;
+      car.loading=false;
         this._alert.showAlert('Error','Ingrese kilometraje del vehículo');
     }
    

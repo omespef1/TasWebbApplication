@@ -6,4 +6,6 @@ export class vehicle  {
     Kilometraje:number;
     IdVehiculo:number;
     NuevoKilometraje:number;
+    Sugerido:number;
+    loading:boolean;
 }
