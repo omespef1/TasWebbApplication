@@ -47,10 +47,11 @@
                 <ion-item *ngIf="question.check_foto">
                   
                    <ion-thumbnail slot="start">
-                     <img [src]="question.check_foto" />
+                     <img [src]="question.check_foto!=null" />
                    </ion-thumbnail>
-                   <ion-button (click)="deletePhoto()" fill="outline" color="primary">
+                   <ion-button slot="end" (click)="deletePhoto()" fill="outline" color="primary">
                      <ion-icon slot="end" name="trash"></ion-icon>
+                     Eliminar
                    </ion-button>
                 </ion-item>
               </ion-radio-group>

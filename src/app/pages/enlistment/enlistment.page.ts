@@ -97,11 +97,12 @@ export class EnlistmentPage implements OnInit {
         Check_Image: item.check_foto
       });
     });
+    console.log(answer);
     this._service.PostAnswer(answer).subscribe(resp => {
       if (resp.Retorno === 0) {
         this._alert.showAlert(
           "Perfecto!",
-          `Se generó la orden ${resp.message}`
+          `${resp.message}`
         );
         this.router.navigateByUrl("vehicle");
       } else {
