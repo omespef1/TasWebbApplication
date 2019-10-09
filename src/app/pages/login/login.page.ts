@@ -27,8 +27,7 @@ export class LoginPage implements OnInit {
     private _modal: ModalController
   ) {}
 
-  ngOnInit() {
-
+  ngOnInit() {  
     this.LoadBusiness();
   }
 

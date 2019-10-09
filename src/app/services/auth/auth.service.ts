@@ -6,6 +6,8 @@ import { transaction } from "src/app/models/general/transaction";
 import { HttpManagerService } from "../httpManager/http-manager.service";
 import { loginRequest } from '../../models/general/loginRequest';
 import { SessionService } from '../session/session.service';
+import { AlertService } from '../alert/alert.service';
+import { ThirdPartie } from 'src/app/models/general/user';
 
 @Injectable({
   providedIn: "root"
@@ -14,7 +16,8 @@ export class AuthService {
   constructor(
     private router: Router,
     private _http: HttpManagerService,
-    private _sesion:SessionService
+    private _sesion:SessionService,
+    private _alert:AlertService
   ) {
   }
 
@@ -30,6 +33,16 @@ export class AuthService {
         }
       })
     );
+  }
+
+  signInDirect(){
+
+    const user: ThirdPartie = this._sesion.GetThirdPartie();
+    this._alert.showAlert(
+      'Bienvenido!',
+      `Ingresaste como ${user.NombreCompleto}`
+    );
+    this.router.navigateByUrl("vehicle");
   }
 
   async signOut() {
