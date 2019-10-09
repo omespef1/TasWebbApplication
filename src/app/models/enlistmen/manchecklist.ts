@@ -13,6 +13,8 @@ export class manchecklist {
   CentroId: number;
   detalle: manchecklistDetalle[];
   identificacion:string;
+  Latitude:number;
+  Longitude:number;
 }
 export class manchecklistDetalle {
 
