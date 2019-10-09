@@ -39,7 +39,8 @@
                   <ion-icon slot="start" name="eye"></ion-icon>
                   <ion-label>Evidencia</ion-label>
                   <ion-button slot="end" (click)="takePicture(question)" fill="outline">
-                    <ion-icon slot="start" name="camera"></ion-icon>
+                    <ion-icon *ngIf="!snapshot" slot="start" name="camera"></ion-icon>
+                    <ion-spinner *ngIf="snapshot" slot="start"></ion-spinner>
                     Foto
                   </ion-button>
                 </ion-item>

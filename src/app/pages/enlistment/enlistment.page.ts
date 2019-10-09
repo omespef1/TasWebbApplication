@@ -9,6 +9,7 @@ import { ThirdPartie } from 'src/app/models/general/user';
 import { AlertService } from '../../services/alert/alert.service';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { TouchSequence } from 'selenium-webdriver';
 
 @Component({
   selector: "app-enlistment",
@@ -29,6 +30,7 @@ export class EnlistmentPage implements OnInit {
   car: vehicle;
   loading = false;
   saving = false;
+  snapshot=false;
   ngOnInit() {
     this.GetQuestions();
   console.log(this.router.getCurrentNavigation().extras)  ;
@@ -103,6 +105,7 @@ export class EnlistmentPage implements OnInit {
   }
 
   takePicture(answer:enlistment){
+    this.snapshot = true;
     const options: CameraOptions = {
       quality: 100,
       destinationType: this.camera.DestinationType.FILE_URI,
@@ -110,6 +113,7 @@ export class EnlistmentPage implements OnInit {
       mediaType: this.camera.MediaType.PICTURE
     };
     this.camera.getPicture(options).then((imageData) => {
+      this.snapshot=false;
       // imageData is either a base64 encoded string or a file URI
       // If it's base64 (DATA_URL):
       const base64Image = 'data:image/jpeg;base64,' + imageData;
