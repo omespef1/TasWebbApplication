@@ -19,8 +19,14 @@ export class SessionService {
   SetThirdPartie(user: ThirdPartie) {
     localStorage.setItem('thirdPartie', JSON.stringify(user));
   }
+  SetThirdPartieBio(user: ThirdPartie) {
+    localStorage.setItem('thirdPartieBio', JSON.stringify(user));
+  }
   GetThirdPartie(): ThirdPartie {
     return JSON.parse(localStorage.getItem('thirdPartie'));
+  }
+  GetThirdPartieBio(): ThirdPartie {
+    return JSON.parse(localStorage.getItem('thirdPartieBio'));
   }
   SetKilometerCar(kilometer:number){
     localStorage.setItem('kilometer', kilometer.toString());
