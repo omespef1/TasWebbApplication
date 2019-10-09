@@ -15,7 +15,7 @@
               </ion-list-header>
             </div>
             <div *ngSwitchCase="0">
-              <ion-radio-group [(ngModel)]="question.respuestaUsuario" required [name]="'anwser'+ i">
+              <ion-radio-group [(ngModel)]="question.respuestaUsuario" required [name]="'anwser'+ i" (ionChange)="clear($event,question)">
                 <ion-list-header color="secondary">
                   <ion-label>{{question.Pregunta | uppercase}}</ion-label>
                 </ion-list-header>
