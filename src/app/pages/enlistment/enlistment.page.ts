@@ -76,7 +76,9 @@ export class EnlistmentPage implements OnInit {
       IdTercero: this._sesion.GetThirdPartie().IdTercero,
       Reviso: "",
      detalle : answers,
-     identificacion : this._sesion.GetThirdPartie().Identificacion
+     identificacion : this._sesion.GetThirdPartie().Identificacion,
+      Latitude:latitude,
+      Longitude:longitude
     };
     this.enlistment.forEach(item => {
        answer.detalle.push(
