@@ -36,18 +36,19 @@
                     [name]="'observacion' + i" [(ngModel)]="question.observaciones"></ion-input>
                 </ion-item>
                 <ion-item>
+                  <ion-icon slot="start" name="eye"></ion-icon>
                   <ion-label>Evidencia</ion-label>
-                  <ion-button slot="end" (click)="takePicture(question)">
-                    <ion-icon slot="start" name="aperture"></ion-icon>
-                    Captura
+                  <ion-button slot="end" (click)="takePicture(question)" fill="outline">
+                    <ion-icon slot="start" name="camera"></ion-icon>
+                    Foto
                   </ion-button>
                 </ion-item>
                 <ion-item *ngIf="question.check_foto">
                    <ion-thumbnail>
                      <img [src]="question.check_foto" />
                    </ion-thumbnail>
-                   <ion-button (click)="deletePhoto()">
-                     <ion-icon slot="icon-only" name="trash"></ion-icon>
+                   <ion-button (click)="deletePhoto()" fill="outline" color="primary">
+                     <ion-icon slot="end" name="trash"></ion-icon>
                    </ion-button>
                 </ion-item>
               </ion-radio-group>

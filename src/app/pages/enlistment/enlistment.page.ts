@@ -120,6 +120,6 @@ export class EnlistmentPage implements OnInit {
   }
 
   deletePhoto(answer:enlistment){
-   answer.check_foto = undefined;
+   answer.check_foto = null;
   }
 }
