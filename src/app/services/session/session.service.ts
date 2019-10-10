@@ -71,5 +71,13 @@ export class SessionService {
     localStorage.setItem("offlineEnlistments", JSON.stringify(newOfflineEnlistment));
   }
 
+  SetLastEnlistment(answer:manchecklist){
+    localStorage.setItem("LastEnlistment", JSON.stringify(answer));
+  }
+
+  GetLastEnlistment(): manchecklist {
+    return JSON.parse(localStorage.getItem("LastEnlistment"));
+  }
+
 
 }

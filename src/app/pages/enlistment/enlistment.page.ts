@@ -17,6 +17,7 @@ import {
   NetworkService,
   ConnectionStatus
 } from "../../services/network/network.service";
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: "app-enlistment",
@@ -31,7 +32,8 @@ export class EnlistmentPage implements OnInit {
     private _alert: AlertService,
     private camera: Camera,
     private geolocation: Geolocation,
-    private _network: NetworkService
+    private _network: NetworkService,
+    private _nav:NavController
   ) {}
   enlistment: enlistment[] = [];
   manchecklist: manchecklist;
@@ -119,7 +121,7 @@ export class EnlistmentPage implements OnInit {
         this.saving=false;
         if (resp.Retorno === 0) {
           this._alert.showAlert("Perfecto!", `${resp.message}`);
-          this.router.navigateByUrl("last-enlistments");
+          this._nav.navigateRoot("last-enlistments");
         } else {
           this._alert.showAlert("Error", resp.TxtError);
         }
@@ -138,7 +140,8 @@ export class EnlistmentPage implements OnInit {
         "Error",
         "Te encuentras Offline, cuando tengas acceso a una red, enviaremos este alistamiento!"
       );
-      this.router.navigateByUrl("last-enlistments");
+      // this.router.navigateByUrl("last-enlistments");
+      this._nav.navigateRoot("last-enlistments");
     }
   }
   clear(event: any, question: enlistment) {
