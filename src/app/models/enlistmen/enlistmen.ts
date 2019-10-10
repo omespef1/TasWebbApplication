@@ -10,6 +10,7 @@ respuesta:string;
 respuestaUsuario:string;
 observaciones:string;
 check_foto:string;
+snapshot:boolean;
 }
 
 

@@ -22,7 +22,7 @@
                 <ion-item>
                   <ion-icon color="primary" slot="end" [name]="'checkmark-circle'"></ion-icon>
                   <ion-label>Si</ion-label>
-                  <ion-radio color="success" slot="start" value="2"></ion-radio>
+                  <ion-radio color="primary" slot="start" value="2"></ion-radio>
                 </ion-item>
                 <ion-item>
                   <ion-icon color="primary" slot="end" [name]="'close-circle'"></ion-icon>
@@ -39,15 +39,15 @@
                   <ion-icon slot="start" name="eye"></ion-icon>
                   <ion-label>Evidencia</ion-label>
                   <ion-button slot="end" (click)="takePicture(question)" fill="outline">
-                    <ion-icon *ngIf="!snapshot" slot="start" name="camera"></ion-icon>
-                    <ion-spinner *ngIf="snapshot" slot="start"></ion-spinner>
+                    <ion-icon *ngIf="!question.snapshot" slot="start" name="camera"></ion-icon>
+                    <ion-spinner *ngIf="question.snapshot" slot="start"></ion-spinner>
                     Foto
                   </ion-button>
                 </ion-item>
                 <ion-item *ngIf="question.check_foto">
                   
                    <ion-thumbnail slot="start">
-                     <img [src]="question.check_foto!=null" />
+                     <img [src]="question.check_foto" />
                    </ion-thumbnail>
                    <ion-button slot="end" (click)="deletePhoto()" fill="outline" color="primary">
                      <ion-icon slot="end" name="trash"></ion-icon>

@@ -142,7 +142,7 @@ export class EnlistmentPage implements OnInit {
     }
   }
   takePicture(answer: enlistment) {
-    this.snapshot = true;
+  answer.snapshot=true;
     const options: CameraOptions = {
       quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
@@ -151,7 +151,7 @@ export class EnlistmentPage implements OnInit {
     };
     this.camera.getPicture(options).then(
       imageData => {
-        this.snapshot = false;
+       answer.snapshot=false;
         // imageData is either a base64 encoded string or a file URI
         // If it's base64 (DATA_URL):
         const base64Image = "data:image/jpeg;base64," + imageData;
@@ -164,6 +164,6 @@ export class EnlistmentPage implements OnInit {
   }
 
   deletePhoto(answer: enlistment) {
-    answer.check_foto = null;
+    answer.check_foto = undefined;
   }
 }

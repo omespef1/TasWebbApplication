@@ -46,7 +46,7 @@ export class NetworkService {
  
     let connection = status == ConnectionStatus.Offline ? 'Offline' : 'Online';
     let toast = this.toastController.create({
-      message: `You are now ${connection}`,
+      message: `Estás en modo ${connection}`,
       duration: 3000,
       position: 'bottom'
     });
@@ -58,6 +58,8 @@ export class NetworkService {
   }
  
   public getCurrentNetworkStatus(): ConnectionStatus {
+    let status =  this.network.type !== 'none' ? ConnectionStatus.Online : ConnectionStatus.Offline;
+    this.updateNetworkStatus(status);
     return this.status.getValue();
   }
 }
