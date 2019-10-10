@@ -12,7 +12,7 @@ export enum ConnectionStatus {
 })
 export class NetworkService {
  
-  private status: BehaviorSubject<ConnectionStatus> = new BehaviorSubject(ConnectionStatus.Offline);
+  private status: BehaviorSubject<ConnectionStatus> = new BehaviorSubject(ConnectionStatus.Online);
  
   constructor(private network: Network, private toastController: ToastController, private plt: Platform) {
     console.log(network.type);
