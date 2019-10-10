@@ -116,6 +116,7 @@ export class EnlistmentPage implements OnInit {
 
     if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
       this._service.PostAnswer(answer).subscribe(resp => {
+        this.saving=false;
         if (resp.Retorno === 0) {
           this._alert.showAlert("Perfecto!", `${resp.message}`);
           this.router.navigateByUrl("last-enlistments");
@@ -124,9 +125,15 @@ export class EnlistmentPage implements OnInit {
         }
       });
     } else {
+      this.saving=false;
       let offlineEnlistemnts = this._sesion.GetNewOfflineEnlistment();
-      offlineEnlistemnts.push(answer);
-      this._sesion.SetNewOfflineEnlistment(offlineEnlistemnts);
+      if(offlineEnlistemnts==null || offlineEnlistemnts==undefined){
+         let newList:manchecklist[]=new Array();
+         newList.push(answer);
+      }else {
+        offlineEnlistemnts.push(answer);
+        this._sesion.SetNewOfflineEnlistment(offlineEnlistemnts);
+      }
       this._alert.showAlert(
         "Error",
         "Te encuentras Offline, cuando tengas acceso a una red, enviaremos este alistamiento!"
