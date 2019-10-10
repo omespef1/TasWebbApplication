@@ -18,6 +18,7 @@ export class VehicleService {
 
 
   GetVehicleInformation(business:business,ThirdPartie:ThirdPartie){
+    console.log('consultando vehículos...')
    return this._http.Get<transaction>(`/Vehicle?business=${ business.CodigoEmpresa}&IdTercero=${ThirdPartie.IdTercero}`)
   }
 
@@ -29,5 +30,9 @@ export class VehicleService {
   }
   ArmaProtocolo(business:business,vehicle:vehicle,ThirdPartie:ThirdPartie){
     return this._http.Get<transaction>(`/Vehicle/ArmaProtocolo?business=${business.CodigoEmpresa}&idVehiculo=${vehicle.IdVehiculo}&identificacion=${ThirdPartie.Identificacion}`);
+  }
+
+  GetLastEnlistment(business: business, ThirdPartie: ThirdPartie) {
+    return this._http.Get<transaction>(`/Vehicles/GetLastEnlistment?business=${business.CodigoEmpresa}&IdTercero=${ThirdPartie.IdTercero}`);
   }
 }

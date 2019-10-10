@@ -117,7 +117,7 @@ export class EnlistmentPage implements OnInit {
       this._service.PostAnswer(answer).subscribe(resp => {
         if (resp.Retorno === 0) {
           this._alert.showAlert("Perfecto!", `${resp.message}`);
-          this.router.navigateByUrl("vehicle");
+          this.router.navigateByUrl("last-enlistments");
         } else {
           this._alert.showAlert("Error", resp.TxtError);
         }
@@ -130,7 +130,7 @@ export class EnlistmentPage implements OnInit {
         "Error",
         "Te encuentras Offline, cuando tengas acceso a una red, enviaremos este alistamiento!"
       );
-      this.router.navigateByUrl("vehicle");
+      this.router.navigateByUrl("last-enlistments");
     }
   }
   clear(event: any, question: enlistment) {

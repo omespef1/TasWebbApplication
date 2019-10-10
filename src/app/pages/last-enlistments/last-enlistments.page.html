@@ -1,9 +1,31 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>LastEnlistments</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header headerName="Alistamientos">
 
-<ion-content>
+</app-header>
+
+<ion-content fullscreen class="ion-padding">
+  <ion-list-header>
+    <ion-label>Información General</ion-label>
+  </ion-list-header>
+  <ion-list inset="true">
+    <ion-item>
+      <ion-label>Revisado por</ion-label>
+      <ion-note slot="end">{{ enlistment.Reviso }}</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label>Estado</ion-label>
+      <ion-note slot="end">{{ enlistment.Estado == 'N'? 'Rechazado' :'Aprobado' }}</ion-note>
+    </ion-item>
+    <ion-item>
+        <ion-textarea disabled [(ngModel)]="enlistment.Observaciones"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label>Kilometraje</ion-label>
+      <ion-note slot="end">{{ enlistment.Kilometraje }}</ion-note>
+    </ion-item>
+    <ion-item>
+        <ion-label>Fecha</ion-label>
+        <ion-note slot="end">{{ enlistment.FechaProceso |  date : 'dd/MM/yyyy' }}</ion-note>
+      </ion-item>
+  </ion-list>
 
 </ion-content>
