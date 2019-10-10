@@ -13,6 +13,10 @@ import { AlertService } from "../../services/alert/alert.service";
 import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { TouchSequence } from "selenium-webdriver";
+import {
+  NetworkService,
+  ConnectionStatus
+} from "../../services/network/network.service";
 
 @Component({
   selector: "app-enlistment",
@@ -26,7 +30,8 @@ export class EnlistmentPage implements OnInit {
     private router: Router,
     private _alert: AlertService,
     private camera: Camera,
-    private geolocation: Geolocation
+    private geolocation: Geolocation,
+    private _network: NetworkService
   ) {}
   enlistment: enlistment[] = [];
   manchecklist: manchecklist;
@@ -41,14 +46,23 @@ export class EnlistmentPage implements OnInit {
   }
   GetQuestions() {
     this.loading = true;
-    this._service
-      .GetQuestions(this._sesion.GetBussiness(), this._sesion.GetThirdPartie())
-      .subscribe(resp => {
-        this.loading = false;
-        if (resp.Retorno == 0) {
-          this.enlistment = resp.ObjTransaction;
-        }
-      });
+    if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
+      this._service
+        .GetQuestions(
+          this._sesion.GetBussiness(),
+          this._sesion.GetThirdPartie()
+        )
+        .subscribe(resp => {
+          this.loading = false;
+          if (resp.Retorno == 0) {
+            this.enlistment = resp.ObjTransaction;
+            this._sesion.SetQuestions(this.enlistment);
+          }
+        });
+    } else {
+      this.enlistment = this._sesion.GetQuestions();
+      this.loading = false;
+    }
   }
 
   Guardar() {
@@ -98,25 +112,33 @@ export class EnlistmentPage implements OnInit {
       });
     });
     console.log(answer);
-    this._service.PostAnswer(answer).subscribe(resp => {
-      if (resp.Retorno === 0) {
-        this._alert.showAlert(
-          "Perfecto!",
-          `${resp.message}`
-        );
-        this.router.navigateByUrl("vehicle");
-      } else {
-        this._alert.showAlert("Error", resp.TxtError);
-      }
-    });
+
+    if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
+      this._service.PostAnswer(answer).subscribe(resp => {
+        if (resp.Retorno === 0) {
+          this._alert.showAlert("Perfecto!", `${resp.message}`);
+          this.router.navigateByUrl("vehicle");
+        } else {
+          this._alert.showAlert("Error", resp.TxtError);
+        }
+      });
+    } else {
+      let offlineEnlistemnts = this._sesion.GetNewOfflineEnlistment();
+      offlineEnlistemnts.push(answer);
+      this._sesion.SetNewOfflineEnlistment(offlineEnlistemnts);
+      this._alert.showAlert(
+        "Error",
+        "Te encuentras Offline, cuando tengas acceso a una red, enviaremos este alistamiento!"
+      );
+      this.router.navigateByUrl("vehicle");
+    }
   }
   clear(event: any, question: enlistment) {
     console.log(event);
     console.log("limpia");
-    if (event.target.nodeName == "ION-RADIO-GROUP"){
+    if (event.target.nodeName == "ION-RADIO-GROUP") {
       question.observaciones = "";
     }
-  
   }
   takePicture(answer: enlistment) {
     this.snapshot = true;
