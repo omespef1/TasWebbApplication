@@ -108,7 +108,8 @@ export class EnlistmentPage implements OnInit {
         IdEmpresa: this._sesion.GetBussiness().CodigoEmpresa,
         Respuesta: item.respuestaUsuario,
         Resultado: "",
-        Check_Image: item.check_foto
+        Check_Image:''
+       
       });
     });
     console.log(answer);
