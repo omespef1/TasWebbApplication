@@ -18,7 +18,9 @@ import { Network } from '@ionic-native/network/ngx';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,
+  imports: [BrowserModule, IonicModule.forRoot(
+   { mode: 'ios'}
+  ), AppRoutingModule,
   ComponentsModule,HttpClientModule, IonicStorageModule.forRoot()],
   providers: [
     Network,

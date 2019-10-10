@@ -41,8 +41,8 @@ export class VehiclePage implements OnInit {
 
   GetVehicleInformation() {
     this.loading = true;
-console.log('vechiuli....')
-    if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
+    console.log(this._network.getCurrentNetworkStatus());
+    if (this._network.getCurrentNetworkStatus() === ConnectionStatus.Online) {
       this._vehicle
         .GetVehicleInformation(
           this._sesion.GetBussiness(),
@@ -56,8 +56,7 @@ console.log('vechiuli....')
             this.loading = false;
           }
         });
-    } else {
-      console.log('no hyay conexion')
+    } else {    
       this.vehicles = this._sesion.GetVehicles();
       this.vehiclesFilter = this._sesion.GetVehicles();
       this.loading = false;

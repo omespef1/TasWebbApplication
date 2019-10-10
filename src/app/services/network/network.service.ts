@@ -15,9 +15,11 @@ export class NetworkService {
   private status: BehaviorSubject<ConnectionStatus> = new BehaviorSubject(ConnectionStatus.Offline);
  
   constructor(private network: Network, private toastController: ToastController, private plt: Platform) {
+    console.log(network.type);
     this.plt.ready().then(() => {
-      this.initializeNetworkEvents();
       let status =  this.network.type !== 'none' ? ConnectionStatus.Online : ConnectionStatus.Offline;
+      this.initializeNetworkEvents();
+     
       this.status.next(status);
     });
   }
