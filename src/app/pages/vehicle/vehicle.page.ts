@@ -43,6 +43,7 @@ export class VehiclePage implements OnInit {
       )
       .subscribe(resp => {
         if (resp.Retorno == 0) {
+          this._sesion.SetVehicles(resp.ObjTransaction);
           this.vehicles = resp.ObjTransaction;
           this.vehiclesFilter = this.vehicles;
           this.loading=false;

@@ -3,6 +3,7 @@ import { business } from "../../models/business/business";
 import { ThirdPartie } from "../../models/general/user";
 import { ToastController } from '@ionic/angular';
 import { stringify } from 'querystring';
+import { vehicle } from 'src/app/models/vehicle/vehicle';
 
 @Injectable({
   providedIn: "root"
@@ -45,5 +46,12 @@ export class SessionService {
   }
   removeUser(){
     localStorage.clear();
+  }
+
+  SetVehicles(vehicles:vehicle[]){
+    localStorage.setItem('vehicles', JSON.stringify(vehicles));
+  }
+  GetVehicles():vehicle[]{
+    return JSON.parse(localStorage.getItem('vehicles'));
   }
 }
