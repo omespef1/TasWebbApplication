@@ -120,7 +120,7 @@ export class EnlistmentPage implements OnInit {
       this._service.PostAnswer(answer).subscribe(resp => {
         this.saving=false;
         if (resp.Retorno === 0) {
-          this._alert.showAlert("Perfecto!", `${resp.message}`);
+          this._alert.showAlert("Mensaje del sistema", `${resp.message}`);
           this._nav.navigateRoot("last-enlistments");
         } else {
           this._alert.showAlert("Error", resp.TxtError);

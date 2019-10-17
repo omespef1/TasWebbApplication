@@ -68,7 +68,8 @@ export class LoginPage implements OnInit {
             'Bienvenido!',
             `Ingresaste como ${user.NombreCompleto}`
           );
-          this.router.navigateByUrl('vehicle')
+          // this._nav.setDirection('root');
+          this.router.navigateByUrl('vehicle');
         }
       },
       err => {

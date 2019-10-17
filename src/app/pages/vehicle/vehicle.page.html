@@ -1,4 +1,4 @@
-<app-header headerName="Vehículos">
+<app-header [showBackButton]="false" headerName="Vehículos">
 
 </app-header>
 
@@ -20,7 +20,7 @@
                 <ion-item>
                   <ion-icon slot="start" name="alarm"></ion-icon>
                   <ion-label>Fecha Actual</ion-label>
-                  <ion-note slot="end"> {{ today | date:'dd/mm/yyyy'}}</ion-note>
+                  <ion-note slot="end"> {{ today | date:'dd/mm/yyyy hh:mm aa'}}</ion-note>
                 </ion-item>        
               </ion-list>             
              <ion-list id="skeleton" *ngIf="loading">
@@ -164,9 +164,9 @@
 
                <ng-container *ngIf="vehicle.Sugerido==1">
 
-                <ion-list-header>
+                <!-- <ion-list-header>
                   <ion-label> <b>Vehículo sugerido</b></ion-label>
-                </ion-list-header>
+                </ion-list-header> -->
 
                     
                 <ion-list lines="none" inset="true">

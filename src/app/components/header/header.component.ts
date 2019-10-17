@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
   @Input() headerName:string;
+  @Input() showBackButton = true;
   constructor(private _auth: SessionService,private router:Router) { }
 
   ngOnInit() {}

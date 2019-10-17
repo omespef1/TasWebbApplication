@@ -1,4 +1,4 @@
-<app-header headerName="Alistamientos">
+<app-header headerName="Histórico">
 
 </app-header>
 
@@ -24,7 +24,7 @@
     </ion-item>
     <ion-item>
         <ion-label>Fecha</ion-label>
-        <ion-note slot="end">{{ enlistment.FechaProceso |  date : 'dd/MM/yyyy' }}</ion-note>
+        <ion-note slot="end">{{ enlistment.FechaProceso |  date : 'dd/MM/yyyy hh:mm aa' }}</ion-note>
       </ion-item>
   </ion-list>
 

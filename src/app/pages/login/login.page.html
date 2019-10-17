@@ -13,11 +13,11 @@
             </div>           
           </ion-col>
         </ion-row>
-        <ion-row>
+        <!-- <ion-row>
           <ion-col padding>
             <h2><b>BIENVENIDO!</b></h2>
           </ion-col>
-        </ion-row>
+        </ion-row> -->
         <ion-row>
           <ion-col>
             <ion-item>
@@ -42,7 +42,7 @@
         </ion-row>
         <ion-row>
           <ion-col padding>
-            <ion-button [disabled]="!loginForm.form.valid" expand="block" (click)="signIn()" >
+            <ion-button [disabled]="!loginForm.form.valid" color="secondary" expand="block" (click)="signIn()" >
                 <ion-icon *ngIf="!loading" slot="start" name="checkmark-circle"></ion-icon>
                 <ion-spinner *ngIf="loading" slot="start"></ion-spinner>
                 INGRESAR

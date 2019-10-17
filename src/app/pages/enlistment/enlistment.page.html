@@ -1,4 +1,4 @@
-<app-header headerName="Alistamiento">
+<app-header  [headerName]="car.PlacaVehiculo">
 
 </app-header>
 
@@ -10,24 +10,24 @@
         <ng-container [ngSwitch]="question.Seccion">
           <ion-list inset="true">
             <div *ngSwitchCase="1">
-              <ion-list-header color="primary">
+              <ion-list-header color="secondary">
                 <ion-label>{{question.Pregunta | uppercase}} </ion-label>
               </ion-list-header>
             </div>
             <div *ngSwitchCase="0">
               <ion-radio-group [(ngModel)]="question.respuestaUsuario" required [name]="'anwser'+ i" (ionChange)="clear($event,question)">
-                <ion-list-header color="secondary">
+                <ion-list-header color="primary">
                   <ion-label>{{question.Pregunta | uppercase}}</ion-label>
                 </ion-list-header>
                 <ion-item>
-                  <ion-icon color="primary" slot="end" [name]="'checkmark-circle'"></ion-icon>
+                  <ion-icon color="secondary" slot="end" [name]="'checkmark-circle'"></ion-icon>
                   <ion-label>Si</ion-label>
-                  <ion-radio color="primary" slot="start" value="2"></ion-radio>
+                  <ion-radio color="secondary" slot="start" value="2"></ion-radio>
                 </ion-item>
                 <ion-item>
-                  <ion-icon color="primary" slot="end" [name]="'close-circle'"></ion-icon>
+                  <ion-icon color="secondary" slot="end" [name]="'close-circle'"></ion-icon>
                   <ion-label>No</ion-label>
-                  <ion-radio color="danger" slot="start" value="1"></ion-radio>
+                  <ion-radio color="secondary" slot="start" value="1"></ion-radio>
                 </ion-item>
                 <ion-item>
                   <ion-icon slot="start" name="clipboard"></ion-icon>
@@ -38,7 +38,7 @@
                 <ion-item>
                   <ion-icon slot="start" name="eye"></ion-icon>
                   <ion-label>Evidencia</ion-label>
-                  <ion-button slot="end" (click)="takePicture(question)" fill="outline">
+                  <ion-button color="secondary" slot="end" (click)="takePicture(question)" fill="outline">
                     <ion-icon *ngIf="!question.snapshot" slot="start" name="camera"></ion-icon>
                     <ion-spinner *ngIf="question.snapshot" slot="start"></ion-spinner>
                     Foto
