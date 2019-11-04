@@ -29,6 +29,7 @@ export class AuthService {
         if (userData) {
           if (userData.Retorno === 0) {
            this._sesion.SetThirdPartie(userData.ObjTransaction);
+           this._sesion.SetThirdPartieBio(userData.ObjTransaction);
           }
         }
       })
@@ -42,12 +43,12 @@ export class AuthService {
       'Bienvenido!',
       `Ingresaste como ${user.NombreCompleto}`
     );
-    this.router.navigateByUrl("vehicle");
+    this.router.navigateByUrl("tabs/vehicle");
   }
 
   async signOut() {
    // await this.storage.set("user", null);
    this._sesion.removeUser();
-    this.router.navigateByUrl("/login");
+    this.router.navigateByUrl("login");
   }
 }
