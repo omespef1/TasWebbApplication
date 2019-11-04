@@ -3,11 +3,12 @@ import { AuthService } from "../../services/auth/auth.service";
 import { Router } from "@angular/router";
 import { NgForm } from "@angular/forms";
 import { loginRequest } from "../../models/general/loginRequest";
-import { NavController, ModalController } from "@ionic/angular";
+import { NavController, ModalController, Platform } from "@ionic/angular";
 import { AlertService } from "../../services/alert/alert.service";
 import { SessionService } from "../../services/session/session.service";
 import { BusinessPage } from "../business/business.page";
 import { ThirdPartie } from "../../models/general/user";
+import { TouchIdService } from '../../services/touch/touch-id.service';
 
 @Component({
   selector: "app-login",
@@ -18,18 +19,24 @@ export class LoginPage implements OnInit {
   loading = false;
   showPass = false;
   user: loginRequest = new loginRequest();
+  touchId:boolean=false;
   constructor(
     private auth: AuthService,
     private router: Router,
     private _alert: AlertService,
     private _nav: NavController,
     private _sesion: SessionService,
-    private _modal: ModalController
+    private _modal: ModalController,
+    private _touch:TouchIdService,
+    private _platform:Platform
   ) {}
 
   ngOnInit() {  
     this.LoadBusiness();
+    this.GetTouchId();
   }
+
+
 
   async LoadBusiness() {
     const business = this._sesion.GetBussiness();
@@ -69,7 +76,7 @@ export class LoginPage implements OnInit {
             `Ingresaste como ${user.NombreCompleto}`
           );
           // this._nav.setDirection('root');
-          this.router.navigateByUrl('vehicle');
+          this.router.navigateByUrl('tabs');
         }
       },
       err => {
@@ -80,5 +87,28 @@ export class LoginPage implements OnInit {
   }
   changeBusiness(){
     this.showModalBusiness(); 
+  }
+
+  GetTouchId(){
+    if(this._platform.is('cordova')){
+    this._touch.isAvailale().then((resp:any)=>{
+        this.touchId=true;
+        this.logTouchId();
+    },err=>{
+
+    })
+  }
+  }
+
+  logTouchId(){
+
+    if(this._platform.is('cordova')){
+      this._touch.verifyFingerPrint('Ingresa tu huella dactilar para ingresar').then(resp=>{
+        
+      },err=>{
+  
+      })
+    }
+ 
   }
 }
