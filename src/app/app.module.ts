@@ -15,6 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { NetworkService } from './services/network/network.service';
 import { Network } from '@ionic-native/network/ngx';
+import { TouchID } from '@ionic-native/touch-id/ngx';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -24,6 +25,7 @@ import { Network } from '@ionic-native/network/ngx';
   ComponentsModule,HttpClientModule, IonicStorageModule.forRoot()],
   providers: [
     Network,
+    TouchID,
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
