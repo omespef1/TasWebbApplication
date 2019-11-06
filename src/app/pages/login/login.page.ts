@@ -76,7 +76,7 @@ export class LoginPage implements OnInit {
             `Ingresaste como ${user.NombreCompleto}`
           );
           // this._nav.setDirection('root');
-          this.router.navigateByUrl('tabs');
+          this.router.navigateByUrl('tabs/vehicle');
         }
       },
       err => {
