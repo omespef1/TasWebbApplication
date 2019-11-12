@@ -51,6 +51,9 @@
         <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
             <string>Usaremos tu ubicación para determinar desde donde realizaste el alistamiento</string>
         </edit-config>
+        <config-file parent="NSFaceIDUsageDescription" target="*-Info.plist">
+            <string>Usaremos tus datos biométricos para acceder a la aplicación</string>
+        </config-file>
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
