@@ -1,0 +1,33 @@
+<app-header  headerName="Pendientes">
+
+</app-header>
+<ion-content fullscreen>
+<form #pendingForm="ngForm" (ngSubmit)="Guardar()">
+  <div *ngFor="let pending of pendings;let i = index">    
+      <ion-list inset="true">                
+          <ion-radio-group [(ngModel)]="pending.Resuelto" required [name]="'pending'+ i">
+            <ion-list-header color="primary">
+              <ion-label>{{pending.Pendiente}}</ion-label>
+            </ion-list-header>
+            <ion-item>
+              <ion-icon color="secondary" slot="end" [name]="'checkmark-circle'"></ion-icon>
+              <ion-label>Resuelto</ion-label>
+              <ion-radio color="secondary" slot="start" value="S"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-icon color="secondary" slot="end" [name]="'close-circle'"></ion-icon>
+              <ion-label>No Resuelto</ion-label> 
+              <ion-radio color="secondary" slot="start" value="N"></ion-radio>
+            </ion-item>                                 
+          </ion-radio-group>      
+      </ion-list>
+
+  </div>
+  <ion-button [disabled]="!pendingForm.form.valid || saving " expand="block" type="submit">
+    <ion-icon *ngIf="!saving" slot="start" name="checkmark-circle"></ion-icon>
+    <ion-spinner *ngIf="saving" slot="start"></ion-spinner>
+    GUARDAR
+  </ion-button>
+
+</form>
+</ion-content>

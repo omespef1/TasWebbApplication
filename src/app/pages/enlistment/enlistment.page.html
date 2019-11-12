@@ -35,14 +35,14 @@
                     clearOnEdit="true" multiple="true" placeholder="Ingrese los detalles aquí"
                     [name]="'observacion' + i" [(ngModel)]="question.observaciones"></ion-input>
                 </ion-item>
-                <ion-item *ngIf="question.respuestaUsuario != question.respuesta || question.respuestaUsuario!=undefined">
+                <ion-item *ngIf="question.respuestaUsuario != question.respuesta">
                   <ion-icon slot="start" name="eye"></ion-icon>
                   <ion-label>Evidencia</ion-label>
                   <ion-button color="secondary" slot="end" (click)="takePicture(question)" fill="outline">
                     <ion-icon *ngIf="!question.snapshot" slot="start" name="camera"></ion-icon>
                     <ion-spinner *ngIf="question.snapshot" slot="start"></ion-spinner>
                     Foto
-                  </ion-button>
+                  </ion-button>                  
                 </ion-item>
                 <ion-item *ngIf="question.check_foto">
                   

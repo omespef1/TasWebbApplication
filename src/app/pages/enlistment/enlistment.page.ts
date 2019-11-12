@@ -121,7 +121,7 @@ export class EnlistmentPage implements OnInit {
         this.saving=false;
         if (resp.Retorno === 0) {
           this._alert.showAlert("Mensaje del sistema", `${resp.message}`);
-          this._nav.navigateRoot("last-enlistments");
+          this._nav.navigateRoot("tabs/last-enlistments");
         } else {
           this._alert.showAlert("Error", resp.TxtError);
         }
@@ -141,7 +141,7 @@ export class EnlistmentPage implements OnInit {
         "Te encuentras Offline, cuando tengas acceso a una red, enviaremos este alistamiento!"
       );
       // this.router.navigateByUrl("last-enlistments");
-      this._nav.navigateRoot("last-enlistments");
+      this._nav.navigateRoot("tabs/last-enlistments");
     }
   }
   clear(event: any, question: enlistment) {

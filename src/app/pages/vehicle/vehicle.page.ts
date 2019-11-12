@@ -8,6 +8,7 @@ import { AlertService } from "../../services/alert/alert.service";
 import { aliparam } from "src/app/models/vehicle/aliparam";
 import { async } from "@angular/core/testing";
 import { error } from "@angular/compiler/src/util";
+import { pending } from "../../models/vehicle/pending";
 import {
   NetworkService,
   ConnectionStatus
@@ -56,7 +57,7 @@ export class VehiclePage implements OnInit {
             this.loading = false;
           }
         });
-    } else {    
+    } else {
       this.vehicles = this._sesion.GetVehicles();
       this.vehiclesFilter = this._sesion.GetVehicles();
       this.loading = false;
@@ -94,25 +95,37 @@ export class VehiclePage implements OnInit {
                 .GetManPendientes(this._sesion.GetBussiness(), car)
                 .subscribe(resp => {
                   if (resp.Retorno === 0) {
-                    this._vehicle
-                      .ArmaProtocolo(
-                        this._sesion.GetBussiness(),
-                        car,
-                        this._sesion.GetThirdPartie()
-                      )
-                      .subscribe(resp => {
-                        if (resp.Retorno === 1) {
-                          throw Error(resp.TxtError);
+
+                    let pendings: pending[] = resp.ObjTransaction;
+                    if (pendings != null && pendings.length > 0) {
+                      let paramsPendings: NavigationExtras = {
+                        state: {
+                          pendings: pendings,
+                          car: car
                         }
-                        this._sesion.SetKilometerCar(car.NuevoKilometraje);
-                        let params: NavigationExtras = {
-                          state: {
-                            car: car
+                      };
+                      this.router.navigateByUrl("pendings", paramsPendings);
+                    } else {
+                      this._vehicle
+                        .ArmaProtocolo(
+                          this._sesion.GetBussiness(),
+                          car,
+                          this._sesion.GetThirdPartie()
+                        )
+                        .subscribe(resp => {
+                          if (resp.Retorno === 1) {
+                            throw Error(resp.TxtError);
                           }
-                        };
-                        car.loading = false;
-                        this.router.navigateByUrl("enlistment", params);
-                      });
+                          this._sesion.SetKilometerCar(car.NuevoKilometraje);
+                          let params: NavigationExtras = {
+                            state: {
+                              car: car
+                            }
+                          };
+                          car.loading = false;
+                          this.router.navigateByUrl("enlistment", params);
+                        });
+                    }
                   }
                 });
             } catch (err) {
@@ -126,13 +139,15 @@ export class VehiclePage implements OnInit {
         this._alert.showAlert("Error", "Ingrese kilometraje del vehículo");
       }
     } else {
-      let params: NavigationExtras = {
-        state: {
-          car: car
-        }
-      };
-      car.loading = false;
-      this.router.navigateByUrl("enlistment", params);
+      if (car.NuevoKilometraje != null && car.NuevoKilometraje > 0) {
+        let params: NavigationExtras = {
+          state: {
+            car: car
+          }
+        };
+        car.loading = false;
+        this.router.navigateByUrl("enlistment", params);
+      }
     }
   }
 
