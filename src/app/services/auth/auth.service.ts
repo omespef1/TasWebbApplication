@@ -49,6 +49,7 @@ export class AuthService {
   signInDirectTouch(){
 
     const user: ThirdPartie = this._sesion.GetThirdPartieBio();
+    this._sesion.SetThirdPartie(user);
     console.log(user);
     this._alert.showAlert(
       'Bienvenido!',
