@@ -3,6 +3,7 @@ import { Network } from '@ionic-native/network/ngx';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ToastController, Platform } from '@ionic/angular';
 import { AlertService } from '../alert/alert.service';
+import { OfflineManagerService } from '../offline/offline-manager.service';
 
 export enum ConnectionStatus {
   Online,
@@ -15,7 +16,8 @@ export class NetworkService {
  
   private status: BehaviorSubject<ConnectionStatus> = new BehaviorSubject(ConnectionStatus.Online);
  
-  constructor(private network: Network, private toastController: ToastController, private plt: Platform,private alert:AlertService) {
+  constructor(private network: Network, private toastController: ToastController, private plt: Platform,private alert:AlertService,
+    private _offline: OfflineManagerService) {
     console.log(network.type);
     this.plt.ready().then(() => {
       let status =  this.network.type !== 'none' ? ConnectionStatus.Online : ConnectionStatus.Offline;
@@ -47,6 +49,8 @@ export class NetworkService {
       if (this.status.getValue() === ConnectionStatus.Offline) {
         console.log('WE ARE ONLINE');
         this.updateNetworkStatus(ConnectionStatus.Online);
+        this._offline.checkEventsPendings();
+        
       }
     });
   }

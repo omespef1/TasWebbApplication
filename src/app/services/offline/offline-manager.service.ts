@@ -104,19 +104,30 @@ export class OfflineManagerService {
   }
 
   checkEventsPendings() {
-    this.alert.presentToast('Sincronizando alistamientos...',5000)
-    let pendings: manchecklist[] = this.sesion.GetNewOfflineEnlistment();    
-    for (const pending of pendings) {
-      this.enlistment.PostAnswer(pending).subscribe(resp => {
-        if (resp.Retorno === 0) {
-          pendings = pendings.filter(obj => obj !== pending);
-          this.alert.showAlert("Mensaje del sistema", `${resp.message}`);
-        } else {
-          this.alert.showAlert("Error", resp.TxtError);
+   
+    try {
+      
+      let pendings: manchecklist[] = this.sesion.GetNewOfflineEnlistment(); 
+      if(pendings!=null && pendings.length>0) {
+        this.alert.presentToast('Sincronizando alistamientos...',5000) 
+        for (const pending of pendings) {
+          this.enlistment.PostAnswer(pending).subscribe(resp => {
+            if (resp.Retorno === 0) {
+              pendings = pendings.filter(obj => obj !== pending);
+              this.alert.showAlert("Mensaje del sistema", `${resp.message}`);
+            } else {
+              this.alert.showAlert("Error", resp.TxtError);
+            }
+          });
         }
-      });
-    }
+        this.sesion.SetNewOfflineEnlistment(pendings);
+      }
+     
 
-    this.sesion.SetNewOfflineEnlistment(pendings);
+    } catch (error) {
+      this.alert.presentToast('error sincronizando...',5000) 
+    }
+   
+   
   }
 }
