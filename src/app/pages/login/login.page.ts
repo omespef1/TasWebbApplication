@@ -93,7 +93,7 @@ export class LoginPage implements OnInit {
     if(this._platform.is('cordova')){
     this._touch.isAvailale().then((resp:any)=>{
         this.touchId=true;
-        this.logTouchId();
+       // this.logTouchId();
     },err=>{
 
     })
@@ -103,8 +103,10 @@ export class LoginPage implements OnInit {
   logTouchId(){
 
     if(this._platform.is('cordova')){
-      this._touch.verifyFingerPrint('Ingresa tu huella dactilar para ingresar').then(resp=>{
-        
+      this._touch.verifyFingerPrint('Ingresa tu huella dactilar para ingresar').then(()=>{
+        console.log('bio ok');
+        this.auth.signInDirectTouch();
+        this.router.navigateByUrl("tabs/vehicle");
       },err=>{
   
       })

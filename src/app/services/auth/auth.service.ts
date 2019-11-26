@@ -46,6 +46,17 @@ export class AuthService {
     this.router.navigateByUrl("tabs/vehicle");
   }
 
+  signInDirectTouch(){
+
+    const user: ThirdPartie = this._sesion.GetThirdPartieBio();
+    console.log(user);
+    this._alert.showAlert(
+      'Bienvenido!',
+      `Ingresaste como ${user.NombreCompleto}`
+    );
+    
+  }
+
   async signOut() {
    // await this.storage.set("user", null);
    this._sesion.removeUser();

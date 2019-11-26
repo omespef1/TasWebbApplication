@@ -11,8 +11,8 @@ import { retry, catchError, filter, map, tap } from "rxjs/operators";
   providedIn: "root"
 })
 export class HttpManagerService {
-  // baseUrl: string = "https://tas.com.co/taswebapi/api";
-   baseUrl: string = "http://192.168.0.29/RTASWEB/api";
+  baseUrl: string = "https://tas.com.co/taswebapi/api";
+   //baseUrl: string = "http://192.168.0.29/RTASWEB/api";
   private httpOptions: {
     headers: HttpHeaders;
   };
