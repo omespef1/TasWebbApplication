@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Network } from '@ionic-native/network/ngx';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ToastController, Platform } from '@ionic/angular';
+import { AlertService } from '../alert/alert.service';
 
 export enum ConnectionStatus {
   Online,
@@ -14,7 +15,7 @@ export class NetworkService {
  
   private status: BehaviorSubject<ConnectionStatus> = new BehaviorSubject(ConnectionStatus.Online);
  
-  constructor(private network: Network, private toastController: ToastController, private plt: Platform) {
+  constructor(private network: Network, private toastController: ToastController, private plt: Platform,private alert:AlertService) {
     console.log(network.type);
     this.plt.ready().then(() => {
       let status =  this.network.type !== 'none' ? ConnectionStatus.Online : ConnectionStatus.Offline;
@@ -34,11 +35,18 @@ export class NetworkService {
     });
  
     this.network.onConnect().subscribe(() => {
+
+      setTimeout(() => {
+        if (this.network.type === 'wifi') {
+         this.alert.presentToast('Conexión WIFI',4000);
+        }
+        else {
+          this.alert.presentToast('Conexión 3G/4G',4000);
+        }
+      }, 3000);
       if (this.status.getValue() === ConnectionStatus.Offline) {
         console.log('WE ARE ONLINE');
         this.updateNetworkStatus(ConnectionStatus.Online);
-      
-
       }
     });
   }
