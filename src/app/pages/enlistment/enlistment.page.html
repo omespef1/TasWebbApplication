@@ -62,7 +62,7 @@
       <ion-button [disabled]="!enlistmentForm.form.valid || saving " expand="block" type="submit">
         <ion-icon *ngIf="!saving" slot="start" name="checkmark-circle"></ion-icon>
         <ion-spinner *ngIf="saving" slot="start"></ion-spinner>
-        GUARDAR
+        {{ saving?'ENVIANDO...':'GUARDAR'}}
       </ion-button>
 
     </form>
