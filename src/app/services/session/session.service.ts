@@ -41,13 +41,14 @@ export class SessionService {
     return JSON.parse(localStorage.getItem("wifi"));
   }
   SetMobile(val: boolean) {
+    console.log('permiso a mobile cambiado');
     localStorage.setItem("mobile", JSON.stringify(val));
   }
   GetMobile() {
     return JSON.parse(localStorage.getItem("mobile"));
   }
   removeUser() {
-    localStorage.clear();
+    localStorage.removeItem("thirdPartie");
   }
 
   SetVehicles(vehicles: vehicle[]) {

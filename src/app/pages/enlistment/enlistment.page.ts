@@ -41,10 +41,15 @@ export class EnlistmentPage implements OnInit {
   loading = false;
   saving = false;
   snapshot = false;
+  progress=0;
+  
   ngOnInit() {
-    this.GetQuestions();
+    
     console.log(this.router.getCurrentNavigation().extras);
     this.car = this.router.getCurrentNavigation().extras.state.car;
+  }
+  ionViewWillEnter(){
+    this.GetQuestions();
   }
   GetQuestions() {
     this.loading = true;
@@ -130,10 +135,14 @@ export class EnlistmentPage implements OnInit {
       this.saving=false;
       let offlineEnlistemnts = this._sesion.GetNewOfflineEnlistment();
       if(offlineEnlistemnts==null || offlineEnlistemnts==undefined){
+        console.log(offlineEnlistemnts);
          let newList:manchecklist[]=new Array();
          newList.push(answer);
+         console.log('item agregado al offline');
+         this._sesion.SetNewOfflineEnlistment(newList);
       }else {
         offlineEnlistemnts.push(answer);
+        console.log('item agregado al offline2');
         this._sesion.SetNewOfflineEnlistment(offlineEnlistemnts);
       }
       this._alert.showAlert(
@@ -148,7 +157,10 @@ export class EnlistmentPage implements OnInit {
     console.log(event);
     console.log("limpia");
     if (event.target.nodeName == "ION-RADIO-GROUP") {
+      
+      this.progressUp();
       question.observaciones = "";
+
     }
   }
   takePicture(answer: enlistment) {
@@ -171,6 +183,14 @@ export class EnlistmentPage implements OnInit {
         // Handle error
       }
     );
+  }
+
+  progressUp(){
+    this.progress+=1;
+  }
+
+  progressValue(){
+   return (this.progress * 100 / this.enlistment.length) /100;
   }
 
   deletePhoto(answer: enlistment) {

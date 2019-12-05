@@ -60,8 +60,8 @@
 
        <ion-row text-center>
          <ion-col size="12">
-            <div class="fingerprint" button tappable *ngIf="touchId" (click)="logTouchId()" >
-                <img src="assets/imgs/fingerprintdark.svg">
+            <div class="fingerprint"  tappable *ngIf="touchId"  >
+                <img tappable (click)="logTouchId()" src="assets/imgs/fingerprintdark.svg">
               </div>
          </ion-col>
        </ion-row>
