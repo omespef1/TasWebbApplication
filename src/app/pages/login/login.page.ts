@@ -107,6 +107,7 @@ export class LoginPage implements OnInit {
         console.log('bio ok');
         this.auth.signInDirectTouch();
         this.router.navigateByUrl("tabs/vehicle");
+        console.log('paso autoiza');
       },err=>{
   
       })

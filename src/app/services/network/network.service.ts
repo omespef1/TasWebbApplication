@@ -46,7 +46,7 @@ export class NetworkService {
           this.alert.presentToast('Conexión 3G/4G',4000);
         }
       }, 3000);
-      if (this.status.getValue() === ConnectionStatus.Offline) {
+      if (this.status.getValue() === ConnectionStatus.Online) {
         console.log('WE ARE ONLINE');
         this.updateNetworkStatus(ConnectionStatus.Online);
         this._offline.checkEventsPendings();
