@@ -15,7 +15,7 @@ export class LastEnlistmentsPage implements OnInit {
   constructor(private _vehicle: VehicleService,private _sesion:SessionService,private _network:NetworkService) {}
   enlistment: manchecklist = new manchecklist();
   ngOnInit() {
-    this.GetLastEnlistment();
+    
   }
 
   GetLastEnlistment() {
