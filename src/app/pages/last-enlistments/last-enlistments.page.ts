@@ -18,6 +18,10 @@ export class LastEnlistmentsPage implements OnInit {
     
   }
 
+  ionViewWillEnter(){
+    this.GetLastEnlistment();
+  }
+
   GetLastEnlistment() {
     if(this._network.getCurrentNetworkStatus()== ConnectionStatus.Online){
       this._vehicle.GetLastEnlistment(this._sesion.GetBussiness(), this._sesion.GetThirdPartie()).subscribe(resp => {

@@ -1,11 +1,13 @@
 <app-header  [headerName]="car.PlacaVehiculo">
-
+    
 </app-header>
 
 <ion-content fullscreen>
+    <ion-progress-bar ion-fixed  color="secondary" [value]="progressValue()"></ion-progress-bar>
   <div *ngIf="!loading">
-
+      
     <form #enlistmentForm="ngForm" (ngSubmit)="Guardar()">
+        
       <div *ngFor="let question of enlistment;let i = index">
         <ng-container [ngSwitch]="question.Seccion">
           <ion-list inset="true">

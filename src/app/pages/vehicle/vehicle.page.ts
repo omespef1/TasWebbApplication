@@ -95,7 +95,7 @@ export class VehiclePage implements OnInit {
                 .GetManPendientes(this._sesion.GetBussiness(), car)
                 .subscribe(resp => {
                   if (resp.Retorno === 0) {
-
+                    car.loading = false;
                     let pendings: pending[] = resp.ObjTransaction;
                     if (pendings != null && pendings.length > 0) {
                       let paramsPendings: NavigationExtras = {
@@ -104,7 +104,7 @@ export class VehiclePage implements OnInit {
                           car: car
                         }
                       };
-                      this.router.navigateByUrl("pendings", paramsPendings);
+                      this.router.navigateByUrl("tabs/pendings", paramsPendings);
                     } else {
                       this._vehicle
                         .ArmaProtocolo(
@@ -123,7 +123,7 @@ export class VehiclePage implements OnInit {
                             }
                           };
                           car.loading = false;
-                          this.router.navigateByUrl("enlistment", params);
+                          this.router.navigateByUrl("tabs/enlistment", params);
                         });
                     }
                   }
@@ -146,7 +146,7 @@ export class VehiclePage implements OnInit {
           }
         };
         car.loading = false;
-        this.router.navigateByUrl("enlistment", params);
+        this.router.navigateByUrl("tabs/enlistment", params);
       }
     }
   }

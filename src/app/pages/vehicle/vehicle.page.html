@@ -216,7 +216,7 @@
                         <ion-item button color="secondary" (click)="checkVehicle(vehicle)">
                             <ion-icon *ngIf="!saving" slot="start" name="checkmark-circle"></ion-icon>
                             <ion-spinner *ngIf="saving" slot="start"></ion-spinner>
-                            SELECCIONAR
+                             {{ !saving?'SELECCIONAR':'ESPERE...'}}
                         </ion-item>
   
                     </ion-list>

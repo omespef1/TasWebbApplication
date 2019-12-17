@@ -18,6 +18,26 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'enlistment',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../pages/enlistment/enlistment.module').then(m => m.EnlistmentPageModule)
+          }
+        ]
+      },
+      {
+        path: 'pendings',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../pages/pendings/pendings.module').then(m => m.PendingsPageModule)
+          }
+        ]
+      },
+      {
         path: 'last-enlistments',
         children: [
           {

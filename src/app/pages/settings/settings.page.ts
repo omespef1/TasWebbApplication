@@ -10,7 +10,8 @@ import { AuthService } from '../../services/auth/auth.service';
 })
 export class SettingsPage implements OnInit {
   ThirdPartie:ThirdPartie;
-
+  mobile=false;
+  wifi=false;
   constructor(private _sesion: SessionService,private _auth:AuthService) {
 
     this.ThirdPartie = this._sesion.GetThirdPartie();
@@ -19,21 +20,22 @@ export class SettingsPage implements OnInit {
 
   ngOnInit() {
 
-
+    this.mobile = this.GetMobile();
+    this.wifi = this.GetWifi();
 
   }
 
-  SetWifi(value) {
-    console.log(value);
-    this._sesion.SetWifi(value);
+  SetWifi() {
+    console.log(this.wifi);
+    this._sesion.SetWifi(this.wifi);
   }
 
   GetWifi() {
     return this._sesion.GetWifi();
   }
-  SetMobile(value) {
-    console.log(value);
-    this._sesion.SetMobile(value);
+  SetMobile() {
+    console.log(this.mobile);
+    this._sesion.SetMobile(this.mobile);
   }
 
   GetMobile() {

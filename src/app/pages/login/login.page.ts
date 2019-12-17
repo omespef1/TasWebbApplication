@@ -93,7 +93,6 @@ export class LoginPage implements OnInit {
     if(this._platform.is('cordova')){
     this._touch.isAvailale().then((resp:any)=>{
         this.touchId=true;
-       // this.logTouchId();
     },err=>{
 
     })
