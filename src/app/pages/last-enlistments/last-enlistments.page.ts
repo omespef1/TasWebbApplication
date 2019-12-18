@@ -12,6 +12,7 @@ import { ConnectionStatus } from '../../services/network/network.service';
   styleUrls: ["./last-enlistments.page.scss"]
 })
 export class LastEnlistmentsPage implements OnInit {
+  showDetail=false;
   constructor(private _vehicle: VehicleService,private _sesion:SessionService,private _network:NetworkService) {}
   enlistment: manchecklist = new manchecklist();
   ngOnInit() {
@@ -27,7 +28,6 @@ export class LastEnlistmentsPage implements OnInit {
       this._vehicle.GetLastEnlistment(this._sesion.GetBussiness(), this._sesion.GetThirdPartie()).subscribe(resp => {
         if (resp.Retorno == 0) {
           this.enlistment = resp.ObjTransaction;
-          this._sesion.SetLastEnlistment(this.enlistment);
         }
       });
     }
@@ -36,4 +36,6 @@ export class LastEnlistmentsPage implements OnInit {
     }
   
   }
+
+
 }

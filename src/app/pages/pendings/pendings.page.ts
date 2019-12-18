@@ -7,6 +7,8 @@ import { TryCatchStmt } from "@angular/compiler";
 import { throwError } from "rxjs";
 import { AlertService } from '../../services/alert/alert.service';
 import { error } from "util";
+import { VehicleService } from "src/app/services/vehicle/vehicle.service";
+import { SessionService } from '../../services/session/session.service';
 
 @Component({
   selector: "app-pendings",
@@ -17,7 +19,8 @@ export class PendingsPage implements OnInit {
   pendings: pending[];
   saving: boolean = false;
   car: vehicle;
-  constructor(private _service: PendingService, private router: Router,private alert:AlertService) {}
+  constructor(private _service: PendingService, private router: Router,private alert:AlertService,private _vehicle:VehicleService,
+    private _sesion:SessionService) {}
 
   ngOnInit() {
     this.car = this.router.getCurrentNavigation().extras.state.car;
@@ -31,17 +34,32 @@ export class PendingsPage implements OnInit {
       throw new Error("Existen pendientes por resolver de tipo restrictivo.No puedes continuar");        
       }
       this._service.UpdatePendings(this.pendings).subscribe(resp => {
-        if (resp.Retorno == 1) {
+        if (resp.Retorno === 1) {
          throwError(resp.TxtError);
         }       
-        let paramsEnlistment:NavigationExtras ={
-          state: {
-            car:this.car
-          }
-        };
-        this.saving = false;
-        this.alert.presentToast('Pendientes actualizados',3000);
-        this.router.navigateByUrl("enlistment",paramsEnlistment);
+        if(resp.Retorno==0){
+          this._vehicle
+          .ArmaProtocolo(
+            this._sesion.GetBussiness(),
+            this.car,
+            this._sesion.GetThirdPartie()
+          )
+          .subscribe(resp => {
+            if (resp.Retorno === 1) {
+              throw Error(resp.TxtError);
+            }
+            this._sesion.SetKilometerCar(this.car.NuevoKilometraje);
+            let params: NavigationExtras = {
+              state: {
+                car: this.car
+              }
+            };
+            this.alert.presentToast('Pendientes actualizados',3000);
+            this.router.navigateByUrl("tabs/enlistment", params);
+          });
+         
+          
+        }
       });
     } catch (err) {
 

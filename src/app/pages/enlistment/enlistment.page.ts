@@ -17,7 +17,7 @@ import {
   NetworkService,
   ConnectionStatus
 } from "../../services/network/network.service";
-import { NavController } from '@ionic/angular';
+import { NavController } from "@ionic/angular";
 
 @Component({
   selector: "app-enlistment",
@@ -33,7 +33,7 @@ export class EnlistmentPage implements OnInit {
     private camera: Camera,
     private geolocation: Geolocation,
     private _network: NetworkService,
-    private _nav:NavController
+    private _nav: NavController
   ) {}
   enlistment: enlistment[] = [];
   manchecklist: manchecklist;
@@ -41,14 +41,14 @@ export class EnlistmentPage implements OnInit {
   loading = false;
   saving = false;
   snapshot = false;
-  progress=0;
-  
+  progress = 0;
+
   ngOnInit() {
-    
+    debugger;
     console.log(this.router.getCurrentNavigation().extras);
     this.car = this.router.getCurrentNavigation().extras.state.car;
   }
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.GetQuestions();
   }
   GetQuestions() {
@@ -108,23 +108,23 @@ export class EnlistmentPage implements OnInit {
     this.enlistment.forEach(item => {
       answer.detalle.push({
         IdCheckList: 0,
-        Comentario: "",
+        Comentario: item.observaciones,
         PNo: item.PNo,
         Pregunta: item.Pregunta,
         Grupo: Number(item.Seccion),
         IdEmpresa: this._sesion.GetBussiness().CodigoEmpresa,
         Respuesta: item.respuestaUsuario,
         Resultado: "",
-        Check_Image:''
-       
+        Check_Image: ""
       });
     });
     console.log(answer);
 
     if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
       this._service.PostAnswer(answer).subscribe(resp => {
-        this.saving=false;
+        this.saving = false;
         if (resp.Retorno === 0) {
+          this._sesion.SetLastEnlistment(answer);
           this._alert.showAlert("Mensaje del sistema", `${resp.message}`);
           this._nav.navigateRoot("tabs/last-enlistments");
         } else {
@@ -132,17 +132,18 @@ export class EnlistmentPage implements OnInit {
         }
       });
     } else {
-      this.saving=false;
-      let offlineEnlistemnts = this._sesion.GetNewOfflineEnlistment();
-      if(offlineEnlistemnts==null || offlineEnlistemnts==undefined){
+      this.saving = false;
+      this._sesion.SetLastEnlistment(answer);
+      const offlineEnlistemnts = this._sesion.GetNewOfflineEnlistment();
+      if (offlineEnlistemnts == null || offlineEnlistemnts == undefined) {
         console.log(offlineEnlistemnts);
-         let newList:manchecklist[]=new Array();
-         newList.push(answer);
-         console.log('item agregado al offline');
-         this._sesion.SetNewOfflineEnlistment(newList);
-      }else {
+        const newList: manchecklist[] = new Array();
+        newList.push(answer);
+        console.log("item agregado al offline");
+        this._sesion.SetNewOfflineEnlistment(newList);
+      } else {
         offlineEnlistemnts.push(answer);
-        console.log('item agregado al offline2');
+        console.log("item agregado al offline2");
         this._sesion.SetNewOfflineEnlistment(offlineEnlistemnts);
       }
       this._alert.showAlert(
@@ -157,14 +158,12 @@ export class EnlistmentPage implements OnInit {
     console.log(event);
     console.log("limpia");
     if (event.target.nodeName == "ION-RADIO-GROUP") {
-      
       this.progressUp();
       question.observaciones = "";
-
     }
   }
   takePicture(answer: enlistment) {
-  answer.snapshot=true;
+    answer.snapshot = true;
     const options: CameraOptions = {
       quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
@@ -173,7 +172,7 @@ export class EnlistmentPage implements OnInit {
     };
     this.camera.getPicture(options).then(
       imageData => {
-       answer.snapshot=false;
+        answer.snapshot = false;
         // imageData is either a base64 encoded string or a file URI
         // If it's base64 (DATA_URL):
         const base64Image = "data:image/jpeg;base64," + imageData;
@@ -185,12 +184,12 @@ export class EnlistmentPage implements OnInit {
     );
   }
 
-  progressUp(){
-    this.progress+=1;
+  progressUp() {
+    this.progress += 1;
   }
 
-  progressValue(){
-   return (this.progress * 100 / this.enlistment.length) /100;
+  progressValue() {
+    return (this.progress * 100) / this.enlistment.length / 100;
   }
 
   deletePhoto(answer: enlistment) {

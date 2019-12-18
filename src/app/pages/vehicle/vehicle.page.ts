@@ -24,6 +24,7 @@ export class VehiclePage implements OnInit {
   thirdPartie: ThirdPartie = new ThirdPartie();
   vehicles: vehicle[] = [];
   vehiclesFilter: vehicle[] = [];
+  vehicleFavorite: vehicle = new vehicle();
   loading = false;
 
   constructor(
@@ -53,8 +54,24 @@ export class VehiclePage implements OnInit {
           if (resp.Retorno == 0) {
             this._sesion.SetVehicles(resp.ObjTransaction);
             this.vehicles = resp.ObjTransaction;
-            this.vehiclesFilter = this.vehicles;
+            
+
+            this.vehicleFavorite = this.vehicles.filter(v => v.Sugerido === 2).length == 0 ? null :this.vehicles.filter(v => v.Sugerido === 2)[0];
+            if (this.vehicleFavorite !== undefined && this.vehicleFavorite != null){                        
+              this.vehicleFavorite = this.vehicleFavorite;
+              this.vehiclesFilter.push(this.vehicleFavorite);
+            }
+            this.vehicleFavorite = this.vehicles.filter(v => v.Sugerido === 1).length == 0 ? null :this.vehicles.filter(v => v.Sugerido === 1)[0];
+            if (this.vehicleFavorite !== undefined && this.vehicleFavorite != null){ 
+              this.vehiclesFilter=[];           
+              this.vehicleFavorite = this.vehicleFavorite;
+              this.vehiclesFilter.push(this.vehicleFavorite);
+            }
+            
             this.loading = false;
+          }
+          else {
+            this._alert.showAlert('Error', resp.TxtError);
           }
         });
     } else {
@@ -104,7 +121,10 @@ export class VehiclePage implements OnInit {
                           car: car
                         }
                       };
-                      this.router.navigateByUrl("tabs/pendings", paramsPendings);
+                      this.router.navigateByUrl(
+                        "tabs/pendings",
+                        paramsPendings
+                      );
                     } else {
                       this._vehicle
                         .ArmaProtocolo(
@@ -152,12 +172,17 @@ export class VehiclePage implements OnInit {
   }
 
   filterVehicles(event) {
+    this.vehiclesFilter = [];
     console.log(event.target);
     this.vehiclesFilter = this.vehicles.filter(
       v =>
         v.PlacaVehiculo.toUpperCase().indexOf(
           event.target.value.toUpperCase()
-        ) > -1
+        ) > -1 || v.NumeroInterno.indexOf(event.target.value) > -1
     );
+    if (event.target.value==""){
+      this.vehiclesFilter = [];
+      this.vehiclesFilter.push(this.vehicleFavorite);
+    }
   }
 }

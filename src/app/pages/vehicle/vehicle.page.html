@@ -162,11 +162,11 @@
 
              <ng-container *ngFor="let vehicle of vehiclesFilter">
 
-               <ng-container *ngIf="vehicle.Sugerido==1">
+               <!-- <ng-container *ngIf="vehicle.Sugerido==1">
 
-                <!-- <ion-list-header>
+                <ion-list-header>
                   <ion-label> <b>Vehículo sugerido</b></ion-label>
-                </ion-list-header> -->
+                </ion-list-header>
 
                     
                 <ion-list lines="none" inset="true">
@@ -192,12 +192,9 @@
 
                   </ion-list>
 
-               </ng-container>
+               </ng-container> -->
 
-               <ng-container *ngIf="vehicle.Sugerido==0">
-                  <ion-list-header *ngIf="expression">
-                      <ion-label>Otros Vehículos</ion-label>
-                    </ion-list-header>                   
+               <ng-container>                               
                     <ion-list lines="none" inset="true">
                       <ion-list-header color="primary">
                           <ion-label>Vehículo</ion-label>
@@ -206,6 +203,11 @@
                           <ion-icon slot="start" name="car"></ion-icon>
                           <ion-label>Placa</ion-label>
                           <ion-note slot="end">{{vehicle.PlacaVehiculo}}</ion-note>
+                        </ion-item> 
+                        <ion-item >
+                          <ion-icon slot="start" name="clipboard"></ion-icon>
+                          <ion-label>Número Interno</ion-label>
+                          <ion-note slot="end">{{vehicle.NumeroInterno}}</ion-note>
                         </ion-item>                      
                         <ion-item>
                           <ion-icon slot="start" name="stopwatch"></ion-icon>        
@@ -214,8 +216,8 @@
                           
                         
                         <ion-item button color="secondary" (click)="checkVehicle(vehicle)">
-                            <ion-icon *ngIf="!saving" slot="start" name="checkmark-circle"></ion-icon>
-                            <ion-spinner *ngIf="saving" slot="start"></ion-spinner>
+                          <ion-icon *ngIf="!vehicle.loading" slot="start" name="checkmark-circle"></ion-icon>
+                          <ion-spinner *ngIf="vehicle.loading" slot="start"></ion-spinner>
                              {{ !saving?'SELECCIONAR':'ESPERE...'}}
                         </ion-item>
   

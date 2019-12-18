@@ -44,7 +44,7 @@
           <ion-col padding>
             <ion-button [disabled]="!loginForm.form.valid" color="secondary" expand="block" (click)="signIn()" >
                 <ion-icon *ngIf="!loading" slot="start" name="checkmark-circle"></ion-icon>
-                <ion-spinner *ngIf="loading" slot="start"></ion-spinner>
+                <ion-spinner color="light" *ngIf="loading" slot="start"></ion-spinner>
                 INGRESAR
             </ion-button>
           </ion-col>

@@ -27,5 +27,41 @@
         <ion-note slot="end">{{ enlistment.FechaProceso |  date : 'dd/MM/yyyy hh:mm aa' }}</ion-note>
       </ion-item>
   </ion-list>
+ <ion-button  (click)="showDetail=!showDetail" >
+   <ion-icon [name]="showDetail?'eye-close':'eye'" slot="first"></ion-icon>
+     {{showDetail?'Ver detalle':'Ocultar'}}
+ </ion-button>
+
+
+   <div *ngIf="showDetail">
+
+    <div *ngFor="let question of enlistment.detalle;let i = index">
+        <ion-list inset="true">           
+          
+              <ion-list-header color="primary">
+                <ion-label>{{question.Pregunta | uppercase}}</ion-label>
+              </ion-list-header>             
+              <ion-item>
+                <ion-icon color="secondary" slot="end" name="alert"></ion-icon>
+                <ion-label>{{question.Respuesta=='2'?'Si':'No'}}</ion-label>              
+              </ion-item>
+              <ion-item *ngIf="question.Comentario.length>0">
+                <ion-icon slot="start" name="clipboard"></ion-icon>
+                <ion-input type="text" clearInput="true" disabled
+                 multiple="true" 
+                  [name]="'observacion' + i" [(ngModel)]="question.Comentario"></ion-input>
+              </ion-item>                
+              <ion-item *ngIf="question.Check_Image">                  
+                 <ion-thumbnail slot="start">
+                   <img [src]="question.Check_Image" />
+                 </ion-thumbnail>                  
+              </ion-item>
+    
+        
+        </ion-list>
+      </div>
+    
+   </div>
+    
 
 </ion-content>

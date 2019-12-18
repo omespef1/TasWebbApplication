@@ -22,12 +22,12 @@
                   <ion-label>{{question.Pregunta | uppercase}}</ion-label>
                 </ion-list-header>
                 <ion-item>
-                  <ion-icon color="secondary" slot="end" [name]="'checkmark-circle'"></ion-icon>
+                  <ion-icon color="secondary" slot="end" [name]="'2'==question.respuesta?'checkmark-circle':'close-circle'"></ion-icon>
                   <ion-label>Si</ion-label>
                   <ion-radio color="secondary" slot="start" value="2"></ion-radio>
                 </ion-item>
                 <ion-item>
-                  <ion-icon color="secondary" slot="end" [name]="'close-circle'"></ion-icon>
+                  <ion-icon color="secondary" slot="end" [name]="'1'==question.respuesta?'checkmark-circle':'close-circle'"></ion-icon>
                   <ion-label>No</ion-label>
                   <ion-radio color="secondary" slot="start" value="1"></ion-radio>
                 </ion-item>
@@ -37,13 +37,13 @@
                     clearOnEdit="true" multiple="true" placeholder="Ingrese los detalles aquí"
                     [name]="'observacion' + i" [(ngModel)]="question.observaciones"></ion-input>
                 </ion-item>
-                <ion-item *ngIf="question.respuestaUsuario != question.respuesta">
+                <ion-item *ngIf="question.respuestaUsuario != question.respuesta && question.respuestaUsuario !=undefined">
                   <ion-icon slot="start" name="eye"></ion-icon>
                   <ion-label>Evidencia</ion-label>
                   <ion-button color="secondary" slot="end" (click)="takePicture(question)" fill="outline">
                     <ion-icon *ngIf="!question.snapshot" slot="start" name="camera"></ion-icon>
                     <ion-spinner *ngIf="question.snapshot" slot="start"></ion-spinner>
-                    Foto
+                    Foto 
                   </ion-button>                  
                 </ion-item>
                 <ion-item *ngIf="question.check_foto">
