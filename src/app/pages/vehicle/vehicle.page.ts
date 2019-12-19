@@ -26,6 +26,7 @@ export class VehiclePage implements OnInit {
   vehiclesFilter: vehicle[] = [];
   vehicleFavorite: vehicle = new vehicle();
   loading = false;
+  working = false;
 
   constructor(
     private _sesion: SessionService,
@@ -38,9 +39,13 @@ export class VehiclePage implements OnInit {
   }
 
   ngOnInit() {
-    this.GetVehicleInformation();
+    
   }
 
+  ionViewWillEnter(){
+    console.log('actualizo');
+    this.GetVehicleInformation();
+  }
   GetVehicleInformation() {
     this.loading = true;
     console.log(this._network.getCurrentNetworkStatus());
@@ -172,6 +177,11 @@ export class VehiclePage implements OnInit {
   }
 
   filterVehicles(event) {
+    this.working=true;
+    setTimeout(() => {
+      this.working=false;
+    }, 200);
+   
     this.vehiclesFilter = [];
     console.log(event.target);
     this.vehiclesFilter = this.vehicles.filter(
@@ -180,9 +190,17 @@ export class VehiclePage implements OnInit {
           event.target.value.toUpperCase()
         ) > -1 || v.NumeroInterno.indexOf(event.target.value) > -1
     );
+
+    this.vehiclesFilter= this.vehiclesFilter.filter(
+      (thing, i, arr) => arr.findIndex(t => t.NumeroInterno.toUpperCase() === thing.NumeroInterno.toUpperCase()) === i
+    );
     if (event.target.value==""){
       this.vehiclesFilter = [];
       this.vehiclesFilter.push(this.vehicleFavorite);
     }
+
+
+
+   
   }
 }

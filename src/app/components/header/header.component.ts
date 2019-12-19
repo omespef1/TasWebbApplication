@@ -20,6 +20,6 @@ export class HeaderComponent implements OnInit {
     }
 
     goSettings(){
-      this.router.navigateByUrl('settings');
+      this.router.navigateByUrl('tabs/settings');
     }
 }

@@ -20,12 +20,17 @@ export class LastEnlistmentsPage implements OnInit {
   }
 
   ionViewWillEnter(){
+    console.log('actualiza');
     this.GetLastEnlistment();
   }
 
-  GetLastEnlistment() {
+
+  GetLastEnlistment(event: any= null) {
     if(this._network.getCurrentNetworkStatus()== ConnectionStatus.Online){
       this._vehicle.GetLastEnlistment(this._sesion.GetBussiness(), this._sesion.GetThirdPartie()).subscribe(resp => {
+        if(event!=null){
+          event.target.complete();
+        }
         if (resp.Retorno == 0) {
           this.enlistment = resp.ObjTransaction;
         }

@@ -3,34 +3,54 @@
 </app-header>
 
 <ion-content fullscreen class="ion-padding">
-  <ion-list-header>
+
+    <ion-refresher slot="fixed" (ionRefresh)="GetLastEnlistment($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
+      <p><small> <strong>Desliza hacia abajo para actualizar la información</strong></small></p>
+  <ion-list-header color="secondary">
     <ion-label>Información General</ion-label>
   </ion-list-header>
   <ion-list inset="true">
     <ion-item>
+        <ion-icon slot="start" name="eye"></ion-icon>
       <ion-label>Revisado por</ion-label>
       <ion-note slot="end">{{ enlistment.Reviso }}</ion-note>
     </ion-item>
     <ion-item>
+        <ion-icon slot="start" [name]="enlistment.Estado == 'N'? 'close-circle' :enlistment.Estado == 'A'? 'checkmark-circle':'help-circle'"></ion-icon>
       <ion-label>Estado</ion-label>
-      <ion-note slot="end">{{ enlistment.Estado == 'N'? 'Rechazado' :'Aprobado' }}</ion-note>
+      <ion-note slot="end">{{ enlistment.Estado == 'N'? 'Rechazado' : enlistment.Estado == 'A'? 'Aprobado':'No enviado' }}</ion-note>
     </ion-item>
     <ion-item>
-        <ion-textarea disabled [(ngModel)]="enlistment.Observaciones"></ion-textarea>
+        <ion-icon slot="start" name="information-circle"></ion-icon>
+        <ion-label>Resultado</ion-label>
+        <ion-note slot="end">{{ enlistment.Observaciones }}</ion-note>
+        <!-- <ion-textarea disabled [(ngModel)]="enlistment.Observaciones"></ion-textarea> -->
     </ion-item>
     <ion-item>
+        <ion-icon slot="start" name="speedometer"></ion-icon>
       <ion-label>Kilometraje</ion-label>
       <ion-note slot="end">{{ enlistment.Kilometraje }}</ion-note>
     </ion-item>
     <ion-item>
+        <ion-icon slot="start" name="calendar"></ion-icon>
         <ion-label>Fecha</ion-label>
         <ion-note slot="end">{{ enlistment.FechaProceso |  date : 'dd/MM/yyyy hh:mm aa' }}</ion-note>
       </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="pin"></ion-icon>
+          <ion-label>Coordenadas</ion-label>
+          <ion-note slot="end">{{ enlistment.Latitude }}, {{ enlistment.Longitude }}</ion-note>
+        </ion-item>
+        
   </ion-list>
- <ion-button  (click)="showDetail=!showDetail" >
-   <ion-icon [name]="showDetail?'eye-close':'eye'" slot="first"></ion-icon>
-     {{showDetail?'Ver detalle':'Ocultar'}}
- </ion-button>
+  <ion-list-header color="secondary" tappable (click)="showDetail=!showDetail">
+      <ion-label>Detalle</ion-label>
+      <ion-item lines="none" >
+          <ion-icon slot="end" color="primary" [name]="showDetail?'eye-off':'eye'"></ion-icon>
+      </ion-item>
+    </ion-list-header>
 
 
    <div *ngIf="showDetail">
@@ -62,6 +82,6 @@
       </div>
     
    </div>
-    
+   
 
 </ion-content>

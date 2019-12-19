@@ -20,9 +20,14 @@ export class SettingsPage implements OnInit {
 
   ngOnInit() {
 
+   
+
+  }
+
+  ionViewWillEnter(){
+
     this.mobile = this.GetMobile();
     this.wifi = this.GetWifi();
-
   }
 
   SetWifi() {

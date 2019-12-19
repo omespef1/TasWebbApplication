@@ -4,10 +4,15 @@
 
 <ion-content fullscreen >
     <ion-toolbar>
-        <ion-searchbar showCancelButton="always" debounce="500" (ionChange)="filterVehicles($event)" animated placeholder="Búsqueda por placa" cancelButtonText="Cancelar"></ion-searchbar>
+        <ion-searchbar showCancelButton="always" debounce="500" (ionChange)="filterVehicles($event)" animated placeholder="Búscar placa o # interno" cancelButtonText="Cancelar"></ion-searchbar>
     
       </ion-toolbar>
+     
       <div class="ion-padding">
+
+         <div text-center>
+            <ion-spinner color="secondary" *ngIf="working"></ion-spinner>
+         </div>
           <ion-list lines="none" inset="true">
               <ion-list-header color="primary">
                 <ion-label>Información general</ion-label>

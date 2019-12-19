@@ -18,6 +18,7 @@ import {
   ConnectionStatus
 } from "../../services/network/network.service";
 import { NavController } from "@ionic/angular";
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: "app-enlistment",
@@ -33,7 +34,8 @@ export class EnlistmentPage implements OnInit {
     private camera: Camera,
     private geolocation: Geolocation,
     private _network: NetworkService,
-    private _nav: NavController
+    private _nav: NavController,
+    private _auth:AuthService
   ) {}
   enlistment: enlistment[] = [];
   manchecklist: manchecklist;
@@ -42,6 +44,7 @@ export class EnlistmentPage implements OnInit {
   saving = false;
   snapshot = false;
   progress = 0;
+  third: ThirdPartie= new ThirdPartie();
 
   ngOnInit() {
     debugger;
@@ -49,6 +52,7 @@ export class EnlistmentPage implements OnInit {
     this.car = this.router.getCurrentNavigation().extras.state.car;
   }
   ionViewWillEnter() {
+    this.third = this._sesion.GetThirdPartie();
     this.GetQuestions();
   }
   GetQuestions() {
@@ -57,7 +61,7 @@ export class EnlistmentPage implements OnInit {
       this._service
         .GetQuestions(
           this._sesion.GetBussiness(),
-          this._sesion.GetThirdPartie()
+          this.third
         )
         .subscribe(resp => {
           this.loading = false;
@@ -98,10 +102,10 @@ export class EnlistmentPage implements OnInit {
       Acepto: "",
       NumeroViaje: ".",
       Kilometraje: this.car.NuevoKilometraje,
-      IdTercero: this._sesion.GetThirdPartie().IdTercero,
-      Reviso: "",
+      IdTercero: this.third.IdTercero,
+      Reviso: this.third.NombreCompleto,
       detalle: answers,
-      identificacion: this._sesion.GetThirdPartie().Identificacion,
+      identificacion: this.third.Identificacion,
       Latitude: latitude,
       Longitude: longitude
     };
@@ -123,12 +127,15 @@ export class EnlistmentPage implements OnInit {
     if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
       this._service.PostAnswer(answer).subscribe(resp => {
         this.saving = false;
-        if (resp.Retorno === 0) {
-          this._sesion.SetLastEnlistment(answer);
+        this._sesion.SetLastEnlistment(answer);
+        if (resp.Retorno === 0) {          
           this._alert.showAlert("Mensaje del sistema", `${resp.message}`);
           this._nav.navigateRoot("tabs/last-enlistments");
         } else {
           this._alert.showAlert("Error", resp.TxtError);
+          if(resp.TxtError=='El conductor no se encuentra activo'){
+            this._auth.signOut();
+          }
         }
       });
     } else {

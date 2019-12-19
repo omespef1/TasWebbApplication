@@ -1,17 +1,19 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AuthGuardService } from './guards/auth-guard.service';
 
 const routes: Routes = [
   {
     path: 'tabs',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
-  { path: '', loadChildren: './pages/login/login.module#LoginPageModule' },
+ { path: '', loadChildren: './pages/login/login.module#LoginPageModule', canActivate: [AuthGuardService] },
   { path: 'business', loadChildren: './pages/business/business.module#BusinessPageModule' },
   // { path: 'vehicle', loadChildren: './pages/vehicle/vehicle.module#VehiclePageModule' },
-  { path: 'settings', loadChildren: './pages/settings/settings.module#SettingsPageModule' },
-   { path: 'enlistment', loadChildren: './pages/enlistment/enlistment.module#EnlistmentPageModule' },
-  { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule' },  { path: 'pendings', loadChildren: './pages/pendings/pendings.module#PendingsPageModule' },
+  // { path: 'settings', loadChildren: './pages/settings/settings.module#SettingsPageModule' },
+  //  { path: 'enlistment', loadChildren: './pages/enlistment/enlistment.module#EnlistmentPageModule' },
+  { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule', canActivate: [AuthGuardService] },
+  // { path: 'pendings', loadChildren: './pages/pendings/pendings.module#PendingsPageModule' },
 
   // { path: 'last-enlistments', loadChildren: './pages/last-enlistments/last-enlistments.module#LastEnlistmentsPageModule' }
 ];

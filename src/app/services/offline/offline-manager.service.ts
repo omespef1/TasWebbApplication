@@ -8,6 +8,7 @@ import { AlertService } from "../alert/alert.service";
 import { SessionService } from "../session/session.service";
 import { manchecklist } from "../../models/enlistmen/manchecklist";
 import { EnlistmentService } from "../enlistment/enlistment.service";
+import { pending } from "../../models/vehicle/pending";
 const STORAGE_REQ_KEY = "storedreq";
 
 interface StoredRequest {
@@ -28,8 +29,7 @@ export class OfflineManagerService {
     private toastController: ToastController,
     private alert: AlertService,
     private sesion: SessionService,
-    private enlistment: EnlistmentService,
-  
+    private enlistment: EnlistmentService
   ) {}
 
   checkForEvents(): Observable<any> {
@@ -103,19 +103,21 @@ export class OfflineManagerService {
     return forkJoin(obs);
   }
 
-  checkEventsPendings() {
-    console.log('entrando..');
+  async checkEventsPendings() {
+    console.log("entrando..");
     try {
-      console.log('verificando pendientes..');
-      let pendings: manchecklist[] = this.sesion.GetNewOfflineEnlistment(); 
+      console.log("verificando pendientes..");
+      let pendings: manchecklist[] = this.sesion.GetNewOfflineEnlistment();
       console.log(pendings);
-      if(pendings!=null && pendings!=undefined) {
-        this.alert.presentToast('Sincronizando alistamientos...',5000) 
+      if (pendings != null && pendings != undefined) {
+        this.alert.presentToast("Sincronizando alistamientos...", 5000);
         for (const pending of pendings) {
+          //  const intento = await transactionID this.enlistment.PostAnswer(pending);
+
           this.enlistment.PostAnswer(pending).subscribe(resp => {
             if (resp.Retorno === 0) {
               this.alert.showAlert("Alistamiento enviado", resp.message);
-               pendings = pendings.filter(obj => obj !== pending);
+              pendings = pendings.filter(obj => obj !== pending);
               // this.alert.showAlert("Mensaje del sistema", `${resp.message}`);
             } else {
               this.alert.showAlert("Error sincronzando", resp.TxtError);
@@ -124,12 +126,8 @@ export class OfflineManagerService {
         }
         this.sesion.SetNewOfflineEnlistment(pendings);
       }
-     
-
     } catch (error) {
-      this.alert.presentToast('error sincronizando...',5000) 
+      this.alert.presentToast("error sincronizando...", 5000);
     }
-   
-   
   }
 }
