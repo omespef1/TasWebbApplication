@@ -19,6 +19,7 @@ import {
 } from "../../services/network/network.service";
 import { NavController } from "@ionic/angular";
 import { AuthService } from '../../services/auth/auth.service';
+import { GoogleMap } from "@ionic-native/google-maps";
 
 @Component({
   selector: "app-enlistment",
@@ -44,6 +45,7 @@ export class EnlistmentPage implements OnInit {
   saving = false;
   snapshot = false;
   progress = 0;
+  map: GoogleMap;
   third: ThirdPartie= new ThirdPartie();
 
   ngOnInit() {
@@ -119,7 +121,7 @@ export class EnlistmentPage implements OnInit {
         IdEmpresa: this._sesion.GetBussiness().CodigoEmpresa,
         Respuesta: item.respuestaUsuario,
         Resultado: "",
-        Check_Image: ""
+        Check_Image: item.check_foto
       });
     });
     console.log(answer);
@@ -182,8 +184,8 @@ export class EnlistmentPage implements OnInit {
         answer.snapshot = false;
         // imageData is either a base64 encoded string or a file URI
         // If it's base64 (DATA_URL):
-        const base64Image = "data:image/jpeg;base64," + imageData;
-        answer.check_foto = base64Image;
+        // const base64Image =  imageData;
+        answer.check_foto = imageData;
       },
       err => {
         // Handle error

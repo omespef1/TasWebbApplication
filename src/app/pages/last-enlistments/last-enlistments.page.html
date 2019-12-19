@@ -45,6 +45,27 @@
         </ion-item>
         
   </ion-list>
+  <ion-list-header color="secondary" tappable (click)="showLocation=!showLocation">
+      <ion-label>Ubicación</ion-label>
+      <ion-item lines="none" >
+          <ion-icon slot="end" color="primary" name="pin"></ion-icon>
+      </ion-item>
+  </ion-list-header>
+  <div>
+
+  <div *ngIf="showLocation">
+    <div text-center>
+      <ion-spinner *ngIf="loadingMap">
+
+      </ion-spinner>
+    </div>
+      <div id="map" style="width:100%;height: 300px;"></div>
+  </div>
+
+    
+     
+   
+  </div>
   <ion-list-header color="secondary" tappable (click)="showDetail=!showDetail">
       <ion-label>Detalle</ion-label>
       <ion-item lines="none" >

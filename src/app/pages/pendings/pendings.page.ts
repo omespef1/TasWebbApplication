@@ -23,6 +23,11 @@ export class PendingsPage implements OnInit {
     private _sesion:SessionService) {}
 
   ngOnInit() {
+    
+  }
+
+  
+  ionViewWillEnter(){
     this.car = this.router.getCurrentNavigation().extras.state.car;
 
     this.pendings = this.router.getCurrentNavigation().extras.state.pendings;
@@ -34,6 +39,7 @@ export class PendingsPage implements OnInit {
       throw new Error("Existen pendientes por resolver de tipo restrictivo.No puedes continuar");        
       }
       this._service.UpdatePendings(this.pendings).subscribe(resp => {
+        this.saving = false;
         if (resp.Retorno === 1) {
          throwError(resp.TxtError);
         }       
