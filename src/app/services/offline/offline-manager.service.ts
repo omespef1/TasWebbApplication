@@ -112,19 +112,25 @@ export class OfflineManagerService {
       if (pendings != null && pendings != undefined) {
         this.alert.presentToast("Sincronizando alistamientos...", 5000);
         for (const pending of pendings) {
-          //  const intento = await transactionID this.enlistment.PostAnswer(pending);
-
-          this.enlistment.PostAnswer(pending).subscribe(resp => {
-            if (resp.Retorno === 0) {
-              this.alert.showAlert("Alistamiento enviado", resp.message);
-              pendings = pendings.filter(obj => obj !== pending);
-              // this.alert.showAlert("Mensaje del sistema", `${resp.message}`);
-            } else {
-              this.alert.showAlert("Error sincronzando", resp.TxtError);
-            }
-          });
+          const intento = await this.enlistment.PostAnswer(pending).toPromise();
+          if (intento.Retorno == 0) {
+            this.alert.showAlert("Alistamiento enviado", intento.message);
+            const newPendings = pendings.filter(obj => obj !== pending);
+            this.sesion.SetNewOfflineEnlistment(newPendings);                     
+          }
+          else {
+            this.alert.showAlert("Error sincronzando", intento.TxtError);
+          }
+          // this.enlistment.PostAnswer(pending).subscribe(resp => {
+          //   if (resp.Retorno === 0) {
+          //     this.alert.showAlert("Alistamiento enviado", resp.message);
+          //     pendings = pendings.filter(obj => obj !== pending);
+          //     // this.alert.showAlert("Mensaje del sistema", `${resp.message}`);
+          //   } else {
+          //     this.alert.showAlert("Error sincronzando", resp.TxtError);
+          //   }
+          // });
         }
-        this.sesion.SetNewOfflineEnlistment(pendings);
       }
     } catch (error) {
       this.alert.presentToast("error sincronizando...", 5000);
