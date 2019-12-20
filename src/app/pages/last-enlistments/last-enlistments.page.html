@@ -96,7 +96,7 @@
               </ion-item>                
               <ion-item *ngIf="question.Check_Image">                  
                  <ion-thumbnail slot="start">
-                   <img [src]="question.Check_Image" />
+                    <img [src]="'data:image/jpeg;base64,' + question.Check_Image" />
                  </ion-thumbnail>                  
               </ion-item>
     
