@@ -57,7 +57,7 @@ export class LastEnlistmentsPage implements OnInit {
    this.loadingMap=true;
 
    this.theHtmlString =  this._san.bypassSecurityTrustResourceUrl(`https://maps.google.com/maps?q=${latitude}, ${long}&z=15&output=embed`);
-   console.log(this.theHtmlString);
+   
   
    this.loadingMap=false;
    
