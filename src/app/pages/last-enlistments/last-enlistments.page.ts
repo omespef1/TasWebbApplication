@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Sanitizer } from "@angular/core";
 import { VehicleService } from "../../services/vehicle/vehicle.service";
 import { enlistment } from "../../models/enlistmen/enlistmen";
 import { manchecklist } from "src/app/models/enlistmen/manchecklist";
@@ -7,6 +7,7 @@ import { NetworkService } from 'src/app/services/network/network.service';
 import { ConnectionStatus } from '../../services/network/network.service';
 
 declare var google;
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 
 @Component({
   selector: "app-last-enlistments",
@@ -18,7 +19,8 @@ export class LastEnlistmentsPage implements OnInit {
   showDetail=false;
   showLocation=false;
   loadingMap=false;
-  constructor(private _vehicle: VehicleService,private _sesion:SessionService,private _network:NetworkService) {}
+  theHtmlString :any;
+  constructor(private _vehicle: VehicleService,private _sesion:SessionService,private _network:NetworkService,private _san:DomSanitizer) {}
   enlistment: manchecklist = new manchecklist();
   ngOnInit() {
     
@@ -51,18 +53,25 @@ export class LastEnlistmentsPage implements OnInit {
   }
 
   
-  async loadMap(latitude:number,long:number) {
+   loadMap(latitude:number,long:number) {
    this.loadingMap=true;
-    const myLatLng = { lat: latitude, lng: long};
-    const mapEle: HTMLElement = document.getElementById('map');
-    this.mapRef = new google.maps.Map(mapEle, {
-      center: myLatLng,
-      zoom: 12
-    });
-    google.maps.event.addListenerOnce(this.mapRef, 'idle', () => {    
-      this.loadingMap=false;
-      this.addMaker(myLatLng.lat, myLatLng.lng);
-    });
+
+   this.theHtmlString =  this._san.bypassSecurityTrustResourceUrl(`https://maps.google.com/maps?q=${latitude}, ${long}&z=15&output=embed`);
+   console.log(this.theHtmlString);
+  
+   this.loadingMap=false;
+   
+   
+    // const myLatLng = { lat: latitude, lng: long};
+    // const mapEle: HTMLElement = document.getElementById('map');
+    // this.mapRef = new google.maps.Map(mapEle, {
+    //   center: myLatLng,
+    //   zoom: 12
+    // });
+    // google.maps.event.addListenerOnce(this.mapRef, 'idle', () => {    
+    //   this.loadingMap=false;
+    //   this.addMaker(myLatLng.lat, myLatLng.lng);
+    // });
   }
 
   private addMaker(lat: number, lng: number) {

@@ -13,11 +13,11 @@ import { AppComponent } from "./app.component";
 import { ComponentsModule } from "./components/components.module";
 import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage';
-import { NetworkService } from './services/network/network.service';
 import { Network } from '@ionic-native/network/ngx';
 import { TouchID } from '@ionic-native/touch-id/ngx';
+import { SafePipe } from './pipes/safe.pipe';
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, SafePipe],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(
    { mode: 'ios'}

@@ -19,7 +19,6 @@ import {
 } from "../../services/network/network.service";
 import { NavController } from "@ionic/angular";
 import { AuthService } from '../../services/auth/auth.service';
-import { GoogleMap } from "@ionic-native/google-maps";
 
 @Component({
   selector: "app-enlistment",
@@ -45,7 +44,7 @@ export class EnlistmentPage implements OnInit {
   saving = false;
   snapshot = false;
   progress = 0;
-  map: GoogleMap;
+
   third: ThirdPartie= new ThirdPartie();
 
   ngOnInit() {
