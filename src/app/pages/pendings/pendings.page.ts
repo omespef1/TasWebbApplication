@@ -23,15 +23,13 @@ export class PendingsPage implements OnInit {
     private _sesion:SessionService) {}
 
   ngOnInit() {
-    
-  }
-
-  
-  ionViewWillEnter(){
     this.car = this.router.getCurrentNavigation().extras.state.car;
 
     this.pendings = this.router.getCurrentNavigation().extras.state.pendings;
   }
+
+  
+ 
   Guardar() {
     try {
       this.saving = true;
