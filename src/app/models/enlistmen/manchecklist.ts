@@ -26,5 +26,5 @@ export class manchecklistDetalle {
   Comentario:string;
   Grupo:number;
   Resultado:string;
-  Check_Image:string;
+  Check_Image:ArrayBuffer;
 }

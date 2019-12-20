@@ -48,7 +48,7 @@
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     </platform>
     <platform name="ios">
-     <allow-navigation href="*" />
+        <allow-navigation href="*" />
         <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
             <string>Necesitamos la cámara para que el usuario tome evidencias de cada item en el alistamiento</string>
         </edit-config>
