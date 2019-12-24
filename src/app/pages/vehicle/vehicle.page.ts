@@ -35,7 +35,7 @@ export class VehiclePage implements OnInit {
     private _alert: AlertService,
     private _network: NetworkService
   ) {
-    this.thirdPartie = this._sesion.GetThirdPartie();
+   
   }
 
   ngOnInit() {
@@ -43,10 +43,12 @@ export class VehiclePage implements OnInit {
   }
 
   ionViewWillEnter(){
+    this.thirdPartie = this._sesion.GetThirdPartie();
     console.log('actualizo');
     this.GetVehicleInformation();
   }
   GetVehicleInformation() {
+    this.vehiclesFilter=[];
     this.loading = true;
     console.log(this._network.getCurrentNetworkStatus());
     if (this._network.getCurrentNetworkStatus() === ConnectionStatus.Online) {

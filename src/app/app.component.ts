@@ -1,23 +1,24 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
-import { Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { SessionService } from './services/session/session.service';
-import { AuthService } from './services/auth/auth.service';
+import { Platform } from "@ionic/angular";
+import { SplashScreen } from "@ionic-native/splash-screen/ngx";
+import { StatusBar } from "@ionic-native/status-bar/ngx";
+import { SessionService } from "./services/session/session.service";
+import { AuthService } from "./services/auth/auth.service";
+import { IfStmt } from "@angular/compiler";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss']
+  selector: "app-root",
+  templateUrl: "app.component.html",
+  styleUrls: ["app.component.scss"]
 })
 export class AppComponent {
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private _sesion:SessionService,
-    private _auth:AuthService
+    private _sesion: SessionService,
+    private _auth: AuthService
   ) {
     this.initializeApp();
   }
@@ -26,9 +27,24 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      if(this._sesion.GetThirdPartie() != null  && this._sesion.GetThirdPartie() !== undefined ) {
+      if (
+        this._sesion.GetThirdPartie() != null &&
+        this._sesion.GetThirdPartie() !== undefined
+      ) {
         this._auth.signInDirect();
       }
+      this.LoadFirstSettings();
     });
+  }
+
+  LoadFirstSettings() {
+    const mobile = this._sesion.GetMobile();
+    if (mobile == null || mobile === undefined) {
+      this._sesion.SetMobile(true);
+    }
+    const wifi = this._sesion.GetWifi();
+    if (wifi == null || wifi === undefined) {
+      this._sesion.SetWifi(true);
+    }
   }
 }

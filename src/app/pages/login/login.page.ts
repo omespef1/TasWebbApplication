@@ -32,10 +32,13 @@ export class LoginPage implements OnInit {
   ) {}
 
   ngOnInit() {  
+  
+  }
+  ionViewWillEnter() {
     this.LoadBusiness();
     this.GetTouchId();
-  }
 
+  }
 
 
   async LoadBusiness() {
@@ -91,7 +94,7 @@ export class LoginPage implements OnInit {
 
   GetTouchId(){
     if(this._platform.is('cordova')){
-    this._touch.isAvailale().then((resp:any)=>{
+    this._touch.isAvailale().then(()=>{
         this.touchId=true;
     },err=>{
 

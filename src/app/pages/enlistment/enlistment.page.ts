@@ -77,6 +77,7 @@ export class EnlistmentPage implements OnInit {
   }
 
   Guardar() {
+    this.saving=true;
     this.geolocation
       .getCurrentPosition()
       .then(resp => {
@@ -103,7 +104,7 @@ export class EnlistmentPage implements OnInit {
       NumeroViaje: ".",
       Kilometraje: this.car.NuevoKilometraje,
       IdTercero: this.third.IdTercero,
-      Reviso: this.third.NombreCompleto,
+      Reviso: "CONDUCTOR",
       detalle: answers,
       identificacion: this.third.Identificacion,
       Latitude: latitude,
@@ -119,7 +120,7 @@ export class EnlistmentPage implements OnInit {
         IdEmpresa: this._sesion.GetBussiness().CodigoEmpresa,
         Respuesta: item.respuestaUsuario,
         Resultado: "",
-        Check_Image: "";
+        Check_Image: ""
       });
     });
     console.log(answer);
