@@ -8,6 +8,7 @@ import { ConnectionStatus } from '../../services/network/network.service';
 
 declare var google;
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import { last } from 'rxjs/operators';
 
 @Component({
   selector: "app-last-enlistments",
@@ -20,6 +21,7 @@ export class LastEnlistmentsPage implements OnInit {
   showLocation=false;
   loadingMap=false;
   theHtmlString :any;
+  lastQuestions:enlistment[];
   constructor(private _vehicle: VehicleService,private _sesion:SessionService,private _network:NetworkService,private _san:DomSanitizer) {}
   enlistment: manchecklist = new manchecklist();
   ngOnInit() {
@@ -29,10 +31,12 @@ export class LastEnlistmentsPage implements OnInit {
   ionViewWillEnter(){
     console.log('actualiza');
     this.GetLastEnlistment();
+    this.lastQuestions = this._sesion.GetQuestions();
+    console.log(this.lastQuestions);
   }
 
 
-  GetLastEnlistment(event: any= null) {
+  async GetLastEnlistment(event: any= null) {
     if(this._network.getCurrentNetworkStatus()== ConnectionStatus.Online){
       this._vehicle.GetLastEnlistment(this._sesion.GetBussiness(), this._sesion.GetThirdPartie()).subscribe(resp => {
         if(event!=null){
@@ -46,7 +50,9 @@ export class LastEnlistmentsPage implements OnInit {
       });
     }
     else {
-      this.enlistment = this._sesion.GetLastEnlistment();
+      
+      this.enlistment =   <manchecklist> await this._sesion.GetLastEnlistment();
+      console.log(this.enlistment);
       this.loadMap(this.enlistment.Latitude,this.enlistment.Longitude);
     }
   
@@ -82,6 +88,14 @@ export class LastEnlistmentsPage implements OnInit {
     });
   }
 
+
+  CheckCorrectAnswer(answer:any){
+    if(this.lastQuestions!=undefined){
+      const validAnswer = this.lastQuestions.filter(t=> t.PNo == answer.PNo)[0];
+      if(answer.Respuesta === validAnswer.respuesta)
+      return true;
+    }
+  }
   
 
 

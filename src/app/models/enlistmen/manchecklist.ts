@@ -3,7 +3,7 @@ export class manchecklist {
   Id: number;
   IdVehiculo: number;
   IdTercero: number;
-  FechaProceso: Date;
+  FechaProceso: string;
   Reviso: string;
   Estado: string;
   Observaciones: string;
@@ -22,7 +22,7 @@ export class manchecklistDetalle {
   IdCheckList:number;
   PNo:number;
   Pregunta:string;
-  Respuesta:string;
+  Respuesta:number;
   Comentario:string;
   Grupo:number;
   Resultado:string;

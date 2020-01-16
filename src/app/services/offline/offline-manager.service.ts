@@ -42,7 +42,7 @@ export class OfflineManagerService {
               let toast = this.toastController.create({
                 message: `Local data succesfully synced to API!`,
                 duration: 3000,
-                position: "bottom"
+                position: "top"
               });
               toast.then(toast => toast.present());
 
@@ -107,7 +107,7 @@ export class OfflineManagerService {
     console.log("entrando..");
     try {
       console.log("verificando pendientes..");
-      let pendings: manchecklist[] = this.sesion.GetNewOfflineEnlistment();
+      let pendings: manchecklist[] = <manchecklist[]> await this.sesion.GetNewOfflineEnlistment();
       console.log(pendings);
       if (pendings != null && pendings != undefined) {
         this.alert.presentToast("Sincronizando alistamientos...", 5000);

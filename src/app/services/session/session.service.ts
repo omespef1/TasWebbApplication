@@ -6,12 +6,13 @@ import { stringify } from "querystring";
 import { vehicle } from "src/app/models/vehicle/vehicle";
 import { enlistment } from "src/app/models/enlistmen/enlistmen";
 import { manchecklist } from "src/app/models/enlistmen/manchecklist";
+import { Storage } from '@ionic/storage';
 
 @Injectable({
   providedIn: "root"
 })
 export class SessionService {
-  constructor() {}
+  constructor(private _storage: Storage) {}
 
   SetBusiness(business: business) {
     localStorage.setItem("business", JSON.stringify(business));
@@ -51,6 +52,12 @@ export class SessionService {
     localStorage.removeItem("thirdPartie");
   }
 
+  setOfflineUser(user){
+    localStorage.setItem("offlineUser", JSON.stringify(user));
+  }
+  getOfflineUser(){
+    return JSON.parse(localStorage.getItem("offlineUser"));
+  }
   SetVehicles(vehicles: vehicle[]) {
     localStorage.setItem("vehicles", JSON.stringify(vehicles));
   }
@@ -65,20 +72,30 @@ export class SessionService {
     return JSON.parse(localStorage.getItem("questions"));
   }
 
-  GetNewOfflineEnlistment(): manchecklist[] {
-    return JSON.parse(localStorage.getItem("offlineEnlistments"));
+  GetNewOfflineEnlistment(): Promise<manchecklist[]> {
+    return this._storage.get("offlineEnlistments")
+    // return JSON.parse(localStorage.getItem("offlineEnlistments"));
   }
   SetNewOfflineEnlistment(newOfflineEnlistment: manchecklist[]) {
-    localStorage.setItem("offlineEnlistments", JSON.stringify(newOfflineEnlistment));
+    // localStorage.setItem("offlineEnlistments", JSON.stringify(newOfflineEnlistment));
+    return this._storage.set("offlineEnlistments",newOfflineEnlistment);
   }
 
-  SetLastEnlistment(answer:manchecklist){
-    localStorage.setItem("LastEnlistment", JSON.stringify(answer));
+  SetLastEnlistment(answer:manchecklist):Promise<manchecklist>{
+    // localStorage.setItem("LastEnlistment", JSON.stringify(answer));
+    return this._storage.set("LastEnlistment",answer);
   }
 
-  GetLastEnlistment(): manchecklist {
-    return JSON.parse(localStorage.getItem("LastEnlistment"));
+  removeLastEnlistment(){
+    localStorage.removeItem("LastEnlistment");
   }
+
+  GetLastEnlistment(): Promise<manchecklist> {
+    // return JSON.parse(localStorage.getItem("LastEnlistment"));
+   return this._storage.get("LastEnlistment")
+  }
+
+
 
 
 }

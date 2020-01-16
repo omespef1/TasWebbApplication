@@ -9,6 +9,7 @@ import { SessionService } from "../../services/session/session.service";
 import { BusinessPage } from "../business/business.page";
 import { ThirdPartie } from "../../models/general/user";
 import { TouchIdService } from '../../services/touch/touch-id.service';
+import { NetworkService, ConnectionStatus } from 'src/app/services/network/network.service';
 
 @Component({
   selector: "app-login",
@@ -28,7 +29,8 @@ export class LoginPage implements OnInit {
     private _sesion: SessionService,
     private _modal: ModalController,
     private _touch:TouchIdService,
-    private _platform:Platform
+    private _platform:Platform,
+    private _network:NetworkService
   ) {}
 
   ngOnInit() {  
@@ -64,8 +66,14 @@ export class LoginPage implements OnInit {
     this.loading = true;
     const businessStorage = this._sesion.GetBussiness();
     this.user.business = businessStorage.CodigoEmpresa;
+   
     
     console.log(this.user);
+
+
+    if(this._network.getCurrentNetworkStatus()== ConnectionStatus.Online){
+
+ 
     this.auth.signIn(this.user).subscribe(
       resp => {
         console.log(resp);
@@ -87,6 +95,12 @@ export class LoginPage implements OnInit {
         this._alert.showAlert('Error', err);
       }
     );
+    }
+    else {
+      this.auth.signInDirectOffline();
+      this.router.navigateByUrl("tabs/vehicle");
+      console.log('paso autoiza');
+    }
   }
   changeBusiness(){
     this.showModalBusiness(); 

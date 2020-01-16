@@ -14,7 +14,7 @@ export class SettingsPage implements OnInit {
   wifi=false;
   constructor(private _sesion: SessionService,private _auth:AuthService) {
 
-    this.ThirdPartie = this._sesion.GetThirdPartie();
+   
   }
 
 
@@ -25,7 +25,7 @@ export class SettingsPage implements OnInit {
   }
 
   ionViewWillEnter(){
-
+    this.ThirdPartie = this._sesion.GetThirdPartie();
     this.mobile = this.GetMobile();
     this.wifi = this.GetWifi();
   }

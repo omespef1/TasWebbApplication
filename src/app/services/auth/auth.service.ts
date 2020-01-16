@@ -30,6 +30,7 @@ export class AuthService {
           if (userData.Retorno === 0) {
            this._sesion.SetThirdPartie(userData.ObjTransaction);
            this._sesion.SetThirdPartieBio(userData.ObjTransaction);
+           this._sesion.setOfflineUser(userData.ObjTransaction);
           }
         }
       })
@@ -54,6 +55,18 @@ export class AuthService {
     this._alert.showAlert(
       'Bienvenido!',
       `Ingresaste como ${user.NombreCompleto}`
+    );
+    
+  }
+
+  signInDirectOffline(){
+
+    const user: ThirdPartie = this._sesion.getOfflineUser();
+    this._sesion.SetThirdPartie(user);
+    console.log(user);
+    this._alert.showAlert(
+      'Bienvenido!',
+      `Estás Offline, solo puedes ingresasar como ${user.NombreCompleto}`
     );
     
   }

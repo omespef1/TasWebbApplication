@@ -51,7 +51,7 @@
                    <ion-thumbnail slot="start">
                      <img [src]="'data:image/jpeg;base64,' + question.check_foto" />
                    </ion-thumbnail>
-                   <ion-button slot="end" (click)="deletePhoto()" fill="outline" color="primary">
+                   <ion-button slot="end" (click)="deletePhoto(question)" fill="outline" color="primary">
                      <ion-icon slot="end" name="trash"></ion-icon>
                      Eliminar
                    </ion-button>

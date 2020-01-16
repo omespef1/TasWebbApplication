@@ -4,7 +4,7 @@
 
 <ion-content class="ion-padding">
 
-    <ion-refresher slot="fixed" (ionRefresh)="GetLastEnlistment($event)">
+    <ion-refresher  slot="fixed" (ionRefresh)="GetLastEnlistment($event)">
         <ion-refresher-content></ion-refresher-content>
       </ion-refresher>
       <p><small> <strong>Desliza hacia abajo para actualizar la información</strong></small></p>
@@ -85,7 +85,7 @@
                 <ion-label>{{question.Pregunta | uppercase}}</ion-label>
               </ion-list-header>             
               <ion-item>
-                <ion-icon color="secondary" slot="end" name="alert"></ion-icon>
+                <ion-icon [color]="lastQuestions==undefined?'secondary':CheckCorrectAnswer(question)?'secondary':'danger'" slot="end" [name]="lastQuestions==undefined?'information-circle':CheckCorrectAnswer(question)?'checkmark-circle':'close-circle'"></ion-icon>
                 <ion-label>{{question.Respuesta=='2'?'Si':'No'}}</ion-label>              
               </ion-item>
               <ion-item *ngIf="question.Comentario.length>0">

@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { EnlistmentService } from "../../services/enlistment/enlistment.service";
 import { SessionService } from "../../services/session/session.service";
 import { enlistment } from "src/app/models/enlistmen/enlistmen";
+import * as moment from 'moment';
 import {
   manchecklist,
   manchecklistDetalle
@@ -47,7 +48,6 @@ export class EnlistmentPage implements OnInit {
   third: ThirdPartie= new ThirdPartie();
 
   ngOnInit() {
-    debugger;
     console.log(this.router.getCurrentNavigation().extras);
     this.car = this.router.getCurrentNavigation().extras.state.car;
   }
@@ -89,7 +89,7 @@ export class EnlistmentPage implements OnInit {
       });
   }
 
-  buildPetition(latitude: number, longitude: number) {
+  async buildPetition(latitude: number, longitude: number) {
     let answers: manchecklistDetalle[] = [];
     this.saving = true;
     let answer: manchecklist = {
@@ -97,7 +97,7 @@ export class EnlistmentPage implements OnInit {
       Id: 0,
       IdVehiculo: this.car.IdVehiculo,
       CentroId: 0,
-      FechaProceso: new Date(),
+      FechaProceso: moment(new Date()).format(),
       Estado: "",
       Observaciones: "",
       Acepto: "",
@@ -120,29 +120,42 @@ export class EnlistmentPage implements OnInit {
         IdEmpresa: this._sesion.GetBussiness().CodigoEmpresa,
         Respuesta: item.respuestaUsuario,
         Resultado: "",
-        Check_Image: ""
+        Check_Image: item.check_foto
       });
     });
     console.log(answer);
 
     if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
       this._service.PostAnswer(answer).subscribe(resp => {
+        this._sesion.removeLastEnlistment(); 
+        console.log('respuesta es');  
+        console.log(resp.Retorno);  
+        console.log('la respuesta del chekeo es');
+        console.log(resp);
         this.saving = false;
-        this._sesion.SetLastEnlistment(answer);
-        if (resp.Retorno === 0) {          
+    console.log('activa boton nuevamente');
+        if (resp.Retorno == 0) {  
+          console.log('respuesta es 0 correctamente'); 
+          
+         
           this._alert.showAlert("Mensaje del sistema", `${resp.message}`);
           this._nav.navigateRoot("tabs/last-enlistments");
-        } else {
+          this._sesion.SetLastEnlistment(answer);
+        } 
+        else {
+          console.log('respuesta es 1 correctamente');  
           this._alert.showAlert("Error", resp.TxtError);
           if(resp.TxtError=='El conductor no se encuentra activo'){
             this._auth.signOut();
           }
         }
+      },err=> {
+        this._alert.showAlert("Error", 'erro del sistema no controlado');
       });
     } else {
       this.saving = false;
-      this._sesion.SetLastEnlistment(answer);
-      const offlineEnlistemnts = this._sesion.GetNewOfflineEnlistment();
+      this._sesion.removeLastEnlistment(); 
+      const offlineEnlistemnts =   <manchecklist[]> await this._sesion.GetNewOfflineEnlistment();
       if (offlineEnlistemnts == null || offlineEnlistemnts == undefined) {
         console.log(offlineEnlistemnts);
         const newList: manchecklist[] = new Array();
@@ -160,6 +173,7 @@ export class EnlistmentPage implements OnInit {
       );
       // this.router.navigateByUrl("last-enlistments");
       this._nav.navigateRoot("tabs/last-enlistments");
+      this._sesion.SetLastEnlistment(answer);
     }
   }
   clear(event: any, question: enlistment) {
