@@ -126,8 +126,7 @@ export class EnlistmentPage implements OnInit {
     console.log(answer);
 
     if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
-      this._service.PostAnswer(answer).subscribe(resp => {
-        this._sesion.removeLastEnlistment(); 
+      this._service.PostAnswer(answer).subscribe(resp => {        
         console.log('respuesta es');  
         console.log(resp.Retorno);  
         console.log('la respuesta del chekeo es');
@@ -136,8 +135,7 @@ export class EnlistmentPage implements OnInit {
     console.log('activa boton nuevamente');
         if (resp.Retorno == 0) {  
           console.log('respuesta es 0 correctamente'); 
-          
-         
+
           this._alert.showAlert("Mensaje del sistema", `${resp.message}`);
           this._nav.navigateRoot("tabs/last-enlistments");
           this._sesion.SetLastEnlistment(answer);
@@ -153,8 +151,8 @@ export class EnlistmentPage implements OnInit {
         this._alert.showAlert("Error", 'erro del sistema no controlado');
       });
     } else {
+      this._sesion.SetLastEnlistment(answer);
       this.saving = false;
-      this._sesion.removeLastEnlistment(); 
       const offlineEnlistemnts =   <manchecklist[]> await this._sesion.GetNewOfflineEnlistment();
       if (offlineEnlistemnts == null || offlineEnlistemnts == undefined) {
         console.log(offlineEnlistemnts);
@@ -173,7 +171,7 @@ export class EnlistmentPage implements OnInit {
       );
       // this.router.navigateByUrl("last-enlistments");
       this._nav.navigateRoot("tabs/last-enlistments");
-      this._sesion.SetLastEnlistment(answer);
+     
     }
   }
   clear(event: any, question: enlistment) {

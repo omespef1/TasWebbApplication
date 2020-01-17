@@ -21,11 +21,12 @@ export class LastEnlistmentsPage implements OnInit {
   showLocation=false;
   loadingMap=false;
   theHtmlString :any;
+  loading=false;
   lastQuestions:enlistment[];
   constructor(private _vehicle: VehicleService,private _sesion:SessionService,private _network:NetworkService,private _san:DomSanitizer) {}
   enlistment: manchecklist = new manchecklist();
   ngOnInit() {
-    
+    //this.GetLastEnlistment();
   }
 
   ionViewWillEnter(){
@@ -38,9 +39,15 @@ export class LastEnlistmentsPage implements OnInit {
 
   async GetLastEnlistment(event: any= null) {
     if(this._network.getCurrentNetworkStatus()== ConnectionStatus.Online){
+     if(event==null)
+     this.loading=true;
       this._vehicle.GetLastEnlistment(this._sesion.GetBussiness(), this._sesion.GetThirdPartie()).subscribe(resp => {
+        console.log(resp);
         if(event!=null){
           event.target.complete();
+        }
+        else{
+          this.loading=false;
         }
         if (resp.Retorno == 0) {
           this.enlistment = resp.ObjTransaction;
@@ -91,8 +98,9 @@ export class LastEnlistmentsPage implements OnInit {
 
   CheckCorrectAnswer(answer:any){
     if(this.lastQuestions!=undefined){
-      const validAnswer = this.lastQuestions.filter(t=> t.PNo == answer.PNo)[0];
-      if(answer.Respuesta === validAnswer.respuesta)
+      const validAnswer = this.lastQuestions.filter(t=> t.PNo == answer.PNo)[0];  
+      let answerString:string = answer.Respuesta;  
+      if(answerString == validAnswer.respuesta.toString())
       return true;
     }
   }

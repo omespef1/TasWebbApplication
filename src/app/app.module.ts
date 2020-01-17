@@ -14,7 +14,7 @@ import { ComponentsModule } from "./components/components.module";
 import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { Network } from '@ionic-native/network/ngx';
-import { TouchID } from '@ionic-native/touch-id/ngx';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 import { SafePipe } from './pipes/safe.pipe';
 @NgModule({
   declarations: [AppComponent, SafePipe],
@@ -25,7 +25,7 @@ import { SafePipe } from './pipes/safe.pipe';
   ComponentsModule,HttpClientModule, IonicStorageModule.forRoot()],
   providers: [
     Network,
-    TouchID,
+    FingerprintAIO,
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

@@ -36,28 +36,27 @@ export class NetworkService {
         this.updateNetworkStatus(ConnectionStatus.Offline);
       }
     });
- 
     this.network.onConnect().subscribe(() => {
 
       setTimeout(() => {
-        if (this.network.type === 'wifi' && this._sesion.GetWifi()) {
+        if (this.network.type === 'WIFI' && this._sesion.GetWifi()) {
+          if (this.status.getValue() === ConnectionStatus.Online) {
+            console.log('WE ARE ONLINE');
+            this.updateNetworkStatus(ConnectionStatus.Online);
+          }
          this.alert.presentToast('Conexión WIFI permitida',4000);
          this._offline.checkEventsPendings();
-        }
-        else {
-          if(this._sesion.GetMobile()){
-            this.alert.presentToast('Conexión 3G/4G permitida',4000);
+        } else {
+          if (this.status.getValue() === ConnectionStatus.Online) {
+            console.log('WE ARE ONLINE');
+            this.updateNetworkStatus(ConnectionStatus.Online);
+          }
+          if (this._sesion.GetMobile() && this._sesion.GetMobile()){
+            this.alert.presentToast('Conexión 3G/4G permitida', 4000);
             this._offline.checkEventsPendings();
           }
-         
         }
-      }, 3000);
-      if (this.status.getValue() === ConnectionStatus.Online) {
-        console.log('WE ARE ONLINE');
-        this.updateNetworkStatus(ConnectionStatus.Online);
-        
-        
-      }
+      }, 3000); 
     });
   }
  
@@ -78,8 +77,20 @@ export class NetworkService {
   }
  
   public getCurrentNetworkStatus(): ConnectionStatus {
+    console.log(this.network.type);
     let status =  this.network.type !== 'none' ? ConnectionStatus.Online : ConnectionStatus.Offline;
     this.updateNetworkStatus(status);
+    // return ConnectionStatus.Offline;
+    if (this.network.type === 'wifi') {
+      if(!this._sesion.GetWifi()){
+        return ConnectionStatus.Offline;
+      }
+     } else
+      {
+      if(!this._sesion.GetMobile()){
+        return ConnectionStatus.Offline;
+      }
+     }
     return this.status.getValue();
   }
 }

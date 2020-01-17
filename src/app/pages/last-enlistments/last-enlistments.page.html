@@ -4,107 +4,123 @@
 
 <ion-content class="ion-padding">
 
-    <ion-refresher  slot="fixed" (ionRefresh)="GetLastEnlistment($event)">
-        <ion-refresher-content></ion-refresher-content>
-      </ion-refresher>
-      <p><small> <strong>Desliza hacia abajo para actualizar la información</strong></small></p>
+  <ion-refresher slot="fixed" (ionRefresh)="GetLastEnlistment($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <p><small> <strong>Desliza hacia abajo para actualizar la información</strong></small></p>
+    <div text-center>
+      <ion-spinner *ngIf="loading" slot="start"></ion-spinner>
+    </div>
   <ion-list-header color="secondary">
     <ion-label>Información General</ion-label>
   </ion-list-header>
   <ion-list inset="true">
     <ion-item>
-        <ion-icon slot="start" name="eye"></ion-icon>
+      <ion-icon slot="start" name="eye"></ion-icon>
       <ion-label>Revisado por</ion-label>
       <ion-note slot="end">{{ enlistment.Reviso }}</ion-note>
     </ion-item>
     <ion-item>
-        <ion-icon slot="start" [name]="enlistment.Estado == 'N'? 'close-circle' :enlistment.Estado == 'A'? 'checkmark-circle':'help-circle'"></ion-icon>
+      <ion-icon slot="start"
+        [name]="enlistment.Estado == 'N'? 'close-circle' :enlistment.Estado == 'A'? 'checkmark-circle':'help-circle'">
+      </ion-icon>
       <ion-label>Estado</ion-label>
-      <ion-note slot="end">{{ enlistment.Estado == 'N'? 'Rechazado' : enlistment.Estado == 'A'? 'Aprobado':'No enviado' }}</ion-note>
+      <ion-note slot="end">
+        {{ enlistment.Estado == 'N'? 'Rechazado' : enlistment.Estado == 'A'? 'Aprobado':'No enviado' }}</ion-note>
     </ion-item>
     <ion-item>
-        <ion-icon slot="start" name="information-circle"></ion-icon>
-        <ion-label>Resultado</ion-label>
-        <ion-note slot="end">{{ enlistment.Observaciones }}</ion-note>
-        <!-- <ion-textarea disabled [(ngModel)]="enlistment.Observaciones"></ion-textarea> -->
+      <ion-icon slot="start" name="information-circle"></ion-icon>
+      <ion-label>Resultado</ion-label>
+      <ion-note slot="end">{{ enlistment.Observaciones }}</ion-note>
+      <!-- <ion-textarea disabled [(ngModel)]="enlistment.Observaciones"></ion-textarea> -->
     </ion-item>
     <ion-item>
-        <ion-icon slot="start" name="speedometer"></ion-icon>
+      <ion-icon slot="start" name="speedometer"></ion-icon>
       <ion-label>Kilometraje</ion-label>
       <ion-note slot="end">{{ enlistment.Kilometraje }}</ion-note>
     </ion-item>
     <ion-item>
-        <ion-icon slot="start" name="calendar"></ion-icon>
-        <ion-label>Fecha</ion-label>
-        <ion-note slot="end">{{ enlistment.FechaProceso |  date : 'dd/MM/yyyy hh:mm aa' }}</ion-note>
-      </ion-item>
-      <ion-item>
-        <ion-icon slot="start" name="pin"></ion-icon>
-          <ion-label>Coordenadas</ion-label>
-          <ion-note slot="end">{{ enlistment.Latitude }}, {{ enlistment.Longitude }}</ion-note>
-        </ion-item>
-        
+      <ion-icon slot="start" name="calendar"></ion-icon>
+      <ion-label>Fecha</ion-label>
+      <ion-note slot="end">{{ enlistment.FechaProceso |  date : 'dd/MM/yyyy hh:mm aa' }}</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="pin"></ion-icon>
+      <ion-label>Coordenadas</ion-label>
+      <ion-note slot="end">{{ enlistment.Latitude }}, {{ enlistment.Longitude }}</ion-note>
+    </ion-item>
+
   </ion-list>
   <ion-list-header color="secondary" tappable (click)="showLocation=!showLocation">
-      <ion-label>Ubicación</ion-label>
-      <ion-item lines="none" >
-          <ion-icon slot="end" color="primary" name="pin"></ion-icon>
-      </ion-item>
+    <ion-label>Ubicación</ion-label>
+    <ion-item lines="none">
+      <ion-icon slot="end" color="primary" name="pin"></ion-icon>
+    </ion-item>
   </ion-list-header>
   <div>
-      <!-- <div #map  [innerHTML]="theHtmlString"></div> -->
-  <div *ngIf="showLocation">
-    <div text-center>
-      <ion-spinner *ngIf="loadingMap">
+    <!-- <div #map  [innerHTML]="theHtmlString"></div> -->
+    <div *ngIf="showLocation">
+      <div text-center>
+        <ion-spinner *ngIf="loadingMap">
 
-      </ion-spinner>
-    </div>
+        </ion-spinner>
+      </div>
       <!-- <div id="map" style="width:100%;height: 300px;"></div> -->
-     
-      <iframe [src]="theHtmlString" width="100%" height="270" frameborder="0" style="border:0"></iframe>  
-  </div>
 
-    
-     
-   
+      <iframe [src]="theHtmlString" width="100%" height="270" frameborder="0" style="border:0"></iframe>
+    </div>
+
+
+
+
   </div>
   <ion-list-header color="secondary" tappable (click)="showDetail=!showDetail">
-      <ion-label>Detalle</ion-label>
-      <ion-item lines="none" >
-          <ion-icon slot="end" color="primary" [name]="showDetail?'eye-off':'eye'"></ion-icon>
-      </ion-item>
-    </ion-list-header>
+    <ion-label>Detalle</ion-label>
+    <ion-item lines="none">
+      <ion-icon slot="end" color="primary" [name]="showDetail?'eye-off':'eye'"></ion-icon>
+    </ion-item>
+  </ion-list-header>
 
 
-   <div *ngIf="showDetail">
-
+  <div *ngIf="showDetail">
+    <ion-list inset="true">
     <div *ngFor="let question of enlistment.detalle;let i = index">
-        <ion-list inset="true">           
-          
-              <ion-list-header color="primary">
-                <ion-label>{{question.Pregunta | uppercase}}</ion-label>
-              </ion-list-header>             
-              <ion-item>
-                <ion-icon [color]="lastQuestions==undefined?'secondary':CheckCorrectAnswer(question)?'secondary':'danger'" slot="end" [name]="lastQuestions==undefined?'information-circle':CheckCorrectAnswer(question)?'checkmark-circle':'close-circle'"></ion-icon>
-                <ion-label>{{question.Respuesta=='2'?'Si':'No'}}</ion-label>              
-              </ion-item>
-              <ion-item *ngIf="question.Comentario.length>0">
-                <ion-icon slot="start" name="clipboard"></ion-icon>
-                <ion-input type="text" clearInput="true" disabled
-                 multiple="true" 
-                  [name]="'observacion' + i" [(ngModel)]="question.Comentario"></ion-input>
-              </ion-item>                
-              <ion-item *ngIf="question.Check_Image">                  
-                 <ion-thumbnail slot="start">
-                    <img [src]="'data:image/jpeg;base64,' + question.Check_Image" />
-                 </ion-thumbnail>                  
-              </ion-item>
-    
-        
-        </ion-list>
+      <div *ngIf="question.Respuesta==undefined || question.Respuesta==0 ">
+        <ion-list-header color="secondary">
+          <ion-label>{{question.Pregunta | uppercase}}</ion-label>
+        </ion-list-header>
       </div>
-    
-   </div>
+      <div *ngIf="question.Respuesta!=undefined || question.Respuesta>0">       
+          <ion-list-header color="primary">
+            <ion-label>{{question.Pregunta | uppercase}}</ion-label>
+          </ion-list-header>
+          <ion-item>
+            <ion-icon [color]="lastQuestions==undefined?'secondary':CheckCorrectAnswer(question)?'secondary':'danger'"
+              slot="end"
+              [name]="lastQuestions==undefined?'information-circle':CheckCorrectAnswer(question)?'checkmark-circle':'close-circle'">
+            </ion-icon>
+            <ion-label>{{question.Respuesta=='2'?'Si':'No'}}</ion-label>
+          </ion-item>
+          <ion-item *ngIf="question.Comentario!=undefined && question.Comentario.length>0">
+            <ion-icon slot="start" name="clipboard"></ion-icon>
+            <ion-input type="text" clearInput="true" disabled multiple="true" [name]="'observacion' + i"
+              [(ngModel)]="question.Comentario"></ion-input>
+          </ion-item>
+          <ion-item *ngIf="question.Check_Image">
+            <ion-thumbnail slot="start">
+              <img [src]="'data:image/jpeg;base64,' + question.Check_Image" />
+            </ion-thumbnail>
+          </ion-item>
+
+
+       
+      </div>
    
+
+    </div>
+  </ion-list>
+
+  </div>
+
 
 </ion-content>

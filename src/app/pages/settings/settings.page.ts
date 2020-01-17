@@ -19,7 +19,7 @@ export class SettingsPage implements OnInit {
 
 
   ngOnInit() {
-
+    this.ThirdPartie = this._sesion.GetThirdPartie();
    
 
   }
