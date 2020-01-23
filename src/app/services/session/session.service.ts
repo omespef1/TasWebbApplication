@@ -38,14 +38,14 @@ export class SessionService {
   SetWifi(val: boolean) {
     localStorage.setItem("wifi", JSON.stringify(val));
   }
-  GetWifi() {
+  GetWifi() :boolean{
     return JSON.parse(localStorage.getItem("wifi"));
   }
   SetMobile(val: boolean) {
     console.log('permiso a mobile cambiado');
     localStorage.setItem("mobile", JSON.stringify(val));
   }
-  GetMobile() {
+  GetMobile():boolean {
     return JSON.parse(localStorage.getItem("mobile"));
   }
   removeUser() {

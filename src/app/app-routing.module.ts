@@ -8,7 +8,7 @@ const routes: Routes = [
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
  { path: '', loadChildren: './pages/login/login.module#LoginPageModule', canActivate: [AuthGuardService] },
-  { path: 'business', loadChildren: './pages/business/business.module#BusinessPageModule' },
+ // { path: 'business', loadChildren: './pages/business/business.module#BusinessPageModule' },
   // { path: 'vehicle', loadChildren: './pages/vehicle/vehicle.module#VehiclePageModule' },
   // { path: 'settings', loadChildren: './pages/settings/settings.module#SettingsPageModule' },
   //  { path: 'enlistment', loadChildren: './pages/enlistment/enlistment.module#EnlistmentPageModule' },

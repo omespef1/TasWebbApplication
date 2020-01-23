@@ -23,6 +23,7 @@ interface StoredRequest {
   providedIn: "root"
 })
 export class OfflineManagerService {
+  uploading=false;
   constructor(
     private storage: Storage,
     private http: HttpClient,
@@ -109,16 +110,20 @@ export class OfflineManagerService {
       console.log("verificando pendientes..");
       let pendings: manchecklist[] = <manchecklist[]> await this.sesion.GetNewOfflineEnlistment();
       console.log(pendings);
-      if (pendings != null && pendings != undefined) {
-        this.alert.presentToast("Sincronizando alistamientos...", 5000);
-        for (const pending of pendings) {
+      if (pendings != null && pendings != undefined && this.uploading==false) {
+        
+        for (let pending of pendings) {
+          this.alert.presentToast(`Sincronizando alistamientos para vehículo ${pending.IdVehiculo} y kilometraje ${pending.Kilometraje}`, 5000);
+          this.uploading=true;
           const intento = await this.enlistment.PostAnswer(pending).toPromise();
+          this.uploading=false;
           if (intento.Retorno == 0) {
-            this.alert.showAlert("Alistamiento enviado", intento.message);
+            this.alert.showAlert(`Alistamiento enviado, kilometraje ${pending.Kilometraje}`,  intento.message);
             const newPendings = pendings.filter(obj => obj !== pending);
             this.sesion.SetNewOfflineEnlistment(newPendings);                     
           }
           else {
+            
             this.alert.showAlert("Error sincronzando", intento.TxtError);
           }
           // this.enlistment.PostAnswer(pending).subscribe(resp => {
@@ -132,7 +137,12 @@ export class OfflineManagerService {
           // });
         }
       }
+      else {
+        this.uploading=false;
+        this.alert.presentToast('Ningún alistamiento pendiente',5000);
+      }
     } catch (error) {
+      this.uploading=false;
       this.alert.presentToast("error sincronizando...", 5000);
     }
   }

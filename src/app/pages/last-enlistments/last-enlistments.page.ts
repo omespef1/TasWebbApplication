@@ -60,7 +60,13 @@ export class LastEnlistmentsPage implements OnInit {
       
       this.enlistment =   <manchecklist> await this._sesion.GetLastEnlistment();
       console.log(this.enlistment);
+      if(event!=null){
+        event.target.complete();
+      }
       this.loadMap(this.enlistment.Latitude,this.enlistment.Longitude);
+      
+     
+      
     }
   
   }

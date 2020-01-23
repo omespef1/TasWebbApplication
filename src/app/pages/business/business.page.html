@@ -3,6 +3,9 @@
 </app-header>
 
 <ion-content>
+  <div text-center>
+    <ion-spinner *ngIf="loading" slot="start"></ion-spinner>
+  </div>
  <ion-list>
    <ion-item tappable *ngFor="let business of businessList" (click)="SetBusiness(business)">
      <ion-icon slot="start" name="home"></ion-icon>

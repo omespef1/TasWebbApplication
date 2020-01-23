@@ -13,6 +13,7 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 })
 export class BusinessPage implements OnInit {
   businessList: business;
+  loading=false;
   constructor(
     private _sesion: SessionService,
     private _http: HttpManagerService,
@@ -24,11 +25,15 @@ export class BusinessPage implements OnInit {
   }
 
   GetBusinessList() {
+    this.loading=true;
     this._http.Get<transaction>("/business").subscribe(resp => {
+      this.loading=false;
       console.log(resp);
       if (resp.Retorno === 0) {
         this.businessList = resp.ObjTransaction;
       }
+    },err=>{
+      this.loading=false;
     });
   }
 

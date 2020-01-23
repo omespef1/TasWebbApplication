@@ -90,7 +90,7 @@
           <ion-label>{{question.Pregunta | uppercase}}</ion-label>
         </ion-list-header>
       </div>
-      <div *ngIf="question.Respuesta!=undefined || question.Respuesta>0">       
+      <div *ngIf="question.Respuesta!=undefined && question.Respuesta>0">       
           <ion-list-header color="primary">
             <ion-label>{{question.Pregunta | uppercase}}</ion-label>
           </ion-list-header>

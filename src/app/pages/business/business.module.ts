@@ -1,28 +1,28 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+// import { NgModule } from '@angular/core';
+// import { CommonModule } from '@angular/common';
+// import { FormsModule } from '@angular/forms';
+// import { Routes, RouterModule } from '@angular/router';
 
-import { IonicModule } from '@ionic/angular';
+// import { IonicModule } from '@ionic/angular';
 
-import { BusinessPage } from './business.page';
-import { ComponentsModule } from '../../components/components.module';
+// import { BusinessPage } from './business.page';
+// import { ComponentsModule } from '../../components/components.module';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: BusinessPage
-  }
-];
+// const routes: Routes = [
+//   {
+//     path: '',
+//     component: BusinessPage
+//   }
+// ];
 
-@NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    ComponentsModule,
-    RouterModule.forChild(routes)
-  ],
-  declarations: [BusinessPage]
-})
-export class BusinessPageModule {}
+// @NgModule({
+//   imports: [
+//     CommonModule,
+//     FormsModule,
+//     IonicModule,
+//     ComponentsModule,
+//     RouterModule.forChild(routes)
+//   ],
+//   declarations: [BusinessPage]
+// })
+// export class BusinessPageModule {}

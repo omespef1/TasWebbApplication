@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="co.tasweb.com" version="20.0.1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="co.tasweb.com" version="20.0.1.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Tasweb</name>
     <description>Aplicación de protocolo de alistamiento</description>
     <author email="omespef1@gmail.com" href="http://ionicframework.com/">Tas Team</author>
@@ -112,8 +112,5 @@
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
     <plugin name="cordova-plugin-ionic-webview" spec="^4.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
-    <!-- <plugin name="cordova-plugin-touch-id" spec="^3.4.0">
-        <variable name="FACEID_USAGE_DESCRIPTION" value="For easy authentication" />
-    </plugin> -->
     <plugin name="cordova-plugin-geolocation" spec="^4.0.2" />
 </widget>

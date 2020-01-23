@@ -167,6 +167,7 @@ export class VehiclePage implements OnInit {
       }
     } else {
       if (car.NuevoKilometraje != null && car.NuevoKilometraje > 0) {
+        this._sesion.SetKilometerCar(car.NuevoKilometraje);
         let params: NavigationExtras = {
           state: {
             car: car
@@ -174,6 +175,10 @@ export class VehiclePage implements OnInit {
         };
         car.loading = false;
         this.router.navigateByUrl("tabs/enlistment", params);
+      }
+      else {
+        car.loading = false;
+        this._alert.showAlert("Error", "Ingrese kilometraje del vehículo");
       }
     }
   }

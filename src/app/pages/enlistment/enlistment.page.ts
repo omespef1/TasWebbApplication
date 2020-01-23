@@ -148,7 +148,8 @@ export class EnlistmentPage implements OnInit {
           }
         }
       },err=> {
-        this._alert.showAlert("Error", 'erro del sistema no controlado');
+        this._alert.showAlert("Error de conexión,intente nuevamente.", err);
+        this.saving = false;
       });
     } else {
       this._sesion.SetLastEnlistment(answer);
@@ -178,7 +179,7 @@ export class EnlistmentPage implements OnInit {
     console.log(event);
     console.log("limpia");
     if (event.target.nodeName == "ION-RADIO-GROUP") {
-      this.progressUp();
+     // this.progressUp();
       question.observaciones = "";
     }
   }
@@ -204,13 +205,13 @@ export class EnlistmentPage implements OnInit {
     );
   }
 
-  progressUp() {
-    this.progress += 1;
-  }
+  // progressUp() {
+  //   this.progress += 1;
+  // }
 
-  progressValue() {
-    return (this.progress * 100) / this.enlistment.length / 100;
-  }
+  // progressValue() {
+  //   return (this.progress * 100) / this.enlistment.length / 100;
+  // }
 
   deletePhoto(answer: enlistment) {
     answer.check_foto = undefined;

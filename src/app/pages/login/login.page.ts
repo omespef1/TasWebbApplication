@@ -29,7 +29,7 @@ export class LoginPage implements OnInit {
     private router: Router,
     private _alert: AlertService,
     private _nav: NavController,
-    private _sesion: SessionService,
+    public _sesion: SessionService,
     private _modal: ModalController,
     private _touch: TouchIdService,
     private _platform: Platform,
