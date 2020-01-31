@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChildren, QueryList, ElementRef } from "@angular/core";
 import { EnlistmentService } from "../../services/enlistment/enlistment.service";
 import { SessionService } from "../../services/session/session.service";
 import { enlistment } from "src/app/models/enlistmen/enlistmen";
@@ -17,7 +17,7 @@ import {
   NetworkService,
   ConnectionStatus
 } from "../../services/network/network.service";
-import { NavController } from "@ionic/angular";
+import { NavController, IonRadioGroup } from "@ionic/angular";
 import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
@@ -26,6 +26,8 @@ import { AuthService } from '../../services/auth/auth.service';
   styleUrls: ["./enlistment.page.scss"]
 })
 export class EnlistmentPage implements OnInit {
+  predefined=false;
+  @ViewChildren(IonRadioGroup) divs: QueryList<IonRadioGroup>
   constructor(
     private _service: EnlistmentService,
     private _sesion: SessionService,
@@ -75,7 +77,27 @@ export class EnlistmentPage implements OnInit {
       this.loading = false;
     }
   }
+  MarkPredefined(){
+    debugger;
+    if(this.predefined==true){
 
+        this.divs.forEach(element => {
+        
+          let index = element.name.split("anwser")[1];
+          element.value = this.enlistment[index].respuesta;
+          
+        });
+
+    }
+    else {
+      this.divs.forEach(element => {
+        
+        let index = element.name.split("answer")[1];
+        element.value = undefined;
+        
+      });
+    }
+  }
   Guardar() {
     this.saving=true;
     this.geolocation

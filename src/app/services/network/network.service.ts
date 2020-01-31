@@ -39,7 +39,7 @@ export class NetworkService {
     this.network.onConnect().subscribe(() => {
 console.log('evento de recien conectado');
       setTimeout(() => {
-        if (this.network.type.toUpperCase() == 'WIFI' && this._sesion.GetWifi()) {
+        if (this.network.type == 'wifi' && this._sesion.GetWifi()) {
           if (this.status.getValue() === ConnectionStatus.Online) {
             console.log('WE ARE ONLINE');
             this.updateNetworkStatus(ConnectionStatus.Online);
@@ -85,7 +85,7 @@ console.log('evento de recien conectado');
     let status =  this.network.type !== 'none' ? ConnectionStatus.Online : ConnectionStatus.Offline;
    
     // return ConnectionStatus.Offline;
-    if (this.network.type.toUpperCase() === 'WIFI') {
+    if (this.network.type === 'wifi') {
       if(!this._sesion.GetWifi()){
         console.log('entra por wifi')
         this.updateNetworkStatus(ConnectionStatus.Offline);
