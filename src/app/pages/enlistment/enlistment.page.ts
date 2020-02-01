@@ -78,25 +78,18 @@ export class EnlistmentPage implements OnInit {
     }
   }
   MarkPredefined(){
-    debugger;
-    if(this.predefined==true){
-
-        this.divs.forEach(element => {
-        
-          let index = element.name.split("anwser")[1];
-          element.value = this.enlistment[index].respuesta;
-          
-        });
-
-    }
-    else {
-      this.divs.forEach(element => {
-        
-        let index = element.name.split("answer")[1];
-        element.value = undefined;
-        
-      });
-    }
+    this.enlistment[1].respuestaUsuario=1; 
+    // if(this.predefined==true){ 
+    //     this.divs.forEach(element => {
+    //       const index: number = Number(element.name.split("anwser")[1]);
+    //       this.enlistment[index].respuestaUsuario = this.enlistment[index].respuesta;
+    //     });
+    // } else {
+    //   this.divs.forEach(element => {
+    //     const index = element.name.split("answer")[1];
+    //     this.enlistment[index].respuestaUsuario = undefined;
+    //   });
+    // }
   }
   Guardar() {
     this.saving=true;
@@ -197,11 +190,8 @@ export class EnlistmentPage implements OnInit {
      
     }
   }
-  clear(event: any, question: enlistment) {
-    console.log(event);
-    console.log("limpia");
-    if (event.target.nodeName == "ION-RADIO-GROUP") {
-     // this.progressUp();
+  clear(event: any, question: enlistment) {    
+    if (event.target.nodeName == "ION-RADIO-GROUP") {     
       question.observaciones = "";
     }
   }

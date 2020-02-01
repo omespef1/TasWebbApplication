@@ -88,9 +88,13 @@
       <div *ngIf="question.Respuesta==undefined || question.Respuesta==0 ">
         <ion-list-header color="secondary">
           <ion-label>{{question.Pregunta | uppercase}}</ion-label>
+          <ion-item lines="none" *ngIf="groupEnlistment">
+            <ion-icon slot="end" color="primary" [name]="isGroupCorrect(question)?'checkmark-circle':'close-circle'"></ion-icon>
+          </ion-item>
         </ion-list-header>
+        
       </div>
-      <div *ngIf="question.Respuesta!=undefined && question.Respuesta>0">       
+      <div *ngIf="question.Respuesta!=undefined && question.Respuesta>0 && !groupEnlistment">       
           <ion-list-header color="primary">
             <ion-label>{{question.Pregunta | uppercase}}</ion-label>
           </ion-list-header>
@@ -110,10 +114,7 @@
             <ion-thumbnail slot="start">
               <img [src]="'data:image/jpeg;base64,' + question.Check_Image" />
             </ion-thumbnail>
-          </ion-item>
-
-
-       
+          </ion-item>       
       </div>
    
 

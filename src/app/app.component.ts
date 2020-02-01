@@ -46,5 +46,9 @@ export class AppComponent {
     if (wifi == null || wifi === undefined) {
       this._sesion.SetWifi(true);
     }
+    const groupEnlistment = this._sesion.getGroupEnlistment();
+    if(groupEnlistment==null || groupEnlistment==undefined){
+      this._sesion.setGroupEnlistment(true);
+    }
   }
 }

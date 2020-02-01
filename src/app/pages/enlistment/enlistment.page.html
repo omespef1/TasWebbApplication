@@ -30,7 +30,7 @@
                 <ion-item>
                   <ion-icon color="secondary" slot="end" [name]="'2'==question.respuesta?'checkmark-circle':'close-circle'"></ion-icon>
                   <ion-label>Si</ion-label>
-                  <ion-radio color="secondary" slot="start" value="2"></ion-radio>
+                  <ion-radio  color="secondary" slot="start" value="2"></ion-radio>
                 </ion-item>
                 <ion-item>
                   <ion-icon color="secondary" slot="end" [name]="'1'==question.respuesta?'checkmark-circle':'close-circle'"></ion-icon>
@@ -75,6 +75,9 @@
       </ion-button>
 
     </form>
+ <div>
+   {{enlistment | json}}
+ </div>
 
 
 

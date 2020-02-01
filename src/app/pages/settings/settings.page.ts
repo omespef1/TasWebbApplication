@@ -12,6 +12,7 @@ export class SettingsPage implements OnInit {
   ThirdPartie:ThirdPartie;
   mobile=false;
   wifi=false;
+  groupEnlistment=false;
   constructor(private _sesion: SessionService,private _auth:AuthService) {
 
    
@@ -28,6 +29,7 @@ export class SettingsPage implements OnInit {
     this.ThirdPartie = this._sesion.GetThirdPartie();
     this.mobile = this.GetMobile();
     this.wifi = this.GetWifi();
+
   }
 
   SetWifi() {
@@ -47,6 +49,14 @@ export class SettingsPage implements OnInit {
     return this._sesion.GetMobile();
   }
 
+
+  SetGroupEnlistment() {   
+    this._sesion.setGroupEnlistment(this.groupEnlistment);
+  }
+
+  GetGroupEnlistment(){
+   return this._sesion.getGroupEnlistment();
+  }
   GoOut(){
     this._auth.signOut();
   }

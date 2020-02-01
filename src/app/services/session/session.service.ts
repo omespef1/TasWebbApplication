@@ -48,6 +48,13 @@ export class SessionService {
   GetMobile():boolean {
     return JSON.parse(localStorage.getItem("mobile"));
   }
+
+  setGroupEnlistment(val: boolean) {
+    localStorage.setItem("GroupEnlistment", JSON.stringify(val));
+  }
+  getGroupEnlistment():boolean{
+    return JSON.parse(localStorage.getItem("GroupEnlistment"));
+  }
   removeUser() {
     localStorage.removeItem("thirdPartie");
   }
