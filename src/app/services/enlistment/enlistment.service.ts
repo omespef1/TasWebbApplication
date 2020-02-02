@@ -4,12 +4,17 @@ import { business } from "../../models/business/business";
 import { ThirdPartie } from "../../models/general/user";
 import { transaction, transactionID } from "../../models/general/transaction";
 import { manchecklist } from "../../models/enlistmen/manchecklist";
+import { SessionService } from "../session/session.service";
+import { enlistment } from "../../models/enlistmen/enlistmen";
 
 @Injectable({
   providedIn: "root"
 })
 export class EnlistmentService {
-  constructor(private _http: HttpManagerService) {}
+  constructor(
+    private _http: HttpManagerService,
+    private _sesion: SessionService
+  ) {}
   GetQuestions(business: business, user: ThirdPartie) {
     return this._http.Get<transaction>(
       `/Question?business=${business.CodigoEmpresa}&user=${user.Identificacion}`
@@ -20,5 +25,12 @@ export class EnlistmentService {
     return this._http.Post<transactionID>("/vehicle", answers);
   }
 
-  
+  CheckEnlistment(enlistment: manchecklist) {
+    let answersWaited = this._sesion.GetQuestions();
+    enlistment.detalle.forEach(element => {
+      const validAnswer = answersWaited.filter(t => t.PNo == element.PNo);
+      if(element.Respuesta != validAnswer[0].respuesta) return false;
+    });
+    return true;
+  }
 }

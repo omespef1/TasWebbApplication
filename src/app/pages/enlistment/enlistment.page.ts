@@ -78,18 +78,18 @@ export class EnlistmentPage implements OnInit {
     }
   }
   MarkPredefined(){
-    this.enlistment[1].respuestaUsuario=1; 
-    // if(this.predefined==true){ 
-    //     this.divs.forEach(element => {
-    //       const index: number = Number(element.name.split("anwser")[1]);
-    //       this.enlistment[index].respuestaUsuario = this.enlistment[index].respuesta;
-    //     });
-    // } else {
-    //   this.divs.forEach(element => {
-    //     const index = element.name.split("answer")[1];
-    //     this.enlistment[index].respuestaUsuario = undefined;
-    //   });
-    // }
+   // this.enlistment[1].respuestaUsuario=1; 
+    if(this.predefined==true){ 
+        this.divs.forEach(element => {
+          const index: number = Number(element.name.split("anwser")[1]);
+          this.enlistment[index].respuestaUsuario = this.enlistment[index].respuesta;
+        });
+    } else {
+      this.divs.forEach(element => {
+        const index = element.name.split("answer")[1];
+        this.enlistment[index].respuestaUsuario = undefined;
+      });
+    }
   }
   Guardar() {
     this.saving=true;
@@ -135,7 +135,8 @@ export class EnlistmentPage implements OnInit {
         IdEmpresa: this._sesion.GetBussiness().CodigoEmpresa,
         Respuesta: item.respuestaUsuario,
         Resultado: "",
-        Check_Image: item.check_foto
+        Check_Image: item.check_foto,
+        show:true
       });
     });
     console.log(answer);
@@ -167,6 +168,14 @@ export class EnlistmentPage implements OnInit {
         this.saving = false;
       });
     } else {
+      if(this._service.CheckEnlistment(answer)){
+        answer.Estado='A';
+       this._alert.showAlert('Mensaje del sistema','LA LISTA DE CHEQUEO HA SIDO APROBADA');
+      }
+      else {
+        answer.Estado='N';
+        this._alert.showAlert('Mensaje del sistema','LA LISTA DE CHEQUEO NO HA SIDO APROBADA');
+      }
       this._sesion.SetLastEnlistment(answer);
       this.saving = false;
       const offlineEnlistemnts =   <manchecklist[]> await this._sesion.GetNewOfflineEnlistment();
@@ -181,10 +190,11 @@ export class EnlistmentPage implements OnInit {
         console.log("item agregado al offline2");
         this._sesion.SetNewOfflineEnlistment(offlineEnlistemnts);
       }
-      this._alert.showAlert(
-        "Error",
-        "Te encuentras Offline, cuando tengas acceso a una red, enviaremos este alistamiento!"
+      this._alert.presentToast(
+        "Te encuentras Offline, cuando tengas acceso a una red, enviaremos este alistamiento!",5000
       );
+
+      
       // this.router.navigateByUrl("last-enlistments");
       this._nav.navigateRoot("tabs/last-enlistments");
      

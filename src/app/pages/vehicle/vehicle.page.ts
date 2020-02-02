@@ -103,6 +103,7 @@ export class VehiclePage implements OnInit {
               if (resp.Retorno === 1) {
                 throw error(resp.TxtError);
               }
+              console.log(car);
               const paramValid: aliparam = resp.ObjTransaction;
               if (car.NuevoKilometraje < car.Kilometraje) {
                 throw error("Kilometraje no puede ser inferior al actual");

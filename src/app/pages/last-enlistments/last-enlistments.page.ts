@@ -44,6 +44,28 @@ export class LastEnlistmentsPage implements OnInit {
     console.log(this.lastQuestions);
   }
 
+  SetVisibilityItems() {
+    this.enlistment.detalle.forEach(item => {
+      if (item.Respuesta > 0) {
+        if (this.groupEnlistment) {
+          item.show = false;
+        } else {
+          item.show = true;
+        }
+      }
+    });
+  }
+
+
+   FixEnlistment(items:manchecklistDetalle[])
+   {
+      items.forEach(element => {
+        element.Grupo = Math.trunc(element.PNo);
+        if(!this.groupEnlistment){
+          element.show=true;
+        }
+      });
+   }
   async GetLastEnlistment(event: any = null) {
     if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
       if (event == null) this.loading = true;
@@ -61,17 +83,23 @@ export class LastEnlistmentsPage implements OnInit {
           }
           if (resp.Retorno == 0) {
             this.enlistment = resp.ObjTransaction;
+            this.FixEnlistment(this.enlistment.detalle);
             this.loadMap(this.enlistment.Latitude, this.enlistment.Longitude);
           }
         });
     } else {
       this.enlistment = <manchecklist>await this._sesion.GetLastEnlistment();
-      console.log(this.enlistment);
+      this.FixEnlistment(this.enlistment.detalle);
+      console.log(this.enlistment.detalle);
+      
       if (event != null) {
         event.target.complete();
       }
       this.loadMap(this.enlistment.Latitude, this.enlistment.Longitude);
     }
+  
+
+    console.log(this.enlistment);
   }
 
   loadMap(latitude: number, long: number) {
@@ -114,18 +142,14 @@ export class LastEnlistmentsPage implements OnInit {
   }
 
   isGroupCorrect(answer: manchecklistDetalle) {
-  
     let valid: Boolean = true;
     let GroupAnswers = this.enlistment.detalle.filter(
-      f => f.Grupo == answer.Grupo && answer.Respuesta>0
+      f => f.Grupo == answer.Grupo && f.Respuesta > 0
     );
-    if (
-      GroupAnswers != null &&
-      GroupAnswers != undefined     
-    ) {
+    if (GroupAnswers != null && GroupAnswers != undefined) {
       GroupAnswers.forEach(element => {
         const validAnswer = this.lastQuestions.filter(
-          t => t.PNo == answer.PNo
+          t => t.PNo == element.PNo
         )[0];
         if (element.Respuesta.toString() != validAnswer.respuesta.toString()) {
           valid = false;
@@ -133,7 +157,12 @@ export class LastEnlistmentsPage implements OnInit {
       });
       return valid;
     }
-   
-    
+  }
+
+  showItems(element:manchecklistDetalle){
+  
+    this.enlistment.detalle.filter(p=>p.Grupo==element.Grupo).forEach(element => {
+      element.show = !element.show;
+    });
   }
 }

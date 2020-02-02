@@ -29,6 +29,7 @@ export class SettingsPage implements OnInit {
     this.ThirdPartie = this._sesion.GetThirdPartie();
     this.mobile = this.GetMobile();
     this.wifi = this.GetWifi();
+    this.groupEnlistment = this.GetGroupEnlistment();
 
   }
 

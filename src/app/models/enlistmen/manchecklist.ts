@@ -17,7 +17,9 @@ export class manchecklist {
   Longitude:number;
 }
 export class manchecklistDetalle {
-
+constructor(){
+  this.show=true;
+}
   IdEmpresa:number;
   IdCheckList:number;
   PNo:number;
@@ -27,4 +29,5 @@ export class manchecklistDetalle {
   Grupo:number;
   Resultado:string;
   Check_Image:string;
+  show:boolean;
 }
