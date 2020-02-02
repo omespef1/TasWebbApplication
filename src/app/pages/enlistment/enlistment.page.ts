@@ -26,7 +26,6 @@ import { AuthService } from '../../services/auth/auth.service';
   styleUrls: ["./enlistment.page.scss"]
 })
 export class EnlistmentPage implements OnInit {
-  predefined=false;
   @ViewChildren(IonRadioGroup) divs: QueryList<IonRadioGroup>
   constructor(
     private _service: EnlistmentService,
@@ -47,6 +46,7 @@ export class EnlistmentPage implements OnInit {
   snapshot = false;
   progress = 0;
 markedCorrect=false;
+predefined:boolean=false;
   third: ThirdPartie= new ThirdPartie();
 
   ngOnInit() {

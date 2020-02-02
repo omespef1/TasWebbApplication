@@ -43,7 +43,7 @@
                     clearOnEdit="true" multiple="true" placeholder="Ingrese los detalles aquí"
                     [name]="'observacion' + i" [(ngModel)]="question.observaciones"></ion-input>
                 </ion-item>
-                <ion-item *ngIf="markedCorrect && question.respuestaUsuario == question.respuesta">
+                <ion-item *ngIf="predefined && question.respuestaUsuario == question.respuesta">
                   <p>Respuesta correcta seleccionada por el sistema</p>
                  <ion-icon  color="success" slot="end" name="checkmark-circle"></ion-icon>
                 </ion-item>
