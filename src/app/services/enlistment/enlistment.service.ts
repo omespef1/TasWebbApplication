@@ -29,7 +29,7 @@ export class EnlistmentService {
     let answersWaited = this._sesion.GetQuestions();
     enlistment.detalle.forEach(element => {
       const validAnswer = answersWaited.filter(t => t.PNo == element.PNo);
-      if(element.Respuesta != validAnswer[0].respuesta) return false;
+      if(element.Respuesta != validAnswer[0].respuesta && validAnswer[0].Restringe==1) return false;
     });
     return true;
   }
