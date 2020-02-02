@@ -143,6 +143,7 @@ export class LastEnlistmentsPage implements OnInit {
 
   isGroupCorrect(answer: manchecklistDetalle) {
     let valid: Boolean = true;
+    if(this.lastQuestions!=undefined && this.lastQuestions!=null){
     let GroupAnswers = this.enlistment.detalle.filter(
       f => f.Grupo == answer.Grupo && f.Respuesta > 0
     );
@@ -155,6 +156,10 @@ export class LastEnlistmentsPage implements OnInit {
           valid = false;
         }
       });
+    }
+      return valid;
+    }
+    else{
       return valid;
     }
   }

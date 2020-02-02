@@ -46,7 +46,7 @@ export class EnlistmentPage implements OnInit {
   saving = false;
   snapshot = false;
   progress = 0;
-
+markedCorrect=false;
   third: ThirdPartie= new ThirdPartie();
 
   ngOnInit() {
@@ -78,6 +78,7 @@ export class EnlistmentPage implements OnInit {
     }
   }
   MarkPredefined(){
+    this.markedCorrect= !this.markedCorrect;
    // this.enlistment[1].respuestaUsuario=1; 
     if(this.predefined==true){ 
         this.divs.forEach(element => {
@@ -123,7 +124,7 @@ export class EnlistmentPage implements OnInit {
       detalle: answers,
       identificacion: this.third.Identificacion,
       Latitude: latitude,
-      Longitude: longitude
+      Longitude: longitude,
     };
     this.enlistment.forEach(item => {
       answer.detalle.push({
