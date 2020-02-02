@@ -52,10 +52,12 @@ predefined:boolean=false;
   ngOnInit() {
     console.log(this.router.getCurrentNavigation().extras);
     this.car = this.router.getCurrentNavigation().extras.state.car;
-  }
-  ionViewWillEnter() {
+    this.predefined=false;
     this.third = this._sesion.GetThirdPartie();
     this.GetQuestions();
+  }
+  ionViewWillEnter() {
+    
   }
   GetQuestions() {
     this.loading = true;

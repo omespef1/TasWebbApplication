@@ -12,6 +12,7 @@ observaciones:string;
 check_foto:string;
 snapshot:boolean;
 grupo:number;
+Restringe:number
 }
 
 

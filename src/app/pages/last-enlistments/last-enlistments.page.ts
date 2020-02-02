@@ -152,7 +152,7 @@ export class LastEnlistmentsPage implements OnInit {
         const validAnswer = this.lastQuestions.filter(
           t => t.PNo == element.PNo
         )[0];
-        if (element.Respuesta.toString() != validAnswer.respuesta.toString()) {
+        if (element.Respuesta.toString() != validAnswer.respuesta.toString() && validAnswer.Restringe == 1) {
           valid = false;
         }
       });
