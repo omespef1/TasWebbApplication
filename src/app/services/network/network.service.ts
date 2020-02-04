@@ -83,8 +83,7 @@ console.log('evento de recien conectado');
     console.log(this.network.type);
     console.log('obtiene estado conexion actual')
     let status =  this.network.type !== 'none' ? ConnectionStatus.Online : ConnectionStatus.Offline;
-   
-    // return ConnectionStatus.Offline;
+
     if (this.network.type === 'wifi') {
       if(!this._sesion.GetWifi()){
         console.log('entra por wifi')

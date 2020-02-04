@@ -61,20 +61,9 @@ export class VehiclePage implements OnInit {
           if (resp.Retorno == 0) {
             this._sesion.SetVehicles(resp.ObjTransaction);
             this.vehicles = resp.ObjTransaction;
-            
+            this.loadFavoriteCars();
 
-            this.vehicleFavorite = this.vehicles.filter(v => v.Sugerido === 2).length == 0 ? null :this.vehicles.filter(v => v.Sugerido === 2)[0];
-            if (this.vehicleFavorite !== undefined && this.vehicleFavorite != null){                        
-              this.vehicleFavorite = this.vehicleFavorite;
-              this.vehiclesFilter.push(this.vehicleFavorite);
-            }
-            this.vehicleFavorite = this.vehicles.filter(v => v.Sugerido === 1).length == 0 ? null :this.vehicles.filter(v => v.Sugerido === 1)[0];
-            if (this.vehicleFavorite !== undefined && this.vehicleFavorite != null){ 
-              this.vehiclesFilter=[];           
-              this.vehicleFavorite = this.vehicleFavorite;
-              this.vehiclesFilter.push(this.vehicleFavorite);
-            }
-            
+      
             this.loading = false;
           }
           else {
@@ -83,11 +72,25 @@ export class VehiclePage implements OnInit {
         });
     } else {
       this.vehicles = this._sesion.GetVehicles();
-      this.vehiclesFilter = this._sesion.GetVehicles();
+      this.loadFavoriteCars();
       this.loading = false;
     }
   }
 
+  loadFavoriteCars(){
+    this.vehicleFavorite = this.vehicles.filter(v => v.Sugerido === 2).length == 0 ? null :this.vehicles.filter(v => v.Sugerido === 2)[0];
+    if (this.vehicleFavorite !== undefined && this.vehicleFavorite != null){                        
+      this.vehicleFavorite = this.vehicleFavorite;
+      this.vehiclesFilter.push(this.vehicleFavorite);
+    }
+    this.vehicleFavorite = this.vehicles.filter(v => v.Sugerido === 1).length == 0 ? null :this.vehicles.filter(v => v.Sugerido === 1)[0];
+    if (this.vehicleFavorite !== undefined && this.vehicleFavorite != null){ 
+      this.vehiclesFilter=[];           
+      this.vehicleFavorite = this.vehicleFavorite;
+      this.vehiclesFilter.push(this.vehicleFavorite);
+    }
+    
+  }
   checkVehicle(car: vehicle) {
     car.loading = true;
     if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {

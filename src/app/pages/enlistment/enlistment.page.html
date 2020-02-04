@@ -44,7 +44,7 @@
                     [name]="'observacion' + i" [(ngModel)]="question.observaciones"></ion-input>
                 </ion-item>
                 <ion-item *ngIf="predefined && question.respuestaUsuario == question.respuesta">
-                  <p>Respuesta correcta seleccionada por el sistema</p>
+                  <p>Señor usuario, usted marcó <b> {{question.respuestaUsuario== 1?'No':'Si'}}</b></p>
                  <ion-icon  color="success" slot="end" name="checkmark-circle"></ion-icon>
                 </ion-item>
 

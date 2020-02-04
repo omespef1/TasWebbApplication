@@ -1,8 +1,14 @@
-import { Component, OnInit, ViewChildren, QueryList, ElementRef } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChildren,
+  QueryList,
+  ElementRef
+} from "@angular/core";
 import { EnlistmentService } from "../../services/enlistment/enlistment.service";
 import { SessionService } from "../../services/session/session.service";
 import { enlistment } from "src/app/models/enlistmen/enlistmen";
-import * as moment from 'moment';
+import * as moment from "moment";
 import {
   manchecklist,
   manchecklistDetalle
@@ -18,7 +24,7 @@ import {
   ConnectionStatus
 } from "../../services/network/network.service";
 import { NavController, IonRadioGroup } from "@ionic/angular";
-import { AuthService } from '../../services/auth/auth.service';
+import { AuthService } from "../../services/auth/auth.service";
 
 @Component({
   selector: "app-enlistment",
@@ -26,7 +32,7 @@ import { AuthService } from '../../services/auth/auth.service';
   styleUrls: ["./enlistment.page.scss"]
 })
 export class EnlistmentPage implements OnInit {
-  @ViewChildren(IonRadioGroup) divs: QueryList<IonRadioGroup>
+  @ViewChildren(IonRadioGroup) divs: QueryList<IonRadioGroup>;
   constructor(
     private _service: EnlistmentService,
     private _sesion: SessionService,
@@ -36,7 +42,7 @@ export class EnlistmentPage implements OnInit {
     private geolocation: Geolocation,
     private _network: NetworkService,
     private _nav: NavController,
-    private _auth:AuthService
+    private _auth: AuthService
   ) {}
   enlistment: enlistment[] = [];
   manchecklist: manchecklist;
@@ -45,28 +51,23 @@ export class EnlistmentPage implements OnInit {
   saving = false;
   snapshot = false;
   progress = 0;
-markedCorrect=false;
-predefined:boolean=false;
-  third: ThirdPartie= new ThirdPartie();
+  markedCorrect = false;
+  predefined: boolean = false;
+  third: ThirdPartie = new ThirdPartie();
 
   ngOnInit() {
     console.log(this.router.getCurrentNavigation().extras);
     this.car = this.router.getCurrentNavigation().extras.state.car;
-    this.predefined=false;
+    this.predefined = false;
     this.third = this._sesion.GetThirdPartie();
     this.GetQuestions();
   }
-  ionViewWillEnter() {
-    
-  }
+  ionViewWillEnter() {}
   GetQuestions() {
     this.loading = true;
     if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
       this._service
-        .GetQuestions(
-          this._sesion.GetBussiness(),
-          this.third
-        )
+        .GetQuestions(this._sesion.GetBussiness(), this.third)
         .subscribe(resp => {
           this.loading = false;
           if (resp.Retorno == 0) {
@@ -79,23 +80,25 @@ predefined:boolean=false;
       this.loading = false;
     }
   }
-  MarkPredefined(){
-    this.markedCorrect= !this.markedCorrect;
-   // this.enlistment[1].respuestaUsuario=1; 
-    if(this.predefined==true){ 
-        this.divs.forEach(element => {
-          const index: number = Number(element.name.split("anwser")[1]);
-          this.enlistment[index].respuestaUsuario = this.enlistment[index].respuesta;
-        });
-    } else {
+  MarkPredefined() {
+    this.markedCorrect = !this.markedCorrect;
+    // this.enlistment[1].respuestaUsuario=1;
+    if (this.predefined == true) {
       this.divs.forEach(element => {
-        const index = element.name.split("answer")[1];
+        const index: number = Number(element.name.split("anwser")[1]);
+        this.enlistment[index].respuestaUsuario = this.enlistment[
+          index
+        ].respuesta;
+      });
+    } else {
+      this.divs.forEach(element => {       
+        const index: number = Number(element.name.split("anwser")[1]);
         this.enlistment[index].respuestaUsuario = undefined;
       });
     }
   }
   Guardar() {
-    this.saving=true;
+    this.saving = true;
     this.geolocation
       .getCurrentPosition()
       .then(resp => {
@@ -126,7 +129,7 @@ predefined:boolean=false;
       detalle: answers,
       identificacion: this.third.Identificacion,
       Latitude: latitude,
-      Longitude: longitude,
+      Longitude: longitude
     };
     this.enlistment.forEach(item => {
       answer.detalle.push({
@@ -139,49 +142,58 @@ predefined:boolean=false;
         Respuesta: item.respuestaUsuario,
         Resultado: "",
         Check_Image: item.check_foto,
-        show:true
+        show: true
       });
     });
     console.log(answer);
 
     if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
-      this._service.PostAnswer(answer).subscribe(resp => {        
-        console.log('respuesta es');  
-        console.log(resp.Retorno);  
-        console.log('la respuesta del chekeo es');
-        console.log(resp);
-        this.saving = false;
-    console.log('activa boton nuevamente');
-        if (resp.Retorno == 0) {  
-          console.log('respuesta es 0 correctamente'); 
+      this._service.PostAnswer(answer).subscribe(
+        resp => {
+          console.log("respuesta es");
+          console.log(resp.Retorno);
+          console.log("la respuesta del chekeo es");
+          console.log(resp);
+          this.saving = false;
+          console.log("activa boton nuevamente");
+          if (resp.Retorno == 0) {
+            console.log("respuesta es 0 correctamente");
 
-          this._alert.showAlert("Mensaje del sistema", `${resp.message}`);
-          this._nav.navigateRoot("tabs/last-enlistments");
-          this._sesion.SetLastEnlistment(answer);
-        } 
-        else {
-          console.log('respuesta es 1 correctamente');  
-          this._alert.showAlert("Error", resp.TxtError);
-          if(resp.TxtError=='El conductor no se encuentra activo'){
-            this._auth.signOut();
+            this._alert.showAlert("Mensaje del sistema", `${resp.message}`);
+            this._nav.navigateRoot("tabs/last-enlistments");
+            this._sesion.SetLastEnlistment(answer);
+          } else {
+            console.log("respuesta es 1 correctamente");
+            this._alert.showAlert("Error", resp.TxtError);
+            if (resp.TxtError == "El conductor no se encuentra activo") {
+              this._auth.signOut();
+            }
           }
+        },
+        err => {
+          this._alert.showAlert("Error de conexión,intente nuevamente.", err);
+          this.saving = false;
         }
-      },err=> {
-        this._alert.showAlert("Error de conexión,intente nuevamente.", err);
-        this.saving = false;
-      });
+      );
     } else {
-      if(this._service.CheckEnlistment(answer)){
-        answer.Estado='A';
-       this._alert.showAlert('Mensaje del sistema','LA LISTA DE CHEQUEO HA SIDO APROBADA');
-      }
-      else {
-        answer.Estado='N';
-        this._alert.showAlert('Mensaje del sistema','LA LISTA DE CHEQUEO NO HA SIDO APROBADA');
+      if (this._service.CheckEnlistment(answer)) {
+        answer.Estado = "A";
+        this._alert.showAlert(
+          "Mensaje del sistema",
+          "LA LISTA DE CHEQUEO HA SIDO APROBADA"
+        );
+      } else {
+        answer.Estado = "N";
+        this._alert.showAlert(
+          "Mensaje del sistema",
+          "LA LISTA DE CHEQUEO NO HA SIDO APROBADA"
+        );
       }
       this._sesion.SetLastEnlistment(answer);
       this.saving = false;
-      const offlineEnlistemnts =   <manchecklist[]> await this._sesion.GetNewOfflineEnlistment();
+      const offlineEnlistemnts = <manchecklist[]>(
+        await this._sesion.GetNewOfflineEnlistment()
+      );
       if (offlineEnlistemnts == null || offlineEnlistemnts == undefined) {
         console.log(offlineEnlistemnts);
         const newList: manchecklist[] = new Array();
@@ -194,17 +206,16 @@ predefined:boolean=false;
         this._sesion.SetNewOfflineEnlistment(offlineEnlistemnts);
       }
       this._alert.presentToast(
-        "Te encuentras Offline, cuando tengas acceso a una red, enviaremos este alistamiento!",5000
+        "Te encuentras Offline, cuando tengas acceso a una red, enviaremos este alistamiento!",
+        5000
       );
 
-      
       // this.router.navigateByUrl("last-enlistments");
       this._nav.navigateRoot("tabs/last-enlistments");
-     
     }
   }
-  clear(event: any, question: enlistment) {    
-    if (event.target.nodeName == "ION-RADIO-GROUP") {     
+  clear(event: any, question: enlistment) {
+    if (event.target.nodeName == "ION-RADIO-GROUP") {
       question.observaciones = "";
     }
   }
@@ -241,6 +252,4 @@ predefined:boolean=false;
   deletePhoto(answer: enlistment) {
     answer.check_foto = undefined;
   }
-
-
 }
