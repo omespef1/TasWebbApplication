@@ -121,12 +121,13 @@ export class LoginPage implements OnInit {
         .verifyFingerPrint("Ingresa tu huella dactilar para ingresar")
         .then((result: any) => {
           console.log(`Autenticación resultado  es ${result}`);
-          if (result == "Success") {
-            this.auth.signInDirectTouch();
-            this.router.navigateByUrl("tabs/vehicle");
-          } else {
-            this._alert.showAlert("Error", "Verificación fallida");
-          }
+          this.router.navigateByUrl("tabs/vehicle");
+          // if (result == "Success") {
+          //   this.auth.signInDirectTouch();
+          //   this.router.navigateByUrl("tabs/vehicle");
+          // } else {
+          //   this._alert.showAlert("Error", "Verificación fallida");
+          // }
         })
         .catch((error: any) => {
           this._alert.showAlert("Error", "Verificación fallida");
