@@ -121,6 +121,7 @@ export class LoginPage implements OnInit {
         .verifyFingerPrint("Ingresa tu huella dactilar para ingresar")
         .then((result: any) => {
           console.log(`Autenticación resultado  es ${result}`);
+          this.auth.signInDirectTouch();
           this.router.navigateByUrl("tabs/vehicle");
           // if (result == "Success") {
           //   this.auth.signInDirectTouch();
