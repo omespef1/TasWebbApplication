@@ -100,14 +100,15 @@ export class LoginPage implements OnInit {
     this.showModalBusiness();
   }
 
-  GetTouchId() {
+  async GetTouchId() {
     if (this._platform.is("cordova")) {
+      await this._platform.ready();
       this._touch.isAvailale().then(
         result => {
-          if (result === "finger" || result === "face") {
+          // if (result === "finger" || result === "face") {
             console.log(`Autenticación disponible por ${result}`);
             this.touchId = true;
-          }
+          // }
         },
         err => {}
       );
