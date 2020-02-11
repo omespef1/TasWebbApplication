@@ -59,10 +59,13 @@ export class EnlistmentPage implements OnInit {
     console.log(this.router.getCurrentNavigation().extras);
     this.car = this.router.getCurrentNavigation().extras.state.car;
     this.predefined = false;
-    this.third = this._sesion.GetThirdPartie();
+   
     this.GetQuestions();
   }
-  ionViewWillEnter() {}
+  ionViewWillEnter() {
+
+    this.third = this._sesion.GetThirdPartie();
+  }
   GetQuestions() {
     this.loading = true;
     if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
