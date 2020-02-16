@@ -9,6 +9,7 @@ import { AlertService } from '../../services/alert/alert.service';
 import { error } from "util";
 import { VehicleService } from "src/app/services/vehicle/vehicle.service";
 import { SessionService } from '../../services/session/session.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: "app-pendings",
@@ -19,8 +20,9 @@ export class PendingsPage implements OnInit {
   pendings: pending[];
   saving: boolean = false;
   car: vehicle;
-  constructor(private _service: PendingService, private router: Router,private alert:AlertService,private _vehicle:VehicleService,
-    private _sesion:SessionService) {}
+  constructor(private _service: PendingService, private router: Router,
+    private alert:AlertService,private _vehicle:VehicleService,
+    private _sesion:SessionService,private _nav:NavController) {}
 
   ngOnInit() {
     this.car = this.router.getCurrentNavigation().extras.state.car;
@@ -59,7 +61,7 @@ export class PendingsPage implements OnInit {
               }
             };
             this.alert.presentToast('Pendientes actualizados',3000);
-            this.router.navigateByUrl("tabs/enlistment", params);
+            this._nav.navigateForward("tabs/enlistment", params);
           });
          
           

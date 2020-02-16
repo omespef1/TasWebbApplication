@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SessionService } from '../../services/session/session.service';
 import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-header',
@@ -10,9 +11,11 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit {
   @Input() headerName:string;
   @Input() showBackButton = true;
-  constructor(private _auth: SessionService,private router:Router) { }
+  constructor(private _auth: SessionService,private router:Router,private _nav:NavController) { }
 
   ngOnInit() {}
+
+
 
   logged() { 
    
@@ -20,6 +23,6 @@ export class HeaderComponent implements OnInit {
     }
 
     goSettings(){
-      this.router.navigateByUrl('tabs/settings');
+      this._nav.navigateRoot('tabs/settings');
     }
 }

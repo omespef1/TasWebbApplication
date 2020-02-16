@@ -10,6 +10,7 @@ declare var google;
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { last } from "rxjs/operators";
 import { manchecklistDetalle } from "../../models/enlistmen/manchecklist";
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-last-enlistments",
@@ -24,18 +25,26 @@ export class LastEnlistmentsPage implements OnInit {
   theHtmlString: any;
   loading = false;
   lastQuestions: enlistment[];
+  showBack=false;
   constructor(
     private _vehicle: VehicleService,
     private _sesion: SessionService,
     private _network: NetworkService,
-    private _san: DomSanitizer
+    private _san: DomSanitizer,
+    private router: Router,
   ) {}
   enlistment: manchecklist = new manchecklist();
   groupEnlistment = false;
   ngOnInit() {
     //this.GetLastEnlistment();
   }
+ 
 
+   ionViewDidLoad(){
+     console.log('carga extras');
+    this.showBack = this.router.getCurrentNavigation().extras.state.showBack;
+    console.log(this.showBack);
+   }
   ionViewWillEnter() {
     console.log("actualiza");
     this.groupEnlistment = this._sesion.getGroupEnlistment();

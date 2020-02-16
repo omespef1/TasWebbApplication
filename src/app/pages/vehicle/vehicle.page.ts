@@ -13,6 +13,7 @@ import {
   NetworkService,
   ConnectionStatus
 } from "src/app/services/network/network.service";
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: "app-vehicle",
@@ -33,14 +34,13 @@ export class VehiclePage implements OnInit {
     private _vehicle: VehicleService,
     private router: Router,
     private _alert: AlertService,
-    private _network: NetworkService
+    private _network: NetworkService,
+    private _nav:NavController
   ) {
    
   }
 
-  ngOnInit() {
-    
-  }
+
 
   ionViewWillEnter(){
     this.thirdPartie = this._sesion.GetThirdPartie();
@@ -132,8 +132,8 @@ export class VehiclePage implements OnInit {
                           car: car
                         }
                       };
-                      this.router.navigateByUrl(
-                        "tabs/pendings",
+                      this._nav.navigateForward(
+                        "tabs/vehicle/pendings",
                         paramsPendings
                       );
                     } else {
@@ -154,7 +154,9 @@ export class VehiclePage implements OnInit {
                             }
                           };
                           car.loading = false;
-                          this.router.navigateByUrl("tabs/enlistment", params);
+                          
+                         // this.router.navigateByUrl("tabs/enlistment", params);
+                         this.goEnlistment(params);
                         });
                     }
                   }
@@ -178,7 +180,7 @@ export class VehiclePage implements OnInit {
           }
         };
         car.loading = false;
-        this.router.navigateByUrl("tabs/enlistment", params);
+        this.goEnlistment(params);
       }
       else {
         car.loading = false;
@@ -213,5 +215,10 @@ export class VehiclePage implements OnInit {
 
 
    
+  }
+
+  goEnlistment(params:NavigationExtras){
+    this._nav.navigateForward("tabs/vehicle/enlistemnt",params)
+    // this.router.navigateByUrl("tabs/enlistment", params);
   }
 }

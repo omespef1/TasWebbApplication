@@ -8,6 +8,7 @@ import { loginRequest } from '../../models/general/loginRequest';
 import { SessionService } from '../session/session.service';
 import { AlertService } from '../alert/alert.service';
 import { ThirdPartie } from 'src/app/models/general/user';
+import { NavController } from '@ionic/angular';
 
 @Injectable({
   providedIn: "root"
@@ -17,7 +18,8 @@ export class AuthService {
     private router: Router,
     private _http: HttpManagerService,
     private _sesion:SessionService,
-    private _alert:AlertService
+    private _alert:AlertService,
+    private nav:NavController
   ) {
   }
 
@@ -44,7 +46,7 @@ export class AuthService {
       'Bienvenido!',
       `Ingresaste como ${user.NombreCompleto}`
     );
-    this.router.navigateByUrl("tabs/vehicle");
+    this.nav.navigateForward("tabs/vehicle");
   }
 
   signInDirectTouch(){
@@ -73,7 +75,9 @@ export class AuthService {
 
   async signOut() {
    // await this.storage.set("user", null);
+   this.nav.navigateRoot('login');
    this._sesion.removeUser();
-    this.router.navigateByUrl("login");
+  
+  
   }
 }

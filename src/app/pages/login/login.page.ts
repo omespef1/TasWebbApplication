@@ -13,6 +13,7 @@ import {
   NetworkService,
   ConnectionStatus
 } from "src/app/services/network/network.service";
+import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller';
 
 @Component({
   selector: "app-login",
@@ -82,7 +83,7 @@ export class LoginPage implements OnInit {
               `Ingresaste como ${user.NombreCompleto}`
             );
             // this._nav.setDirection('root');
-            this.router.navigateByUrl("tabs/vehicle");
+            this.goVehicles();
           }
         },
         err => {
@@ -92,7 +93,7 @@ export class LoginPage implements OnInit {
       );
     } else {
       this.auth.signInDirectOffline();
-      this.router.navigateByUrl("tabs/vehicle");
+      this.goVehicles();
       console.log("paso autoiza");
     }
   }
@@ -122,7 +123,7 @@ export class LoginPage implements OnInit {
         .then((result: any) => {
           console.log(`Autenticación resultado  es ${result}`);
           this.auth.signInDirectTouch();
-          this.router.navigateByUrl("tabs/vehicle");
+          this.goVehicles();
           // if (result == "Success") {
           //   this.auth.signInDirectTouch();
           //   this.router.navigateByUrl("tabs/vehicle");
@@ -134,5 +135,10 @@ export class LoginPage implements OnInit {
           this._alert.showAlert("Error", "Verificación fallida");
         });
     }
+  }
+
+  goVehicles(){
+   this._nav.navigateRoot("tabs/vehicle");
+    
   }
 }

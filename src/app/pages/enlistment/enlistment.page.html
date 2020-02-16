@@ -1,4 +1,4 @@
-<app-header [showBackButton]="false"  [headerName]="car.PlacaVehiculo">
+<app-header  [headerName]="car.PlacaVehiculo">
     
 </app-header>
 
@@ -73,7 +73,7 @@
           </ion-list>
         </ng-container>
       </div>
-      <ion-button [disabled]="!enlistmentForm.form.valid || saving " expand="block" type="submit">
+      <ion-button [disabled]="!enlistmentForm.form.valid || saving || done " expand="block" type="submit">
         <ion-icon *ngIf="!saving" slot="start" name="checkmark-circle"></ion-icon>
         <ion-spinner *ngIf="saving" slot="start"></ion-spinner>
         {{ saving?'ENVIANDO...':'GUARDAR'}}

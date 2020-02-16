@@ -14,7 +14,7 @@ import {
   manchecklistDetalle
 } from "../../models/enlistmen/manchecklist";
 import { vehicle } from "src/app/models/vehicle/vehicle";
-import { Router } from "@angular/router";
+import { Router, NavigationExtras } from "@angular/router";
 import { ThirdPartie } from "src/app/models/general/user";
 import { AlertService } from "../../services/alert/alert.service";
 import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
@@ -25,6 +25,7 @@ import {
 } from "../../services/network/network.service";
 import { NavController, IonRadioGroup } from "@ionic/angular";
 import { AuthService } from "../../services/auth/auth.service";
+import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller';
 
 @Component({
   selector: "app-enlistment",
@@ -54,17 +55,29 @@ export class EnlistmentPage implements OnInit {
   markedCorrect = false;
   predefined: boolean = false;
   third: ThirdPartie = new ThirdPartie();
+  done=false;
 
   ngOnInit() {
     console.log(this.router.getCurrentNavigation().extras);
     this.car = this.router.getCurrentNavigation().extras.state.car;
     this.predefined = false;
-   
+    this.third = this._sesion.GetThirdPartie();
     this.GetQuestions();
   }
   ionViewWillEnter() {
 
     this.third = this._sesion.GetThirdPartie();
+  }
+  ionViewDidEnter(){
+    console.log('gggsdfsd');
+   if(this.done){
+    this._alert.showAlert('Atención','Alistamiento enviado...volviendo al inicio');
+   setTimeout(() => {
+      this.done=false;
+      this._nav.navigateBack("tabs/vehicle")
+   }, 2000);
+   }
+   
   }
   GetQuestions() {
     this.loading = true;
@@ -162,8 +175,9 @@ export class EnlistmentPage implements OnInit {
           if (resp.Retorno == 0) {
             console.log("respuesta es 0 correctamente");
 
-            this._alert.showAlert("Mensaje del sistema", `${resp.message}`);
-            this._nav.navigateRoot("tabs/last-enlistments");
+            this._alert.showAlert("Mensaje del sistema", `${resp.message}`);          
+            this.goLastEnlisment();
+           
             this._sesion.SetLastEnlistment(answer);
           } else {
             console.log("respuesta es 1 correctamente");
@@ -214,7 +228,7 @@ export class EnlistmentPage implements OnInit {
       );
 
       // this.router.navigateByUrl("last-enlistments");
-      this._nav.navigateRoot("tabs/last-enlistments");
+     this.goLastEnlisment();
     }
   }
   clear(event: any, question: enlistment) {
@@ -254,5 +268,12 @@ export class EnlistmentPage implements OnInit {
 
   deletePhoto(answer: enlistment) {
     answer.check_foto = undefined;
+  }
+
+
+  goLastEnlisment(){
+  this.done=true;
+    this._nav.navigateRoot("tabs/last-enlistments");
+    
   }
 }
