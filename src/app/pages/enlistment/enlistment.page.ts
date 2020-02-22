@@ -58,7 +58,7 @@ export class EnlistmentPage implements OnInit {
   done=false;
 
   ngOnInit() {
-    console.log(this.router.getCurrentNavigation().extras);
+    //console.log(this.router.getCurrentNavigation().extras);
     this.car = this.router.getCurrentNavigation().extras.state.car;
     this.predefined = false;
     this.third = this._sesion.GetThirdPartie();
@@ -69,7 +69,7 @@ export class EnlistmentPage implements OnInit {
     this.third = this._sesion.GetThirdPartie();
   }
   ionViewDidEnter(){
-    console.log('gggsdfsd');
+    //console.log('gggsdfsd');
    if(this.done){
     this._alert.showAlert('Atención','Alistamiento enviado...volviendo al inicio');
    setTimeout(() => {
@@ -121,7 +121,7 @@ export class EnlistmentPage implements OnInit {
         this.buildPetition(resp.coords.latitude, resp.coords.longitude);
       })
       .catch(error => {
-        console.log("Error getting location", error);
+        //console.log("Error getting location", error);
         this.buildPetition(0, 0);
       });
   }
@@ -145,7 +145,8 @@ export class EnlistmentPage implements OnInit {
       detalle: answers,
       identificacion: this.third.Identificacion,
       Latitude: latitude,
-      Longitude: longitude
+      Longitude: longitude,
+      sending:true
     };
     this.enlistment.forEach(item => {
       answer.detalle.push({
@@ -161,26 +162,26 @@ export class EnlistmentPage implements OnInit {
         show: true
       });
     });
-    console.log(answer);
+    //console.log(answer);
 
     if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
       this._service.PostAnswer(answer).subscribe(
         resp => {
-          console.log("respuesta es");
-          console.log(resp.Retorno);
-          console.log("la respuesta del chekeo es");
-          console.log(resp);
+          //console.log("respuesta es");
+          //console.log(resp.Retorno);
+          //console.log("la respuesta del chekeo es");
+          //console.log(resp);
           this.saving = false;
-          console.log("activa boton nuevamente");
+          //console.log("activa boton nuevamente");
           if (resp.Retorno == 0) {
-            console.log("respuesta es 0 correctamente");
+            //console.log("respuesta es 0 correctamente");
 
             this._alert.showAlert("Mensaje del sistema", `${resp.message}`);          
             this.goLastEnlisment();
            
             this._sesion.SetLastEnlistment(answer);
           } else {
-            console.log("respuesta es 1 correctamente");
+            //console.log("respuesta es 1 correctamente");
             this._alert.showAlert("Error", resp.TxtError);
             if (resp.TxtError == "El conductor no se encuentra activo") {
               this._auth.signOut();
@@ -212,14 +213,14 @@ export class EnlistmentPage implements OnInit {
         await this._sesion.GetNewOfflineEnlistment()
       );
       if (offlineEnlistemnts == null || offlineEnlistemnts == undefined) {
-        console.log(offlineEnlistemnts);
+        //console.log(offlineEnlistemnts);
         const newList: manchecklist[] = new Array();
         newList.push(answer);
-        console.log("item agregado al offline");
+        //console.log("item agregado al offline");
         this._sesion.SetNewOfflineEnlistment(newList);
       } else {
         offlineEnlistemnts.push(answer);
-        console.log("item agregado al offline2");
+        //console.log("item agregado al offline2");
         this._sesion.SetNewOfflineEnlistment(offlineEnlistemnts);
       }
       this._alert.presentToast(
@@ -262,9 +263,10 @@ export class EnlistmentPage implements OnInit {
   //   this.progress += 1;
   // }
 
-  // progressValue() {
-  //   return (this.progress * 100) / this.enlistment.length / 100;
-  // }
+  progressValue() {
+    // return (this.progress * 100) / this.enlistment.length / 100;
+   return  (this.enlistment.filter(t=>t.respuestaUsuario>0 ).length * 100) / this.enlistment.filter(t=>t.Seccion=="0").length / 100;
+  }
 
   deletePhoto(answer: enlistment) {
     answer.check_foto = undefined;

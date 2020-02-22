@@ -28,7 +28,7 @@ export class BusinessPage implements OnInit {
     this.loading=true;
     this._http.Get<transaction>("/business").subscribe(resp => {
       this.loading=false;
-      console.log(resp);
+      //console.log(resp);
       if (resp.Retorno === 0) {
         this.businessList = resp.ObjTransaction;
       }

@@ -25,7 +25,7 @@ export class AuthService {
 
 
   signIn(credentials: loginRequest) {
-    console.log(credentials);
+    //console.log(credentials);
     return this._http.Post<transaction>('/login', credentials).pipe(
       tap(async (userData: transaction) => {
         if (userData) {
@@ -53,7 +53,7 @@ export class AuthService {
 
     const user: ThirdPartie = this._sesion.GetThirdPartieBio();
     this._sesion.SetThirdPartie(user);
-    console.log(user);
+    //console.log(user);
     this._alert.showAlert(
       'Bienvenido!',
       `Ingresaste como ${user.NombreCompleto}`
@@ -65,7 +65,7 @@ export class AuthService {
 
     const user: ThirdPartie = this._sesion.getOfflineUser();
     this._sesion.SetThirdPartie(user);
-    console.log(user);
+    //console.log(user);
     this._alert.showAlert(
       'Bienvenido!',
       `Estás Offline, solo puedes ingresasar como ${user.NombreCompleto}`

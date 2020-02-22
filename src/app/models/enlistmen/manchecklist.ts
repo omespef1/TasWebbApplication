@@ -15,6 +15,7 @@ export class manchecklist {
   identificacion:string;
   Latitude:number;
   Longitude:number;
+  sending:boolean;
 }
 export class manchecklistDetalle {
 constructor(){

@@ -41,16 +41,16 @@ export class LastEnlistmentsPage implements OnInit {
  
 
    ionViewDidLoad(){
-     console.log('carga extras');
+     //console.log('carga extras');
     this.showBack = this.router.getCurrentNavigation().extras.state.showBack;
-    console.log(this.showBack);
+    //console.log(this.showBack);
    }
   ionViewWillEnter() {
-    console.log("actualiza");
+    //console.log("actualiza");
     this.groupEnlistment = this._sesion.getGroupEnlistment();
     this.GetLastEnlistment();
     this.lastQuestions = this._sesion.GetQuestions();
-    console.log(this.lastQuestions);
+    //console.log(this.lastQuestions);
   }
 
   SetVisibilityItems() {
@@ -84,7 +84,7 @@ export class LastEnlistmentsPage implements OnInit {
           this._sesion.GetThirdPartie()
         )
         .subscribe(resp => {
-          console.log(resp);
+          //console.log(resp);
           if (event != null) {
             event.target.complete();
           } else {
@@ -99,7 +99,7 @@ export class LastEnlistmentsPage implements OnInit {
     } else {
       this.enlistment = <manchecklist>await this._sesion.GetLastEnlistment();
       this.FixEnlistment(this.enlistment.detalle);
-      console.log(this.enlistment.detalle);
+      //console.log(this.enlistment.detalle);
       
       if (event != null) {
         event.target.complete();
@@ -108,7 +108,7 @@ export class LastEnlistmentsPage implements OnInit {
     }
   
 
-    console.log(this.enlistment);
+    //console.log(this.enlistment);
   }
 
   loadMap(latitude: number, long: number) {

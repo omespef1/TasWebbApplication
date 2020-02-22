@@ -1,9 +1,11 @@
 <app-header  [headerName]="car.PlacaVehiculo">
-    
+ 
 </app-header>
-
-<ion-content fullscreen>
-    <!-- <ion-progress-bar ion-fixed  color="secondary" [value]="progressValue()"></ion-progress-bar> -->
+<div>
+  <ion-progress-bar ion-fixed  color="secondary" [value]="progressValue()"></ion-progress-bar> 
+ </div>
+<ion-content class="outer-content">
+   
   <div *ngIf="!loading">
       
     <form #enlistmentForm="ngForm" (ngSubmit)="Guardar()">

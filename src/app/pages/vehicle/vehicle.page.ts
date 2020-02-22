@@ -20,7 +20,7 @@ import { NavController } from '@ionic/angular';
   templateUrl: "./vehicle.page.html",
   styleUrls: ["./vehicle.page.scss"]
 })
-export class VehiclePage implements OnInit {
+export class VehiclePage  {
   today = new Date();
   thirdPartie: ThirdPartie = new ThirdPartie();
   vehicles: vehicle[] = [];
@@ -44,13 +44,13 @@ export class VehiclePage implements OnInit {
 
   ionViewWillEnter(){
     this.thirdPartie = this._sesion.GetThirdPartie();
-    console.log('actualizo');
+    //console.log('actualizo');
     this.GetVehicleInformation();
   }
   GetVehicleInformation() {
     this.vehiclesFilter=[];
     this.loading = true;
-    console.log(this._network.getCurrentNetworkStatus());
+    //console.log(this._network.getCurrentNetworkStatus());
     if (this._network.getCurrentNetworkStatus() === ConnectionStatus.Online) {
       this._vehicle
         .GetVehicleInformation(
@@ -106,7 +106,7 @@ export class VehiclePage implements OnInit {
               if (resp.Retorno === 1) {
                 throw error(resp.TxtError);
               }
-              console.log(car);
+              //console.log(car);
               const paramValid: aliparam = resp.ObjTransaction;
               if (car.NuevoKilometraje < car.Kilometraje) {
                 throw error("Kilometraje no puede ser inferior al actual");
@@ -162,7 +162,7 @@ export class VehiclePage implements OnInit {
                   }
                 });
             } catch (err) {
-              console.log(err);
+              //console.log(err);
               car.loading = false;
               this._alert.showAlert("error", err);
             }
@@ -196,7 +196,7 @@ export class VehiclePage implements OnInit {
     }, 200);
    
     this.vehiclesFilter = [];
-    console.log(event.target);
+    //console.log(event.target);
     this.vehiclesFilter = this.vehicles.filter(
       v =>
         v.PlacaVehiculo.toUpperCase().indexOf(

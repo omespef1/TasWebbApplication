@@ -34,7 +34,7 @@ export class SettingsPage implements OnInit {
   }
 
   SetWifi() {
-    console.log(this.wifi);
+    //console.log(this.wifi);
     this._sesion.SetWifi(this.wifi);
   }
 
@@ -42,7 +42,7 @@ export class SettingsPage implements OnInit {
     return this._sesion.GetWifi();
   }
   SetMobile() {
-    console.log(this.mobile);
+    //console.log(this.mobile);
     this._sesion.SetMobile(this.mobile);
   }
 

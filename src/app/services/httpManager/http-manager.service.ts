@@ -31,7 +31,7 @@ baseUrl: string = "https://tas.com.co/taswebapi/api";
       headers: new HttpHeaders(headerDict),
       observe: "body"
     };
-console.log(`${this.baseUrl}${urlController}`);
+//console.log(`${this.baseUrl}${urlController}`);
     return this._http
       .get<T>(`${this.baseUrl}${urlController}`, <object>options)
       .pipe(
@@ -62,7 +62,7 @@ console.log(`${this.baseUrl}${urlController}`);
       .post<T>(`${this.baseUrl}${urlController}`, body, <object>bodyRequest)
       .pipe(
         tap(resp=>{
-          console.log(resp);
+          //console.log(resp);
           catchError(err => this.handleError(err))      
         })
         
@@ -70,7 +70,7 @@ console.log(`${this.baseUrl}${urlController}`);
   }
 
   private handleError(error: HttpErrorResponse) {
-    console.log(error);
+    //console.log(error);
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
       console.error("Ocurrió un error:", error.error.message);

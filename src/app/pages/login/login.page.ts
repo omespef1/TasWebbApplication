@@ -45,7 +45,7 @@ export class LoginPage implements OnInit {
 
   async LoadBusiness() {
     const business = this._sesion.GetBussiness();
-    console.log(business);
+    //console.log(business);
     if (business == null) {
       await this.showModalBusiness();
     }
@@ -56,7 +56,7 @@ export class LoginPage implements OnInit {
       component: BusinessPage
     });
     modal.onDidDismiss().then(resp => {
-      console.log(resp);
+      //console.log(resp);
       this._sesion.SetBusiness(resp.data);
     });
     return await modal.present();
@@ -67,12 +67,12 @@ export class LoginPage implements OnInit {
     const businessStorage = this._sesion.GetBussiness();
     this.user.business = businessStorage.CodigoEmpresa;
 
-    console.log(this.user);
+    //console.log(this.user);
 
     if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
       this.auth.signIn(this.user).subscribe(
         resp => {
-          console.log(resp);
+          //console.log(resp);
           this.loading = false;
           if (resp.Retorno == 1) {
             this._alert.showAlert("Ingreso fallido", `${resp.TxtError}`);
@@ -94,7 +94,7 @@ export class LoginPage implements OnInit {
     } else {
       this.auth.signInDirectOffline();
       this.goVehicles();
-      console.log("paso autoiza");
+      //console.log("paso autoiza");
     }
   }
   changeBusiness() {
@@ -107,7 +107,7 @@ export class LoginPage implements OnInit {
       this._touch.isAvailale().then(
         result => {
           // if (result === "finger" || result === "face") {
-            console.log(`Autenticación disponible por ${result}`);
+            //console.log(`Autenticación disponible por ${result}`);
             this.touchId = true;
           // }
         },
@@ -121,7 +121,7 @@ export class LoginPage implements OnInit {
       this._touch
         .verifyFingerPrint("Ingresa tu huella dactilar para ingresar")
         .then((result: any) => {
-          console.log(`Autenticación resultado  es ${result}`);
+          //console.log(`Autenticación resultado  es ${result}`);
           this.auth.signInDirectTouch();
           this.goVehicles();
           // if (result == "Success") {

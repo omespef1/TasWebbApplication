@@ -18,7 +18,7 @@ export class VehicleService {
 
 
   GetVehicleInformation(business:business,ThirdPartie:ThirdPartie){
-    console.log('consultando vehículos...')
+    //console.log('consultando vehículos...')
    return this._http.Get<transaction>(`/Vehicle?business=${ business.CodigoEmpresa}&IdTercero=${ThirdPartie.IdTercero}`)
   }
 

@@ -19,7 +19,7 @@ export class NetworkService {
  
   constructor(private network: Network, private toastController: ToastController, private plt: Platform,private alert:AlertService,
     private _offline: OfflineManagerService, private _sesion:SessionService) {
-    console.log(network.type);
+    //console.log(network.type);
     this.plt.ready().then(() => {
       let status =  this.network.type !== 'none' ? ConnectionStatus.Online : ConnectionStatus.Offline;
       this.initializeNetworkEvents();
@@ -29,26 +29,26 @@ export class NetworkService {
   }
  
   public initializeNetworkEvents() {
- console.log('inicializa');
+ //console.log('inicializa');
     this.network.onDisconnect().subscribe(() => {
       if (this.status.getValue() === ConnectionStatus.Online) {
-        console.log('WE ARE OFFLINE');
+        //console.log('WE ARE OFFLINE');
         this.updateNetworkStatus(ConnectionStatus.Offline);
       }
     });
     this.network.onConnect().subscribe(() => {
-console.log('evento de recien conectado');
+//console.log('evento de recien conectado');
       setTimeout(() => {
         if (this.network.type == 'wifi' && this._sesion.GetWifi()) {
           if (this.status.getValue() === ConnectionStatus.Online) {
-            console.log('WE ARE ONLINE');
+            //console.log('WE ARE ONLINE');
             this.updateNetworkStatus(ConnectionStatus.Online);
           }
          this.alert.presentToast('Conexión WIFI permitida',4000);
        
         } else {
           if (this.status.getValue() === ConnectionStatus.Online) {
-            console.log('WE ARE ONLINE');
+            //console.log('WE ARE ONLINE');
             this.updateNetworkStatus(ConnectionStatus.Online);
           }
           if (this._sesion.GetMobile() && this._sesion.GetMobile()){
@@ -61,7 +61,7 @@ console.log('evento de recien conectado');
   }
  
   private async updateNetworkStatus(status: ConnectionStatus) {
-    console.log('evento actualizacion');
+    //console.log('evento actualizacion');
     this.status.next(status);
  
     let connection = status == ConnectionStatus.Offline ? 'Offline' : 'Online';
@@ -80,26 +80,26 @@ console.log('evento de recien conectado');
   }
  
   public getCurrentNetworkStatus(): ConnectionStatus {
-    console.log(this.network.type);
-    console.log('obtiene estado conexion actual')
+    //console.log(this.network.type);
+    //console.log('obtiene estado conexion actual')
     let status =  this.network.type !== 'none' ? ConnectionStatus.Online : ConnectionStatus.Offline;
-
+//return ConnectionStatus.Offline;
     if (this.network.type === 'wifi') {
       if(!this._sesion.GetWifi()){
-        console.log('entra por wifi')
+        //console.log('entra por wifi')
         this.updateNetworkStatus(ConnectionStatus.Offline);
         return ConnectionStatus.Offline;
       }
      } else
       {
       if(!this._sesion.GetMobile()){
-        console.log('entra por mobile')
+        //console.log('entra por mobile')
         this.updateNetworkStatus(ConnectionStatus.Offline);        
         return ConnectionStatus.Offline;
         
       }
      }
-     console.log('actualiza por donde no debe')
+     //console.log('actualiza por donde no debe')
      this.updateNetworkStatus(status);
     return this.status.getValue();
   }

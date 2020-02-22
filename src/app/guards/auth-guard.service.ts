@@ -13,8 +13,8 @@ export class AuthGuardService implements CanActivate {
 
 
   canActivate(): boolean {
-    console.log('revisando-..');
-    console.log(this._loc.path())
+    //console.log('revisando-..');
+    //console.log(this._loc.path())
 if(this._loc.path()=="login" || this._loc.path()==""){
 
 
@@ -31,7 +31,7 @@ else {
 }
 else {
   
-  console.log(this._sesion.GetThirdPartie())
+  //console.log(this._sesion.GetThirdPartie())
   if(this._sesion.GetThirdPartie()==null || this._sesion.GetThirdPartie()==undefined){
     if(this._loc.path()=="/tabs/settings")
     return true;

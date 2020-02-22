@@ -51,7 +51,7 @@ export class OfflineManagerService {
             })
           );
         } else {
-          console.log("no local events to sync");
+          //console.log("no local events to sync");
           return of(false);
         }
       })
@@ -95,7 +95,7 @@ export class OfflineManagerService {
     let obs = [];
 
     for (let op of operations) {
-      console.log("Make one request: ", op);
+      //console.log("Make one request: ", op);
       let oneObs = this.http.request(op.type, op.url, op.data);
       obs.push(oneObs);
     }
@@ -105,18 +105,24 @@ export class OfflineManagerService {
   }
 
   async checkEventsPendings() {
-    console.log("entrando..");
+    //console.log("entrando..");
+    let pendings: manchecklist[] = <manchecklist[]>(
+      await this.sesion.GetNewOfflineEnlistment()
+    );
     try {
-      console.log("verificando pendientes..");
-      let pendings: manchecklist[] = <manchecklist[]>(
-        await this.sesion.GetNewOfflineEnlistment()
-      );
-      console.log(pendings);
+      
+      //console.log("verificando pendientes..");
+  
+      //console.log(pendings);
       if (
         pendings != null &&
         pendings != undefined &&
         this.uploading == false
       ) {
+        pendings.forEach(item=>{
+          item.sending=true;
+        })
+        this.sesion.SetNewOfflineEnlistment(null);
         for (let pending of pendings) {
           this.alert.presentToast(
             `Sincronizando alistamientos para vehículo ${pending.IdVehiculo} y kilometraje ${pending.Kilometraje}`,
@@ -124,16 +130,21 @@ export class OfflineManagerService {
           );
           this.uploading = true;
           const intento = await this.enlistment.PostAnswer(pending).toPromise();
-          this.uploading = false;
+         
+         if ( pendings.indexOf(pending)== pendings.length-1){
+           this.uploading=false;
+         }
           if (intento.Retorno == 0) {
+            pending.sending=false;
             this.alert.showAlert(
               `Alistamiento enviado, kilometraje ${pending.Kilometraje}`,
               intento.message
             );
-            const newPendings = pendings.filter(obj => obj !== pending);
-            this.sesion.SetNewOfflineEnlistment(newPendings);
+           
+            
           } else {
             this.alert.showAlert("Error sincronzando", intento.TxtError);
+           
           }
           // this.enlistment.PostAnswer(pending).subscribe(resp => {
           //   if (resp.Retorno === 0) {
@@ -149,7 +160,10 @@ export class OfflineManagerService {
         this.uploading = false;
         this.alert.presentToast("Ningún alistamiento pendiente", 5000);
       }
+
+      this.sesion.SetNewOfflineEnlistment(pendings.filter(t=> t.sending==true));
     } catch (error) {
+      this.sesion.SetNewOfflineEnlistment(pendings.filter(t=> t.sending==true));
       this.uploading = false;
       this.alert.presentToast("error sincronizando...", 5000);
     }

@@ -61,7 +61,7 @@ export class PendingsPage implements OnInit {
               }
             };
             this.alert.presentToast('Pendientes actualizados',3000);
-            this._nav.navigateForward("tabs/enlistment", params);
+            this._nav.navigateForward("tabs/vehicle/enlistemnt", params);
           });
          
           
@@ -70,7 +70,7 @@ export class PendingsPage implements OnInit {
     } catch (err) {
 
       this.saving=false;
-      console.log(err);
+      //console.log(err);
      this.alert.showAlert('Error',err);
     }
   }
