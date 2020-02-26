@@ -5,7 +5,7 @@ import {
   HttpErrorResponse
 } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
-import { retry, catchError, filter, map, tap } from "rxjs/operators";
+import { retry, catchError, map, tap } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"

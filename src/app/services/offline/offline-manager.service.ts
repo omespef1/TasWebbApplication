@@ -162,7 +162,9 @@ export class OfflineManagerService {
         
       }
 
+      if(pendings!=null){
       this.sesion.SetNewOfflineEnlistment(pendings.filter(t=> t.sending==true));
+      }
     } catch (error) {
       this.sesion.SetNewOfflineEnlistment(pendings.filter(t=> t.sending==true));
       this.uploading = false;

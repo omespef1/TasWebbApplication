@@ -160,7 +160,8 @@ export class EnlistmentPage implements OnInit {
         Respuesta: item.respuestaUsuario,
         Resultado: "",
         Check_Image: item.check_foto,
-        show: true
+        show: true,
+        HasImage:0
       });
     });
     //console.log(answer);

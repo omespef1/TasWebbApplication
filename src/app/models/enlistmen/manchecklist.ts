@@ -31,4 +31,5 @@ constructor(){
   Resultado:string;
   Check_Image:string;
   show:boolean;
+  HasImage:number;
 }

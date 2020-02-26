@@ -35,4 +35,8 @@ export class VehicleService {
   GetLastEnlistment(business: business, ThirdPartie: ThirdPartie) {
     return this._http.Get<transaction>(`/Vehicles/GetLastEnlistment?business=${business.CodigoEmpresa}&IdTercero=${ThirdPartie.IdTercero}`);
   }
+
+  GetManCheckListDetalle(idEmpresa:number,idCheckList:number,pNo:string){
+    return this._http.Get<transaction>(`/Vehicles/GetCheckListDetalle?IdCheckList=${idCheckList}&IdEmpresa=${idEmpresa}&PNo=${pNo}`);
+  }
 }

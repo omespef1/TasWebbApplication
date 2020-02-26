@@ -11,6 +11,7 @@ import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { last } from "rxjs/operators";
 import { manchecklistDetalle } from "../../models/enlistmen/manchecklist";
 import { Router } from '@angular/router';
+import { transaction } from '../../models/general/transaction';
 
 @Component({
   selector: "app-last-enlistments",
@@ -32,6 +33,7 @@ export class LastEnlistmentsPage implements OnInit {
     private _network: NetworkService,
     private _san: DomSanitizer,
     private router: Router,
+    private sanitizer: DomSanitizer
   ) {}
   enlistment: manchecklist = new manchecklist();
   groupEnlistment = false;
@@ -94,6 +96,10 @@ export class LastEnlistmentsPage implements OnInit {
             this.enlistment = resp.ObjTransaction;
             this.FixEnlistment(this.enlistment.detalle);
             this.loadMap(this.enlistment.Latitude, this.enlistment.Longitude);
+
+            this.enlistment.detalle.forEach(element => {
+             this.GetManCheckListDetalle(element);
+            });
           }
         });
     } else {
@@ -178,5 +184,14 @@ export class LastEnlistmentsPage implements OnInit {
     this.enlistment.detalle.filter(p=>p.Grupo==element.Grupo).forEach(element => {
       element.show = !element.show;
     });
+  }
+
+
+  async GetManCheckListDetalle(detalle:manchecklistDetalle ){
+
+   this._vehicle.GetManCheckListDetalle(detalle.IdEmpresa,detalle.IdCheckList,detalle.PNo.toString()).subscribe(resp=>{
+     detalle.Check_Image ="data:image/jpeg;base64,"+resp.ObjTransaction.Check_Image
+   });
+
   }
 }
