@@ -143,6 +143,7 @@ export class OfflineManagerService {
            
             
           } else {
+            pending.sending=false;
             this.alert.showAlert("Error sincronzando", intento.TxtError);
            
           }
