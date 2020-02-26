@@ -42,14 +42,14 @@ export class NetworkService {
         if (this.network.type == 'wifi' && this._sesion.GetWifi()) {
           if (this.status.getValue() === ConnectionStatus.Online) {
             //console.log('WE ARE ONLINE');
-            this.updateNetworkStatus(ConnectionStatus.Online);
+            this.getCurrentNetworkStatus();
           }
          this.alert.presentToast('Conexión WIFI permitida',4000);
        
         } else {
           if (this.status.getValue() === ConnectionStatus.Online) {
             //console.log('WE ARE ONLINE');
-            this.updateNetworkStatus(ConnectionStatus.Online);
+            this.getCurrentNetworkStatus();
           }
           if (this._sesion.GetMobile() && this._sesion.GetMobile()){
             this.alert.presentToast('Conexión 3G/4G permitida', 4000);

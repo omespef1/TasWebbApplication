@@ -175,7 +175,7 @@ export class EnlistmentPage implements OnInit {
           );
           this.goLastEnlisment();
         }
-      }, 60000);
+      }, 120000);
       this._service.PostAnswer(answer).subscribe(
         resp => {
           enviado = true;
