@@ -20,7 +20,7 @@ export class AppComponent {
     private statusBar: StatusBar,
     private _sesion: SessionService,
     private _auth: AuthService,
-    private _network:NetworkService
+    private _network: NetworkService
   ) {
     this.initializeApp();
   }
