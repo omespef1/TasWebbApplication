@@ -158,7 +158,7 @@ export class OfflineManagerService {
         }
       } else {
         this.uploading = false;
-        this.alert.presentToast("Ningún alistamiento pendiente", 5000);
+        
       }
 
       this.sesion.SetNewOfflineEnlistment(pendings.filter(t=> t.sending==true));

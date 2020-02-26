@@ -6,6 +6,7 @@ import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { SessionService } from "./services/session/session.service";
 import { AuthService } from "./services/auth/auth.service";
 import { IfStmt } from "@angular/compiler";
+import { NetworkService } from './services/network/network.service';
 
 @Component({
   selector: "app-root",
@@ -18,7 +19,8 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private _sesion: SessionService,
-    private _auth: AuthService
+    private _auth: AuthService,
+    private _network:NetworkService
   ) {
     this.initializeApp();
   }

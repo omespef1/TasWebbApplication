@@ -19,7 +19,7 @@ export class NetworkService {
  
   constructor(private network: Network, private toastController: ToastController, private plt: Platform,private alert:AlertService,
     private _offline: OfflineManagerService, private _sesion:SessionService) {
-    //console.log(network.type);
+    console.log('INICIALIZA RED');
     this.plt.ready().then(() => {
       let status =  this.network.type !== 'none' ? ConnectionStatus.Online : ConnectionStatus.Offline;
       this.initializeNetworkEvents();

@@ -25,7 +25,7 @@ import {
 } from "../../services/network/network.service";
 import { NavController, IonRadioGroup } from "@ionic/angular";
 import { AuthService } from "../../services/auth/auth.service";
-import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller';
+import { NavigationOptions } from "@ionic/angular/dist/providers/nav-controller";
 
 @Component({
   selector: "app-enlistment",
@@ -55,7 +55,7 @@ export class EnlistmentPage implements OnInit {
   markedCorrect = false;
   predefined: boolean = false;
   third: ThirdPartie = new ThirdPartie();
-  done=false;
+  done = false;
 
   ngOnInit() {
     //console.log(this.router.getCurrentNavigation().extras);
@@ -65,19 +65,20 @@ export class EnlistmentPage implements OnInit {
     this.GetQuestions();
   }
   ionViewWillEnter() {
-
     this.third = this._sesion.GetThirdPartie();
   }
-  ionViewDidEnter(){
+  ionViewDidEnter() {
     //console.log('gggsdfsd');
-   if(this.done){
-    this._alert.showAlert('Atención','Alistamiento enviado...volviendo al inicio');
-   setTimeout(() => {
-      this.done=false;
-      this._nav.navigateBack("tabs/vehicle")
-   }, 2000);
-   }
-   
+    if (this.done) {
+      this._alert.showAlert(
+        "Atención",
+        "Alistamiento enviado...volviendo al inicio"
+      );
+      setTimeout(() => {
+        this.done = false;
+        this._nav.navigateBack("tabs/vehicle");
+      }, 2000);
+    }
   }
   GetQuestions() {
     this.loading = true;
@@ -107,7 +108,7 @@ export class EnlistmentPage implements OnInit {
         ].respuesta;
       });
     } else {
-      this.divs.forEach(element => {       
+      this.divs.forEach(element => {
         const index: number = Number(element.name.split("anwser")[1]);
         this.enlistment[index].respuestaUsuario = undefined;
       });
@@ -146,7 +147,7 @@ export class EnlistmentPage implements OnInit {
       identificacion: this.third.Identificacion,
       Latitude: latitude,
       Longitude: longitude,
-      sending:true
+      sending: true
     };
     this.enlistment.forEach(item => {
       answer.detalle.push({
@@ -165,8 +166,19 @@ export class EnlistmentPage implements OnInit {
     //console.log(answer);
 
     if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
+      let enviado = false;
+      setTimeout(() => {
+        if (!enviado) {
+          this._alert.showAlert(
+            "Red Lenta",
+            "Parece que la red se encuentra un poco lenta. Guardaremos este alistamiento y lo enviaremos por ti cuando haya una mejor calidad de red"
+          );
+          this.goLastEnlisment();
+        }
+      }, 60000);
       this._service.PostAnswer(answer).subscribe(
         resp => {
+          enviado = true;
           //console.log("respuesta es");
           //console.log(resp.Retorno);
           //console.log("la respuesta del chekeo es");
@@ -176,9 +188,9 @@ export class EnlistmentPage implements OnInit {
           if (resp.Retorno == 0) {
             //console.log("respuesta es 0 correctamente");
 
-            this._alert.showAlert("Mensaje del sistema", `${resp.message}`);          
+            this._alert.showAlert("Mensaje del sistema", `${resp.message}`);
             this.goLastEnlisment();
-           
+
             this._sesion.SetLastEnlistment(answer);
           } else {
             //console.log("respuesta es 1 correctamente");
@@ -229,7 +241,7 @@ export class EnlistmentPage implements OnInit {
       );
 
       // this.router.navigateByUrl("last-enlistments");
-     this.goLastEnlisment();
+      this.goLastEnlisment();
     }
   }
   clear(event: any, question: enlistment) {
@@ -265,17 +277,19 @@ export class EnlistmentPage implements OnInit {
 
   progressValue() {
     // return (this.progress * 100) / this.enlistment.length / 100;
-   return  (this.enlistment.filter(t=>t.respuestaUsuario>0 ).length * 100) / this.enlistment.filter(t=>t.Seccion=="0").length / 100;
+    return (
+      (this.enlistment.filter(t => t.respuestaUsuario > 0).length * 100) /
+      this.enlistment.filter(t => t.Seccion == "0").length /
+      100
+    );
   }
 
   deletePhoto(answer: enlistment) {
     answer.check_foto = undefined;
   }
 
-
-  goLastEnlisment(){
-  this.done=true;
+  goLastEnlisment() {
+    this.done = true;
     this._nav.navigateRoot("tabs/last-enlistments");
-    
   }
 }
