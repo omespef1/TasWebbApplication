@@ -80,4 +80,9 @@ export class AuthService {
   
   
   }
+
+
+  changePassword(changePass:any){
+    return this._http.Post<transaction>('/login/ChangePassword',changePass);
+  }
 }

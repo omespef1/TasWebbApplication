@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { SessionService } from "../../services/session/session.service";
 import { ThirdPartie } from '../../models/general/user';
 import { AuthService } from '../../services/auth/auth.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: "app-settings",
@@ -13,7 +14,7 @@ export class SettingsPage implements OnInit {
   mobile=false;
   wifi=false;
   groupEnlistment=false;
-  constructor(private _sesion: SessionService,private _auth:AuthService) {
+  constructor(private _sesion: SessionService,private _auth:AuthService,private _nav:NavController) {
 
    
   }
@@ -60,5 +61,8 @@ export class SettingsPage implements OnInit {
   }
   GoOut(){
     this._auth.signOut();
+  }
+  goChangePassword(){
+    this._nav.navigateRoot('tabs/forget-password');
   }
 }
