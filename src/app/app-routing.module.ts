@@ -13,6 +13,10 @@ const routes: Routes = [
   // { path: 'settings', loadChildren: './pages/settings/settings.module#SettingsPageModule' },
   //  { path: 'enlistment', loadChildren: './pages/enlistment/enlistment.module#EnlistmentPageModule' },
   { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule', canActivate: [AuthGuardService] },
+  
+
+
+
   // { path: 'pendings', loadChildren: './pages/pendings/pendings.module#PendingsPageModule' },
 
   // { path: 'last-enlistments', loadChildren: './pages/last-enlistments/last-enlistments.module#LastEnlistmentsPageModule' }

@@ -60,6 +60,16 @@ const routes: Routes = [
           }
         ]
       },
+      {
+        path: 'forget-password',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../pages/change-password/change-password.module').then(m => m.ChangePasswordPageModule)
+          }
+        ]
+      },
     ]
   },
   {
