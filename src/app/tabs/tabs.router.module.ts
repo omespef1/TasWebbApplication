@@ -70,6 +70,16 @@ const routes: Routes = [
           }
         ]
       },
+      {
+        path: 'fueqs',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../pages/fueq/fueq.module').then(m => m.FueqPageModule)
+          }
+        ]
+      },
     ]
   },
   {

@@ -20,6 +20,7 @@
     "@angular/platform-browser": "~8.1.2",
     "@angular/platform-browser-dynamic": "~8.1.2",
     "@angular/router": "~8.1.2",
+    "@ionic-native/browser-tab": "^5.25.0",
     "@ionic-native/camera": "^5.15.0",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/fingerprint-aio": "^5.19.1",
@@ -31,7 +32,9 @@
     "@ionic/storage": "^2.2.0",
     "cordova-android": "^8.1.0",
     "cordova-ios": "^5.1.1",
+    "cordova-plugin-browsertab": "^0.2.0",
     "cordova-plugin-camera": "^4.1.0",
+    "cordova-plugin-compat": "^1.2.0",
     "cordova-plugin-fingerprint-aio": "^3.0.0",
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-plugin-network-information": "^2.0.2",
@@ -88,7 +91,8 @@
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-fingerprint-aio": {}
+      "cordova-plugin-fingerprint-aio": {},
+      "cordova-plugin-browsertab": {}
     },
     "platforms": [
       "android",
