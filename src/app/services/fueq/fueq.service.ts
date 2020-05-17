@@ -10,7 +10,7 @@ export class FueqService {
   constructor(private _http:HttpManagerService) { }
 
 
-  GetFueqs(EmpresaId:number,ConductorId1:number,FechaInicial:number,FechaFinal:number){
-   return this._http.Get<transaction>(`api/fueq?EmpresaId=${EmpresaId}&ConductorId1=${ConductorId1}&FechaInicial=${FechaInicial}&FechaFinal=${FechaFinal}`)
+  GetFueqs(EmpresaId:number,ConductorId1:number){
+   return this._http.Get<transaction>(`/fueq?EmpresaId=${EmpresaId}&ConductorId1=${ConductorId1}`)
   }
 }

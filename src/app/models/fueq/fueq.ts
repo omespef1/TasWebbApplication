@@ -1,6 +1,7 @@
 export class fueq {
 
 
-    NumeroFuec:number;
+    NumeroFuec:string;
     placaVehiculo:string;
+    FuecId:number;
 }

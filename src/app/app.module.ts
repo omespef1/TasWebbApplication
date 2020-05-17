@@ -16,6 +16,8 @@ import { IonicStorageModule } from '@ionic/storage';
 import { Network } from '@ionic-native/network/ngx';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 import { SafePipe } from './pipes/safe.pipe';
+import { BrowserTab } from "@ionic-native/browser-tab/ngx";
+
 @NgModule({
   declarations: [AppComponent, SafePipe],
   entryComponents: [],
@@ -28,6 +30,7 @@ import { SafePipe } from './pipes/safe.pipe';
     FingerprintAIO,
     StatusBar,
     SplashScreen,
+    BrowserTab,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
 
   ],

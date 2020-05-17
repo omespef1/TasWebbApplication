@@ -35,7 +35,7 @@ export class AlertService {
   }
 
   openBrowserUrl(url:string){
-
+console.log(url);
     this.browserTab.isAvailable()
     .then(isAvailable => {
       if (isAvailable) {
