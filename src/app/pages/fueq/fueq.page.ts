@@ -17,15 +17,20 @@ export class FueqPage implements OnInit {
     private _fueq: FueqService,
     private _session: SessionService,
     private _alert: AlertService
-  ) {}
-
-  ngOnInit() {
+  ) {
     
+
   }
 
-  ionViewDidLoad(){
+  
+
+  ionViewWillEnter(){
     this.GetFueqs();
   }
+   ngOnInit(){
+
+  }
+  
 
   GetFueqs(event?: any) {
     this.loading = true;
@@ -38,13 +43,13 @@ export class FueqPage implements OnInit {
         this.loading = false;
         if (event != null) {
           event.target.complete();
-          
+        }
           if (resp != null && resp.Retorno == 0) {
             if(resp.ObjTransaction==null)
             this._alert.presentToast("No se encontraron registros",3000);
             this.fueqs = resp.ObjTransaction;
           }
-        }
+        
       });
   }
 
