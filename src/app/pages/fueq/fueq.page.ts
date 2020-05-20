@@ -23,7 +23,7 @@ export class FueqPage implements OnInit {
     
   }
 
-  ionViewDidLoad(){
+  ionViewWillEnter() {
     this.GetFueqs();
   }
 
@@ -38,13 +38,13 @@ export class FueqPage implements OnInit {
         this.loading = false;
         if (event != null) {
           event.target.complete();
-          
+        }
           if (resp != null && resp.Retorno == 0) {
             if(resp.ObjTransaction==null)
             this._alert.presentToast("No se encontraron registros",3000);
             this.fueqs = resp.ObjTransaction;
           }
-        }
+      
       });
   }
 
