@@ -54,10 +54,12 @@ export class FueqPage implements OnInit {
   }
 
   seeFueq(fuec: fueq) {
+
+    this._alert.presentToast('Si no se visualiza el archivo, por favor verifique en las descargas de su dispositivo',3000);    
     this._alert.openBrowserUrl(
       `https://www.tas.com.co/tasweb/FUEImpFuecApp.aspx?Modo=REP&Emp=${
         this._session.GetThirdPartie().IdEmpresa
-      }&Id=${fuec.NumeroFuec}`
+      }&Id=${fuec.FuecId}`
     );
   }
 }
