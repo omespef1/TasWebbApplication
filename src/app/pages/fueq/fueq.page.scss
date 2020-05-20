@@ -18,8 +18,12 @@ ion-list {
     --inner-border-width: 0;
 }
 
+
 ion-item{
     ion-note{
-        font-size: 0.9rem;
+        font-size: 0.8rem;
+    }
+    ion-label {
+        font-size: 0.8rem;
     }
 }

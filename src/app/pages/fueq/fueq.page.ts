@@ -17,15 +17,20 @@ export class FueqPage implements OnInit {
     private _fueq: FueqService,
     private _session: SessionService,
     private _alert: AlertService
-  ) {}
-
-  ngOnInit() {
+  ) {
     
+
   }
 
-  ionViewWillEnter() {
+  
+
+  ionViewWillEnter(){
     this.GetFueqs();
   }
+   ngOnInit(){
+
+  }
+  
 
   GetFueqs(event?: any) {
     this.loading = true;
