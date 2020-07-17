@@ -130,6 +130,11 @@ export class EnlistmentPage implements OnInit {
   async buildPetition(latitude: number, longitude: number) {
     let answers: manchecklistDetalle[] = [];
     this.saving = true;
+    let reviso = "";
+    if(this._sesion.GetUser()!=undefined && this._sesion.GetUser()!=null)
+    reviso = this._sesion.GetUser().NombreCompleto;
+    else
+    reviso = "CONDUCTOR";
     let answer: manchecklist = {
       IdEmpresa: this._sesion.GetBussiness().CodigoEmpresa,
       Id: 0,
@@ -142,7 +147,7 @@ export class EnlistmentPage implements OnInit {
       NumeroViaje: ".",
       Kilometraje: this.car.NuevoKilometraje,
       IdTercero: this.third.IdTercero,
-      Reviso: "CONDUCTOR",
+      Reviso: reviso,
       detalle: answers,
       identificacion: this.third.Identificacion,
       Latitude: latitude,

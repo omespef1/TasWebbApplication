@@ -221,4 +221,13 @@ export class VehiclePage  {
     this._nav.navigateForward("tabs/vehicle/enlistemnt",params)
     // this.router.navigateByUrl("tabs/enlistment", params);
   }
+
+  goThirdParties(){
+    this._nav.navigateRoot("third-parties");
+  }
+
+
+  isUserLoogued(){
+    return this._sesion.GetUser() != undefined && this._sesion.GetUser()!=null;
+  }
 }

@@ -13,6 +13,13 @@
          <div text-center>
             <ion-spinner color="secondary" *ngIf="working"></ion-spinner>
          </div>
+
+         <div class="btn-driver">
+          <ion-button expand="block" color="secondary" *ngIf="isUserLoogued()" (click)="goThirdParties()">
+            CAMBIAR CONDUCTOR
+            <ion-icon slot="end" name="person"></ion-icon>
+          </ion-button>
+         </div>
           <ion-list lines="none" inset="true">
               <ion-list-header color="primary">
                 <ion-label>Información general</ion-label>

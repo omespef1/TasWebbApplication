@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { business } from "../../models/business/business";
-import { ThirdPartie } from "../../models/general/user";
+import { ThirdPartie } from '../../models/general/user';
 import { ToastController } from "@ionic/angular";
 import { stringify } from "querystring";
 import { vehicle } from "src/app/models/vehicle/vehicle";
@@ -23,6 +23,9 @@ export class SessionService {
   SetThirdPartie(user: ThirdPartie) {
     localStorage.setItem("thirdPartie", JSON.stringify(user));
   }
+  SetUserBio(user: ThirdPartie) {
+    localStorage.setItem("userBio", JSON.stringify(user));
+  }
   SetThirdPartieBio(user: ThirdPartie) {
     localStorage.setItem("thirdPartieBio", JSON.stringify(user));
   }
@@ -31,6 +34,9 @@ export class SessionService {
   }
   GetThirdPartieBio(): ThirdPartie {
     return JSON.parse(localStorage.getItem("thirdPartieBio"));
+  }
+  GetUserBio(): ThirdPartie {
+    return JSON.parse(localStorage.getItem("userBio"));
   }
   SetKilometerCar(kilometer: number) {
     localStorage.setItem("kilometer", kilometer.toString());
@@ -55,10 +61,13 @@ export class SessionService {
   getGroupEnlistment():boolean{
     return JSON.parse(localStorage.getItem("GroupEnlistment"));
   }
-  removeUser() {
+  removeThirdPartie() {
     localStorage.removeItem("thirdPartie");
   }
 
+removeUser(){
+  localStorage.removeItem("user");
+}
   setOfflineUser(user){
     localStorage.setItem("offlineUser", JSON.stringify(user));
   }
@@ -102,7 +111,11 @@ export class SessionService {
    return this._storage.get("LastEnlistment")
   }
 
-
-
+  SetUser(user: ThirdPartie){
+    localStorage.setItem("user", JSON.stringify(user));
+  }
+ GetUser(): ThirdPartie {
+    return JSON.parse(localStorage.getItem("user"));
+ }
 
 }

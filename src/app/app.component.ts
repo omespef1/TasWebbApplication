@@ -29,12 +29,7 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      if (
-        this._sesion.GetThirdPartie() != null &&
-        this._sesion.GetThirdPartie() !== undefined
-      ) {
-        this._auth.signInDirect();
-      }
+      this._auth.signInDirect();
       this.LoadFirstSettings();
     });
   }

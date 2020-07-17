@@ -34,7 +34,8 @@ export class LoginPage implements OnInit {
     private _modal: ModalController,
     private _touch: TouchIdService,
     private _platform: Platform,
-    private _network: NetworkService
+    private _network: NetworkService,
+    private _auth:AuthService
   ) {}
 
   ngOnInit() {}
@@ -76,14 +77,9 @@ export class LoginPage implements OnInit {
           this.loading = false;
           if (resp.Retorno == 1) {
             this._alert.showAlert("Ingreso fallido", `${resp.TxtError}`);
-          } else {
-            const user: ThirdPartie = resp.ObjTransaction;
-            this._alert.showAlert(
-              "Bienvenido!",
-              `Ingresaste como ${user.NombreCompleto}`
-            );
+          } else {                       
             // this._nav.setDirection('root');
-            this.goVehicles();
+            this._auth.goApp();
           }
         },
         err => {
@@ -93,7 +89,7 @@ export class LoginPage implements OnInit {
       );
     } else {
       this.auth.signInDirectOffline();
-      this.goVehicles();
+      this._auth.goApp();
       //console.log("paso autoiza");
     }
   }
@@ -123,7 +119,7 @@ export class LoginPage implements OnInit {
         .then((result: any) => {
           //console.log(`Autenticación resultado  es ${result}`);
           this.auth.signInDirectTouch();
-          this.goVehicles();
+          this._auth.goApp();
           // if (result == "Success") {
           //   this.auth.signInDirectTouch();
           //   this.router.navigateByUrl("tabs/vehicle");
@@ -137,8 +133,24 @@ export class LoginPage implements OnInit {
     }
   }
 
-  goVehicles(){
-   this._nav.navigateRoot("tabs/vehicle");
+  // goApp(){
+
+  // if (this._sesion.GetUser()!==undefined){
+  //   this._alert.showAlert(
+  //     "Bienvenido!",
+  //     `Ingresaste como usuario ${ this._sesion.GetUser().NombreCompleto}`
+  //   );
+
+  //   this._nav.navigateRoot("tabs/thirdparties");
+  // }
+  // else {
     
-  }
+  //   this._alert.showAlert(
+  //     "Bienvenido!",
+  //     `Ingresaste como ${ this._sesion.GetThirdPartie().NombreCompleto}`
+  //   );
+  //   this._nav.navigateRoot("tabs/vehicle");
+
+  // }
+  // }
 }
