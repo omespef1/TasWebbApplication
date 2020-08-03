@@ -9,6 +9,7 @@ import { SessionService } from "../session/session.service";
 import { AlertService } from "../alert/alert.service";
 import { ThirdPartie } from "src/app/models/general/user";
 import { NavController } from "@ionic/angular";
+import { ThirdPartiesService } from '../third-parties/third-parties.service';
 
 @Injectable({
   providedIn: "root",
@@ -20,7 +21,8 @@ export class AuthService {
     private _sesion: SessionService,
     private _alert: AlertService,
     private nav: NavController,
-    private _nav:NavController
+    private _nav:NavController,
+    private _thirdParties:ThirdPartiesService
   ) {}
 
   signIn(credentials: loginRequest) {
@@ -40,6 +42,8 @@ export class AuthService {
               this._sesion.SetThirdPartie(userData.ObjTransaction);
               this._sesion.SetThirdPartieBio(userData.ObjTransaction);
               this._sesion.setOfflineUser(userData.ObjTransaction);
+              this._thirdParties.addThirdPartie(userData.ObjTransaction);
+            
             }
           
           }
@@ -48,13 +52,24 @@ export class AuthService {
     );
   }
 
+
+
+  validThirdPartie(credentials: loginRequest) {
+    return this._http.Post<transaction>("/login", credentials).pipe(
+      tap(async (userData: transaction) => {
+     return userData;
+        })); }
+
+
   signInDirect() {
 
     if (
       (this._sesion.GetThirdPartie() != null &&
       this._sesion.GetThirdPartie() !== undefined) || (  this._sesion.GetUser()!=undefined && this._sesion.GetUser()!=null)
     ) {
-
+      if(this._sesion.GetUser()==undefined || this._sesion.GetUser()==null){
+        this._thirdParties.addThirdPartie(this._sesion.GetThirdPartie())
+      }
       this.goApp();
 
     }
@@ -70,6 +85,7 @@ export class AuthService {
    else {
 
     this._sesion.SetThirdPartie(thirdPartieBio);
+    this._thirdParties.addThirdPartie(thirdPartieBio);
    }
     this.goApp();
   }
@@ -77,6 +93,7 @@ export class AuthService {
   signInDirectOffline() {
     const user: ThirdPartie = this._sesion.getOfflineUser();
     this._sesion.SetThirdPartie(user);
+    this._thirdParties.addThirdPartie(user);
     //console.log(user);
     this._alert.showAlert(
       "Bienvenido!",
@@ -86,8 +103,10 @@ export class AuthService {
 
   async signOut() {
     // await this.storage.set("user", null);
+    this._thirdParties.removeThirdPartiesSession();
     this.nav.navigateRoot("login");
     this._sesion.removeThirdPartie();
+  
     this._sesion.removeUser();
   }
 

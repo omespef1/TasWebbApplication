@@ -11,18 +11,20 @@ import { error } from "@angular/compiler/src/util";
 import { pending } from "../../models/vehicle/pending";
 import {
   NetworkService,
-  ConnectionStatus
+  ConnectionStatus,
 } from "src/app/services/network/network.service";
-import { NavController } from '@ionic/angular';
+import { NavController } from "@ionic/angular";
+import { ThirdPartiesService } from "../../services/third-parties/third-parties.service";
 
 @Component({
   selector: "app-vehicle",
   templateUrl: "./vehicle.page.html",
-  styleUrls: ["./vehicle.page.scss"]
+  styleUrls: ["./vehicle.page.scss"],
 })
-export class VehiclePage  {
+export class VehiclePage {
   today = new Date();
   thirdPartie: ThirdPartie = new ThirdPartie();
+  thirdPartiesSelected: ThirdPartie[] = [];
   vehicles: vehicle[] = [];
   vehiclesFilter: vehicle[] = [];
   vehicleFavorite: vehicle = new vehicle();
@@ -35,39 +37,32 @@ export class VehiclePage  {
     private router: Router,
     private _alert: AlertService,
     private _network: NetworkService,
-    private _nav:NavController
-  ) {
-   
-  }
+    private _nav: NavController,
+    public _thirdParties: ThirdPartiesService
+  ) {}
 
-
-
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.thirdPartie = this._sesion.GetThirdPartie();
-    //console.log('actualizo');
     this.GetVehicleInformation();
+    this.thirdPartiesSelected = this._thirdParties.GetThirdParties();
   }
   GetVehicleInformation() {
-    this.vehiclesFilter=[];
+    this.vehiclesFilter = [];
     this.loading = true;
-    //console.log(this._network.getCurrentNetworkStatus());
     if (this._network.getCurrentNetworkStatus() === ConnectionStatus.Online) {
       this._vehicle
         .GetVehicleInformation(
           this._sesion.GetBussiness(),
           this._sesion.GetThirdPartie()
         )
-        .subscribe(resp => {
+        .subscribe((resp) => {
           if (resp.Retorno == 0) {
             this._sesion.SetVehicles(resp.ObjTransaction);
             this.vehicles = resp.ObjTransaction;
             this.loadFavoriteCars();
-
-      
             this.loading = false;
-          }
-          else {
-            this._alert.showAlert('Error', resp.TxtError);
+          } else {
+            this._alert.showAlert("Error", resp.TxtError);
           }
         });
     } else {
@@ -77,22 +72,27 @@ export class VehiclePage  {
     }
   }
 
-  loadFavoriteCars(){
-    this.vehicleFavorite = this.vehicles.filter(v => v.Sugerido === 2).length == 0 ? null :this.vehicles.filter(v => v.Sugerido === 2)[0];
-    if (this.vehicleFavorite !== undefined && this.vehicleFavorite != null){                        
+  loadFavoriteCars() {
+    this.vehicleFavorite =
+      this.vehicles.filter((v) => v.Sugerido === 2).length == 0
+        ? null
+        : this.vehicles.filter((v) => v.Sugerido === 2)[0];
+    if (this.vehicleFavorite !== undefined && this.vehicleFavorite != null) {
       this.vehicleFavorite = this.vehicleFavorite;
       this.vehiclesFilter.push(this.vehicleFavorite);
     }
-    this.vehicleFavorite = this.vehicles.filter(v => v.Sugerido === 1).length == 0 ? null :this.vehicles.filter(v => v.Sugerido === 1)[0];
-    if (this.vehicleFavorite !== undefined && this.vehicleFavorite != null){ 
-      this.vehiclesFilter=[];           
+    this.vehicleFavorite =
+      this.vehicles.filter((v) => v.Sugerido === 1).length == 0
+        ? null
+        : this.vehicles.filter((v) => v.Sugerido === 1)[0];
+    if (this.vehicleFavorite !== undefined && this.vehicleFavorite != null) {
+      this.vehiclesFilter = [];
       this.vehicleFavorite = this.vehicleFavorite;
       this.vehiclesFilter.push(this.vehicleFavorite);
     }
-    
   }
   checkVehicle(car: vehicle) {
-    car.loading = true;
+    car.loading = true;  
     if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
       if (car.NuevoKilometraje != null && car.NuevoKilometraje > 0) {
         this._vehicle
@@ -101,7 +101,7 @@ export class VehiclePage  {
             this._sesion.GetThirdPartie(),
             car
           )
-          .subscribe(resp => {
+          .subscribe((resp) => {
             try {
               if (resp.Retorno === 1) {
                 throw error(resp.TxtError);
@@ -121,7 +121,7 @@ export class VehiclePage  {
               }
               this._vehicle
                 .GetManPendientes(this._sesion.GetBussiness(), car)
-                .subscribe(resp => {
+                .subscribe((resp) => {
                   if (resp.Retorno === 0) {
                     car.loading = false;
                     let pendings: pending[] = resp.ObjTransaction;
@@ -129,8 +129,8 @@ export class VehiclePage  {
                       let paramsPendings: NavigationExtras = {
                         state: {
                           pendings: pendings,
-                          car: car
-                        }
+                          car: car,
+                        },
                       };
                       this._nav.navigateForward(
                         "tabs/vehicle/pendings",
@@ -143,20 +143,20 @@ export class VehiclePage  {
                           car,
                           this._sesion.GetThirdPartie()
                         )
-                        .subscribe(resp => {
+                        .subscribe((resp) => {
                           if (resp.Retorno === 1) {
                             throw Error(resp.TxtError);
                           }
                           this._sesion.SetKilometerCar(car.NuevoKilometraje);
                           let params: NavigationExtras = {
                             state: {
-                              car: car
-                            }
+                              car: car,
+                            },
                           };
                           car.loading = false;
-                          
-                         // this.router.navigateByUrl("tabs/enlistment", params);
-                         this.goEnlistment(params);
+
+                          // this.router.navigateByUrl("tabs/enlistment", params);
+                          this.goEnlistment(params);
                         });
                     }
                   }
@@ -176,13 +176,12 @@ export class VehiclePage  {
         this._sesion.SetKilometerCar(car.NuevoKilometraje);
         let params: NavigationExtras = {
           state: {
-            car: car
-          }
+            car: car,
+          },
         };
         car.loading = false;
         this.goEnlistment(params);
-      }
-      else {
+      } else {
         car.loading = false;
         this._alert.showAlert("Error", "Ingrese kilometraje del vehículo");
       }
@@ -190,44 +189,45 @@ export class VehiclePage  {
   }
 
   filterVehicles(event) {
-    this.working=true;
+    this.working = true;
     setTimeout(() => {
-      this.working=false;
+      this.working = false;
     }, 200);
-   
+
     this.vehiclesFilter = [];
     //console.log(event.target);
     this.vehiclesFilter = this.vehicles.filter(
-      v =>
+      (v) =>
         v.PlacaVehiculo.toUpperCase().indexOf(
           event.target.value.toUpperCase()
         ) > -1 || v.NumeroInterno.indexOf(event.target.value) > -1
     );
 
-    this.vehiclesFilter= this.vehiclesFilter.filter(
-      (thing, i, arr) => arr.findIndex(t => t.NumeroInterno.toUpperCase() === thing.NumeroInterno.toUpperCase()) === i
+    this.vehiclesFilter = this.vehiclesFilter.filter(
+      (thing, i, arr) =>
+        arr.findIndex(
+          (t) =>
+            t.NumeroInterno.toUpperCase() === thing.NumeroInterno.toUpperCase()
+        ) === i
     );
-    if (event.target.value==""){
+    if (event.target.value == "") {
       this.vehiclesFilter = [];
       this.vehiclesFilter.push(this.vehicleFavorite);
     }
-
-
-
-   
   }
 
-  goEnlistment(params:NavigationExtras){
-    this._nav.navigateForward("tabs/vehicle/enlistemnt",params)
+  goEnlistment(params: NavigationExtras) {
+    this._nav.navigateForward("tabs/vehicle/enlistemnt", params);
     // this.router.navigateByUrl("tabs/enlistment", params);
   }
 
-  goThirdParties(){
+  goThirdParties() {
     this._nav.navigateRoot("third-parties");
   }
 
-
-  isUserLoogued(){
-    return this._sesion.GetUser() != undefined && this._sesion.GetUser()!=null;
+  isUserLoogued() {
+    return (
+      this._sesion.GetUser() != undefined && this._sesion.GetUser() != null
+    );
   }
 }

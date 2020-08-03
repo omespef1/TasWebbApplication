@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>third-partie-validation</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form autocomplete="off"  #validationForm="ngForm" class="bounceIn">
+    <ion-grid fixed>     
+      <!-- <ion-row>
+        <ion-col padding>
+          <h2><b>BIENVENIDO!</b></h2>
+        </ion-col>
+      </ion-row> -->
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <!-- <ion-label position="stacked">Email</ion-label> -->
+            <ion-input position="fixed" required autofocus="true" name="email" clear-input type="text" placeholder="Usuario"
+              [(ngModel)]="thirdValidation.user"></ion-input>
+            <ion-icon name="person" slot="start"></ion-icon>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <!-- <ion-label strong position="stacked">Password</ion-label> -->
+            <ion-input required  [type]="showPass?'text':'password'" clear-input placeholder="Password" name="password"
+              [(ngModel)]="thirdValidation.Password"></ion-input>
+            <ion-icon name="lock" slot="start"></ion-icon>
+            <ion-icon  (click)="showPass=!showPass" button [name]="showPass==true?'eye-off':'eye'" slot="end"></ion-icon>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col padding>
+          <ion-button [disabled]="!validationForm.form.valid" [color]="valiadted?'success':'secondary'" expand="block" (click)="validateThirdPartie()" >
+              <ion-icon *ngIf="!loading" slot="start" [name]="valiadted?'checkmark-circle':'checkmark-circle-outline' "></ion-icon>
+              <ion-spinner color="light" *ngIf="loading" slot="start"></ion-spinner>
+              {{valiadted?'VALIDADO':'VALIDAR Y AGREGAR'}}
+          </ion-button>
+        </ion-col>
+        <ion-col padding>
+          <ion-button  color="primary" expand="block" (click)="closeModal()" >
+              <ion-icon slot="start" name="close-circle"></ion-icon>
+              CERRAR
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      <!-- <ion-row>
+        <ion-col text-left padding size="7">
+          <ion-button class="btn-forgot" strong expand="block" fill="clear" >OLVIDÉ MI CONTRASEÑA</ion-button>
+        </ion-col>
+        <ion-col text-right padding size="5">
+          <ion-button class="btn-signup" strong expand="block" fill="clear" >REGISTRARME</ion-button>
+        </ion-col>
+      </ion-row> -->             
+    </ion-grid>
+  </form>
+</ion-content>

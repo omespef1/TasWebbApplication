@@ -26,6 +26,7 @@ import {
 import { NavController, IonRadioGroup } from "@ionic/angular";
 import { AuthService } from "../../services/auth/auth.service";
 import { NavigationOptions } from "@ionic/angular/dist/providers/nav-controller";
+import { ThirdPartiesService } from '../../services/third-parties/third-parties.service';
 
 @Component({
   selector: "app-enlistment",
@@ -43,7 +44,8 @@ export class EnlistmentPage implements OnInit {
     private geolocation: Geolocation,
     private _network: NetworkService,
     private _nav: NavController,
-    private _auth: AuthService
+    private _auth: AuthService,
+    private _thirdParties:ThirdPartiesService
   ) {}
   enlistment: enlistment[] = [];
   manchecklist: manchecklist;
@@ -152,8 +154,12 @@ export class EnlistmentPage implements OnInit {
       identificacion: this.third.Identificacion,
       Latitude: latitude,
       Longitude: longitude,
-      sending: true
+      sending: true,
+      drivers: []
     };
+    this._thirdParties.GetThirdParties().forEach(element => {
+      answer.drivers.push(element.IdTercero);
+    });
     this.enlistment.forEach(item => {
       answer.detalle.push({
         IdCheckList: 0,
