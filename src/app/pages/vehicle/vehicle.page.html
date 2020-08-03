@@ -16,24 +16,29 @@
 
          <div class="btn-driver">
           <ion-button expand="block" color="secondary" *ngIf="isUserLoogued()" (click)="goThirdParties()">
-            CAMBIAR CONDUCTOR
+            AGREGAR CONDUCTORES
             <ion-icon slot="end" name="person"></ion-icon>
           </ion-button>
          </div>
           <ion-list lines="none" inset="true">
               <ion-list-header color="primary">
-                <ion-label>Información general</ion-label>
+                <ion-label>CONDUCTOR(ES)</ion-label>
               </ion-list-header>
+              <div *ngFor="let thirdPartie of thirdPartiesSelected">              
                 <ion-item>
                   <ion-icon slot="start" name="contact"></ion-icon>
                   <ion-label>Conductor</ion-label>
                    <ion-note slot="end"> {{thirdPartie.NombreRazon}} {{ thirdPartie.PrimerApellido }} </ion-note>
-                </ion-item>   
-                <ion-item>
-                  <ion-icon slot="start" name="alarm"></ion-icon>
-                  <ion-label>Fecha Actual</ion-label>
-                  <ion-note slot="end"> {{ today | date:'dd/MM/yyyy hh:mm aa'}}</ion-note>
-                </ion-item>        
+                   <ion-button *ngIf="isUserLoogued()" (click)="_thirdParties.removeThirdParties(thirdPartie)" color="danger" fill="clear" slot="end">
+                     <ion-icon name="trash" slot="end"></ion-icon> 
+                   </ion-button>
+                </ion-item>                  
+              </div>   
+              <ion-item>
+                <ion-icon slot="start" name="alarm"></ion-icon>
+                <ion-label>Fecha Actual</ion-label>
+                <ion-note slot="end"> {{ today | date:'dd/MM/yyyy hh:mm aa'}}</ion-note>
+              </ion-item>     
               </ion-list>             
              <ion-list id="skeleton" *ngIf="loading">
                 <ion-list-header>
@@ -227,7 +232,7 @@
                         </ion-item>
                           
                         
-                        <ion-item button color="secondary" (click)="checkVehicle(vehicle)">
+                        <ion-item [disabled]="thirdPartiesSelected.length==0" button color="secondary" (click)="checkVehicle(vehicle)">
                           <ion-icon *ngIf="!vehicle.loading" slot="start" name="checkmark-circle"></ion-icon>
                           <ion-spinner *ngIf="vehicle.loading" slot="start"></ion-spinner>
                              {{ !vehicle.loading?'SELECCIONAR':'ESPERE...'}}

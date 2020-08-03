@@ -16,6 +16,7 @@ export class manchecklist {
   Latitude:number;
   Longitude:number;
   sending:boolean;
+  drivers:number[];
 }
 export class manchecklistDetalle {
 constructor(){

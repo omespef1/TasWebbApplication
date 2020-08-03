@@ -15,11 +15,6 @@ const routes: Routes = [
   { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule', canActivate: [AuthGuardService] },
   { path: 'third-parties', loadChildren: './pages/third-parties/third-parties.module#ThirdPartiesPageModule' },
 
-
-  
-
-
-
   // { path: 'pendings', loadChildren: './pages/pendings/pendings.module#PendingsPageModule' },
 
   // { path: 'last-enlistments', loadChildren: './pages/last-enlistments/last-enlistments.module#LastEnlistmentsPageModule' }
