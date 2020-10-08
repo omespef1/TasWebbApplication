@@ -1,6 +1,12 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>third-partie-validation</ion-title>
+  <ion-toolbar color="primary">
+    
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>VALIDACIÓN</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -16,7 +22,7 @@
         <ion-col>
           <ion-item>
             <!-- <ion-label position="stacked">Email</ion-label> -->
-            <ion-input position="fixed" required autofocus="true" name="email" clear-input type="text" placeholder="Usuario"
+            <ion-input disabled position="fixed" required autofocus="true" name="email" clear-input type="text" placeholder="Usuario"
               [(ngModel)]="thirdValidation.user"></ion-input>
             <ion-icon name="person" slot="start"></ion-icon>
           </ion-item>
@@ -40,12 +46,6 @@
               <ion-icon *ngIf="!loading" slot="start" [name]="valiadted?'checkmark-circle':'checkmark-circle-outline' "></ion-icon>
               <ion-spinner color="light" *ngIf="loading" slot="start"></ion-spinner>
               {{valiadted?'VALIDADO':'VALIDAR Y AGREGAR'}}
-          </ion-button>
-        </ion-col>
-        <ion-col padding>
-          <ion-button  color="primary" expand="block" (click)="closeModal()" >
-              <ion-icon slot="start" name="close-circle"></ion-icon>
-              CERRAR
           </ion-button>
         </ion-col>
       </ion-row>

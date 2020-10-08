@@ -39,6 +39,8 @@ export class ThirdPartieValidationPage implements OnInit {
         else {
           this.valiadted = true;
           this._thirdParties.addThirdPartie(resp.ObjTransaction);
+          this._alert.showAlert("Perfecto", "Tercero agregado!");
+          this.closeModal();
         }
         // this.closeModal();
       } else {

@@ -62,13 +62,15 @@ export class ThirdPartiesPage implements OnInit {
       v =>
         v.NombreCompleto.toUpperCase().indexOf(
           event.target.value.toUpperCase()
-        ) > -1
-    );
+        ) > -1 ||  v.Identificacion.indexOf(
+          event.target.value
+    ) > -1);
 
   }
 
- 
-
+  closeModal(){
+    this._nav.navigateBack('tabs/vehicle');
+  }
   async showModalThirdPartieValidation(thirdPartie: ThirdPartie) {
 
     let validationRequest: loginRequest= new loginRequest();
