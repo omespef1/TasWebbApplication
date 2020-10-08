@@ -38,8 +38,6 @@ const routes: Routes = [
           },
         ],canActivate:[AuthGuardService]
       },
-      
-     
       {
         path: 'last-enlistments',
         children: [
@@ -77,6 +75,27 @@ const routes: Routes = [
             path: '',
             loadChildren: () =>
               import('../pages/fueq/fueq.module').then(m => m.FueqPageModule)
+          }
+        ]
+      },
+      {
+        path: 'programming',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../pages/programming/programming.module').then(m => m.ProgrammingPageModule)
+          },
+          {
+            path: 'programming-detail',
+            children:[
+            {
+              path:'',
+              loadChildren: () =>
+              import('../pages/programming-detail/programming-detail.module').then(m => m.ProgrammingDetailPageModule)
+            }
+            ]
+           
           }
         ]
       },

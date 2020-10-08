@@ -40,6 +40,8 @@
     "cordova-plugin-network-information": "^2.0.2",
     "cordova-sqlite-storage": "^3.4.0",
     "core-js": "^2.5.4",
+    "devextreme": "20.1.7",
+    "devextreme-angular": "20.1.7",
     "moment": "^2.24.0",
     "release": "6.1.0",
     "rxjs": "~6.5.1",

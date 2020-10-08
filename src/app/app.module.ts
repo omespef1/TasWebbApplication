@@ -18,6 +18,8 @@ import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 import { SafePipe } from './pipes/safe.pipe';
 import { BrowserTab } from "@ionic-native/browser-tab/ngx";
 
+
+
 @NgModule({
   declarations: [AppComponent, SafePipe],
   entryComponents: [],
