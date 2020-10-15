@@ -118,4 +118,12 @@ removeUser(){
     return JSON.parse(localStorage.getItem("user"));
  }
 
+ setOneSignalIds(value){
+   this._storage.set("oneSignalId",value)
+ }
+
+ getOneSignalId(){
+   this._storage.get("oneSignalId");
+ }
+
 }

@@ -7,6 +7,7 @@ import { SessionService } from "./services/session/session.service";
 import { AuthService } from "./services/auth/auth.service";
 import { IfStmt } from "@angular/compiler";
 import { NetworkService } from './services/network/network.service';
+import { NotificationsService } from './services/push/notifications.service';
 
 @Component({
   selector: "app-root",
@@ -20,13 +21,19 @@ export class AppComponent {
     private statusBar: StatusBar,
     private _sesion: SessionService,
     private _auth: AuthService,
-    private _network: NetworkService
+    private _network: NetworkService,
+    private _push:NotificationsService
   ) {
     this.initializeApp();
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
+
+      if (this.platform.is("cordova")) {
+    
+        this._push.init_Notifications();
+      }
       this.statusBar.styleDefault();
       this.splashScreen.hide();
       this._auth.signInDirect();
