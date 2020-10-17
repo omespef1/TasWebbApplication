@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, CanActivate } from '@angular/router';
 import { TabsPage } from './tabs.page';
 import { AuthGuardService } from '../guards/auth-guard.service';
+import { RolesGuard } from '../guards/roles.guard';
 
 const routes: Routes = [
   {
@@ -14,7 +15,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../pages/vehicle/vehicle.module').then(m => m.VehiclePageModule)
+              import('../pages/vehicle/vehicle.module').then(m => m.VehiclePageModule),
           },
           {
             path: 'enlistemnt',

@@ -3,6 +3,7 @@ import { ServicesRequestService } from "../../services/services-request/services
 import { SessionService } from "../../services/session/session.service";
 import { NavigationExtras } from "@angular/router";
 import { NavController } from "@ionic/angular";
+import { ThirdPartie } from 'src/app/models/general/user';
 
 @Component({
   selector: "app-programming",
@@ -22,6 +23,7 @@ export class ProgrammingPage implements OnInit {
    
   }
   ionViewWillEnter(){
+  
     this.GetProgramming();
   }
   GetProgramming(event: any = null) {

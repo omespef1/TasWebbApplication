@@ -5,4 +5,5 @@ export class ThirdPartie {
     Identificacion: string;
     NombreRazon:string;
     PrimerApellido:string;
+    Grupo;
 }

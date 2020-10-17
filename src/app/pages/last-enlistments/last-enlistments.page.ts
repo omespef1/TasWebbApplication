@@ -7,16 +7,16 @@ import { NetworkService } from "src/app/services/network/network.service";
 import { ConnectionStatus } from "../../services/network/network.service";
 
 declare var google;
-import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
+import { DomSanitizer } from "@angular/platform-browser";
 import { last } from "rxjs/operators";
 import { manchecklistDetalle } from "../../models/enlistmen/manchecklist";
-import { Router } from '@angular/router';
-import { transaction } from '../../models/general/transaction';
+import { Router } from "@angular/router";
+import { AlertService } from '../../services/alert/alert.service';
 
 @Component({
   selector: "app-last-enlistments",
   templateUrl: "./last-enlistments.page.html",
-  styleUrls: ["./last-enlistments.page.scss"]
+  styleUrls: ["./last-enlistments.page.scss"],
 })
 export class LastEnlistmentsPage implements OnInit {
   mapRef = null;
@@ -26,37 +26,36 @@ export class LastEnlistmentsPage implements OnInit {
   theHtmlString: any;
   loading = false;
   lastQuestions: enlistment[];
-  showBack=false;
+  showBack = false;
   constructor(
     private _vehicle: VehicleService,
     private _sesion: SessionService,
     private _network: NetworkService,
     private _san: DomSanitizer,
     private router: Router,
-    private sanitizer: DomSanitizer
+    private _alert:AlertService
   ) {}
   enlistment: manchecklist = new manchecklist();
   groupEnlistment = false;
   ngOnInit() {
     //this.GetLastEnlistment();
   }
- 
 
-   ionViewDidLoad(){
-     //console.log('carga extras');
+  ionViewDidLoad() {
+    //console.log('carga extras');
     this.showBack = this.router.getCurrentNavigation().extras.state.showBack;
     //console.log(this.showBack);
-   }
+  }
   ionViewWillEnter() {
-    //console.log("actualiza");
-    this.groupEnlistment = this._sesion.getGroupEnlistment();
-    this.GetLastEnlistment();
-    this.lastQuestions = this._sesion.GetQuestions();
-    //console.log(this.lastQuestions);
+    if (this.validAccess) {
+      this.groupEnlistment = this._sesion.getGroupEnlistment();
+      this.GetLastEnlistment();
+      this.lastQuestions = this._sesion.GetQuestions();
+    }
   }
 
   SetVisibilityItems() {
-    this.enlistment.detalle.forEach(item => {
+    this.enlistment.detalle.forEach((item) => {
       if (item.Respuesta > 0) {
         if (this.groupEnlistment) {
           item.show = false;
@@ -67,16 +66,14 @@ export class LastEnlistmentsPage implements OnInit {
     });
   }
 
-
-   FixEnlistment(items:manchecklistDetalle[])
-   {
-      items.forEach(element => {
-        element.Grupo = Math.trunc(element.PNo);
-        if(!this.groupEnlistment){
-          element.show=true;
-        }
-      });
-   }
+  FixEnlistment(items: manchecklistDetalle[]) {
+    items.forEach((element) => {
+      element.Grupo = Math.trunc(element.PNo);
+      if (!this.groupEnlistment) {
+        element.show = true;
+      }
+    });
+  }
   async GetLastEnlistment(event: any = null) {
     if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
       if (event == null) this.loading = true;
@@ -85,7 +82,7 @@ export class LastEnlistmentsPage implements OnInit {
           this._sesion.GetBussiness(),
           this._sesion.GetThirdPartie()
         )
-        .subscribe(resp => {
+        .subscribe((resp) => {
           //console.log(resp);
           if (event != null) {
             event.target.complete();
@@ -97,8 +94,8 @@ export class LastEnlistmentsPage implements OnInit {
             this.FixEnlistment(this.enlistment.detalle);
             this.loadMap(this.enlistment.Latitude, this.enlistment.Longitude);
 
-            this.enlistment.detalle.forEach(element => {
-             this.GetManCheckListDetalle(element);
+            this.enlistment.detalle.forEach((element) => {
+              this.GetManCheckListDetalle(element);
             });
           }
         });
@@ -106,13 +103,12 @@ export class LastEnlistmentsPage implements OnInit {
       this.enlistment = <manchecklist>await this._sesion.GetLastEnlistment();
       this.FixEnlistment(this.enlistment.detalle);
       //console.log(this.enlistment.detalle);
-      
+
       if (event != null) {
         event.target.complete();
       }
       this.loadMap(this.enlistment.Latitude, this.enlistment.Longitude);
     }
-  
 
     //console.log(this.enlistment);
   }
@@ -142,14 +138,14 @@ export class LastEnlistmentsPage implements OnInit {
     const marker = new google.maps.Marker({
       position: { lat, lng },
       map: this.mapRef,
-      title: "último alistamiento"
+      title: "último alistamiento",
     });
   }
 
   CheckCorrectAnswer(answer: any) {
     if (this.lastQuestions != undefined) {
       const validAnswer = this.lastQuestions.filter(
-        t => t.PNo == answer.PNo
+        (t) => t.PNo == answer.PNo
       )[0];
       let answerString: string = answer.Respuesta;
       if (answerString == validAnswer.respuesta.toString()) return true;
@@ -158,40 +154,57 @@ export class LastEnlistmentsPage implements OnInit {
 
   isGroupCorrect(answer: manchecklistDetalle) {
     let valid: Boolean = true;
-    if(this.lastQuestions!=undefined && this.lastQuestions!=null){
-    let GroupAnswers = this.enlistment.detalle.filter(
-      f => f.Grupo == answer.Grupo && f.Respuesta > 0
-    );
-    if (GroupAnswers != null && GroupAnswers != undefined) {
-      GroupAnswers.forEach(element => {
-        const validAnswer = this.lastQuestions.filter(
-          t => t.PNo == element.PNo
-        )[0];
-        if (element.Respuesta.toString() != validAnswer.respuesta.toString() && validAnswer.Restringe == 1) {
-          valid = false;
-        }
+    if (this.lastQuestions != undefined && this.lastQuestions != null) {
+      let GroupAnswers = this.enlistment.detalle.filter(
+        (f) => f.Grupo == answer.Grupo && f.Respuesta > 0
+      );
+      if (GroupAnswers != null && GroupAnswers != undefined) {
+        GroupAnswers.forEach((element) => {
+          const validAnswer = this.lastQuestions.filter(
+            (t) => t.PNo == element.PNo
+          )[0];
+          if (
+            element.Respuesta.toString() != validAnswer.respuesta.toString() &&
+            validAnswer.Restringe == 1
+          ) {
+            valid = false;
+          }
+        });
+      }
+      return valid;
+    } else {
+      return valid;
+    }
+  }
+
+  showItems(element: manchecklistDetalle) {
+    this.enlistment.detalle
+      .filter((p) => p.Grupo == element.Grupo)
+      .forEach((element) => {
+        element.show = !element.show;
       });
-    }
-      return valid;
-    }
-    else{
-      return valid;
-    }
   }
 
-  showItems(element:manchecklistDetalle){
-  
-    this.enlistment.detalle.filter(p=>p.Grupo==element.Grupo).forEach(element => {
-      element.show = !element.show;
-    });
+  async GetManCheckListDetalle(detalle: manchecklistDetalle) {
+    this._vehicle
+      .GetManCheckListDetalle(
+        detalle.IdEmpresa,
+        detalle.IdCheckList,
+        detalle.PNo.toString()
+      )
+      .subscribe((resp) => {
+        detalle.Check_Image =
+          "data:image/jpeg;base64," + resp.ObjTransaction.Check_Image;
+      });
   }
 
-
-  async GetManCheckListDetalle(detalle:manchecklistDetalle ){
-
-   this._vehicle.GetManCheckListDetalle(detalle.IdEmpresa,detalle.IdCheckList,detalle.PNo.toString()).subscribe(resp=>{
-     detalle.Check_Image ="data:image/jpeg;base64,"+resp.ObjTransaction.Check_Image
-   });
-
+  validAccess() {
+    if (this._sesion.isUser()) {
+      if (this._sesion.GetUser().Grupo != "SUPERVISOR") {
+        this._alert.showAlert("Acceso no autorizado","No se encuentra autorizado para acceder a esta sección");
+        return false;
+      }
+    }
+    return true;
   }
 }

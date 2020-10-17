@@ -11,9 +11,12 @@ export class ServicesRequestService {
   constructor(private _http:HttpManagerService) { }
 
 
-  GetServicesRequest(business: number,idVehiculo: number){
-   return this._http.Get<transaction>(`/GESSolicitudServicios?empresaId=${business}&conductorId=${idVehiculo}`);
+  GetServicesRequest(business: number,thirdPartie: number){
+   return this._http.Get<transaction>(`/GESSolicitudServicios?empresaId=${business}&conductorId=${thirdPartie}`);
   }
+  GetServicesRequestBeneficiario(business: number,user: string){
+    return this._http.Get<transaction>(`/GESSolicitudServiciosClient?empresaId=${business}&usuario=${user}`);
+   }
   GetServicesDetail(business: number,id: number){
     return this._http.Get<transaction>(`/GESSolicitudServicios/GetGESSolicitudServiciosDetalle?empresaId=${business}&solicitudId=${id}`);
    }

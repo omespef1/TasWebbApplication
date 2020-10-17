@@ -16,7 +16,8 @@ export class FueqPage implements OnInit {
   constructor(
     private _fueq: FueqService,
     private _session: SessionService,
-    private _alert: AlertService
+    private _alert: AlertService,
+    private _sesion:SessionService
   ) {
     
 
@@ -31,7 +32,15 @@ export class FueqPage implements OnInit {
 
   }
   
-
+  validAccess() {
+    if (this._sesion.isUser()) {
+      if (this._sesion.GetUser().Grupo != "SUPERVISOR") {
+        this._alert.showAlert("Acceso no autorizado","No se encuentra autorizado para acceder a esta sección");
+        return false;
+      }
+    }
+    return true;
+  }
   GetFueqs(event?: any) {
     this.loading = true;
     return this._fueq

@@ -42,9 +42,21 @@ export class VehiclePage {
   ) {}
 
   ionViewWillEnter() {
-    this.thirdPartie = this._sesion.GetThirdPartie();
-    this.GetVehicleInformation();
-    this.thirdPartiesSelected = this._thirdParties.GetThirdParties();
+    if(this.validAccess){
+      this.thirdPartie = this._sesion.GetThirdPartie();
+      this.GetVehicleInformation();
+      this.thirdPartiesSelected = this._thirdParties.GetThirdParties();
+    }
+
+  }
+  validAccess() {
+    if (this._sesion.isUser()) {
+      if (this._sesion.GetUser().Grupo != "SUPERVISOR") {
+        this._alert.showAlert("Acceso no autorizado","No se encuentra autorizado para acceder a esta sección");
+        return false;
+      }
+    }
+    return true;
   }
   GetVehicleInformation() {
     this.vehiclesFilter = [];
@@ -92,7 +104,7 @@ export class VehiclePage {
     }
   }
   checkVehicle(car: vehicle) {
-    car.loading = true;  
+    car.loading = true;
     if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
       if (car.NuevoKilometraje != null && car.NuevoKilometraje > 0) {
         this._vehicle

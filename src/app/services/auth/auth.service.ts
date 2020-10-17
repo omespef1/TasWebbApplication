@@ -9,7 +9,10 @@ import { SessionService } from "../session/session.service";
 import { AlertService } from "../alert/alert.service";
 import { ThirdPartie } from "src/app/models/general/user";
 import { NavController } from "@ionic/angular";
-import { ThirdPartiesService } from '../third-parties/third-parties.service';
+import { ThirdPartiesService } from "../third-parties/third-parties.service";
+import { NotificationsService } from "../push/notifications.service";
+import { OneSignalThirdPartiesService } from "../OneSignalThirdParties/one-signal-third-parties.service";
+import { OneSignalThirdPartie } from "../../models/one-signal-third-parties/one-signal-third-parties";
 
 @Injectable({
   providedIn: "root",
@@ -21,8 +24,10 @@ export class AuthService {
     private _sesion: SessionService,
     private _alert: AlertService,
     private nav: NavController,
-    private _nav:NavController,
-    private _thirdParties:ThirdPartiesService
+    private _nav: NavController,
+    private _thirdParties: ThirdPartiesService,
+    private _push: NotificationsService,
+    private _thirdPartieOneSignal: OneSignalThirdPartiesService
   ) {}
 
   signIn(credentials: loginRequest) {
@@ -37,56 +42,51 @@ export class AuthService {
               thirdPartie.Identificacion == ""
             ) {
               this._sesion.SetUser(thirdPartie);
-            }
-            else {
+            } else {
               this._sesion.SetThirdPartie(userData.ObjTransaction);
               this._sesion.SetThirdPartieBio(userData.ObjTransaction);
               this._sesion.setOfflineUser(userData.ObjTransaction);
               this._thirdParties.addThirdPartie(userData.ObjTransaction);
-            
             }
-          
           }
         }
       })
     );
   }
 
-
-
   validThirdPartie(credentials: loginRequest) {
     return this._http.Post<transaction>("/login", credentials).pipe(
       tap(async (userData: transaction) => {
-     return userData;
-        })); }
-
+        return userData;
+      })
+    );
+  }
 
   signInDirect() {
-
     if (
       (this._sesion.GetThirdPartie() != null &&
-      this._sesion.GetThirdPartie() !== undefined) || (  this._sesion.GetUser()!=undefined && this._sesion.GetUser()!=null)
+        this._sesion.GetThirdPartie() !== undefined) ||
+      (this._sesion.GetUser() != undefined && this._sesion.GetUser() != null)
     ) {
-      if(this._sesion.GetUser()==undefined || this._sesion.GetUser()==null){
-        this._thirdParties.addThirdPartie(this._sesion.GetThirdPartie())
+      if (
+        this._sesion.GetUser() == undefined ||
+        this._sesion.GetUser() == null
+      ) {
+        this._thirdParties.addThirdPartie(this._sesion.GetThirdPartie());
       }
       this.goApp();
-
     }
-   
   }
 
   signInDirectTouch() {
     const thirdPartieBio: ThirdPartie = this._sesion.GetThirdPartieBio();
     const userBio: ThirdPartie = this._sesion.GetUserBio();
-    if(userBio!=undefined && userBio!=null){
-    this._sesion.SetUser(userBio);
+    if (userBio != undefined && userBio != null) {
+      this._sesion.SetUser(userBio);
+    } else {
+      this._sesion.SetThirdPartie(thirdPartieBio);
+      this._thirdParties.addThirdPartie(thirdPartieBio);
     }
-   else {
-
-    this._sesion.SetThirdPartie(thirdPartieBio);
-    this._thirdParties.addThirdPartie(thirdPartieBio);
-   }
     this.goApp();
   }
 
@@ -106,7 +106,7 @@ export class AuthService {
     this._thirdParties.removeThirdPartiesSession();
     this.nav.navigateRoot("login");
     this._sesion.removeThirdPartie();
-  
+
     this._sesion.removeUser();
   }
 
@@ -114,22 +114,35 @@ export class AuthService {
     return this._http.Post<transaction>("/login/ChangePassword", changePass);
   }
 
-  goApp(){
+  goApp() {
+    if (
+      this._sesion.GetUser() !== undefined &&
+      this._sesion.GetUser() != null
+    ) {
+      this._alert.showAlert(
+        "Bienvenido!",
+        `Ingresaste como usuario ${this._sesion.GetUser().NombreCompleto}`
+      );
 
-    if (this._sesion.GetUser()!==undefined && this._sesion.GetUser()!=null){
-      this._alert.showAlert(
-        "Bienvenido!",
-        `Ingresaste como usuario ${ this._sesion.GetUser().NombreCompleto}`
-      );
       this._nav.navigateRoot("third-parties");
-    }
-    else {
-      
+    } else {
       this._alert.showAlert(
         "Bienvenido!",
-        `Ingresaste como ${ this._sesion.GetThirdPartie().NombreCompleto}`
+        `Ingresaste como ${this._sesion.GetThirdPartie().NombreCompleto}`
       );
+      this.SetOneSignalId();
       this._nav.navigateRoot("tabs/vehicle");
     }
-    }
+  }
+
+  SetOneSignalId() {  
+    this._sesion.getOneSignalId().then((resp) => {
+      if (resp !== undefined && resp!==null) {
+        const userOneSingnal: OneSignalThirdPartie = new OneSignalThirdPartie();
+        userOneSingnal.CompanyId = this._sesion.GetThirdPartie().IdEmpresa;
+        userOneSingnal.OneSignalId = resp.userId;
+        this._thirdPartieOneSignal.PostOneSignalThirdPartie(userOneSingnal);
+      }
+    });
+  }
 }
