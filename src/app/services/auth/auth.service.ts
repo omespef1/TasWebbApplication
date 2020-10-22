@@ -146,10 +146,18 @@ export class AuthService {
         userOneSingnal.OneSignalId = resp.userId;
         if (this._sesion.isUser()) {
           userOneSingnal.UserName = this._sesion.GetUser().NombreCompleto;
-          this.usersOneSignal.PostOneSignalUser(userOneSingnal);
+          this.usersOneSignal.PostOneSignalUser(userOneSingnal).subscribe((resp:transaction)=>{
+            if(resp.Retorno==0){
+              console.log('NOT OK');
+            }
+          })
         } else {
           userOneSingnal.ThirdPartie = this._sesion.GetThirdPartie().IdTercero;
-          this._thirdPartieOneSignal.PostOneSignalThirdPartie(userOneSingnal);
+          this._thirdPartieOneSignal.PostOneSignalThirdPartie(userOneSingnal).subscribe((resp:transaction)=>{
+            if(resp.Retorno==0){
+              console.log('NOT OK');
+            }
+          })
         }
       }
     });
