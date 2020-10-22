@@ -58,7 +58,7 @@
       <ion-textarea rows="3" cols="12" [(ngModel)]="observations"learOnEdit="true"></ion-textarea>
     </ion-item>
   </ion-item>
-    <ion-button [disabled]="sending" (click)="setState()" expand="full" size="large" color="danger">
+    <ion-button *ngIf="!_sesion.isUser()" [disabled]="sending" (click)="setState()" expand="full" size="large" color="danger">
       <ion-icon class="fa-spin" name="clipboard"></ion-icon> {{textButton}}
     </ion-button>
 

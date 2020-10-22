@@ -14,7 +14,7 @@ export class SettingsPage implements OnInit {
   mobile=false;
   wifi=false;
   groupEnlistment=false;
-  constructor(private _sesion: SessionService,private _auth:AuthService,private _nav:NavController) {
+  constructor(private _sesion: SessionService,private _auth:AuthService,private _nav:NavController,public sesion:SessionService) {
 
    
   }

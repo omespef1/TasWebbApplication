@@ -11,7 +11,7 @@ import { NavController } from '@ionic/angular';
 export class HeaderComponent implements OnInit {
   @Input() headerName:string;
   @Input() showBackButton = true;
-  constructor(private _auth: SessionService,private router:Router,private _nav:NavController) { }
+  constructor(private _auth: SessionService,private router:Router,private _nav:NavController, private sesion:SessionService) { }
 
   ngOnInit() {}
 
@@ -19,7 +19,7 @@ export class HeaderComponent implements OnInit {
 
   logged() { 
    
-    return this._auth.GetThirdPartie() != null;
+    return this._auth.GetThirdPartie() != null || this.sesion.isUser();
     }
 
     goSettings(){

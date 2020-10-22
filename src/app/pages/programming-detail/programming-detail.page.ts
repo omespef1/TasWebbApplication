@@ -26,7 +26,7 @@ export class ProgrammingDetailPage implements OnInit {
     private _service: ServicesRequestService,
     private _modal: ModalController,
     private _alert: AlertService,
-    private _sesion: SessionService,
+    public _sesion: SessionService,
     private geo: Geolocation
   ) {
 

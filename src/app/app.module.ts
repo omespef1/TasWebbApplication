@@ -17,12 +17,13 @@ import { Network } from '@ionic-native/network/ngx';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 import { SafePipe } from './pipes/safe.pipe';
 import { BrowserTab } from "@ionic-native/browser-tab/ngx";
+import { ThirdPartiesGenericPage } from './pages/third-parties-generic/third-parties-generic.page';
 
 
 
 @NgModule({
-  declarations: [AppComponent, SafePipe],
-  entryComponents: [],
+  declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage],
+  entryComponents: [ThirdPartiesGenericPage],
   imports: [BrowserModule, IonicModule.forRoot(
    { mode: 'ios'}
   ), AppRoutingModule,

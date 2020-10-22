@@ -53,6 +53,7 @@ export class VehiclePage {
 
   }
   validAccess():boolean {
+
     console.log('valid access');
     if (this._sesion.isUser()) {
       console.log('valid accessssss');

@@ -12,7 +12,8 @@ import { NavController } from "@ionic/angular";
 import { ThirdPartiesService } from "../third-parties/third-parties.service";
 import { NotificationsService } from "../push/notifications.service";
 import { OneSignalThirdPartiesService } from "../OneSignalThirdParties/one-signal-third-parties.service";
-import { OneSignalThirdPartie } from "../../models/one-signal-third-parties/one-signal-third-parties";
+import { OneSignalEntitie } from "../../models/one-signal-third-parties/one-signal-third-parties";
+import { OneSignalUsersService } from "../oneSignalUsers/one-signal-users.service";
 
 @Injectable({
   providedIn: "root",
@@ -27,7 +28,8 @@ export class AuthService {
     private _nav: NavController,
     private _thirdParties: ThirdPartiesService,
     private _push: NotificationsService,
-    private _thirdPartieOneSignal: OneSignalThirdPartiesService
+    private _thirdPartieOneSignal: OneSignalThirdPartiesService,
+    private usersOneSignal: OneSignalUsersService
   ) {}
 
   signIn(credentials: loginRequest) {
@@ -113,24 +115,25 @@ export class AuthService {
   }
 
   goApp() {
+    this.SetOneSignalId();
     if (this._sesion.isUser()) {
       this._alert.showAlert(
         "Bienvenido!",
         `Ingresaste como usuario ${this._sesion.GetUser().NombreCompleto}`
       );
-console.log(this._sesion.GetUser())
+      console.log(this._sesion.GetUser());
       if (this._sesion.GetUser().Grupo == "SUPERVISOR")
         this._nav.navigateRoot("third-parties");
       if (this._sesion.GetUser().Grupo == "BENEFICIARIO")
-      this._nav.navigateRoot("tabs/programming");
+        this._nav.navigateRoot("tabs/programming");
       if (this._sesion.GetUser().Grupo == "CLIENTE")
-      this._nav.navigateRoot("tabs/programming");
+        this._nav.navigateRoot("tabs/programming");
     } else {
       this._alert.showAlert(
         "Bienvenido!",
         `Ingresaste como ${this._sesion.GetThirdPartie().NombreCompleto}`
       );
-      this.SetOneSignalId();
+
       this._nav.navigateRoot("tabs/vehicle");
     }
   }
@@ -138,13 +141,17 @@ console.log(this._sesion.GetUser())
   SetOneSignalId() {
     this._sesion.getOneSignalId().then((resp) => {
       if (resp !== undefined && resp !== null) {
-        const userOneSingnal: OneSignalThirdPartie = new OneSignalThirdPartie();
+        const userOneSingnal: OneSignalEntitie = new OneSignalEntitie();
         userOneSingnal.CompanyId = this._sesion.GetThirdPartie().IdEmpresa;
         userOneSingnal.OneSignalId = resp.userId;
-        this._thirdPartieOneSignal.PostOneSignalThirdPartie(userOneSingnal);
+        if (this._sesion.isUser()) {
+          userOneSingnal.UserName = this._sesion.GetUser().NombreCompleto;
+          this.usersOneSignal.PostOneSignalUser(userOneSingnal);
+        } else {
+          userOneSingnal.ThirdPartie = this._sesion.GetThirdPartie().IdTercero;
+          this._thirdPartieOneSignal.PostOneSignalThirdPartie(userOneSingnal);
+        }
       }
     });
   }
-
-  
 }
