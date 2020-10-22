@@ -39,24 +39,43 @@ export class VehiclePage {
     private _network: NetworkService,
     private _nav: NavController,
     public _thirdParties: ThirdPartiesService
-  ) {}
+  ) {
+
+
+  }
 
   ionViewWillEnter() {
-    if(this.validAccess){
+    if(this.validAccess()){
       this.thirdPartie = this._sesion.GetThirdPartie();
       this.GetVehicleInformation();
       this.thirdPartiesSelected = this._thirdParties.GetThirdParties();
     }
 
   }
-  validAccess() {
+  validAccess():boolean {
+    console.log('valid access');
     if (this._sesion.isUser()) {
-      if (this._sesion.GetUser().Grupo != "SUPERVISOR") {
+      console.log('valid accessssss');
+      console.log(this._sesion.GetUser());
+      if (this._sesion.GetUser().Grupo !== "SUPERVISOR") {
         this._alert.showAlert("Acceso no autorizado","No se encuentra autorizado para acceder a esta sección");
+        if (this._sesion.GetUser().Grupo == "BENEFICIARIO") {
+          this._nav.navigateRoot("tabs/programming");
+        }
+        if (this._sesion.GetUser().Grupo == "CLIENTE") {
+          this._nav.navigateRoot("tabs/programming");
+        }
+
         return false;
       }
+      else {
+        return true;
+      }
     }
-    return true;
+    else {
+      return true;
+    }
+  
   }
   GetVehicleInformation() {
     this.vehiclesFilter = [];

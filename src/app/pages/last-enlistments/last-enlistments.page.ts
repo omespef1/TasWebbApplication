@@ -12,6 +12,7 @@ import { last } from "rxjs/operators";
 import { manchecklistDetalle } from "../../models/enlistmen/manchecklist";
 import { Router } from "@angular/router";
 import { AlertService } from '../../services/alert/alert.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: "app-last-enlistments",
@@ -33,7 +34,8 @@ export class LastEnlistmentsPage implements OnInit {
     private _network: NetworkService,
     private _san: DomSanitizer,
     private router: Router,
-    private _alert:AlertService
+    private _alert:AlertService,
+    private _nav:NavController
   ) {}
   enlistment: manchecklist = new manchecklist();
   groupEnlistment = false;
@@ -47,7 +49,7 @@ export class LastEnlistmentsPage implements OnInit {
     //console.log(this.showBack);
   }
   ionViewWillEnter() {
-    if (this.validAccess) {
+    if (this.validAccess()) {
       this.groupEnlistment = this._sesion.getGroupEnlistment();
       this.GetLastEnlistment();
       this.lastQuestions = this._sesion.GetQuestions();
@@ -198,13 +200,29 @@ export class LastEnlistmentsPage implements OnInit {
       });
   }
 
-  validAccess() {
+  validAccess():boolean {
+    console.log('valid access');
     if (this._sesion.isUser()) {
-      if (this._sesion.GetUser().Grupo != "SUPERVISOR") {
+      console.log('valid accessssss');
+      console.log(this._sesion.GetUser());
+      if (this._sesion.GetUser().Grupo !== "SUPERVISOR") {
         this._alert.showAlert("Acceso no autorizado","No se encuentra autorizado para acceder a esta sección");
+        if (this._sesion.GetUser().Grupo == "BENEFICIARIO") {
+          this._nav.navigateRoot("tabs/programming");
+        }
+        if (this._sesion.GetUser().Grupo == "CLIENTE") {
+          this._nav.navigateRoot("tabs/programming");
+        }
+
         return false;
       }
+      else {
+        return true;
+      }
     }
-    return true;
+    else {
+      return true;
+    }
+  
   }
 }

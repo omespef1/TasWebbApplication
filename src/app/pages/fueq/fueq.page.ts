@@ -4,6 +4,7 @@ import { FueqService } from "src/app/services/fueq/fueq.service";
 import { SessionService } from "src/app/services/session/session.service";
 import * as moment from "moment";
 import { AlertService } from "src/app/services/alert/alert.service";
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: "app-fueq",
@@ -17,7 +18,8 @@ export class FueqPage implements OnInit {
     private _fueq: FueqService,
     private _session: SessionService,
     private _alert: AlertService,
-    private _sesion:SessionService
+    private _sesion:SessionService,
+    private _nav:NavController
   ) {
     
 
@@ -26,20 +28,39 @@ export class FueqPage implements OnInit {
   
 
   ionViewWillEnter(){
-    this.GetFueqs();
+    if(this.validAccess()){
+      this.GetFueqs();
+    }
+   
   }
    ngOnInit(){
 
   }
   
-  validAccess() {
+  validAccess():boolean {
+    console.log('valid access');
     if (this._sesion.isUser()) {
-      if (this._sesion.GetUser().Grupo != "SUPERVISOR") {
+      console.log('valid accessssss');
+      console.log(this._sesion.GetUser());
+      if (this._sesion.GetUser().Grupo !== "SUPERVISOR") {
         this._alert.showAlert("Acceso no autorizado","No se encuentra autorizado para acceder a esta sección");
+        if (this._sesion.GetUser().Grupo == "BENEFICIARIO") {
+          this._nav.navigateRoot("tabs/programming");
+        }
+        if (this._sesion.GetUser().Grupo == "CLIENTE") {
+          this._nav.navigateRoot("tabs/programming");
+        }
+
         return false;
       }
+      else {
+        return true;
+      }
     }
-    return true;
+    else {
+      return true;
+    }
+  
   }
   GetFueqs(event?: any) {
     this.loading = true;

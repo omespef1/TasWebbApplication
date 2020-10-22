@@ -106,25 +106,25 @@ export class AuthService {
     this._thirdParties.removeThirdPartiesSession();
     this.nav.navigateRoot("login");
     this._sesion.removeThirdPartie();
-
     this._sesion.removeUser();
   }
-
   changePassword(changePass: any) {
     return this._http.Post<transaction>("/login/ChangePassword", changePass);
   }
 
   goApp() {
-    if (
-      this._sesion.GetUser() !== undefined &&
-      this._sesion.GetUser() != null
-    ) {
+    if (this._sesion.isUser()) {
       this._alert.showAlert(
         "Bienvenido!",
         `Ingresaste como usuario ${this._sesion.GetUser().NombreCompleto}`
       );
-
-      this._nav.navigateRoot("third-parties");
+console.log(this._sesion.GetUser())
+      if (this._sesion.GetUser().Grupo == "SUPERVISOR")
+        this._nav.navigateRoot("third-parties");
+      if (this._sesion.GetUser().Grupo == "BENEFICIARIO")
+      this._nav.navigateRoot("tabs/programming");
+      if (this._sesion.GetUser().Grupo == "CLIENTE")
+      this._nav.navigateRoot("tabs/programming");
     } else {
       this._alert.showAlert(
         "Bienvenido!",
@@ -135,9 +135,9 @@ export class AuthService {
     }
   }
 
-  SetOneSignalId() {  
+  SetOneSignalId() {
     this._sesion.getOneSignalId().then((resp) => {
-      if (resp !== undefined && resp!==null) {
+      if (resp !== undefined && resp !== null) {
         const userOneSingnal: OneSignalThirdPartie = new OneSignalThirdPartie();
         userOneSingnal.CompanyId = this._sesion.GetThirdPartie().IdEmpresa;
         userOneSingnal.OneSignalId = resp.userId;
@@ -145,4 +145,6 @@ export class AuthService {
       }
     });
   }
+
+  
 }
