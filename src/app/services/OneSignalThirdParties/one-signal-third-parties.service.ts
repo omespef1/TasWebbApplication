@@ -13,6 +13,6 @@ export class OneSignalThirdPartiesService {
 
 
   PostOneSignalThirdPartie(thirdPartie: OneSignalEntitie){
-    return this._http.Post<transaction>(`/GENTercerosOneSignal/PostGENTercerosOneSignal`,ThirdPartie);
+    return this._http.Post<transaction>(`/GENTercerosOneSignal/PostGENTercerosOneSignal`,thirdPartie);
   }
 }
