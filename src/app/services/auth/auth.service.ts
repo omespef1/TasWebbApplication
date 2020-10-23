@@ -170,15 +170,11 @@ export class AuthService {
   }
 
   RemoveOneSignalId() {
-    console.log("removiendo");
-    this._sesion.getOneSignalId().then((respOne) => {
-      console.log("obteniendo signal");
-      if (respOne !== undefined && respOne !== null) {
-        console.log("obteniendo signal lleno");
+    this._sesion.getOneSignalId().then((resp) => {
+      if (resp !== undefined && resp !== null) {
         const userOneSingnal: OneSignalEntitie = new OneSignalEntitie();
-        userOneSingnal.OneSignalId = respOne.userId;
+        userOneSingnal.OneSignalId = resp.userId;
         if (this._sesion.isUser()) {
-          console.log("borrando usuario");
           userOneSingnal.UserName = this._sesion.GetUser().NombreCompleto;
           userOneSingnal.CompanyId = this._sesion.GetUser().IdEmpresa;
           this.usersOneSignal
@@ -189,7 +185,6 @@ export class AuthService {
               }
             });
         } else {
-          console.log("borrando tercero");
           userOneSingnal.ThirdPartie = this._sesion.GetThirdPartie().IdTercero;
           userOneSingnal.CompanyId = this._sesion.GetThirdPartie().IdEmpresa;
           this._thirdPartieOneSignal
