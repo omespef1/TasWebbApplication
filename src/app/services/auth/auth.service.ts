@@ -147,45 +147,58 @@ export class AuthService {
         if (this._sesion.isUser()) {
           userOneSingnal.UserName = this._sesion.GetUser().NombreCompleto;
           userOneSingnal.CompanyId = this._sesion.GetUser().IdEmpresa;
-          this.usersOneSignal.PostOneSignalUser(userOneSingnal).subscribe((resp:transaction)=>{
-            if(resp.Retorno==0){
-              console.log('NOT OK');
-            }
-          })
+          this.usersOneSignal
+            .PostOneSignalUser(userOneSingnal)
+            .subscribe((resp: transaction) => {
+              if (resp.Retorno == 0) {
+                console.log("NOT OK");
+              }
+            });
         } else {
           userOneSingnal.ThirdPartie = this._sesion.GetThirdPartie().IdTercero;
           userOneSingnal.CompanyId = this._sesion.GetThirdPartie().IdEmpresa;
-          this._thirdPartieOneSignal.PostOneSignalThirdPartie(userOneSingnal).subscribe((resp:transaction)=>{
-            if(resp.Retorno==0){
-              console.log('NOT OK');
-            }
-          })
+          this._thirdPartieOneSignal
+            .PostOneSignalThirdPartie(userOneSingnal)
+            .subscribe((resp: transaction) => {
+              if (resp.Retorno == 0) {
+                console.log("NOT OK");
+              }
+            });
         }
       }
     });
   }
 
   RemoveOneSignalId() {
-    this._sesion.getOneSignalId().then((resp) => {
-      if (resp !== undefined && resp !== null) {
+    console.log("removiendo");
+    this._sesion.getOneSignalId().then((respOne) => {
+      console.log("obteniendo signal");
+      if (respOne !== undefined && respOne !== null) {
+        console.log("obteniendo signal lleno");
         const userOneSingnal: OneSignalEntitie = new OneSignalEntitie();
-        userOneSingnal.OneSignalId = resp.userId;
+        userOneSingnal.OneSignalId = respOne.userId;
         if (this._sesion.isUser()) {
+          console.log("borrando usuario");
           userOneSingnal.UserName = this._sesion.GetUser().NombreCompleto;
           userOneSingnal.CompanyId = this._sesion.GetUser().IdEmpresa;
-          this.usersOneSignal.DeleteOneSignalUser(userOneSingnal).subscribe((resp:transaction)=>{
-            if(resp.Retorno==0){
-              console.log('NOT OK');
-            }
-          })
+          this.usersOneSignal
+            .DeleteOneSignalUser(userOneSingnal)
+            .subscribe((resp: transaction) => {
+              if (resp.Retorno == 0) {
+                console.log("NOT OK");
+              }
+            });
         } else {
+          console.log("borrando tercero");
           userOneSingnal.ThirdPartie = this._sesion.GetThirdPartie().IdTercero;
           userOneSingnal.CompanyId = this._sesion.GetThirdPartie().IdEmpresa;
-          this._thirdPartieOneSignal.DeleteOneSignalThirdPartie(userOneSingnal).subscribe((resp:transaction)=>{
-            if(resp.Retorno==0){
-              console.log('NOT OK');
-            }
-          })
+          this._thirdPartieOneSignal
+            .DeleteOneSignalThirdPartie(userOneSingnal)
+            .subscribe((resp: transaction) => {
+              if (resp.Retorno == 0) {
+                console.log("NOT OK");
+              }
+            });
         }
       }
     });
