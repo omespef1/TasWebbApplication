@@ -59,8 +59,7 @@ export class SettingsPage implements OnInit {
   GetGroupEnlistment(){
    return this._sesion.getGroupEnlistment();
   }
-  GoOut(){
-    this._auth.RemoveOneSignalId();
+  GoOut(){  
     this._auth.signOut();
   }
   goChangePassword(){
