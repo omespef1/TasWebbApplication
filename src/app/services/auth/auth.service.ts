@@ -163,4 +163,30 @@ export class AuthService {
       }
     });
   }
+
+  RemoveOneSignalId() {
+    this._sesion.getOneSignalId().then((resp) => {
+      if (resp !== undefined && resp !== null) {
+        const userOneSingnal: OneSignalEntitie = new OneSignalEntitie();
+        userOneSingnal.OneSignalId = resp.userId;
+        if (this._sesion.isUser()) {
+          userOneSingnal.UserName = this._sesion.GetUser().NombreCompleto;
+          userOneSingnal.CompanyId = this._sesion.GetUser().IdEmpresa;
+          this.usersOneSignal.DeleteOneSignalUser(userOneSingnal).subscribe((resp:transaction)=>{
+            if(resp.Retorno==0){
+              console.log('NOT OK');
+            }
+          })
+        } else {
+          userOneSingnal.ThirdPartie = this._sesion.GetThirdPartie().IdTercero;
+          userOneSingnal.CompanyId = this._sesion.GetThirdPartie().IdEmpresa;
+          this._thirdPartieOneSignal.DeleteOneSignalThirdPartie(userOneSingnal).subscribe((resp:transaction)=>{
+            if(resp.Retorno==0){
+              console.log('NOT OK');
+            }
+          })
+        }
+      }
+    });
+  }
 }

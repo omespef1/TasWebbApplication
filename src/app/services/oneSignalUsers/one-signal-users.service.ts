@@ -16,4 +16,7 @@ export class OneSignalUsersService {
   PostOneSignalUser(user: OneSignalEntitie){
     return this._http.Post<transaction>(`/UsuariosOneSignal/PostGENUsuariosOneSignal`,user);
   }
+  DeleteOneSignalUser(user: OneSignalEntitie){
+    return this._http.Post<transaction>(`/UsuariosOneSignal/DeleteUsuariosOneSignal`,user);
+  }
 }

@@ -60,6 +60,7 @@ export class SettingsPage implements OnInit {
    return this._sesion.getGroupEnlistment();
   }
   GoOut(){
+    this._auth.RemoveOneSignalId();
     this._auth.signOut();
   }
   goChangePassword(){

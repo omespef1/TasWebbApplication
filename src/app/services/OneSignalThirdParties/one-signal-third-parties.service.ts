@@ -15,4 +15,7 @@ export class OneSignalThirdPartiesService {
   PostOneSignalThirdPartie(thirdPartie: OneSignalEntitie){
     return this._http.Post<transaction>(`/GENTercerosOneSignal/PostGENTercerosOneSignal`,thirdPartie);
   }
+  DeleteOneSignalThirdPartie(thirdPartie: OneSignalEntitie){
+    return this._http.Post<transaction>(`/GENTercerosOneSignal/DeleteGENTercerosOneSignal`,thirdPartie);
+  }
 }
