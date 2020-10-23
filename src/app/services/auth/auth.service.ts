@@ -105,6 +105,7 @@ export class AuthService {
 
   async signOut() {
     // await this.storage.set("user", null);
+    this.RemoveOneSignalId();
     this._thirdParties.removeThirdPartiesSession();
     this.nav.navigateRoot("login");
     this._sesion.removeThirdPartie();
