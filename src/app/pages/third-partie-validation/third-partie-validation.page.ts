@@ -50,7 +50,7 @@ export class ThirdPartieValidationPage implements OnInit {
     });
   }
 
-  closeModal() {
-    this._modal.dismiss();
+ async closeModal() {
+    await this._modal.dismiss();
   }
 }

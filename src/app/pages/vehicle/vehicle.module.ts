@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 
 import { VehiclePage } from './vehicle.page';
 import { ComponentsModule } from '../../components/components.module';
+import { ThirdPartiesPage } from '../third-parties/third-parties.page';
+import { ThirdPartieValidationPage } from '../third-partie-validation/third-partie-validation.page';
 
 const routes: Routes = [
   {
@@ -23,6 +25,7 @@ const routes: Routes = [
     ComponentsModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [VehiclePage]
+  declarations: [VehiclePage,ThirdPartiesPage,ThirdPartieValidationPage],
+  entryComponents:[ThirdPartiesPage,ThirdPartieValidationPage]
 })
 export class VehiclePageModule {}

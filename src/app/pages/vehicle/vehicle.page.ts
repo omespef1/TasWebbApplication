@@ -13,8 +13,9 @@ import {
   NetworkService,
   ConnectionStatus,
 } from "src/app/services/network/network.service";
-import { NavController } from "@ionic/angular";
+import { NavController, ModalController } from "@ionic/angular";
 import { ThirdPartiesService } from "../../services/third-parties/third-parties.service";
+import { ThirdPartiesPage } from "../third-parties/third-parties.page";
 
 @Component({
   selector: "app-vehicle",
@@ -22,6 +23,7 @@ import { ThirdPartiesService } from "../../services/third-parties/third-parties.
   styleUrls: ["./vehicle.page.scss"],
 })
 export class VehiclePage {
+  isUser = false;
   today = new Date();
   thirdPartie: ThirdPartie = new ThirdPartie();
   thirdPartiesSelected: ThirdPartie[] = [];
@@ -38,28 +40,39 @@ export class VehiclePage {
     private _alert: AlertService,
     private _network: NetworkService,
     private _nav: NavController,
-    public _thirdParties: ThirdPartiesService
-  ) {
+    public _thirdParties: ThirdPartiesService,
+    private _modal: ModalController
+  ) {}
 
-
-  }
-
-  ionViewWillEnter() {
-    if(this.validAccess()){
-      this.thirdPartie = this._sesion.GetThirdPartie();
-      this.GetVehicleInformation();
-      this.thirdPartiesSelected = this._thirdParties.GetThirdParties();
+  ionViewWillEnter() {    
+    if (this.validAccess()) {
+      this.isUserLoogued();
+      if (
+       this._thirdParties.GetThirdParties().length==0
+      ) {
+        this.goThirdParties();
+      } else {        
+       // this.thirdPartie = this._sesion.GetThirdPartie();
+        this.GetVehicleInformation();
+        if (
+          this._thirdParties.GetThirdParties() != undefined &&
+          this._thirdParties.GetThirdParties() != undefined
+        ) {
+          this.thirdPartiesSelected = this._thirdParties.GetThirdParties();
+        }
+      }
     }
-
   }
-  validAccess():boolean {
-
-    console.log('valid access');
+  validAccess(): boolean {
+    console.log("valid access");
     if (this._sesion.isUser()) {
-      console.log('valid accessssss');
+      console.log("valid accessssss");
       console.log(this._sesion.GetUser());
       if (this._sesion.GetUser().Grupo !== "SUPERVISOR") {
-        this._alert.showAlert("Acceso no autorizado","No se encuentra autorizado para acceder a esta sección");
+        this._alert.showAlert(
+          "Acceso no autorizado",
+          "No se encuentra autorizado para acceder a esta sección"
+        );
         if (this._sesion.GetUser().Grupo == "BENEFICIARIO") {
           this._nav.navigateRoot("tabs/programming");
         }
@@ -68,15 +81,12 @@ export class VehiclePage {
         }
 
         return false;
-      }
-      else {
+      } else {
         return true;
       }
-    }
-    else {
+    } else {
       return true;
     }
-  
   }
   GetVehicleInformation() {
     this.vehiclesFilter = [];
@@ -253,13 +263,23 @@ export class VehiclePage {
     // this.router.navigateByUrl("tabs/enlistment", params);
   }
 
-  goThirdParties() {
-    this._nav.navigateRoot("third-parties");
+  async goThirdParties() {
+    const modal = await this._modal.create({
+      component: ThirdPartiesPage,
+    });
+    modal.present();
+    modal.onDidDismiss().then(data=>{
+      if(this._thirdParties.GetThirdParties().length>0){
+        this.GetVehicleInformation();
+        this.thirdPartiesSelected = this._thirdParties.GetThirdParties();
+      }
+       
+    
+    
+    })
   }
 
   isUserLoogued() {
-    return (
-      this._sesion.GetUser() != undefined && this._sesion.GetUser() != null
-    );
+    this.isUser = this._sesion.isUser();
   }
 }

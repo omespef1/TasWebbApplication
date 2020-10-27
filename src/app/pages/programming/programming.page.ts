@@ -33,6 +33,10 @@ export class ProgrammingPage implements OnInit {
         }
         if (this._session.GetUser().Grupo == "CLIENTE") {
           this.canEdit=false;
+          if(this._session.GetThirdPartie()!= null && this._session.GetThirdPartie()!=undefined){
+
+           this.GetProgramming(event);
+          }
           // if(this._session.GetThirdPartie==null  || this._session.GetThirdPartie()==undefined){
           //   this.showModalThirdParties();
           // }

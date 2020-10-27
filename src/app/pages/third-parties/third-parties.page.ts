@@ -68,8 +68,8 @@ export class ThirdPartiesPage implements OnInit {
 
   }
 
-  closeModal(){
-    this._nav.navigateBack('tabs/vehicle');
+ async closeModal(){
+  this._modal.dismiss();
   }
   async showModalThirdPartieValidation(thirdPartie: ThirdPartie) {
 

@@ -64,7 +64,12 @@ export class SessionService {
   removeThirdPartie() {
     localStorage.removeItem("thirdPartie");
   }
-
+  removeUserBio(){
+    localStorage.removeItem("userBio");
+  }
+removeThirdPartieBio(){
+  localStorage.removeItem("thirdPartieBio");
+}
   removeUser() {
     localStorage.removeItem("user");
   }

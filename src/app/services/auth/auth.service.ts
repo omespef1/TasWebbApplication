@@ -43,8 +43,11 @@ export class AuthService {
               thirdPartie.IdTercero == 0 &&
               thirdPartie.Identificacion == ""
             ) {
-              this._sesion.SetUser(thirdPartie);
+              this._sesion.SetUser(thirdPartie);     
+              //this._thirdParties.addThirdPartie(userData.ObjTransaction);       
             } else {
+
+
               this._sesion.SetThirdPartie(userData.ObjTransaction);
               this._sesion.SetThirdPartieBio(userData.ObjTransaction);
               this._sesion.setOfflineUser(userData.ObjTransaction);
@@ -77,14 +80,16 @@ export class AuthService {
         this._thirdParties.addThirdPartie(this._sesion.GetThirdPartie());
       }
       this.goApp();
-    }
   }
+}
 
   signInDirectTouch() {
     const thirdPartieBio: ThirdPartie = this._sesion.GetThirdPartieBio();
     const userBio: ThirdPartie = this._sesion.GetUserBio();
     if (userBio != undefined && userBio != null) {
-      this._sesion.SetUser(userBio);
+      this._sesion.SetUser(userBio);    
+      this._sesion.removeThirdPartieBio();
+      this._sesion.removeThirdPartie();
     } else {
       this._sesion.SetThirdPartie(thirdPartieBio);
       this._thirdParties.addThirdPartie(thirdPartieBio);
@@ -110,6 +115,7 @@ export class AuthService {
     this._thirdParties.removeThirdPartiesSession();
     this.nav.navigateRoot("login");
     this._sesion.removeThirdPartie();
+    this._thirdParties.removeThirdPartiesSession();
     this._sesion.removeUser();
   }
   changePassword(changePass: any) {
@@ -117,19 +123,26 @@ export class AuthService {
   }
 
   goApp() {
+  
     this.SetOneSignalId();
-    if (this._sesion.isUser()) {
+    console.log(this._sesion.isUser());
+    if (this._sesion.isUser()) {  
+      if (this._sesion.GetUser().Grupo === "SUPERVISOR"){
+        console.log('supervisor');
+        this._nav.navigateRoot("tabs/vehicle");      
+      }
+     
+      if (this._sesion.GetUser().Grupo === "BENEFICIARIO"){
+        this._nav.navigateRoot("tabs/programming");
+      }
+       
+      if (this._sesion.GetUser().Grupo === "CLIENTE"){
+        this._nav.navigateRoot("tabs/programming");
+      }
       this._alert.showAlert(
         "Bienvenido!",
         `Ingresaste como usuario ${this._sesion.GetUser().NombreCompleto}`
       );
-      console.log(this._sesion.GetUser());
-      if (this._sesion.GetUser().Grupo == "SUPERVISOR")
-        this._nav.navigateRoot("third-parties");
-      if (this._sesion.GetUser().Grupo == "BENEFICIARIO")
-        this._nav.navigateRoot("tabs/programming");
-      if (this._sesion.GetUser().Grupo == "CLIENTE")
-        this._nav.navigateRoot("tabs/programming");
     } else {
       this._alert.showAlert(
         "Bienvenido!",

@@ -14,9 +14,10 @@ export class AuthGuardService implements CanActivate {
     //console.log('revisando-..');
     //console.log(this._loc.path())
     if (this._loc.path() == "login" || this._loc.path() == "") {
+      debugger;
       if (
-        this._sesion.GetThirdPartie() == null ||
-        this._sesion.GetThirdPartie() == undefined
+       ( this._sesion.GetThirdPartie() == null ||
+        this._sesion.GetThirdPartie() == undefined) && (!this._sesion.isUser())
       ) {
         return false;
       } else {
@@ -25,8 +26,8 @@ export class AuthGuardService implements CanActivate {
     } else {
       //console.log(this._sesion.GetThirdPartie())
       if (
-        this._sesion.GetThirdPartie() == null ||
-        this._sesion.GetThirdPartie() == undefined
+        (this._sesion.GetThirdPartie() == null ||
+        this._sesion.GetThirdPartie() == undefined)  && (!this._sesion.isUser())
       ) {
         if (this._loc.path() == "/tabs/settings") return true;
         return false;
