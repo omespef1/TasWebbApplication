@@ -11,8 +11,8 @@ import { retry, catchError, map, tap } from "rxjs/operators";
   providedIn: "root"
 })
 export class HttpManagerService {
-//baseUrl: string = "https://tas.com.co/taswebapi/api";
- baseUrl: string = "http://192.168.1.107/RTASWEB/api";
+baseUrl: string = "https://tas.com.co/taswebapi/api";
+ //baseUrl: string = "http://192.168.1.107/RTASWEB/api";
   private httpOptions: {
     headers: HttpHeaders;
   };
@@ -85,5 +85,28 @@ export class HttpManagerService {
     return throwError(
       "Ocurrió un error inesperado.Inténtelo nuevamente más tarde"
     );
+  }
+
+
+  PostRequest<T>(urlController: string, body: any) {
+    const headerDict = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Origin": "*"
+    };
+    const bodyRequest: any = {
+      headers: new HttpHeaders(headerDict)
+    };
+    console.log(`${this.baseUrl}${urlController}`);
+    console.log(body);
+    return this._http
+      .post<T>(`${this.baseUrl}${urlController}`, body, <object>bodyRequest)
+      .pipe(
+        tap(resp => {
+          retry(5);
+          catchError(err => this.handleError(err))
+        })
+        );
   }
 }

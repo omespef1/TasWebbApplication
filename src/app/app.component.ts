@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-
+import { timer } from 'rxjs';
 import { Platform } from "@ionic/angular";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
@@ -8,6 +8,7 @@ import { AuthService } from "./services/auth/auth.service";
 import { IfStmt } from "@angular/compiler";
 import { NetworkService } from './services/network/network.service';
 import { NotificationsService } from './services/push/notifications.service';
+import { TransportRequestService } from './services/transport-request/transport-request.service';
 
 @Component({
   selector: "app-root",
@@ -22,7 +23,8 @@ export class AppComponent {
     private _sesion: SessionService,
     private _auth: AuthService,
     private _network: NetworkService,
-    private _push:NotificationsService
+    private _push:NotificationsService,
+    private _transport:TransportRequestService
   ) {
     this.initializeApp();
   }
@@ -35,11 +37,25 @@ export class AppComponent {
         this._push.init_Notifications();
       }
       this.statusBar.styleDefault();
+    
       this.splashScreen.hide();
       this._auth.signInDirect();
       this.LoadFirstSettings();
+      this.SetRemoteTransport();
     });
   }
+
+
+  SetRemoteTransport() {
+    setInterval(() => {
+      this._transport.GetTransportRequestFailed().then(() => {
+        console.log('Pendientes de transporte enviados');
+      });
+    }, 30000);
+  }
+
+
+
 
   LoadFirstSettings() {
     const mobile = this._sesion.GetMobile();

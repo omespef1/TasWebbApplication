@@ -8,6 +8,7 @@ import { AlertService } from "../../services/alert/alert.service";
 import { ServiceRequestDetail } from "../../models/service-request/programmings";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { StatesRequestProgrammingPipe } from "src/app/pipes/states-request-programming.pipe";
+import { TransportRequestService } from '../../services/transport-request/transport-request.service';
 @Component({
   selector: "app-programming-detail",
   templateUrl: "./programming-detail.page.html",
@@ -27,7 +28,8 @@ export class ProgrammingDetailPage implements OnInit {
     private _modal: ModalController,
     private _alert: AlertService,
     public _sesion: SessionService,
-    private geo: Geolocation
+    private geo: Geolocation,
+    private _request:TransportRequestService
   ) {
 
     this.programming.details = [];
@@ -131,34 +133,36 @@ export class ProgrammingDetailPage implements OnInit {
       this.textButton = "Esperando...";
 
       setTimeout(() => {
-
-
-
-
-        let log: ServiceRequestDetail = new ServiceRequestDetail();
+        const log: ServiceRequestDetail = new ServiceRequestDetail();
         log.SolicitudId = this.programming.SolicitudId;
         log.EmpresaId = this._sesion.GetThirdPartie().IdEmpresa;
         log.Estado = value;
         log.Latitude = data.coords.latitude;
         log.Longitude = data.coords.longitude;
         log.observations = this.observations;
-        this._service.PostServicesDetail(log).subscribe(
-          (resp:any) => {
-            this.sending = false;
-            if (resp.Retorno === 0) {
-              this.textButton = "NUEVO SEGUIMIENTO";
-              this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
-              this.loadDetail();
-            } else {
-              this.textButton = "NUEVO SEGUIMIENTO";
-              this._alert.showAlert("Error", resp.TxtError);
+        // Guardamos el intento en los fallidos en caso de que falle
+        this._request.SetTransportRequestFailed(log).then(() => {
+          this._service.PostServicesDetail(log).subscribe(
+            (resp: any) => {
+              this.sending = false;
+              // Borramos el intento ya que el servidor si respondió
+              this._request.deleteTransportFailed(log);
+              if (resp.Retorno === 0) {
+                this.textButton = "NUEVO SEGUIMIENTO";
+                this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
+                this.loadDetail();
+              } else {
+                this.textButton = "NUEVO SEGUIMIENTO";
+                this._alert.showAlert("Error", resp.TxtError);
+              }
+            },
+            (err) => {
+              this.sending = false;
+              this.textButton = "Error";
+              console.log(err);
             }
-          },
-          (err) => {
-            this.sending = false;
-            this.textButton = "Error";
-          }
-        );
+          );
+        });
       }, 3000);
     });
   }

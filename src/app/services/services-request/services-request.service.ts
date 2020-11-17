@@ -22,6 +22,6 @@ export class ServicesRequestService {
    }
 
    PostServicesDetail(request: ServiceRequestDetail){
-     return this._http.Post('/GESSolicitudServicios/PostGESSolicitudServiciosDetalle', request);
+     return this._http.PostRequest('/GESSolicitudServicios/PostGESSolicitudServiciosDetalle', request);
    }
 }
