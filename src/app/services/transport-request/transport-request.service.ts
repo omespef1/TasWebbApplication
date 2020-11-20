@@ -26,50 +26,52 @@ export class TransportRequestService {
   }
 
 
-  deleteTransportFailed(data: ServiceRequestDetail){
-    debugger;
-    const actualData: ServiceRequestDetail[] = JSON.parse(localStorage.getItem('ServiceRequestDetail'));
-    if (actualData !== undefined && actualData !== null && actualData.length > 0) {
-      const index: number = actualData.indexOf(data);
-      if (index !== -1) {
-        // Elimina el elemento
-       actualData.splice(index, 1);
-       localStorage.setItem('ServiceRequestDetail', JSON.stringify(actualData));
-      }
-    }
+  deleteTransportFailed(data: ServiceRequestDetail){   
+    // let actualData: ServiceRequestDetail[] = JSON.parse(localStorage.getItem('ServiceRequestDetail'));
+    // if (actualData !== undefined && actualData !== null && actualData.length > 0) {
+    //   const index: number = actualData.indexOf(data);
+    //   if (index !== -1) {
+    //     // Elimina el elemento
+    //  actualData =  actualData.splice(index, 1);    
+       localStorage.removeItem('ServiceRequestDetail');
+    //   }
+    // }
   }
   GetTransportRequestFailed() {
-
-    const promise: Promise<any> = new Promise((resolve, reject) => {
-      const actualData: ServiceRequestDetail[] = JSON.parse(localStorage.getItem('ServiceRequestDetail'));
-      if (actualData !== undefined && actualData !== null && actualData.length > 0) {
-        for (const item of actualData) {
-          this._service.PostServicesDetail(item).subscribe(
-            (resp: any) => {
-              if (resp.Retorno === 0) {
-                this._alert.showAlert('Perfecto!', 'Seguimiento ingresado');
-                const index: number = actualData.indexOf(item);
-                if (index !== -1) {
-                  // Elimina el elemento
-                  actualData.splice(index, 1);
+const promise: Promise<any> = new Promise((resolve, reject) => {
+  console.log(localStorage.getItem('ServiceRequestDetail'))
+  if(localStorage.getItem('ServiceRequestDetail')!==undefined && localStorage.getItem('ServiceRequestDetail')!==null){
+        const actualData: ServiceRequestDetail[] = JSON.parse(localStorage.getItem('ServiceRequestDetail'));
+        if (actualData !== undefined && actualData !== null && actualData.length > 0) {
+          for (const item of actualData) {
+            this._service.PostServicesDetail(item).subscribe(
+              (resp: any) => {
+                if (resp.Retorno === 0) {
+                  this._alert.showAlert('Perfecto!', 'Seguimiento ingresado');
+                  const index: number = actualData.indexOf(item);
+                  if (index !== -1) {
+                    // Elimina el elemento
+                    actualData.splice(index, 1);
+                  }
+                } else {
+                  this._alert.showAlert('Error', resp.TxtError);
                 }
-              } else {
-                this._alert.showAlert('Error', resp.TxtError);
+              },
+              (err) => {
+                    console.log('error enviando request');
               }
-            },
-            (err) => {
-                  console.log('error enviando request');
-            }
-          );
+            );
+          }
+          resolve();
         }
-        resolve();
+        else {
+          console.log('no hay nada para enviar');
+          resolve();
+        }
       }
-      else {
-        console.log('no hay nada para enviar');
-        resolve();
-      }
+ 
     });
-    return promise;
+return promise;
   }
 
   

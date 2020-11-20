@@ -160,6 +160,7 @@ export class ProgrammingDetailPage implements OnInit {
               this.sending = false;
               this.textButton = "Error";
               console.log(err);
+              this._request.deleteTransportFailed(log);
             }
           );
         });

@@ -74,7 +74,7 @@ export class ThirdPartiesPage implements OnInit {
   async showModalThirdPartieValidation(thirdPartie: ThirdPartie) {
 
     let validationRequest: loginRequest= new loginRequest();
-    validationRequest = {  user : thirdPartie.Identificacion, Password : '', business : Number(this._session.GetBussiness()) };
+    validationRequest = {  user : thirdPartie.Identificacion, Password : '', business : Number(thirdPartie.IdEmpresa) };
     const modal = await this._modal.create({
       component: ThirdPartieValidationPage,
       componentProps: {
