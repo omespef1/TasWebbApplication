@@ -129,42 +129,41 @@ export class ProgrammingDetailPage implements OnInit {
   setNewLog(value: any) {
     this.textButton = "Localizando...";
     this.sending = true;
-    this.geo.getCurrentPosition().then((data) => {
-      this.textButton = "Esperando...";
-
-      setTimeout(() => {
-        const log: ServiceRequestDetail = new ServiceRequestDetail();
-        log.SolicitudId = this.programming.SolicitudId;
-        log.EmpresaId = this._sesion.GetThirdPartie().IdEmpresa;
-        log.Estado = value;
-        log.Latitude = data.coords.latitude;
-        log.Longitude = data.coords.longitude;
-        log.observations = this.observations;
-        // Guardamos el intento en los fallidos en caso de que falle
-        this._request.SetTransportRequestFailed(log).then(() => {
+    const log: ServiceRequestDetail = new ServiceRequestDetail();
+    log.SolicitudId = this.programming.SolicitudId;
+    log.EmpresaId = this._sesion.GetThirdPartie().IdEmpresa;
+    log.Estado = value;
+    this._request.SetTransportRequestFailed(log).then(()=>{
+      this.geo.getCurrentPosition().then((data) => {
+        this.textButton = "Esperando...";
+        setTimeout(() => {
+          log.Latitude = data.coords.latitude;
+          log.Longitude = data.coords.longitude;
+          log.observations = this.observations;
+          // Guardamos el intento en los fallidos en caso de que falle        
           this._service.PostServicesDetail(log).subscribe(
-            (resp: any) => {
-              this.sending = false;
-              // Borramos el intento ya que el servidor si respondió
-              this._request.deleteTransportFailed(log);
-              if (resp.Retorno === 0) {
-                this.textButton = "NUEVO SEGUIMIENTO";
-                this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
-                this.loadDetail();
-              } else {
-                this.textButton = "NUEVO SEGUIMIENTO";
-                this._alert.showAlert("Error", resp.TxtError);
+              (resp: any) => {
+                this.sending = false;
+                // Borramos el intento ya que el servidor si respondió
+                this._request.deleteTransportFailed(log);
+                if (resp.Retorno === 0) {
+                  this.textButton = "NUEVO SEGUIMIENTO";
+                  this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
+                  this.loadDetail();
+                } else {
+                  this.textButton = "NUEVO SEGUIMIENTO";
+                  this._alert.showAlert("Error", resp.TxtError);
+                }
+              },
+              (err) => {
+                this.sending = false;
+                this.textButton = "Error";
+                console.log(err);
               }
-            },
-            (err) => {
-              this.sending = false;
-              this.textButton = "Error";
-              console.log(err);
-              this._request.deleteTransportFailed(log);
-            }
-          );
-        });
-      }, 3000);
-    });
+            );
+        }, 3000);
+      });
+    })
+
   }
 }
