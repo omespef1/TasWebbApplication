@@ -26,7 +26,7 @@ export class TransportRequestService {
   }
 
 
-  deleteTransportFailed(data: ServiceRequestDetail){   
+  deleteTransportFailed(){   
     // let actualData: ServiceRequestDetail[] = JSON.parse(localStorage.getItem('ServiceRequestDetail'));
     // if (actualData !== undefined && actualData !== null && actualData.length > 0) {
     //   const index: number = actualData.indexOf(data);
@@ -46,13 +46,9 @@ const promise: Promise<any> = new Promise((resolve, reject) => {
           for (const item of actualData) {
             this._service.PostServicesDetail(item).subscribe(
               (resp: any) => {
+                this.deleteTransportFailed();
                 if (resp.Retorno === 0) {
-                  this._alert.showAlert('Perfecto!', 'Seguimiento ingresado');
-                  const index: number = actualData.indexOf(item);
-                  if (index !== -1) {
-                    // Elimina el elemento
-                    actualData.splice(index, 1);
-                  }
+                  this._alert.showAlert('Perfecto!', 'Seguimiento ingresado');                  
                 } else {
                   this._alert.showAlert('Error', resp.TxtError);
                 }

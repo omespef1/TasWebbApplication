@@ -145,7 +145,7 @@ export class ProgrammingDetailPage implements OnInit {
               (resp: any) => {
                 this.sending = false;
                 // Borramos el intento ya que el servidor si respondió
-                this._request.deleteTransportFailed(log);
+                this._request.deleteTransportFailed();
                 if (resp.Retorno === 0) {
                   this.textButton = "NUEVO SEGUIMIENTO";
                   this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
