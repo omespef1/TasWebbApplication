@@ -14,6 +14,7 @@ import {
   ConnectionStatus
 } from "src/app/services/network/network.service";
 import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller';
+import { business } from '../../models/business/business';
 
 @Component({
   selector: "app-login",
@@ -25,6 +26,7 @@ export class LoginPage implements OnInit {
   showPass = false;
   user: loginRequest = new loginRequest();
   touchId: boolean = false;
+  businessName:string='INGRESO';
   constructor(
     private auth: AuthService,
     private router: Router,
@@ -57,8 +59,9 @@ export class LoginPage implements OnInit {
       component: BusinessPage
     });
     modal.onDidDismiss().then(resp => {
-      //console.log(resp);
+     const _businessName: business= resp.data;
       this._sesion.SetBusiness(resp.data);
+      this.businessName = _businessName.NombreEmpresa;
     });
     return await modal.present();
   }
