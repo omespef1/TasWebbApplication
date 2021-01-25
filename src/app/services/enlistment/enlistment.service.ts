@@ -6,6 +6,9 @@ import { transaction, transactionID } from "../../models/general/transaction";
 import { manchecklist } from "../../models/enlistmen/manchecklist";
 import { SessionService } from "../session/session.service";
 import { enlistment } from "../../models/enlistmen/enlistmen";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { retry } from "rxjs/operators";
+import { config } from "src/assets/config/settings";
 
 @Injectable({
   providedIn: "root"
@@ -13,7 +16,8 @@ import { enlistment } from "../../models/enlistmen/enlistmen";
 export class EnlistmentService {
   constructor(
     private _http: HttpManagerService,
-    private _sesion: SessionService
+    private _sesion: SessionService,
+    private http:HttpClient
   ) {}
   GetQuestions(business: business, user: ThirdPartie) {
     return this._http.Get<transaction>(
@@ -22,7 +26,17 @@ export class EnlistmentService {
   }
 
   PostAnswer(answers: manchecklist) {
-    return this._http.Post<transactionID>("/vehicle", answers);
+    // return this._http.Post<    background-color: #F2F2F2;>("/vehicle", answers);
+    const headerDict = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Origin": "*"
+    };
+    let bodyRequest: any = {
+      headers: new HttpHeaders(headerDict)
+    };
+    return this.http.post<transactionID>(`${config.url} /vehicle`, answers, bodyRequest as object).pipe(retry(5));
   }
 
   CheckEnlistment(enlistment: manchecklist) {

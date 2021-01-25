@@ -6,18 +6,21 @@ import {
 } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { retry, catchError, map, tap } from "rxjs/operators";
+import { config } from "src/assets/config/settings";
 
 @Injectable({
   providedIn: "root"
 })
 export class HttpManagerService {
-baseUrl: string = "https://tas.com.co/taswebapi/api";
- //baseUrl: string = "http://192.168.1.107/RTASWEB/api";
+baseUrl:string;
   private httpOptions: {
     headers: HttpHeaders;
   };
   strToken = "";
-  constructor(private _http: HttpClient) {}
+  constructor(private _http: HttpClient) {
+
+this.baseUrl = config.url;
+  }
 
   Get<T>(urlController: string) {
     const headerDict = {

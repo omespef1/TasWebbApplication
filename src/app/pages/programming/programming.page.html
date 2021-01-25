@@ -30,7 +30,7 @@
         <ion-label>{{_session.isUser() && canEdit?'Conductor':'Usuario'}}</ion-label>
          <ion-note slot="end"> {{_session.isUser() && canEdit?  programming.Conductor : programming.UsuarioServicio}}</ion-note>
       </ion-item>   
-      <ion-item *ngIf="_session.isUser()">
+      <ion-item >
         <ion-icon slot="start" name="car"></ion-icon>
         <ion-label>Placa</ion-label>
          <ion-note slot="end"> {{programming.PlacaVehiculo}}</ion-note>

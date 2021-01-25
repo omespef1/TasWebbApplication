@@ -3,7 +3,7 @@ import {
   OnInit,
   ViewChildren,
   QueryList,
-  ElementRef
+  ElementRef,
 } from "@angular/core";
 import { EnlistmentService } from "../../services/enlistment/enlistment.service";
 import { SessionService } from "../../services/session/session.service";
@@ -11,7 +11,7 @@ import { enlistment } from "src/app/models/enlistmen/enlistmen";
 import * as moment from "moment";
 import {
   manchecklist,
-  manchecklistDetalle
+  manchecklistDetalle,
 } from "../../models/enlistmen/manchecklist";
 import { vehicle } from "src/app/models/vehicle/vehicle";
 import { Router, NavigationExtras } from "@angular/router";
@@ -21,17 +21,17 @@ import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import {
   NetworkService,
-  ConnectionStatus
+  ConnectionStatus,
 } from "../../services/network/network.service";
 import { NavController, IonRadioGroup } from "@ionic/angular";
 import { AuthService } from "../../services/auth/auth.service";
 import { NavigationOptions } from "@ionic/angular/dist/providers/nav-controller";
-import { ThirdPartiesService } from '../../services/third-parties/third-parties.service';
+import { ThirdPartiesService } from "../../services/third-parties/third-parties.service";
 
 @Component({
   selector: "app-enlistment",
   templateUrl: "./enlistment.page.html",
-  styleUrls: ["./enlistment.page.scss"]
+  styleUrls: ["./enlistment.page.scss"],
 })
 export class EnlistmentPage implements OnInit {
   @ViewChildren(IonRadioGroup) divs: QueryList<IonRadioGroup>;
@@ -45,7 +45,7 @@ export class EnlistmentPage implements OnInit {
     private _network: NetworkService,
     private _nav: NavController,
     private _auth: AuthService,
-    private _thirdParties:ThirdPartiesService
+    private _thirdParties: ThirdPartiesService
   ) {}
   enlistment: enlistment[] = [];
   manchecklist: manchecklist;
@@ -87,7 +87,7 @@ export class EnlistmentPage implements OnInit {
     if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
       this._service
         .GetQuestions(this._sesion.GetBussiness(), this.third)
-        .subscribe(resp => {
+        .subscribe((resp) => {
           this.loading = false;
           if (resp.Retorno == 0) {
             this.enlistment = resp.ObjTransaction;
@@ -103,14 +103,14 @@ export class EnlistmentPage implements OnInit {
     this.markedCorrect = !this.markedCorrect;
     // this.enlistment[1].respuestaUsuario=1;
     if (this.predefined == true) {
-      this.divs.forEach(element => {
+      this.divs.forEach((element) => {
         const index: number = Number(element.name.split("anwser")[1]);
         this.enlistment[index].respuestaUsuario = this.enlistment[
           index
         ].respuesta;
       });
     } else {
-      this.divs.forEach(element => {
+      this.divs.forEach((element) => {
         const index: number = Number(element.name.split("anwser")[1]);
         this.enlistment[index].respuestaUsuario = undefined;
       });
@@ -120,10 +120,10 @@ export class EnlistmentPage implements OnInit {
     this.saving = true;
     this.geolocation
       .getCurrentPosition()
-      .then(resp => {
+      .then((resp) => {
         this.buildPetition(resp.coords.latitude, resp.coords.longitude);
       })
-      .catch(error => {
+      .catch((error) => {
         //console.log("Error getting location", error);
         this.buildPetition(0, 0);
       });
@@ -133,10 +133,11 @@ export class EnlistmentPage implements OnInit {
     let answers: manchecklistDetalle[] = [];
     this.saving = true;
     let reviso = "";
-    if(this._sesion.GetUser()!=undefined && this._sesion.GetUser()!=null)
-    reviso = this._sesion.GetUser().NombreCompleto;
-    else
-    reviso = "CONDUCTOR";
+    if (this._sesion.GetUser() != undefined && this._sesion.GetUser() != null) {
+      reviso = this._sesion.GetUser().NombreCompleto;
+    } else {
+     reviso = "CONDUCTOR"
+    }
     let answer: manchecklist = {
       IdEmpresa: this._sesion.GetBussiness().CodigoEmpresa,
       Id: 0,
@@ -155,12 +156,12 @@ export class EnlistmentPage implements OnInit {
       Latitude: latitude,
       Longitude: longitude,
       sending: true,
-      drivers: []
+      drivers: [],
     };
-    this._thirdParties.GetThirdParties().forEach(element => {
+    this._thirdParties.GetThirdParties().forEach((element) => {
       answer.drivers.push(element.IdTercero);
     });
-    this.enlistment.forEach(item => {
+    this.enlistment.forEach((item) => {
       answer.detalle.push({
         IdCheckList: 0,
         Comentario: item.observaciones,
@@ -172,47 +173,39 @@ export class EnlistmentPage implements OnInit {
         Resultado: "",
         Check_Image: item.check_foto,
         show: true,
-        HasImage:0
+        HasImage: 0,
       });
     });
-    //console.log(answer);
 
     if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
       let enviado = false;
-      setTimeout(() => {
+      setTimeout(async () => {
         if (!enviado) {
           this._alert.showAlert(
             "Red Lenta",
             "Parece que la red se encuentra un poco lenta. Guardaremos este alistamiento y lo enviaremos por ti cuando haya una mejor calidad de red"
           );
+          await this.saveLocal(answer);
           this.goLastEnlisment();
         }
-      }, 120000);
+      }, 30000);
       this._service.PostAnswer(answer).subscribe(
-        resp => {
+        (resp) => {
           enviado = true;
-          //console.log("respuesta es");
-          //console.log(resp.Retorno);
-          //console.log("la respuesta del chekeo es");
-          //console.log(resp);
           this.saving = false;
-          //console.log("activa boton nuevamente");
           if (resp.Retorno == 0) {
-            //console.log("respuesta es 0 correctamente");
-
             this._alert.showAlert("Mensaje del sistema", `${resp.message}`);
             this.goLastEnlisment();
 
             this._sesion.SetLastEnlistment(answer);
           } else {
-            //console.log("respuesta es 1 correctamente");
             this._alert.showAlert("Error", resp.TxtError);
             if (resp.TxtError == "El conductor no se encuentra activo") {
               this._auth.signOut();
             }
           }
         },
-        err => {
+        (err) => {
           this._alert.showAlert("Error de conexión,intente nuevamente.", err);
           this.saving = false;
         }
@@ -233,26 +226,7 @@ export class EnlistmentPage implements OnInit {
       }
       this._sesion.SetLastEnlistment(answer);
       this.saving = false;
-      const offlineEnlistemnts = <manchecklist[]>(
-        await this._sesion.GetNewOfflineEnlistment()
-      );
-      if (offlineEnlistemnts == null || offlineEnlistemnts == undefined) {
-        //console.log(offlineEnlistemnts);
-        const newList: manchecklist[] = new Array();
-        newList.push(answer);
-        //console.log("item agregado al offline");
-        this._sesion.SetNewOfflineEnlistment(newList);
-      } else {
-        offlineEnlistemnts.push(answer);
-        //console.log("item agregado al offline2");
-        this._sesion.SetNewOfflineEnlistment(offlineEnlistemnts);
-      }
-      this._alert.presentToast(
-        "Te encuentras Offline, cuando tengas acceso a una red, enviaremos este alistamiento!",
-        5000
-      );
-
-      // this.router.navigateByUrl("last-enlistments");
+      await this.saveLocal(answer);
       this.goLastEnlisment();
     }
   }
@@ -261,23 +235,39 @@ export class EnlistmentPage implements OnInit {
       question.observaciones = "";
     }
   }
+
+  async saveLocal(answer: manchecklist) {
+    const offlineEnlistemnts = (await this._sesion.GetNewOfflineEnlistment()) as manchecklist[];
+    if (offlineEnlistemnts === null || offlineEnlistemnts === undefined) {
+      const newList: manchecklist[] = new Array();
+      newList.push(answer);
+      this._sesion.SetNewOfflineEnlistment(newList);
+    } else {
+      offlineEnlistemnts.push(answer);
+      this._sesion.SetNewOfflineEnlistment(offlineEnlistemnts);
+    }
+    this._alert.presentToast(
+      "Te encuentras Offline o la red está un poco lenta, cuando tengas acceso a una red, enviaremos este alistamiento!",
+      5000
+    );
+  }
   takePicture(answer: enlistment) {
     answer.snapshot = true;
     const options: CameraOptions = {
-      quality: 50,
+      quality: 40,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
+      mediaType: this.camera.MediaType.PICTURE,
     };
     this.camera.getPicture(options).then(
-      imageData => {
+      (imageData) => {
         answer.snapshot = false;
         // imageData is either a base64 encoded string or a file URI
         // If it's base64 (DATA_URL):
         // const base64Image =  imageData;
         answer.check_foto = imageData;
       },
-      err => {
+      (err) => {
         // Handle error
       }
     );
@@ -290,8 +280,8 @@ export class EnlistmentPage implements OnInit {
   progressValue() {
     // return (this.progress * 100) / this.enlistment.length / 100;
     return (
-      (this.enlistment.filter(t => t.respuestaUsuario > 0).length * 100) /
-      this.enlistment.filter(t => t.Seccion == "0").length /
+      (this.enlistment.filter((t) => t.respuestaUsuario > 0).length * 100) /
+      this.enlistment.filter((t) => t.Seccion == "0").length /
       100
     );
   }
