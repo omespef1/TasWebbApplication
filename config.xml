@@ -14,7 +14,7 @@
     <preference name="ScrollEnabled" value="false" />
     <preference name="loadUrlTimeoutValue" value="70000" />
     <preference name="android-minSdkVersion" value="26" />
-    <preference name="android-targetSdkVersion" value="29" />
+    <preference name="android-targetSdkVersion" value="30" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="FadeSplashScreenDuration" value="300" />
