@@ -92,4 +92,8 @@ export class FueqPage implements OnInit {
       }&Id=${fuec.FuecId}`
     );
   }
+
+  goOcassionalFuec(){
+    
+  }
 }

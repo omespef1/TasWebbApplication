@@ -8,6 +8,9 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <div *ngIf="!loading">
+
+    <ion-button (click)= "goOcassionalFuec()" expand="full"  color="primary">         
+    </ion-button> 
     <ion-list lines="none" *ngFor="let fueq of fueqs" inset="true">
       <ion-item class="header" lines="none" color="secondary">
         <ion-icon slot="start" name="clipboard"></ion-icon>
