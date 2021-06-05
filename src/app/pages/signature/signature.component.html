@@ -1,0 +1,39 @@
+<app-header headerName="Firma">
+  
+</app-header>
+<ion-content padding>
+   
+        <signature-pad [options]="signatureOptions" id="signatureCanvas">
+
+        </signature-pad>
+
+
+    
+    
+    <ion-grid>
+        <ion-row>
+            <ion-col col-4>
+                <ion-button color="primary" fill="solid" expand="block" (click)="close()">
+                    <!-- <ion-icon *ngIf="!question.snapshot" slot="start" name="camera"></ion-icon>
+                    <ion-spinner *ngIf="question.snapshot" slot="start"></ion-spinner> -->
+                   Cancelar
+                  </ion-button>     
+            </ion-col>
+            <ion-col col-4>
+                <ion-button color="danger" fill="solid" expand="block" (click)="drawClear()">
+                    <!-- <ion-icon *ngIf="!question.snapshot" slot="start" name="camera"></ion-icon>
+                    <ion-spinner *ngIf="question.snapshot" slot="start"></ion-spinner> -->
+                   Borrar
+                  </ion-button>     
+            </ion-col>
+            <ion-col col-4>
+                <ion-button color="secondary" fill="solid" expand="block" (click)="drawComplete()">
+                    <!-- <ion-icon *ngIf="!question.snapshot" slot="start" name="camera"></ion-icon>
+                    <ion-spinner *ngIf="question.snapshot" slot="start"></ion-spinner> -->
+                   Aceptar
+                  </ion-button>     
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+</ion-content>

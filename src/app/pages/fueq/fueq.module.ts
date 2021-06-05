@@ -7,11 +7,16 @@ import { IonicModule } from '@ionic/angular';
 
 import { FueqPage } from './fueq.page';
 import { ComponentsModule } from '../../components/components.module';
+import { OccasionalFuecPage } from '../occasional-fuec/occasional-fuec.page';
 
 const routes: Routes = [
   {
     path: '',
     component: FueqPage
+  },
+  {
+    path: 'occasional-fueq',
+    component: OccasionalFuecPage
   }
 ];
 
@@ -23,6 +28,6 @@ const routes: Routes = [
     ComponentsModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [FueqPage]
+  declarations: [FueqPage,OccasionalFuecPage]
 })
 export class FueqPageModule {}

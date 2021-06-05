@@ -5,6 +5,7 @@ import { SessionService } from "src/app/services/session/session.service";
 import * as moment from "moment";
 import { AlertService } from "src/app/services/alert/alert.service";
 import { NavController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-fueq",
@@ -19,7 +20,8 @@ export class FueqPage implements OnInit {
     private _session: SessionService,
     private _alert: AlertService,
     private _sesion:SessionService,
-    private _nav:NavController
+    private _nav:NavController,
+    private router:Router
   ) {
     
 
@@ -94,6 +96,6 @@ export class FueqPage implements OnInit {
   }
 
   goOcassionalFuec(){
-    
+    this.router.navigateByUrl('tabs/fueqs/occasional-fueq');
   }
 }

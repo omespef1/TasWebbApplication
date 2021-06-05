@@ -19,6 +19,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    
     RouterModule.forChild(routes)
   ],
   declarations: [OccasionalFuecPage]

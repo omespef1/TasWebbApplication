@@ -18,16 +18,17 @@ import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 import { SafePipe } from './pipes/safe.pipe';
 import { BrowserTab } from "@ionic-native/browser-tab/ngx";
 import { ThirdPartiesGenericPage } from './pages/third-parties-generic/third-parties-generic.page';
-
+import { SignatureComponent } from './pages/signature/signature.component';
+import { SignaturePadModule } from 'angular2-signaturepad';
 
 
 @NgModule({
-  declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage],
-  entryComponents: [ThirdPartiesGenericPage],
+  declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent],
+  entryComponents: [ThirdPartiesGenericPage,SignatureComponent],
   imports: [BrowserModule, IonicModule.forRoot(
    { mode: 'ios'}
   ), AppRoutingModule,
-  ComponentsModule,HttpClientModule, IonicStorageModule.forRoot()],
+  ComponentsModule,HttpClientModule, IonicStorageModule.forRoot(),SignaturePadModule ],
   providers: [
     Network,
     FingerprintAIO,

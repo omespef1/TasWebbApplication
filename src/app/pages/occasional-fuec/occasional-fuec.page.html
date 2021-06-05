@@ -1,9 +1,96 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>occasional-fuec</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header headerName="Fuec ocasional">
+  
+</app-header>
+
 
 <ion-content>
+
+
+  <ion-list inset="true">
+    <ion-list-header color="secondary">
+      <ion-label>DATOS CONTRATO</ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-icon slot="start" name="home"></ion-icon>
+      <ion-label position="fixed">Cèdula o NIT *</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="home"></ion-icon>
+      <ion-label position="fixed">Nombre o razón social *</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="home"></ion-icon>
+      <ion-label position="fixed">Valor</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="home"></ion-icon>
+      <ion-label position="fixed">Nombres y apellidos representante</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="home"></ion-icon>
+      <ion-label position="fixed">Correo responsable</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="home"></ion-icon>
+      <ion-label position="fixed">Tipo de contrato</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="home"></ion-icon>
+      <ion-label position="fixed">Objeto</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+  </ion-list>
+
+
+  <ion-list>
+    <ion-list-header color="secondary">
+      <ion-label>ORIGEN DESTINO</ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-icon slot="start" name="home"></ion-icon>
+      <ion-label position="fixed">Rutas definidas</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="home"></ion-icon>
+      <ion-label position="fixed">Origen destino</ion-label>
+      <ion-input></ion-input>
+    </ion-item>    
+  </ion-list>
+
+
+  
+  <ion-list>
+    <ion-list-header color="secondary">
+      <ion-label>SELECCIONAR CONDUCTOR</ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-icon slot="start" name="home"></ion-icon>
+      <ion-label position="fixed">Seleccionar</ion-label>     
+    </ion-item>   
+  </ion-list>
+
+
+    
+
+    <ion-list-header (click)="showModalSignature()"  color="secondary">      
+      <ion-label>FIRMA CONTRATANTE</ion-label>
+      <ion-item lines="none">
+        <ion-icon slot="end" color="primary" name="create"></ion-icon>
+      </ion-item>
+      
+    </ion-list-header>
+
+    <ion-list>
+      <ion-item *ngIf="signatureImg">
+        <img [src]="signatureImg" >
+      </ion-item>
+    </ion-list>
 
 </ion-content>

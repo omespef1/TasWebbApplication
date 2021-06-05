@@ -78,7 +78,7 @@ const routes: Routes = [
               import('../pages/fueq/fueq.module').then(m => m.FueqPageModule)
           }
         ]
-      },
+      },    
       {
         path: 'programming',
         children: [
