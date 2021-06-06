@@ -12,7 +12,7 @@
     <ion-button (click)= "goOcassionalFuec()" expand="full"  color="secondary">   
 
       CREAR FUEC OCASIONAL   &nbsp;
-        <ion-spinner *ngIf="chekingThirdPartie" slot="start"></ion-spinner>
+        <ion-spinner  color="primary" *ngIf="chekingThirdPartie" slot="end"></ion-spinner>
     </ion-button> 
     <ion-list lines="none" *ngFor="let fueq of fueqs" inset="true">
       <ion-item class="header" lines="none" color="secondary">
