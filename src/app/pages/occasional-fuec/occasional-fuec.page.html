@@ -11,69 +11,69 @@
       <ion-label>DATOS CONTRATO</ion-label>
     </ion-list-header>
     <ion-item>
-      <ion-icon slot="start" name="home"></ion-icon>
-      <ion-label position="fixed">Cèdula o NIT *</ion-label>
+      <ion-icon slot="start" name="man"></ion-icon>
+      <ion-label position="floating">Cèdula o NIT *</ion-label>
       <ion-input [(ngModel)]="model.Identificacion"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-icon slot="start" name="home"></ion-icon>
-      <ion-label position="fixed">Nombre o razón social *</ion-label>
+      <ion-icon slot="start" name="man"></ion-icon>
+      <ion-label position="floating">Nombre o razón social *</ion-label>
       <ion-input [(ngModel)]="model.NombreCompleto"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-icon slot="start" name="home"></ion-icon>
-      <ion-label position="fixed">Teléfono *</ion-label>
+      <ion-icon slot="start" name="call"></ion-icon>
+      <ion-label position="floating">Teléfono *</ion-label>
       <ion-input [(ngModel)]="model.Telefono"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-icon slot="start" name="home"></ion-icon>
-      <ion-label position="fixed">Dirección *</ion-label>
+      <ion-icon slot="start" name="locate"></ion-icon>
+      <ion-label position="floating">Dirección *</ion-label>
       <ion-input [(ngModel)]="model.Direccion"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-icon slot="start" name="home"></ion-icon>
-      <ion-label position="fixed">Valor</ion-label>
+      <ion-icon slot="start" name="logo-usd"></ion-icon>
+      <ion-label position="floating">Valor</ion-label>
       <ion-input [(ngModel)]="model.Valor"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-icon slot="start" name="home"></ion-icon>
-      <ion-label position="fixed">Nombres y apellidos representante</ion-label>
+      <ion-icon slot="start" name="man"></ion-icon>
+      <ion-label position="floating">Nombres y apellidos representante</ion-label>
       <ion-input [(ngModel)]="model.NombreResponsable"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-icon slot="start" name="home"></ion-icon>
-      <ion-label position="fixed">Cédula representante</ion-label>
+      <ion-icon slot="start" name="man"></ion-icon>
+      <ion-label position="floating">Cédula representante</ion-label>
       <ion-input [(ngModel)]="model.DocResponsable"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-icon slot="start" name="home"></ion-icon>
-      <ion-label position="fixed">Dirección responsable</ion-label>
+      <ion-icon slot="start" name="locate"></ion-icon>
+      <ion-label position="floating">Dirección responsable</ion-label>
       <ion-input [(ngModel)]="model.DireccionR"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-icon slot="start" name="home"></ion-icon>
-      <ion-label position="fixed">Teléfono responsable</ion-label>
+      <ion-icon slot="start" name="call"></ion-icon>
+      <ion-label position="floating">Teléfono responsable</ion-label>
       <ion-input [(ngModel)]="model.TelefonoR"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-icon slot="start" name="home"></ion-icon>
-      <ion-label position="fixed">Correo responsable</ion-label>
+      <ion-icon slot="start" name="mail-unread"></ion-icon>
+      <ion-label position="floating">Correo responsable</ion-label>
       <ion-input [(ngModel)]="model.Email"></ion-input>
     </ion-item>
     <ion-item tappable button  (click)="showPopupContracts()">
-      <ion-icon slot="start" name="home"></ion-icon>
-      <ion-label position="fixed">Tipo de contrato</ion-label>
+      <ion-icon slot="start" name="paper"></ion-icon>
+      <ion-label position="floating">Tipo de contrato</ion-label>
       <ion-note slot="end"></ion-note>
     </ion-item>
     <ion-item tappable button  (click)="showPopupCities()">
-      <ion-icon slot="start" name="home"></ion-icon>
-      <ion-label position="fixed">Ciudad</ion-label>
+      <ion-icon slot="start" name="locate"></ion-icon>
+      <ion-label position="floating">Ciudad</ion-label>
       <ion-note slot="end"></ion-note>
     </ion-item>
 
     <ion-item>
-      <ion-icon slot="start" name="home"></ion-icon>
-      <ion-label position="fixed">Objeto</ion-label>
+      <ion-icon slot="start" name="document"></ion-icon>
+      <ion-label position="floating">Objeto</ion-label>
       <ion-input [(ngModel)]="model.ContratoObjeto"></ion-input>
     </ion-item>
   </ion-list>
@@ -81,7 +81,7 @@
   
   <ion-list-header (click)="showModalSignature()"  color="secondary">      
     <ion-label>FIRMA CONTRATANTE</ion-label>
-    <ion-item lines="none">
+    <ion-item>
       <ion-icon slot="end" color="primary" name="create"></ion-icon>
     </ion-item>
     
@@ -109,17 +109,17 @@
     </ion-list-header>
     <ion-item>
       <ion-icon slot="start" name="home"></ion-icon>
-      <ion-label position="fixed">Rutas definidas</ion-label>
+      <ion-label position="floating">Rutas definidas</ion-label>
       <ion-input></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="home"></ion-icon>
-      <ion-label position="fixed">Origen</ion-label>
+      <ion-label position="floating">Origen</ion-label>
       <ion-input [(ngModel)]="model2.Origen"></ion-input>
     </ion-item>    
     <ion-item>
       <ion-icon slot="start" name="home"></ion-icon>
-      <ion-label position="fixed">Destino</ion-label>
+      <ion-label position="floating">Destino</ion-label>
       <ion-input [(ngModel)]="model2.Destino"></ion-input>
     </ion-item>    
   </ion-list>
@@ -132,7 +132,7 @@
     </ion-list-header>
     <ion-item>
       <ion-icon slot="start" name="home"></ion-icon>
-      <ion-label position="fixed">Seleccionar</ion-label>     
+      <ion-label position="floating">Seleccionar</ion-label>     
     </ion-item>   
   </ion-list>
   <ion-button (click)= "stage =1" expand="full"  color="secondary">      

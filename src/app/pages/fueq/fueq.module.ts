@@ -32,6 +32,6 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [FueqPage,OccasionalFuecPage,TypeContractsComponent,PoliticalDivisionComponent,OcassionalRutesComponent],
-  entryComponents:[TypeContractsComponent]
+  entryComponents:[TypeContractsComponent,PoliticalDivisionComponent]
 })
 export class FueqPageModule {}
