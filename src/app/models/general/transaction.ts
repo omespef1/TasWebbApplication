@@ -4,6 +4,12 @@ export interface transaction {
     Retorno:number;
     ObjTransaction:any;
 }
+export class transactionObj<t> {
+
+    TxtError:string;
+    Retorno:number;
+    ObjTransaction:t;
+}
 
 export interface transactionID {
     TxtError:string;

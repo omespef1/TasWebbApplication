@@ -1,0 +1,22 @@
+export class OcasionalContract {
+	EmpresaId:number;
+	OcasionalId:number;
+	TipoContratoId:number;
+	Identificacion:string;
+	NombreCompleto:string;
+	Telefono:string;
+	Direccion:string;
+	DocResponsable:string;
+	NombreResponsable:string;
+	TelefonoR:string;
+	DireccionR:string;
+	Valor:number;
+	Email:string;
+	CiudadId:number;
+	ContratoObjeto:string;
+	Estado:string;
+	FechaModifica:Date;
+	UsuarioModifica:string;
+	FechaCrea:Date;
+	UsuarioCrea:string;
+}

@@ -4,8 +4,8 @@
 
 
 <ion-content>
-
-
+  
+ <ng-container *ngIf="stage==1;else stage2">
   <ion-list inset="true">
     <ion-list-header color="secondary">
       <ion-label>DATOS CONTRATO</ion-label>
@@ -13,41 +13,80 @@
     <ion-item>
       <ion-icon slot="start" name="home"></ion-icon>
       <ion-label position="fixed">Cèdula o NIT *</ion-label>
-      <ion-input></ion-input>
+      <ion-input [(ngModel)]="model.Identificacion"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="home"></ion-icon>
       <ion-label position="fixed">Nombre o razón social *</ion-label>
-      <ion-input></ion-input>
+      <ion-input [(ngModel)]="model.NombreCompleto"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="home"></ion-icon>
+      <ion-label position="fixed">Teléfono *</ion-label>
+      <ion-input [(ngModel)]="model.Telefono"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="home"></ion-icon>
+      <ion-label position="fixed">Dirección *</ion-label>
+      <ion-input [(ngModel)]="model.Direccion"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="home"></ion-icon>
       <ion-label position="fixed">Valor</ion-label>
-      <ion-input></ion-input>
+      <ion-input [(ngModel)]="model.Valor"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="home"></ion-icon>
       <ion-label position="fixed">Nombres y apellidos representante</ion-label>
-      <ion-input></ion-input>
+      <ion-input [(ngModel)]="model.NombreResponsable"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="home"></ion-icon>
+      <ion-label position="fixed">Cédula representante</ion-label>
+      <ion-input [(ngModel)]="model.DocResponsable"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="home"></ion-icon>
+      <ion-label position="fixed">Dirección responsable</ion-label>
+      <ion-input [(ngModel)]="model.DireccionR"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="home"></ion-icon>
+      <ion-label position="fixed">Teléfono responsable</ion-label>
+      <ion-input [(ngModel)]="model.TelefonoR"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="home"></ion-icon>
       <ion-label position="fixed">Correo responsable</ion-label>
-      <ion-input></ion-input>
+      <ion-input [(ngModel)]="model.Email"></ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item tappable button  (click)="showPopupContracts()">
       <ion-icon slot="start" name="home"></ion-icon>
       <ion-label position="fixed">Tipo de contrato</ion-label>
-      <ion-input></ion-input>
+      <ion-note slot="end"></ion-note>
     </ion-item>
+    <ion-item tappable button  (click)="showPopupCities()">
+      <ion-icon slot="start" name="home"></ion-icon>
+      <ion-label position="fixed">Ciudad</ion-label>
+      <ion-note slot="end"></ion-note>
+    </ion-item>
+
     <ion-item>
       <ion-icon slot="start" name="home"></ion-icon>
       <ion-label position="fixed">Objeto</ion-label>
-      <ion-input></ion-input>
+      <ion-input [(ngModel)]="model.ContratoObjeto"></ion-input>
     </ion-item>
   </ion-list>
 
+  <ion-button (click)= "setOcasionalContract()" expand="full"  color="secondary">      
+    SIGUIENTE
+  </ion-button> 
+ </ng-container>
+ 
 
+<ng-template #stage2>
+
+  
   <ion-list>
     <ion-list-header color="secondary">
       <ion-label>ORIGEN DESTINO</ion-label>
@@ -92,5 +131,14 @@
         <img [src]="signatureImg" >
       </ion-item>
     </ion-list>
+
+    <ion-button (click)= "setFuecOcasional()" expand="full"  color="secondary">      
+      FINALIZAR
+    </ion-button> 
+   </ng-container>
+   
+</ng-template>
+
+
 
 </ion-content>
