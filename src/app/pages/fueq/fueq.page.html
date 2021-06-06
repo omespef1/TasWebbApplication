@@ -9,8 +9,10 @@
   </ion-refresher>
   <div *ngIf="!loading">
 
-    <ion-button (click)= "goOcassionalFuec()" expand="full"  color="secondary">      
-      CREAR FUEC OCASIONAL   
+    <ion-button (click)= "goOcassionalFuec()" expand="full"  color="secondary">   
+
+      CREAR FUEC OCASIONAL   &nbsp;
+        <ion-spinner *ngIf="chekingThirdPartie" slot="start"></ion-spinner>
     </ion-button> 
     <ion-list lines="none" *ngFor="let fueq of fueqs" inset="true">
       <ion-item class="header" lines="none" color="secondary">
