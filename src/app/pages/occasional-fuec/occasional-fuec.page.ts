@@ -8,6 +8,9 @@ import { OcasionalContract } from '../../models/ocasional/ocasional-contract';
 import { PoliticalDivisionComponent } from '../political-division/political-division.component';
 import { DivisionPolitical } from '../../models/general/political-division';
 import { OcassionalFuec } from '../../models/ocasional/occasional-fuec';
+import { OccasionalContractsService } from '../../services/occasional-contracts/occasional-contracts.service';
+import { ThirdPartie } from '../../models/general/user';
+import { SessionService } from '../../services/session/session.service';
 
 
 @Component({
@@ -17,10 +20,16 @@ import { OcassionalFuec } from '../../models/ocasional/occasional-fuec';
 })
 export class OccasionalFuecPage implements OnInit {
   signatureImg:string;
-  constructor(private modal:ModalController) { }
+  constructor(private modal:ModalController,private ocasionalContract:OccasionalContractsService,
+    private sesion:SessionService) { 
+
+
+    this.thirdPartie = this.sesion.GetThirdPartie();
+  }
   stage:number=1;
   model: OcasionalContract= new OcasionalContract();
   model2:OcassionalFuec= new OcassionalFuec();
+  thirdPartie:ThirdPartie;
   ngOnInit() {
   }
 
@@ -76,5 +85,16 @@ export class OccasionalFuecPage implements OnInit {
 
     // Cuando finaliza cambiar stage
     this.stage =2;
+  }
+
+  search(){
+
+        this.ocasionalContract.getOcasionalContracts(this.thirdPartie.IdEmpresa,this.model.Identificacion).subscribe(resp=>{
+
+          if(resp.Retorno==0 && resp.ObjTransaction!=null){
+
+            this.model = resp.ObjTransaction;
+          }
+        })
   }
 }

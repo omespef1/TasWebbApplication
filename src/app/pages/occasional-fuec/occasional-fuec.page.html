@@ -13,7 +13,7 @@
     <ion-item>
       <ion-icon slot="start" name="man"></ion-icon>
       <ion-label position="floating">Cèdula o NIT *</ion-label>
-      <ion-input [(ngModel)]="model.Identificacion"></ion-input>
+      <ion-input [(ngModel)]="model.Identificacion" (ionBlur)="search()"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="man"></ion-icon>
