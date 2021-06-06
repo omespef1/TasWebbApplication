@@ -19,4 +19,5 @@ export class OcasionalContract {
 	UsuarioModifica:string;
 	FechaCrea:Date;
 	UsuarioCrea:string;
+	Firma:string;
 }

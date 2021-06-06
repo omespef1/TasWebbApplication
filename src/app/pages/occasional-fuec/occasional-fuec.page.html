@@ -78,6 +78,22 @@
     </ion-item>
   </ion-list>
 
+  
+  <ion-list-header (click)="showModalSignature()"  color="secondary">      
+    <ion-label>FIRMA CONTRATANTE</ion-label>
+    <ion-item lines="none">
+      <ion-icon slot="end" color="primary" name="create"></ion-icon>
+    </ion-item>
+    
+  </ion-list-header>
+
+  <ion-list>
+    <ion-item *ngIf="model.Firma">
+      <img [src]="model.Firma" >
+    </ion-item>
+  </ion-list>
+
+
   <ion-button (click)= "setOcasionalContract()" expand="full"  color="secondary">      
     SIGUIENTE
   </ion-button> 
@@ -122,20 +138,6 @@
 
 
     
-
-    <ion-list-header (click)="showModalSignature()"  color="secondary">      
-      <ion-label>FIRMA CONTRATANTE</ion-label>
-      <ion-item lines="none">
-        <ion-icon slot="end" color="primary" name="create"></ion-icon>
-      </ion-item>
-      
-    </ion-list-header>
-
-    <ion-list>
-      <ion-item *ngIf="signatureImg">
-        <img [src]="signatureImg" >
-      </ion-item>
-    </ion-list>
 
     <ion-button (click)= "setFuecOcasional()" expand="full"  color="secondary">      
       FINALIZAR

@@ -19,4 +19,5 @@ export class OcassionalFuec {
     Impreso: string;
     FechaModifica: Date;
     UsuarioModifica: string;
+
 }
