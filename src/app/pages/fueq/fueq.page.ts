@@ -6,6 +6,8 @@ import * as moment from "moment";
 import { AlertService } from "src/app/services/alert/alert.service";
 import { NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { GENTercerosService } from '../../services/GENTerceros/genterceros.service';
+import { ThirdPartie } from '../../models/general/user';
 
 @Component({
   selector: "app-fueq",
@@ -15,15 +17,17 @@ import { Router } from '@angular/router';
 export class FueqPage implements OnInit {
   loading = false;
   fueqs: fueq[] = [];
+  private thirdPartie:ThirdPartie;
   constructor(
     private _fueq: FueqService,
     private _session: SessionService,
     private _alert: AlertService,
     private _sesion:SessionService,
     private _nav:NavController,
+    private thirdPartieService:GENTercerosService,
     private router:Router
   ) {
-    
+    this.thirdPartie = this._sesion.GetThirdPartie();
 
   }
 
@@ -96,6 +100,18 @@ export class FueqPage implements OnInit {
   }
 
   goOcassionalFuec(){
-    this.router.navigateByUrl('tabs/fueqs/occasional-fueq');
+
+
+    this.thirdPartieService.GetFuecThirdPartie(this.thirdPartie.IdEmpresa,this.thirdPartie.IdTercero).subscribe(resp=>{
+      if(resp.Retorno==0 && resp.ObjTransaction!=null){
+        this.router.navigateByUrl('tabs/fueqs/occasional-fueq');
+      }
+      else {
+        this._alert.showAlert('Acceso no autorizado','Usted no se encuentra autorizado para realizar fuec ocasional.')
+      }
+    })
+ 
   }
+
+
 }
