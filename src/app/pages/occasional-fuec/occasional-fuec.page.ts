@@ -7,6 +7,7 @@ import { OcassionalRutesComponent } from '../occasional-rutes/ocassional-rutes/o
 import { OcasionalContract } from '../../models/ocasional/ocasional-contract';
 import { PoliticalDivisionComponent } from '../political-division/political-division.component';
 import { DivisionPolitical } from '../../models/general/political-division';
+import { OcassionalFuec } from '../../models/ocasional/occasional-fuec';
 
 
 @Component({
@@ -19,6 +20,7 @@ export class OccasionalFuecPage implements OnInit {
   constructor(private modal:ModalController) { }
   stage:number=1;
   model: OcasionalContract= new OcasionalContract();
+  model2:OcassionalFuec= new OcassionalFuec();
   ngOnInit() {
   }
 
