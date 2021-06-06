@@ -115,12 +115,12 @@
     <ion-item>
       <ion-icon slot="start" name="home"></ion-icon>
       <ion-label position="fixed">Origen</ion-label>
-      <ion-input></ion-input>
+      <ion-input [(ngModel)]="model2.Origen"></ion-input>
     </ion-item>    
     <ion-item>
       <ion-icon slot="start" name="home"></ion-icon>
       <ion-label position="fixed">Destino</ion-label>
-      <ion-input [(ngModel)]=""></ion-input>
+      <ion-input [(ngModel)]="model2.Destino"></ion-input>
     </ion-item>    
   </ion-list>
 
@@ -142,7 +142,7 @@
     <ion-button (click)= "setFuecOcasional()" expand="full"  color="secondary">      
       FINALIZAR
     </ion-button> 
-   </ng-container>
+   
    
 </ng-template>
 
