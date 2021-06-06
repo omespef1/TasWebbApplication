@@ -106,7 +106,7 @@ export class FueqPage implements OnInit {
     this.chekingThirdPartie = true;
     this.thirdPartieService.GetFuecThirdPartie(this.thirdPartie.IdEmpresa,this.thirdPartie.IdTercero).subscribe(resp=>{
       this.chekingThirdPartie = false;
-      if(resp.Retorno==0 && resp.ObjTransaction!=null){
+      if(resp.Retorno==0){
         this.router.navigateByUrl('tabs/fueqs/occasional-fueq');
       }
       else {

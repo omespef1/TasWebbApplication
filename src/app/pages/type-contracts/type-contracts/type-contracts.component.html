@@ -1,8 +1,18 @@
 <app-header headerName="Tipo de contrato">
 </app-header>
 <ion-content>
+
+
   <div text-center>
     <ion-spinner *ngIf="loading" slot="start"></ion-spinner>
+  </div>
+
+  <div padding>
+    <ion-button (click)= "close()" expand="full"  color="secondary">   
+
+    CANCELAR
+    
+    </ion-button> 
   </div>
  <ion-list>
    <ion-item tappable *ngFor="let item of dataList" (click)="setData(item)">

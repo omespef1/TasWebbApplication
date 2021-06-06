@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { TypeContract } from '../../../models/ocasional/type-contract';
 import { ContractTypeService } from '../../../services/contracts-type/contract-type.service';
 import { SessionService } from '../../../services/session/session.service';
+import { ThirdPartie } from '../../../models/general/user';
 
 @Component({
   selector: 'app-type-contracts',
@@ -12,12 +13,16 @@ import { SessionService } from '../../../services/session/session.service';
 export class TypeContractsComponent implements OnInit {
 
   dataList: TypeContract[]=[];
+  thirdPartie:ThirdPartie;
   loading=false;
   constructor(  
     private modalController: ModalController,
     private typeContractService:ContractTypeService,
     private sesionService:SessionService
-  ) {}
+  ) {
+
+    this.thirdPartie = this.sesionService.GetThirdPartie();
+  }
 
   ngOnInit() {
     this.GetData();
@@ -25,7 +30,7 @@ export class TypeContractsComponent implements OnInit {
 
   GetData() {
     this.loading=true;
-    this.typeContractService.GetTypeContracts(this.sesionService.GetUser().IdEmpresa).subscribe(resp=>{
+    this.typeContractService.GetTypeContracts(this.thirdPartie.IdEmpresa).subscribe(resp=>{
       this.loading=false;
       //console.log(resp);
       if (resp.Retorno === 0 && resp.ObjTransaction!=null) {
@@ -37,8 +42,12 @@ export class TypeContractsComponent implements OnInit {
     })       
   }
 
-   async SetData(business: TypeContract) {
+   async setData(business: TypeContract) {
     await this.modalController.dismiss(business);
+  }
+
+  async close(){
+    await this.modalController.dismiss();
   }
 
 }

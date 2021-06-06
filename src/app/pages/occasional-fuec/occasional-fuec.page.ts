@@ -32,7 +32,7 @@ export class OccasionalFuecPage implements OnInit {
     modal.onDidDismiss().then(resp => {
      
       console.log(resp);
-     this.signatureImg = resp.data;
+     this.model.Firma = resp.data;
     });
     return await modal.present();
   }

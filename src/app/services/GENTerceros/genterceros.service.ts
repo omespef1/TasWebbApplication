@@ -15,6 +15,6 @@ export class GENTercerosService {
   }
 
   GetFuecThirdPartie(idEmpresa:number,thirdPartieId:number){
-    return this._http.Get<transaction>(`/GENTerceros/GetFuecThirdPartie?IdEmpresa=${idEmpresa}`);
+    return this._http.Get<transaction>(`/GENTerceros/GetFuecThirdPartie?companyId=${idEmpresa}&thirdPartieId=${thirdPartieId}`);
   }
 }
