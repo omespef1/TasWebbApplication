@@ -4,8 +4,9 @@
 
 
 <ion-content>
-  
+
  <ng-container *ngIf="stage==1;else stage2">
+  <form autocomplete="off" (ngSubmit)="setOcasionalContract()" #contractForm="ngForm" class="bounceIn">
   <ion-list inset="true">
     <ion-list-header color="secondary">
       <ion-label>DATOS CONTRATO</ion-label>
@@ -94,9 +95,10 @@
   </ion-list>
 
 
-  <ion-button (click)= "stage =2" expand="full"  color="secondary">      
+  <ion-button type="submit"  expand="full"  color="secondary">      
     SIGUIENTE
   </ion-button> 
+  </form>
  </ng-container>
  
 

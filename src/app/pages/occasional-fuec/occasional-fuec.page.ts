@@ -11,6 +11,7 @@ import { OcassionalFuec } from '../../models/ocasional/occasional-fuec';
 import { OccasionalContractsService } from '../../services/occasional-contracts/occasional-contracts.service';
 import { ThirdPartie } from '../../models/general/user';
 import { SessionService } from '../../services/session/session.service';
+import { NgForm } from '@angular/forms';
 
 
 @Component({
