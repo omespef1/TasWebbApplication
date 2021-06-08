@@ -12,6 +12,7 @@ import { OccasionalContractsService } from '../../services/occasional-contracts/
 import { ThirdPartie } from '../../models/general/user';
 import { SessionService } from '../../services/session/session.service';
 import { NgForm } from '@angular/forms';
+import { OcasionalRute } from '../../models/ocasional/rutes';
 
 
 @Component({
@@ -31,6 +32,9 @@ export class OccasionalFuecPage implements OnInit {
   model: OcasionalContract= new OcasionalContract();
   model2:OcassionalFuec= new OcassionalFuec();
   thirdPartie:ThirdPartie;
+  typeContractSelected:TypeContract= new TypeContract();
+  citySelected :DivisionPolitical= new DivisionPolitical();
+routeSelected: OcasionalRute = new OcasionalRute();
   ngOnInit() {
   }
 
@@ -52,7 +56,8 @@ export class OccasionalFuecPage implements OnInit {
       component: TypeContractsComponent
     });
     modal.onDidDismiss().then(resp => {
-     const contratSelected: TypeContract= resp.data;      
+     this.typeContractSelected =resp.data; 
+     this.model.TipoContratoId = this.typeContractSelected.TipoContratoId;     
     // Asignar al modelo aquí
     });
     return await modal.present();
@@ -63,7 +68,8 @@ export class OccasionalFuecPage implements OnInit {
       component: OcassionalRutesComponent
     });
     modal.onDidDismiss().then(resp => {
-     const routeSelected: TypeContract= resp.data;      
+     this.routeSelected =  resp.data; 
+     this.model2.RutaId = this.routeSelected.RutaId;     
     // Asignar al modelo aquí
     });
     return await modal.present();
@@ -75,8 +81,8 @@ export class OccasionalFuecPage implements OnInit {
       component: PoliticalDivisionComponent
     });
     modal.onDidDismiss().then(resp => {
-     const citySelected: DivisionPolitical= resp.data;      
-    // Asignar al modelo aquí
+      this.citySelected= resp.data;    
+      this.model.CiudadId = this.citySelected.IdDivisionPolitica;    
     });
     return await modal.present();
   }

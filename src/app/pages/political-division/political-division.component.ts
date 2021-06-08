@@ -25,7 +25,7 @@ export class PoliticalDivisionComponent implements OnInit {
   }
 
 
-  async SetData(data: DivisionPolitical) {
+  async setData(data: DivisionPolitical) {
     await this.modalController.dismiss(data);
   }
 

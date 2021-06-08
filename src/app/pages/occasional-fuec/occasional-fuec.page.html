@@ -64,12 +64,12 @@
     <ion-item tappable button  (click)="showPopupContracts()">
       <ion-icon slot="start" name="paper"></ion-icon>
       <ion-label position="floating">Tipo de contrato</ion-label>
-      <ion-note slot="end"></ion-note>
+      <ion-note slot="end"> {{ typeContractSelected.TipoContratoNombre}}</ion-note>
     </ion-item>
     <ion-item tappable button  (click)="showPopupCities()">
       <ion-icon slot="start" name="locate"></ion-icon>
       <ion-label position="floating">Ciudad</ion-label>
-      <ion-note slot="end"></ion-note>
+      <ion-note slot="end"> {{ citySelected.DescripcionCorta}}</ion-note>
     </ion-item>
 
     <ion-item>
