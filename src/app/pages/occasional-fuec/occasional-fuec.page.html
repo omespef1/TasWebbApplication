@@ -14,52 +14,52 @@
     <ion-item>
       <ion-icon slot="start" name="man"></ion-icon>
       <ion-label position="floating">Cèdula o NIT *</ion-label>
-      <ion-input [(ngModel)]="model.Identificacion" (ionBlur)="search()"></ion-input>
+      <ion-input name="Identificacion" [(ngModel)]="model.Identificacion" (ionBlur)="search()"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="man"></ion-icon>
       <ion-label position="floating">Nombre o razón social *</ion-label>
-      <ion-input [(ngModel)]="model.NombreCompleto"></ion-input>
+      <ion-input name="NombreCompleto" [(ngModel)]="model.NombreCompleto"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="call"></ion-icon>
       <ion-label position="floating">Teléfono *</ion-label>
-      <ion-input [(ngModel)]="model.Telefono"></ion-input>
+      <ion-input name="Telefono" [(ngModel)]="model.Telefono"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="locate"></ion-icon>
       <ion-label position="floating">Dirección *</ion-label>
-      <ion-input [(ngModel)]="model.Direccion"></ion-input>
+      <ion-input name="Direccion" [(ngModel)]="model.Direccion"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="logo-usd"></ion-icon>
       <ion-label position="floating">Valor</ion-label>
-      <ion-input [(ngModel)]="model.Valor"></ion-input>
+      <ion-input name="Valor" [(ngModel)]="model.Valor"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="man"></ion-icon>
       <ion-label position="floating">Nombres y apellidos representante</ion-label>
-      <ion-input [(ngModel)]="model.NombreResponsable"></ion-input>
+      <ion-input name="NombreResponsable" [(ngModel)]="model.NombreResponsable"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="man"></ion-icon>
       <ion-label position="floating">Cédula representante</ion-label>
-      <ion-input [(ngModel)]="model.DocResponsable"></ion-input>
+      <ion-input name="DocResponsable" [(ngModel)]="model.DocResponsable"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="locate"></ion-icon>
       <ion-label position="floating">Dirección responsable</ion-label>
-      <ion-input [(ngModel)]="model.DireccionR"></ion-input>
+      <ion-input name="DireccionR" [(ngModel)]="model.DireccionR"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="call"></ion-icon>
       <ion-label position="floating">Teléfono responsable</ion-label>
-      <ion-input [(ngModel)]="model.TelefonoR"></ion-input>
+      <ion-input name="TelefonoR" [(ngModel)]="model.TelefonoR"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="mail-unread"></ion-icon>
       <ion-label position="floating">Correo responsable</ion-label>
-      <ion-input [(ngModel)]="model.Email"></ion-input>
+      <ion-input name="Email" [(ngModel)]="model.Email"></ion-input>
     </ion-item>
     <ion-item tappable button  (click)="showPopupContracts()">
       <ion-icon slot="start" name="paper"></ion-icon>
@@ -75,7 +75,7 @@
     <ion-item>
       <ion-icon slot="start" name="document"></ion-icon>
       <ion-label position="floating">Objeto</ion-label>
-      <ion-input [(ngModel)]="model.ContratoObjeto"></ion-input>
+      <ion-input name="document" [(ngModel)]="model.ContratoObjeto"></ion-input>
     </ion-item>
   </ion-list>
 
@@ -117,12 +117,12 @@
     <ion-item>
       <ion-icon slot="start" name="home"></ion-icon>
       <ion-label position="floating">Origen</ion-label>
-      <ion-input [(ngModel)]="model2.Origen"></ion-input>
+      <ion-input name="origen" [(ngModel)]="model2.Origen"></ion-input>
     </ion-item>    
     <ion-item>
       <ion-icon slot="start" name="home"></ion-icon>
       <ion-label position="floating">Destino</ion-label>
-      <ion-input [(ngModel)]="model2.Destino"></ion-input>
+      <ion-input name="destino2" [(ngModel)]="model2.Destino"></ion-input>
     </ion-item>    
   </ion-list>
 

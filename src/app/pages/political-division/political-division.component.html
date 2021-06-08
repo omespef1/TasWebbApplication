@@ -1,7 +1,7 @@
 <app-header headerName="Ciudad">
 </app-header>
 <ion-content>
-  <ion-searchbar showCancelButton="always" color="primary" debounce="700" animated placeholder="Buscar ciudad" (ionChange)="search($event)"></ion-searchbar>
+  <ion-searchbar showCancelButton="always"  debounce="700" animated placeholder="Buscar ciudad" (ionChange)="search($event)"></ion-searchbar>
 
 
   <div text-center>
@@ -10,7 +10,7 @@
  <ion-list>
    <ion-item tappable *ngFor="let item of dataList" (click)="setData(item)">
      <ion-icon slot="start" name="home"></ion-icon>
-     <ion-label>{{item.DescripcionCorta}}</ion-label>
+     <ion-label>{{item.DescripcionLarga}}</ion-label>
    </ion-item>
  </ion-list>
 </ion-content>

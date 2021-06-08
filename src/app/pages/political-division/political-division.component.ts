@@ -31,10 +31,10 @@ export class PoliticalDivisionComponent implements OnInit {
 
   search(event) {
 
-  debugger;
+
     console.log(event);
     this.loading = true;
-    this.politicalDivisionService.GetPoliticalDivision(event.value).subscribe(resp => {
+    this.politicalDivisionService.GetPoliticalDivision(event.detail.value).subscribe(resp => {
       this.loading = false;
       //console.log(resp);
       if (resp.Retorno === 0 && resp.ObjTransaction != null) {
