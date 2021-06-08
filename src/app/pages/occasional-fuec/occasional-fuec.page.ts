@@ -95,6 +95,7 @@ export class OccasionalFuecPage implements OnInit {
 
             this.model = resp.ObjTransaction;
           }
+         
         })
   }
 }
