@@ -11,35 +11,39 @@ import { DivisionPolitical } from '../../models/general/political-division';
 })
 export class PoliticalDivisionComponent implements OnInit {
 
- 
-  dataList: DivisionPolitical[]=[];
-  loading=false;
-  constructor(  
+
+  dataList: DivisionPolitical[] = [];
+  loading = false;
+  constructor(
     private modalController: ModalController,
-    private politicalDivisionService:PoliticalDivisionService,
-    private sesionService:SessionService
-  ) {}
+    private politicalDivisionService: PoliticalDivisionService,
+    private sesionService: SessionService
+  ) { }
 
   ngOnInit() {
-    this.GetData();
+   
   }
 
-  GetData() {
-    this.loading=true;
-    this.politicalDivisionService.GetPoliticalDivision().subscribe(resp=>{
-      this.loading=false;
+
+  async SetData(data: DivisionPolitical) {
+    await this.modalController.dismiss(data);
+  }
+
+  search(event) {
+
+  debugger;
+    console.log(event);
+    this.loading = true;
+    this.politicalDivisionService.GetPoliticalDivision(event.value).subscribe(resp => {
+      this.loading = false;
       //console.log(resp);
-      if (resp.Retorno === 0 && resp.ObjTransaction!=null) {
+      if (resp.Retorno === 0 && resp.ObjTransaction != null) {
         this.dataList = resp.ObjTransaction;
       }
-    },err=> {
-      this.loading=false;
+    }, err => {
+      this.loading = false;
 
-    })       
-  }
-
-   async SetData(data: DivisionPolitical) {
-    await this.modalController.dismiss(data);
+    })
   }
 
 }

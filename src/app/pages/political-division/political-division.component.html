@@ -1,6 +1,9 @@
 <app-header headerName="Ciudad">
 </app-header>
 <ion-content>
+  <ion-searchbar showCancelButton="always" color="primary" debounce="700" animated placeholder="Buscar ciudad" (ionChange)="search($event)"></ion-searchbar>
+
+
   <div text-center>
     <ion-spinner *ngIf="loading" slot="start"></ion-spinner>
   </div>

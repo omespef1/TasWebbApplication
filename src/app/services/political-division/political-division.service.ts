@@ -13,7 +13,7 @@ export class PoliticalDivisionService {
 
 
   
-  GetPoliticalDivision(){
-    return this.http.get<transactionObj<DivisionPolitical[]>>(`/GENDivisionPoliticas`);
+  GetPoliticalDivision(filter:string){
+    return this.http.get<transactionObj<DivisionPolitical[]>>(`/GENDivisionPoliticas?filter=${filter}`);
   }
 }
