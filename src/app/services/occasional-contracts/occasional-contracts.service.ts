@@ -15,4 +15,8 @@ export class OccasionalContractsService {
   getOcasionalContracts(companyId:number,documentNumber:string){
     return this.http.Get<transactionObj<OcasionalContract>>(`/GESContratosOcasionales/GetByDocument?companyId=${companyId}&documentNumber=${documentNumber}`);
   }
+  
+  setOcassionalContract(data:OcasionalContract){
+   return this.http.Post<transactionObj<OcasionalContract>>(`/GESContratosOcasionales`,data);
+  }
 }

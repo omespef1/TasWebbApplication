@@ -5,6 +5,7 @@ import { SessionService } from '../session/session.service';
 import { business } from '../../models/business/business';
 import { ThirdPartie } from '../../models/general/user';
 import { vehicle } from '../../models/vehicle/vehicle';
+import { transactionObj } from '../../models/general/transaction';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,16 @@ export class VehicleService {
     //console.log('consultando vehículos...')
    return this._http.Get<transaction>(`/Vehicle?business=${ business.CodigoEmpresa}&IdTercero=${ThirdPartie.IdTercero}`)
   }
+
+  GetAllActiveVehicles(companyId:number){
+    //console.log('consultando vehículos...')
+   return this._http.Get<transaction>(`/Vehicles/GetAllVehicles?companyId=${ companyId}`)
+  }
+  getMyCar(companyId:number,thirdPartieId:number){
+    //console.log('consultando vehículos...')
+   return this._http.Get<transactionObj<vehicle>>(`/Vehicles/mycar?companyId=${companyId}&thirdPartieId=${thirdPartieId}`)
+  }
+
 
   GetDocumentsValidation(business:business,ThirdPartie:ThirdPartie,car:vehicle){
     return this._http.Get<transaction>(`/Vehicle/ValidaDocumentos?business=${ business.CodigoEmpresa}&IdTercero=${ThirdPartie.IdTercero}&identificacion=${ThirdPartie.Identificacion}&idVehiculo=${car.IdVehiculo}`)

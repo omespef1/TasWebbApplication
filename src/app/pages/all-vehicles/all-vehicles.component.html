@@ -1,6 +1,7 @@
-<app-header headerName="Ruta">
+<app-header headerName="Vehículo">
 </app-header>
-<ion-content>
+<ion-content> 
+<ion-content padding>
   <div text-center>
     <ion-spinner *ngIf="loading" slot="start"></ion-spinner>
   </div>
@@ -11,8 +12,8 @@
   </div>
  <ion-list inset="true">
    <ion-item tappable *ngFor="let item of dataList" (click)="setData(item)">
-     <ion-icon slot="start" name="git-pull-request"></ion-icon>
-     <ion-label>{{item.RutaNombre}}</ion-label>
+     <ion-icon slot="start" name="home"></ion-icon>
+     <ion-label>{{item.PlacaVehiculo}}</ion-label>
    </ion-item>
  </ion-list>
 </ion-content>

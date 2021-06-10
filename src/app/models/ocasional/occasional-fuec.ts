@@ -20,4 +20,8 @@ export class OcassionalFuec {
     FechaModifica: Date;
     UsuarioModifica: string;
 
+    constructor(){
+        this.RutaId=0;
+    }
+
 }

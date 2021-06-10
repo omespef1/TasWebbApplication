@@ -4,6 +4,7 @@ import { OccasionalRoutesService } from 'src/app/services/occasional-routes/occa
 import { OcasionalRute } from '../../../models/ocasional/rutes';
 import { ContractTypeService } from '../../../services/contracts-type/contract-type.service';
 import { SessionService } from '../../../services/session/session.service';
+import { ThirdPartie } from '../../../models/general/user';
 
 @Component({
   selector: 'app-ocassional-rutes',
@@ -12,35 +13,42 @@ import { SessionService } from '../../../services/session/session.service';
 })
 export class OcassionalRutesComponent implements OnInit {
 
- 
-  dataList: OcasionalRute[]=[];
-  loading=false;
-  constructor(  
+
+  dataList: OcasionalRute[] = [];
+  loading = false;
+  thirdPartie: ThirdPartie = new ThirdPartie();
+  constructor(
     private modalController: ModalController,
-    private occasionalRoutesService:OccasionalRoutesService,
-    private sesionService:SessionService
-  ) {}
+    private occasionalRoutesService: OccasionalRoutesService,
+    private sesionService: SessionService,
+    private sesion: SessionService
+  ) {
+    this.thirdPartie = this.sesion.GetThirdPartie();
+
+  }
 
   ngOnInit() {
     this.GetData();
   }
 
   GetData() {
-    this.loading=true;
-    this.occasionalRoutesService.GetOccasionalRoutes(this.sesionService.GetUser().IdEmpresa).subscribe(resp=>{
-      this.loading=false;
+    this.loading = true;
+    this.occasionalRoutesService.GetOccasionalRoutes(this.thirdPartie.IdEmpresa).subscribe(resp => {
+      this.loading = false;
       //console.log(resp);
-      if (resp.Retorno === 0 && resp.ObjTransaction!=null) {
+      if (resp.Retorno === 0 && resp.ObjTransaction != null) {
         this.dataList = resp.ObjTransaction;
       }
-    },err=> {
-      this.loading=false;
+    }, err => {
+      this.loading = false;
 
-    })       
+    })
   }
 
-   async SetData(data: OcasionalRute) {
+  async setData(data: OcasionalRute) {
     await this.modalController.dismiss(data);
   }
-
+  async close() {
+    await this.modalController.dismiss();
+  }
 }

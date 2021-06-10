@@ -14,52 +14,52 @@
     <ion-item>
       <ion-icon slot="start" name="man"></ion-icon>
       <ion-label position="floating">Cèdula o NIT *</ion-label>
-      <ion-input name="Identificacion" [(ngModel)]="model.Identificacion" (ionBlur)="search()"></ion-input>
+      <ion-input type="number" required name="Identificacion" [(ngModel)]="model.Identificacion" (ionBlur)="search()"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="man"></ion-icon>
       <ion-label position="floating">Nombre o razón social *</ion-label>
-      <ion-input name="NombreCompleto" [(ngModel)]="model.NombreCompleto"></ion-input>
+      <ion-input type="text" required name="NombreCompleto" [(ngModel)]="model.NombreCompleto"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="call"></ion-icon>
       <ion-label position="floating">Teléfono *</ion-label>
-      <ion-input name="Telefono" [(ngModel)]="model.Telefono"></ion-input>
+      <ion-input type="number" required name="Telefono" [(ngModel)]="model.Telefono"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="locate"></ion-icon>
       <ion-label position="floating">Dirección *</ion-label>
-      <ion-input name="Direccion" [(ngModel)]="model.Direccion"></ion-input>
+      <ion-input required name="Direccion" [(ngModel)]="model.Direccion"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="logo-usd"></ion-icon>
       <ion-label position="floating">Valor</ion-label>
-      <ion-input name="Valor" [(ngModel)]="model.Valor"></ion-input>
+      <ion-input type="number" required name="Valor" [(ngModel)]="model.Valor"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="man"></ion-icon>
       <ion-label position="floating">Nombres y apellidos representante</ion-label>
-      <ion-input name="NombreResponsable" [(ngModel)]="model.NombreResponsable"></ion-input>
+      <ion-input required name="NombreResponsable" [(ngModel)]="model.NombreResponsable"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="man"></ion-icon>
       <ion-label position="floating">Cédula representante</ion-label>
-      <ion-input name="DocResponsable" [(ngModel)]="model.DocResponsable"></ion-input>
+      <ion-input type="number" required name="DocResponsable" [(ngModel)]="model.DocResponsable"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="locate"></ion-icon>
       <ion-label position="floating">Dirección responsable</ion-label>
-      <ion-input name="DireccionR" [(ngModel)]="model.DireccionR"></ion-input>
+      <ion-input required name="DireccionR" [(ngModel)]="model.DireccionR"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="call"></ion-icon>
       <ion-label position="floating">Teléfono responsable</ion-label>
-      <ion-input name="TelefonoR" [(ngModel)]="model.TelefonoR"></ion-input>
+      <ion-input type="number" required name="TelefonoR" [(ngModel)]="model.TelefonoR"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="mail-unread"></ion-icon>
       <ion-label position="floating">Correo responsable</ion-label>
-      <ion-input name="Email" [(ngModel)]="model.Email"></ion-input>
+      <ion-input type="email" required name="Email" [(ngModel)]="model.Email"></ion-input>
     </ion-item>
     <ion-item tappable button  (click)="showPopupContracts()">
       <ion-icon slot="start" name="paper"></ion-icon>
@@ -75,27 +75,32 @@
     <ion-item>
       <ion-icon slot="start" name="document"></ion-icon>
       <ion-label position="floating">Objeto</ion-label>
-      <ion-input name="document" [(ngModel)]="model.ContratoObjeto"></ion-input>
+      <ion-input  required name="document" [(ngModel)]="model.ContratoObjeto"></ion-input>
     </ion-item>
   </ion-list>
 
-  
+  <ion-list inset="true">
   <ion-list-header (click)="showModalSignature()"  color="secondary">      
-    <ion-label>FIRMA CONTRATANTE</ion-label>
-    <ion-item>
-      <ion-icon slot="end" color="primary" name="create"></ion-icon>
-    </ion-item>
-    
+    <ion-label>FIRMA CONTRATANTE</ion-label>        
   </ion-list-header>
 
-  <ion-list>
-    <ion-item *ngIf="model.Firma">
+  
+    <ion-item (click)="showModalSignature()" *ngIf="model.Firma;else noSign">
       <img [src]="model.Firma" >
     </ion-item>
-  </ion-list>
+  <ng-template #noSign>
+      <div tapapble (click)="showModalSignature()" style="width:100%;height:200px;background-color: white;">
 
-
-  <ion-button type="submit"  expand="full"  color="secondary">      
+      </div>
+  </ng-template>
+</ion-list>
+  <div style="display: none;">
+    <ion-input required name="CiudadId" [(ngModel)]="model.CiudadId"></ion-input>
+    <ion-input required name="tipoContratoId" [(ngModel)]="model.TipoContratoId"></ion-input>
+    <ion-input required name="tipoContratoId" [(ngModel)]="model.TipoContratoId"></ion-input>
+  </div>
+  <ion-button [disabled]= "!contractForm.form.valid || sendingContract" type="submit"  expand="full"  color="secondary">      
+    <ion-spinner  color="primary" *ngIf="sendingContract" slot="end"></ion-spinner>
     SIGUIENTE
   </ion-button> 
   </form>
@@ -104,47 +109,73 @@
 
 <ng-template #stage2>
 
-  
-  <ion-list>
+  <form autocomplete="off" (ngSubmit)="setOcasionlFuec()" #fuecForm="ngForm" class="bounceIn">
+ <ion-list inset="true">
     <ion-list-header color="secondary">
       <ion-label>ORIGEN DESTINO</ion-label>
     </ion-list-header>
-    <ion-item>
-      <ion-icon slot="start" name="home"></ion-icon>
+    <ion-item tappable button (click)="showPopupRoutes()">
+      <ion-icon slot="start" name="git-pull-request"></ion-icon>
       <ion-label position="floating">Rutas definidas</ion-label>
-      <ion-input></ion-input>
+      <ion-note slot="end"> {{ routeSelected.RutaNombre}}</ion-note>
     </ion-item>
     <ion-item>
-      <ion-icon slot="start" name="home"></ion-icon>
+      <ion-icon slot="start" name="map"></ion-icon>
       <ion-label position="floating">Origen</ion-label>
-      <ion-input name="origen" [(ngModel)]="model2.Origen"></ion-input>
+      <ion-input [required]="model2.RutaId== 0"  name="origen" [(ngModel)]="model2.Origen"></ion-input>
     </ion-item>    
     <ion-item>
-      <ion-icon slot="start" name="home"></ion-icon>
+      <ion-icon slot="start" name="map"></ion-icon>
       <ion-label position="floating">Destino</ion-label>
-      <ion-input name="destino2" [(ngModel)]="model2.Destino"></ion-input>
+      <ion-input [required]="model2.RutaId== 0" name="destino2" [(ngModel)]="model2.Destino"></ion-input>
     </ion-item>    
   </ion-list>
 
-
-  
-  <ion-list>
+  <ion-list inset="true">
     <ion-list-header color="secondary">
-      <ion-label>SELECCIONAR CONDUCTOR</ion-label>
+      <ion-label>VEHÍCULO</ion-label>
+    </ion-list-header>
+    <ion-item tappable button (click)="showPopupVehicles()">
+      <ion-icon slot="start" name="car"></ion-icon>
+      <ion-label position="floating">Vehículo</ion-label>
+      <ion-note slot="end"> {{ carSelected.PlacaVehiculo}}</ion-note>
+    </ion-item>
+  </ion-list>
+  
+  <ion-list inset="true">
+    <ion-list-header color="secondary">
+      <ion-label>CONDUCTORES</ion-label>
     </ion-list-header>
     <ion-item>
-      <ion-icon slot="start" name="home"></ion-icon>
-      <ion-label position="floating">Seleccionar</ion-label>     
-    </ion-item>   
+      <ion-icon slot="start" name="person"></ion-icon>
+      <ion-label position="floating">CONDUCTOR 1</ion-label>    
+      <ion-note slot="end"> {{ firstDriver.NombreCompleto}}</ion-note> 
+    </ion-item>  
+    <ion-item tappable button (click)="showPopupDrivers()">
+      <ion-icon slot="start" name="person"></ion-icon>
+      <ion-label position="floating">CONDUCTOR 2</ion-label>    
+      <ion-note slot="end"> {{ secondDriver.NombreCompleto}}</ion-note> 
+    </ion-item> 
+    <ion-item tappable button (click)="showPopupDrivers3()">
+      <ion-icon slot="start" name="person"></ion-icon>
+      <ion-label position="floating">CONDUCTOR 3</ion-label>    
+      <ion-note slot="end"> {{ thirdDriver.NombreCompleto}}</ion-note> 
+    </ion-item>  
+    
   </ion-list>
+  <div style="display: none;">
+    <ion-input required name="driver1" [(ngModel)]="model2.ConductorId1"></ion-input>  
+    <ion-input required name="vehiculoId" [(ngModel)]="model2.VehiculoId"></ion-input>    
+    <ion-input [required]="model2.Origen=='' && model2.Destino==''" name="ruta" [(ngModel)]="model2.RutaId"></ion-input>  
+  </div>
   <ion-button (click)= "stage =1" expand="full"  color="secondary">      
     ATRÁS
   </ion-button> 
-    <ion-button (click)= "setOcasionalContract()" expand="full"  color="danger">      
+    <ion-button [disabled]="!fuecForm.form.valid" type="submit"  expand="full"  color="danger">      
       FINALIZAR
     </ion-button> 
-   
-   
+   </form>
+  
 </ng-template>
 
 

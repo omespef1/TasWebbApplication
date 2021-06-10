@@ -11,6 +11,8 @@ import { OccasionalFuecPage } from '../occasional-fuec/occasional-fuec.page';
 import { TypeContractsComponent } from '../type-contracts/type-contracts/type-contracts.component';
 import { PoliticalDivisionComponent } from '../political-division/political-division.component';
 import { OcassionalRutesComponent } from '../occasional-rutes/ocassional-rutes/ocassional-rutes.component';
+import { DriversComponent } from '../drivers/drivers.component';
+import { AllVehiclesComponent } from '../all-vehicles/all-vehicles.component';
 
 const routes: Routes = [
   {
@@ -31,7 +33,7 @@ const routes: Routes = [
     ComponentsModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [FueqPage,OccasionalFuecPage,TypeContractsComponent,PoliticalDivisionComponent,OcassionalRutesComponent],
-  entryComponents:[TypeContractsComponent,PoliticalDivisionComponent]
+  declarations: [FueqPage,OccasionalFuecPage,TypeContractsComponent,PoliticalDivisionComponent,OcassionalRutesComponent,DriversComponent,AllVehiclesComponent],
+  entryComponents:[TypeContractsComponent,PoliticalDivisionComponent,OcassionalRutesComponent,DriversComponent,AllVehiclesComponent]
 })
 export class FueqPageModule {}
