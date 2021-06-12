@@ -187,6 +187,9 @@ export class OccasionalFuecPage implements OnInit {
         this.alertService.showAlert('Perfecto!', `Se ha generado el FUEC ocasional ${resp.ObjTransaction} `);
 
       }
+      else{
+          this.alertService.showAlert('Error',resp.TxtError);
+      }
     }, err => {
       this.alertService.showAlert('Error', 'Ocurrió un error inesperado conectabdo el servidor');
     })
