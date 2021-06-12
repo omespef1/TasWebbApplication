@@ -13,6 +13,7 @@ import { SessionService } from '../../services/session/session.service';
 export class AllVehiclesComponent implements OnInit {
 
   dataList: vehicle[]=[];
+  data: vehicle[]=[];
   thirdPartie:ThirdPartie;
   loading=false;
   constructor(  
@@ -35,6 +36,7 @@ export class AllVehiclesComponent implements OnInit {
       //console.log(resp);
       if (resp.Retorno === 0 && resp.ObjTransaction!=null) {
         this.dataList = resp.ObjTransaction;
+        this.data = resp.ObjTransaction;
       }
     },err=> {
       this.loading=false;
@@ -48,6 +50,17 @@ export class AllVehiclesComponent implements OnInit {
 
   async close(){
     await this.modalController.dismiss();
+  }
+
+  filter(event){
+    this.dataList = this.data;
+    this.dataList = this.data.filter(
+      v =>
+        v.PlacaVehiculo.toUpperCase().indexOf(
+          event.target.value.toUpperCase()
+        ) > -1 ||  v.NumeroInterno.indexOf(
+          event.target.value
+    ) > -1);
   }
 
 }

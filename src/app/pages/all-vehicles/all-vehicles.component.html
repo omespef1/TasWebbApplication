@@ -10,9 +10,13 @@
     CANCELAR    
     </ion-button> 
   </div>
+  <ion-toolbar>
+    <ion-searchbar showCancelButton="always" debounce="500" (ionChange)="filter($event)" animated placeholder="Buscar conductor" cancelButtonText="Cancelar"></ion-searchbar>
+
+  </ion-toolbar>
  <ion-list inset="true">
    <ion-item tappable *ngFor="let item of dataList" (click)="setData(item)">
-     <ion-icon slot="start" name="home"></ion-icon>
+     <ion-icon slot="start" name="car"></ion-icon>
      <ion-label>{{item.PlacaVehiculo}}</ion-label>
    </ion-item>
  </ion-list>

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IonContent, ModalController } from '@ionic/angular';
 import { SignatureComponent } from '../signature/signature.component';
 import { TypeContractsComponent } from '../type-contracts/type-contracts/type-contracts.component';
 import { TypeContract } from '../../models/ocasional/type-contract';
@@ -27,50 +27,54 @@ import { AlertService } from '../../services/alert/alert.service';
   styleUrls: ['./occasional-fuec.page.scss'],
 })
 export class OccasionalFuecPage implements OnInit {
-  signatureImg: string;
+  @ViewChild(IonContent, { static: true }) ionContent: IonContent;
   constructor(private modal: ModalController, private ocasionalContract: OccasionalContractsService,
-    private sesion: SessionService,private vehicleService:VehicleService,private ocasionalFuec:OccasionalFuecService,
-    private alertService:AlertService) {
+    private sesion: SessionService, private vehicleService: VehicleService, private ocasionalFuec: OccasionalFuecService,
+    private alertService: AlertService) {
 
 
-  this.thirdPartie = this.sesion.GetThirdPartie();
-   this.setFirstDriver();
-    
+    this.thirdPartie = this.sesion.GetThirdPartie();
+    this.setFirstDriver();
+
   }
   stage: number = 1;
-  sendingContract=false;
-  sendingFuec=false;
+  sendingContract = false;
+  sendingFuec = false;
   model: OcasionalContract = new OcasionalContract();
   model2: OcassionalFuec = new OcassionalFuec();
   thirdPartie: ThirdPartie;
   typeContractSelected: TypeContract = new TypeContract();
   citySelected: DivisionPolitical = new DivisionPolitical();
   routeSelected: OcasionalRute = new OcasionalRute();
-  firstDriver : ThirdPartie;
-  secondDriver : ThirdPartie = new ThirdPartie();
-  thirdDriver : ThirdPartie=new ThirdPartie();
-  carSelected:vehicle = new vehicle();
+  firstDriver: ThirdPartie;
+  secondDriver: ThirdPartie = new ThirdPartie();
+  thirdDriver: ThirdPartie = new ThirdPartie();
+  carSelected: vehicle = new vehicle();
+  monthShortNames = "Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Sep, Oct, Nov, Dic"
+  today = new Date().toISOString();
   ngOnInit() {
 
-      this.getMyCar();
+    this.getMyCar();
 
   }
+  scrollTop() {
+    this.ionContent.scrollToTop(300);
+  }
 
-
-  setFirstDriver(){
+  setFirstDriver() {
     this.firstDriver = this.thirdPartie;
     this.model2.ConductorId1 = this.firstDriver.IdTercero;
   }
 
-  
+
   async showModalSignature() {
     const modal = await this.modal.create({
       component: SignatureComponent
     });
     modal.onDidDismiss().then(resp => {
-      if(resp.data!=undefined){
-      console.log(resp);
-      this.model.Firma = resp.data;
+      if (resp.data != undefined) {
+        console.log(resp);
+        this.model.Firma = resp.data;
       }
     });
     return await modal.present();
@@ -81,12 +85,12 @@ export class OccasionalFuecPage implements OnInit {
       component: TypeContractsComponent
     });
     modal.onDidDismiss().then(resp => {
-      if(resp.data!=undefined){
+      if (resp.data != undefined) {
         this.typeContractSelected = resp.data;
         this.model.TipoContratoId = this.typeContractSelected.TipoContratoId;
         // Asignar al modelo aquí
       }
-     
+
     });
     return await modal.present();
   }
@@ -96,9 +100,9 @@ export class OccasionalFuecPage implements OnInit {
       component: OcassionalRutesComponent
     });
     modal.onDidDismiss().then(resp => {
-      if(resp.data!=undefined){
-      this.routeSelected = resp.data;
-      this.model2.RutaId = this.routeSelected.RutaId;
+      if (resp.data != undefined) {
+        this.routeSelected = resp.data;
+        this.model2.RutaId = this.routeSelected.RutaId;
       }
       // Asignar al modelo aquí
     });
@@ -111,9 +115,9 @@ export class OccasionalFuecPage implements OnInit {
       component: PoliticalDivisionComponent
     });
     modal.onDidDismiss().then(resp => {
-      if(resp.data!=undefined){
-      this.citySelected = resp.data;
-      this.model.CiudadId = this.citySelected.IdDivisionPolitica;
+      if (resp.data != undefined) {
+        this.citySelected = resp.data;
+        this.model.CiudadId = this.citySelected.IdDivisionPolitica;
       }
     });
     return await modal.present();
@@ -125,9 +129,9 @@ export class OccasionalFuecPage implements OnInit {
       component: DriversComponent
     });
     modal.onDidDismiss().then(resp => {
-      if(resp.data!=undefined){
-      this.secondDriver = resp.data;
-      this.model2.ConductorId2 = this.secondDriver.IdTercero;
+      if (resp.data != undefined) {
+        this.secondDriver = resp.data;
+        this.model2.ConductorId2 = this.secondDriver.IdTercero;
       }
     });
     return await modal.present();
@@ -137,9 +141,9 @@ export class OccasionalFuecPage implements OnInit {
       component: AllVehiclesComponent
     });
     modal.onDidDismiss().then(resp => {
-      if(resp.data!=undefined){
-      this.carSelected = resp.data;
-      this.model2.VehiculoId = this.carSelected.IdVehiculo;
+      if (resp.data != undefined) {
+        this.carSelected = resp.data;
+        this.model2.VehiculoId = this.carSelected.IdVehiculo;
       }
     });
     return await modal.present();
@@ -149,38 +153,42 @@ export class OccasionalFuecPage implements OnInit {
       component: DriversComponent
     });
     modal.onDidDismiss().then(resp => {
-      if(resp.data!=undefined){
-      this.thirdDriver = resp.data;
-      this.model2.ConductorId3 = this.secondDriver.IdTercero;
+      if (resp.data != undefined) {
+        this.thirdDriver = resp.data;
+        this.model2.ConductorId3 = this.secondDriver.IdTercero;
       }
     });
     return await modal.present();
   }
   setOcasionalContract() {
-  this.sendingContract=true; 
-  this.model.EmpresaId =     this.thirdPartie.IdEmpresa;
-  this.model.Estado = "1"   ;
-    this.ocasionalContract.setOcassionalContract(this.model).subscribe(resp=>{
+    this.sendingContract = true;
+    this.model.EmpresaId = this.thirdPartie.IdEmpresa;
+    this.model.Estado = "1";
+    this.ocasionalContract.setOcassionalContract(this.model).subscribe(resp => {
       this.sendingContract = false;
-      if(resp.Retorno == 0){
+      if (resp.Retorno == 0) {
         this.model = resp.ObjTransaction;
         this.stage = 2;
+        this.scrollTop();
       }
-    },err=> {
+    }, err => {
       console.log(err);
       this.sendingContract = false;
     })
   }
 
-  setOcasionlFuec(){
+  setOcasionlFuec() {
+    this.sendingFuec = true;
+    this.model2.ConvenioId = this.carSelected.PoseedorId;
+    this.ocasionalFuec.setOccasionalFuec(this.model2).subscribe(resp => {
+      this.sendingFuec = false;
+      if (resp.Retorno == 0) {
+        this.alertService.showAlert('Perfecto!', `Se ha generado el FUEC ocasional ${resp.ObjTransaction} `);
 
-this.ocasionalFuec.setOccasionalFuec(this.model2).subscribe(resp=>{
-
-  if(resp.Retorno==0){
-    this.alertService.showAlert('Perfecto!',`Se ha generado el FUEC ocasional ${resp.ObjTransaction} `);
-
-  }
-})
+      }
+    }, err => {
+      this.alertService.showAlert('Error', 'Ocurrió un error inesperado conectabdo el servidor');
+    })
 
   }
 
@@ -202,15 +210,15 @@ this.ocasionalFuec.setOccasionalFuec(this.model2).subscribe(resp=>{
   }
 
 
-  getMyCar(){
+  getMyCar() {
 
-    this.vehicleService.getMyCar(this.thirdPartie.IdEmpresa,this.thirdPartie.IdTercero).subscribe(resp=>{
-      if(resp.Retorno==0){
-          this.carSelected = resp.ObjTransaction;
-          this.model2.VehiculoId = this.carSelected.IdVehiculo;
+    this.vehicleService.getMyCar(this.thirdPartie.IdEmpresa, this.thirdPartie.IdTercero).subscribe(resp => {
+      if (resp.Retorno == 0) {
+        this.carSelected = resp.ObjTransaction;
+        this.model2.VehiculoId = this.carSelected.IdVehiculo;
       }
     })
   }
 
- 
+
 }
