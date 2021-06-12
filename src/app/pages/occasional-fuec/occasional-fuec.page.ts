@@ -180,6 +180,7 @@ export class OccasionalFuecPage implements OnInit {
   setOcasionlFuec() {
     this.sendingFuec = true;
     this.model2.ConvenioId = this.carSelected.PoseedorId;
+    this.model2.OcasionalId = this.model.OcasionalId;
     this.ocasionalFuec.setOccasionalFuec(this.model2).subscribe(resp => {
       this.sendingFuec = false;
       if (resp.Retorno == 0) {

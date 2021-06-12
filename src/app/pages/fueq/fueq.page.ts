@@ -110,7 +110,7 @@ export class FueqPage implements OnInit {
         this.router.navigateByUrl('tabs/fueqs/occasional-fueq');
       }
       else {
-        this._alert.showAlert('Acceso no autorizado','Usted no se encuentra autorizado para realizar fuec ocasional.')
+        this._alert.showAlert('Acceso no autorizado',`${resp.TxtError}`)
       }
     },err=>{
       this._alert.presentToast('Error validando tercero',3000);
