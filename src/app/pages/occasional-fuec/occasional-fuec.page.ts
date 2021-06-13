@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonContent, ModalController } from '@ionic/angular';
+import { IonContent, ModalController, NavController } from '@ionic/angular';
 import { SignatureComponent } from '../signature/signature.component';
 import { TypeContractsComponent } from '../type-contracts/type-contracts/type-contracts.component';
 import { TypeContract } from '../../models/ocasional/type-contract';
@@ -19,6 +19,7 @@ import { VehicleService } from '../../services/vehicle/vehicle.service';
 import { AllVehiclesComponent } from '../all-vehicles/all-vehicles.component';
 import { OccasionalFuecService } from '../../services/occasional-fuec/occasional-fuec.service';
 import { AlertService } from '../../services/alert/alert.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -30,7 +31,7 @@ export class OccasionalFuecPage implements OnInit {
   @ViewChild(IonContent, { static: true }) ionContent: IonContent;
   constructor(private modal: ModalController, private ocasionalContract: OccasionalContractsService,
     private sesion: SessionService, private vehicleService: VehicleService, private ocasionalFuec: OccasionalFuecService,
-    private alertService: AlertService) {
+    private alertService: AlertService,private router:NavController) {
 
 
     this.thirdPartie = this.sesion.GetThirdPartie();
@@ -185,7 +186,7 @@ export class OccasionalFuecPage implements OnInit {
       this.sendingFuec = false;
       if (resp.Retorno == 0) {
         this.alertService.showAlert('Perfecto!', `Se ha generado el FUEC ocasional ${resp.ObjTransaction} `);
-
+        this.router.navigateBack('tabs/fueqs');
       }
       else{
           this.alertService.showAlert('Error',resp.TxtError);

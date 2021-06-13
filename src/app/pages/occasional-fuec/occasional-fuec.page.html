@@ -6,7 +6,7 @@
 <ion-content>
 
  <ng-container *ngIf="stage==1;else stage2">
-  <form autocomplete="off" (ngSubmit)="setOcasionalContract()" #contractForm="ngForm" class="bounceIn">
+  <form autocomplete="off" (ngSubmit)="setOcasionalContract()" #contractForm="ngForm">
   <ion-list inset="true">
     <ion-list-header color="secondary">
       <ion-label>DATOS CONTRATO</ion-label>
@@ -132,12 +132,12 @@
     <ion-item>
       <ion-icon slot="start" name="calendar"></ion-icon>
       <ion-label position="floating">Inicio</ion-label>
-      <ion-datetime name="fechaInicial" required [(ngModel)]="model2.FechaInicial" displayFormat="DD/MM/YYYY"  [min]="today"  ></ion-datetime>
+      <ion-datetime doneText="Hecho" cancelText="Cancelar" name="fechaInicial" required [(ngModel)]="model2.FechaInicial" displayFormat="DD/MM/YYYY"  [min]="today"  ></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="calendar"></ion-icon>
       <ion-label position="floating">Final</ion-label>
-      <ion-datetime name="fechFinal" required [(ngModel)]="model2.FechaFinal" [min]="today"  displayFormat="DD/MM/YYYY"  format="DD/MM/YYYY"></ion-datetime>
+      <ion-datetime doneText="Hecho" cancelText="Cancelar" name="fechFinal" required [(ngModel)]="model2.FechaFinal" [min]="today"  displayFormat="DD/MM/YYYY"  format="DD/MM/YYYY"></ion-datetime>
     </ion-item>      
   </ion-list>
 
