@@ -23,6 +23,7 @@ export class ThirdPartieValidationPage implements OnInit {
   thirdValidation: loginRequest = new loginRequest();
   loading = false;
   valiadted = false;
+  showPass=false;
   ngOnInit() {}
   validateThirdPartie() {
     this.loading = true;
