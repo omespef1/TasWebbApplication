@@ -13,7 +13,7 @@ import { ThirdPartie } from '../../../models/general/user';
 })
 export class OcassionalRutesComponent implements OnInit {
 
-
+  data :OcasionalRute[]=[];
   dataList: OcasionalRute[] = [];
   loading = false;
   thirdPartie: ThirdPartie = new ThirdPartie();
@@ -38,6 +38,7 @@ export class OcassionalRutesComponent implements OnInit {
       //console.log(resp);
       if (resp.Retorno === 0 && resp.ObjTransaction != null) {
         this.dataList = resp.ObjTransaction;
+        this.data = resp.ObjTransaction;
       }
     }, err => {
       this.loading = false;
@@ -50,5 +51,13 @@ export class OcassionalRutesComponent implements OnInit {
   }
   async close() {
     await this.modalController.dismiss();
+  }
+  filter(event){
+    this.dataList = this.data;
+    this.dataList = this.data.filter(
+      v =>
+        v.RutaNombre.toUpperCase().indexOf(
+          event.target.value.toUpperCase()
+        ) > -1);
   }
 }

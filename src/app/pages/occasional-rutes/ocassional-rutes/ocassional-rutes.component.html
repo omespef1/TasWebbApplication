@@ -9,6 +9,10 @@
     CANCELAR    
     </ion-button> 
   </div>
+  <ion-toolbar>
+    <ion-searchbar showCancelButton="always"  (ionChange)="filter($event)" animated placeholder="Buscar ruta" cancelButtonText="Cancelar"></ion-searchbar>
+
+  </ion-toolbar>
  <ion-list inset="true">
    <ion-item tappable *ngFor="let item of dataList" (click)="setData(item)">
      <ion-icon slot="start" name="git-pull-request"></ion-icon>

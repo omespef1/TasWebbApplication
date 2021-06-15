@@ -20,6 +20,8 @@ import { AllVehiclesComponent } from '../all-vehicles/all-vehicles.component';
 import { OccasionalFuecService } from '../../services/occasional-fuec/occasional-fuec.service';
 import { AlertService } from '../../services/alert/alert.service';
 import { Router } from '@angular/router';
+import { PoliticalDivisionService } from '../../services/political-division/political-division.service';
+import { ContractTypeService } from '../../services/contracts-type/contract-type.service';
 
 
 @Component({
@@ -31,7 +33,9 @@ export class OccasionalFuecPage implements OnInit {
   @ViewChild(IonContent, { static: true }) ionContent: IonContent;
   constructor(private modal: ModalController, private ocasionalContract: OccasionalContractsService,
     private sesion: SessionService, private vehicleService: VehicleService, private ocasionalFuec: OccasionalFuecService,
-    private alertService: AlertService,private router:NavController) {
+    private alertService: AlertService, private router: NavController,
+    private politicalService: PoliticalDivisionService,
+    private typeContractService: ContractTypeService) {
 
 
     this.thirdPartie = this.sesion.GetThirdPartie();
@@ -189,13 +193,29 @@ export class OccasionalFuecPage implements OnInit {
         this.alertService.showAlert('Perfecto!', `Se ha generado el FUEC ocasional ${resp.ObjTransaction} `);
         this.router.navigateBack('tabs/fueqs');
       }
-      else{
-          this.alertService.showAlert('Error',resp.TxtError);
+      else {
+        this.alertService.showAlert('Error', resp.TxtError);
       }
     }, err => {
       this.alertService.showAlert('Error', 'Ocurrió un error inesperado conectabdo el servidor');
     })
 
+  }
+
+  GetPoliticalDivison(id: number) {
+    this.politicalService.GetPoliticalDivisionByID(id).subscribe(resp => {
+      if (resp.Retorno == 0 && resp.ObjTransaction != null) {
+        this.citySelected = resp.ObjTransaction;
+      }
+    })
+  }
+
+  getTypeContract(id: number) {
+    this.typeContractService.getTypeContractsById(this.thirdPartie.IdEmpresa, id).subscribe(resp => {
+      if (resp.Retorno == 0 && resp.ObjTransaction != null) {
+        this.typeContractSelected = resp.ObjTransaction;
+      }
+    })
   }
 
   search() {
@@ -205,6 +225,9 @@ export class OccasionalFuecPage implements OnInit {
       if (resp.Retorno == 0 && resp.ObjTransaction != null) {
 
         this.model = resp.ObjTransaction;
+        this.model.ContratoObjeto = "";
+        this.GetPoliticalDivison(this.model.CiudadId);
+        this.getTypeContract(this.model.TipoContratoId);
       }
       else {
         let id = this.model.Identificacion;

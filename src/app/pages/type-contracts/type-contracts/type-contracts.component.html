@@ -13,7 +13,10 @@
  <ion-list inset="true">
    <ion-item tappable *ngFor="let item of dataList" (click)="setData(item)">
      <ion-icon slot="start" name="paper"></ion-icon>
-     <ion-label>{{item.TipoContratoNombre}}</ion-label>
+     <!-- <ion-label>{{item.TipoContratoNombre}}</ion-label> -->
+     <p>
+      {{item.TipoContratoNombre}}
+     </p>
    </ion-item>
  </ion-list>
 </ion-content>

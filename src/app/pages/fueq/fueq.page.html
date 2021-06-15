@@ -34,6 +34,24 @@
           <ion-label>Placa</ion-label>
            <ion-note slot="end"> {{ fueq.placaVehiculo}}</ion-note>
         </ion-item> 
+
+        <ion-item>
+          <ion-icon slot="start" name="calendar"></ion-icon>
+          <ion-label>Inicio</ion-label>
+           <ion-note slot="end"> {{ fueq.FechaInicial | date:'dd/MM/yyyy'}}</ion-note>
+        </ion-item> 
+
+
+        <ion-item>
+          <ion-icon slot="start" name="calendar"></ion-icon>
+          <ion-label>Fin</ion-label>
+           <ion-note slot="end"> {{ fueq.FechaFinal | date:'dd/MM/yyyy'}}</ion-note>
+        </ion-item> 
+        <ion-item>
+          <ion-icon slot="start" name="person"></ion-icon>
+          <ion-label>Cliente</ion-label>
+           <ion-note slot="end"> {{ fueq.NombreCompleto}}</ion-note>
+        </ion-item> 
       
       <!-- <ion-item button color="primary" (click)="seeFueq(fueq)">
           <ion-icon  slot="end" name="eye"></ion-icon>

@@ -5,4 +5,7 @@ export class fueq {
     placaVehiculo:string;
     FuecId:number;
     Tipo:string;
+    FechaInicial:Date;
+    FechaFinal:Date;
+    NombreCompleto:string;
 }

@@ -15,4 +15,7 @@ export class ContractTypeService {
   GetTypeContracts(idEmpresa: number){
     return this.http.Get<transactionObj<TypeContract[]>>(`/GESTipoContrato?companyId=${idEmpresa}`);
   }
+  getTypeContractsById(idEmpresa: number,id:number){
+    return this.http.Get<transactionObj<TypeContract>>(`/GESTipoContrato/id?id=${id}&companyId=${idEmpresa}`);
+  }
 }

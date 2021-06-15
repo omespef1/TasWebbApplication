@@ -33,7 +33,6 @@
     "@ionic/storage": "^2.2.0",
     "angular2-signaturepad": "^3.0.4",
     "compare-func": "^2.0.0",
-    "cordova-android": "^8.1.0",
     "cordova-plugin-browsertab": "^0.2.0",
     "cordova-plugin-compat": "^1.2.0",
     "cordova-plugin-fingerprint-aio": "^3.0.0",
@@ -64,6 +63,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
     "codelyzer": "^5.0.0",
+    "cordova-android": "^8.1.0",
     "cordova-browser": "^6.0.0",
     "cordova-ios": "^5.1.1",
     "cordova-plugin-camera": "^5.0.2",
@@ -109,8 +109,8 @@
     },
     "platforms": [
       "ios",
-      "android",
-      "browser"
+      "browser",
+      "android"
     ]
   }
 }
