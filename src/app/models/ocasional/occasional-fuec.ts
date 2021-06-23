@@ -16,10 +16,18 @@ export class OcassionalFuec {
     ConductorId2: number;
     ConductorId3: number;
     ConvenioId: number;
-    Impreso: string;
+    Impreso: number;
     FechaModifica: Date;
     UsuarioModifica: string;
-
+    ContratoObjeto:string;
+    CliDireccion:string;
+    CliTelefono:string;
+    CliEmail:string;
+    ResDocumento:string;
+    ResNombre:string;
+    ResDireccion:string;
+    ResTelefono:string;
+    Valor:number;
     constructor(){
         this.RutaId=0;
     }

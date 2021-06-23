@@ -57,6 +57,7 @@ export class OccasionalFuecPage implements OnInit {
   carSelected: vehicle = new vehicle();
   monthShortNames = "Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Sep, Oct, Nov, Dic"
   today = new Date().toISOString();
+  existClient=false;
   ngOnInit() {
 
     this.getMyCar();
@@ -187,6 +188,14 @@ export class OccasionalFuecPage implements OnInit {
     this.model2.ConvenioId = this.carSelected.PoseedorId;
     this.model2.OcasionalId = this.model.OcasionalId;
     this.model2.EmpresaId = this.thirdPartie.IdEmpresa;
+    this.model2.CliDireccion = this.model.Direccion;
+    this.model2.CliEmail = this.model.Email;
+    this.model2.CliTelefono = this.model.Telefono;
+    this.model2.ContratoObjeto = this.model.ContratoObjeto;
+    this.model2.ResDocumento = this.model.Identificacion;
+    this.model2.ResNombre = this.model.NombreCompleto;
+    this.model2.Valor = this.model.Valor;
+    this.model2.ResDireccion = this.model.DireccionR;
     this.ocasionalFuec.setOccasionalFuec(this.model2).subscribe(resp => {
       this.sendingFuec = false;
       if (resp.Retorno == 0) {
@@ -226,13 +235,15 @@ export class OccasionalFuecPage implements OnInit {
 
         this.model = resp.ObjTransaction;
         this.model.ContratoObjeto = "";
+        this.existClient = true;
         this.GetPoliticalDivison(this.model.CiudadId);
         this.getTypeContract(this.model.TipoContratoId);
       }
       else {
         let id = this.model.Identificacion;
         this.model = new OcasionalContract();
-        this.model.Identificacion = id;
+        this.model.Identificacion = id;  
+        this.existClient = false;
       }
 
     })

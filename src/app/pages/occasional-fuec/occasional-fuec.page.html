@@ -14,12 +14,12 @@
     <ion-item>
       <ion-icon slot="start" name="man"></ion-icon>
       <ion-label position="floating">Cèdula o NIT *</ion-label>
-      <ion-input type="number" required name="Identificacion" [(ngModel)]="model.Identificacion" (ionBlur)="search()"></ion-input>
+      <ion-input [disabled]="existClient" type="number" required name="Identificacion" [(ngModel)]="model.Identificacion" (ionBlur)="search()"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="man"></ion-icon>
       <ion-label position="floating">Nombre o razón social *</ion-label>
-      <ion-input type="text" required name="NombreCompleto" [(ngModel)]="model.NombreCompleto"></ion-input>
+      <ion-input [disabled]="existClient" type="text" required name="NombreCompleto" [(ngModel)]="model.NombreCompleto"></ion-input>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="call"></ion-icon>
