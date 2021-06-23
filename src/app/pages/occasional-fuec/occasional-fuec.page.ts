@@ -197,6 +197,7 @@ export class OccasionalFuecPage implements OnInit {
     this.model2.Valor = this.model.Valor;
     this.model2.ResDireccion = this.model.DireccionR;
     this.model2.ResTelefono = this.model.TelefonoR;
+    this.model2.TipoContratoId = this.model.TipoContratoId;
     this.ocasionalFuec.setOccasionalFuec(this.model2).subscribe(resp => {
       this.sendingFuec = false;
       if (resp.Retorno == 0) {

@@ -4,6 +4,7 @@ export class OcassionalFuec {
     FuecOId: number;
     OcasionalId: number;
     ConsecutivoEC: number;
+    TipoContratoId:number;
     NumeroFuec: string;
     RutaId: number;
     Origen: string;
