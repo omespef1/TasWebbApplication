@@ -177,6 +177,9 @@ export class OccasionalFuecPage implements OnInit {
         this.stage = 2;
         this.scrollTop();
       }
+      else {
+        this.alertService.showAlert('error',resp.TxtError);
+      }
     }, err => {
       console.log(err);
       this.sendingContract = false;
