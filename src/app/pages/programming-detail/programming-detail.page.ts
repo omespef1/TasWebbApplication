@@ -11,6 +11,8 @@ import { QRScanner } from '@ionic-native/qr-scanner/ngx';
 import TypeValidator from '../../enums/type-validator.enum';
 import { PassengerService } from '../../services/passenger/passenger.service';
 import { FactoryValidator } from '../../factory/validator-passenger.factory';
+import { ModalController } from "@ionic/angular";
+import { PassengersComponent } from "../passengers/passengers.component";
 
 @Component({
   selector: "app-programming-detail",
@@ -23,7 +25,7 @@ export class ProgrammingDetailPage implements OnInit {
   loadingMap = true;
   theHtmlString: any;
   sending = false;
-  textButton = "NUEVO SEGUIMIENTO";
+  textButton = "Nuevo seguimiento";
   observations="";
   constructor(
     private router: Router,
@@ -34,7 +36,8 @@ export class ProgrammingDetailPage implements OnInit {
     private geo: Geolocation,
     private _request:TransportRequestService,
     private qrScanner: QRScanner,
-    private passengerService:PassengerService,)
+    private passengerService:PassengerService,
+    private modalController: ModalController)
    {
     this.factoryValidator = new FactoryValidator(this.qrScanner,this.passengerService,_alert);
     this.programming.details = [];
@@ -47,6 +50,7 @@ export class ProgrammingDetailPage implements OnInit {
 
   ionViewDidEnter(){
     this.loadDetail();
+    this.getPassengers();
   }
 
   loadDetail() {
@@ -56,9 +60,10 @@ export class ProgrammingDetailPage implements OnInit {
         this.programming.SolicitudId
       )
       .subscribe((resp) => {
+       
         if (resp.ObjTransaction) {
           this.programming.details = resp.ObjTransaction;
-          this.getPassengers();
+        
         }
       });
   }
@@ -143,11 +148,11 @@ export class ProgrammingDetailPage implements OnInit {
                 // Borramos el intento ya que el servidor si respondió
                 this._request.deleteTransportFailed();
                 if (resp.Retorno === 0) {
-                  this.textButton = "NUEVO SEGUIMIENTO";
+                  this.textButton = "Nuevo seguimiento";
                   this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
                   this.loadDetail();
                 } else {
-                  this.textButton = "NUEVO SEGUIMIENTO";
+                  this.textButton = "Nuevo seguimiento";
                   this._alert.showAlert("Error", resp.TxtError);
                 }
               },
@@ -169,11 +174,19 @@ export class ProgrammingDetailPage implements OnInit {
   factory.validPassenger(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId).then(resp=>{
       if(resp!=null && resp.Retorno==0){
 
-        if(resp.ObjTransaction == true){
-           this._alert.successSweet("Pasajero validado correctamente!");
-          factory.uploadPassenger(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId)
-          
+
+        this.geo.getCurrentPosition().then((data) => {
+        
+          setTimeout(() => {
+            if(resp.ObjTransaction == true){
+              // this._alert.successSweet("Pasajero validado correctamente!");
+             factory.uploadPassenger(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId,data.coords.latitude,data.coords.longitude)
+             
+           }
+          })
         }
+          );
+      
         if(resp.ObjTransaction == false){
           this._alert.errorSweet(resp.TxtError);
         }
@@ -199,11 +212,20 @@ export class ProgrammingDetailPage implements OnInit {
   }
 
 
-
-
+  async showModalPassengers() {
+    const modal = await this.modalController.create({
+      component: PassengersComponent,
+      componentProps: {
+        passengers:this.programming.passengers,     
+     }
+    });
+   
+    return await modal.present();
 
 
 }
 
+
+}
 
 

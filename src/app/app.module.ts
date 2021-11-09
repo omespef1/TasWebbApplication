@@ -22,10 +22,11 @@ import { SignatureComponent } from './pages/signature/signature.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
 
 import { QRScanner } from '@ionic-native/qr-scanner/ngx';
+import { PassengersComponent } from './pages/passengers/passengers.component';
 
 @NgModule({
-  declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent],
-  entryComponents: [ThirdPartiesGenericPage,SignatureComponent],
+  declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent,PassengersComponent],
+  entryComponents: [ThirdPartiesGenericPage,SignatureComponent,PassengersComponent],
   imports: [BrowserModule, IonicModule.forRoot(
    { mode: 'ios'}
   ), AppRoutingModule,

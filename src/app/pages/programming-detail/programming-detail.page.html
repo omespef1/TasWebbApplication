@@ -1,178 +1,146 @@
 <app-header headerName="Detalle">
-  
+
 </app-header>
 
 <ion-content>
 
-    <ion-item class="header" lines="none" color="secondary">
-      <ion-icon slot="start" name="clipboard"></ion-icon>
-      <ion-label>INFORMACIÓN GENERAL</ion-label>       
-    </ion-item>  
-    <!-- <ion-item>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button *ngIf="!_sesion.isUser()" [disabled]="sending" (click)="setState()" expand="block"
+        color="danger">
+        <ion-icon class="fa-spin" name="clipboard"></ion-icon> {{textButton}}
+      </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button (click)="showModalPassengers()" color="secondary"  expand="block" >
+          <ion-icon name="person"></ion-icon>
+          &nbsp; Histórico pasajeros
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="validPassenger(2)" color="primary"  expand="block" >
+          <ion-icon name="paper"></ion-icon>
+          &nbsp; Escanear QR
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button (click)="validPassenger(1)" color="success" expand="block" >
+          <ion-icon name="card"></ion-icon>
+          &nbsp;Identificación
+        </ion-button>
+      
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+  <ion-item class="header" lines="none" color="secondary">
+    <ion-icon slot="start" name="clipboard"></ion-icon>
+    <ion-label>INFORMACIÓN GENERAL</ion-label>
+  </ion-item>
+  <!-- <ion-item>
       <ion-icon slot="start" name="person"></ion-icon>
       <ion-label>Usuario</ion-label>
        <ion-note slot="end"> {{ programming.NombreRazon}} {{ programming.PrimerApellido}}</ion-note>
     </ion-item>        -->
-    <ion-item>
-      <ion-icon slot="start" name="git-merge"></ion-icon>
-      <ion-label>Ruta</ion-label>
-       <ion-note slot="end"> {{ programming.RutaId}} {{ programming.RutaNombre}}</ion-note>
-    </ion-item>       
-    <ion-item>
-      <ion-icon slot="start" name="car"></ion-icon>
-      <ion-label>Placa</ion-label>
-       <ion-note slot="end"> {{ programming.PlacaVehiculo}}</ion-note>
-    </ion-item> 
-    <ion-item>
-      <ion-icon slot="start" name="ios-information-circle"></ion-icon>
-      <ion-label>Fecha Servicio</ion-label>
-       <ion-note slot="end"> {{ programming.FechaServicio | date:'dd/MM/yyyy'}} {{ programming.HoraServicio | date:'HH:mm'}}</ion-note>
-    </ion-item>    
-    <ion-item class="header" lines="none" color="secondary">
-      <ion-icon slot="start" name="locate"></ion-icon>
-      <ion-label>ORIGEN</ion-label>       
-    </ion-item>  
-    <ion-item>
-      <ion-icon slot="start" name="map"></ion-icon>
-      <ion-label>Ciudad</ion-label>
-       <ion-note slot="end"> {{ programming.Origen}}</ion-note>
-    </ion-item>    
-    <ion-item>
-      <ion-icon slot="start" name="navigate"></ion-icon>
-      <ion-label>Dirección</ion-label>
-       <ion-note slot="end"> {{ programming.OrigenDireccion}}</ion-note>
-    </ion-item> 
-    <ion-item class="header" lines="none" color="secondary">
-      <ion-icon slot="start" name="locate"></ion-icon>
-      <ion-label> DESTINO</ion-label>       
-    </ion-item>  
-    <ion-item>
-      <ion-icon slot="start" name="map"></ion-icon>
-      <ion-label>Ciudad</ion-label>
-       <ion-note slot="end"> {{ programming.Destino}}</ion-note>
-    </ion-item> 
-    <ion-item>
-      <ion-icon slot="start" name="navigate"></ion-icon>
-      <ion-label>Dirección</ion-label>
-       <ion-note slot="end"> {{ programming.DestinoDireccion}}</ion-note>
-    </ion-item>                 
- 
+  <ion-item>
+    <ion-icon slot="start" name="git-merge"></ion-icon>
+    <ion-label>Ruta</ion-label>
+    <ion-note slot="end"> {{ programming.RutaId}} {{ programming.RutaNombre}}</ion-note>
+  </ion-item>
+  <ion-item>
+    <ion-icon slot="start" name="car"></ion-icon>
+    <ion-label>Placa</ion-label>
+    <ion-note slot="end"> {{ programming.PlacaVehiculo}}</ion-note>
+  </ion-item>
+  <ion-item>
+    <ion-icon slot="start" name="ios-information-circle"></ion-icon>
+    <ion-label>Fecha Servicio</ion-label>
+    <ion-note slot="end"> {{ programming.FechaServicio | date:'dd/MM/yyyy'}} {{ programming.HoraServicio |
+      date:'HH:mm'}}</ion-note>
+  </ion-item>
+  <ion-item class="header" lines="none" color="secondary">
+    <ion-icon slot="start" name="locate"></ion-icon>
+    <ion-label>ORIGEN</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-icon slot="start" name="map"></ion-icon>
+    <ion-label>Ciudad</ion-label>
+    <ion-note slot="end"> {{ programming.Origen}}</ion-note>
+  </ion-item>
+  <ion-item>
+    <ion-icon slot="start" name="navigate"></ion-icon>
+    <ion-label>Dirección</ion-label>
+    <ion-note slot="end"> {{ programming.OrigenDireccion}}</ion-note>
+  </ion-item>
+  <ion-item class="header" lines="none" color="secondary">
+    <ion-icon slot="start" name="locate"></ion-icon>
+    <ion-label> DESTINO</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-icon slot="start" name="map"></ion-icon>
+    <ion-label>Ciudad</ion-label>
+    <ion-note slot="end"> {{ programming.Destino}}</ion-note>
+  </ion-item>
+  <ion-item>
+    <ion-icon slot="start" name="navigate"></ion-icon>
+    <ion-label>Dirección</ion-label>
+    <ion-note slot="end"> {{ programming.DestinoDireccion}}</ion-note>
+  </ion-item>
+
   <ion-item class="header" lines="none" color="secondary">
     <ion-icon slot="start" name="globe"></ion-icon>
-    <ion-label>OBSERVACIONES</ion-label>       
-  </ion-item>  
-  <ion-item>   
+    <ion-label>OBSERVACIONES</ion-label>
+  </ion-item>
+  <ion-item>
     <ion-item>
-      <ion-label position="stacked" >Solo se enviarán si el seguimiento es FINAL</ion-label>
-      <ion-textarea rows="3" cols="12" [(ngModel)]="observations"learOnEdit="true"></ion-textarea>
+      <ion-label position="stacked">Solo se enviarán si el seguimiento es FINAL</ion-label>
+      <ion-textarea rows="3" cols="12" [(ngModel)]="observations" learOnEdit="true"></ion-textarea>
     </ion-item>
   </ion-item>
-    <ion-button *ngIf="!_sesion.isUser()" [disabled]="sending" (click)="setState()" expand="full" size="large" color="danger">
-      <ion-icon class="fa-spin" name="clipboard"></ion-icon> {{textButton}}
-    </ion-button>
+ 
 
-    <ion-button (click)="validPassenger(2)" color="primary">
-      <ion-icon  name="paper"></ion-icon> 
-     &nbsp; Escanear QR
-
-
-
-    </ion-button>
+  
     
-<ion-button (click)="validPassenger(1)" color="secondary">
-  <ion-icon  name="card"></ion-icon> 
-  &nbsp;Identificación</ion-button>
 
 
 
-    <div id="accordion">
-      <dx-accordion
-          #accordion
-          [dataSource]="programming.details"
-          [collapsible]="true"
-          [multiple]="false"
-          [animationDuration]="1000"
-          noDataText="No hay datos"
-          >
-         
-             
-         
-        
-        <div text-center *dxTemplate="let programming of 'title'">
-          <h1>{{programming.estado | statesRequestProgramming}}</h1>        
+
+  <div id="accordion">
+    <dx-accordion #accordion [dataSource]="programming.details" [collapsible]="true" [multiple]="false"
+      [animationDuration]="1000" noDataText="No hay datos">
+
+
+
+
+      <div text-center *dxTemplate="let programming of 'title'">
+        <h1>{{programming.estado | statesRequestProgramming}}</h1>
       </div>
-          <div  *dxTemplate="let programming of 'item'">
-            <ion-list lines="none" class="map-register">                 
-              <ion-item>
-                <ion-icon slot="start" name="calendar"></ion-icon>
-                <ion-label>Fecha</ion-label>  
-                <ion-note slot="end"> {{programming.fechaServicio | date:'dd/MM/yyyy hh:mm'}}</ion-note>            
-              </ion-item>       
-              <ion-item>
-                <ion-icon slot="start" name="navigate"></ion-icon>
-                <ion-label>Latitud</ion-label>
-                 <ion-note slot="end"> {{programming.latitude}}</ion-note>
-              </ion-item> 
-              <ion-item>
-                <ion-icon slot="start" name="navigate"></ion-icon>
-                <ion-label>Longitud</ion-label>
-                <ion-note slot="end"> {{programming.longitude}}</ion-note>
-              </ion-item>
-              <iframe [src]="programming | mapsUrl" width="100%" height="270" frameborder="0" style="border:0"></iframe>
-            </ion-list> 
-          </div>
-      </dx-accordion>
-    </div>
-    
+      <div *dxTemplate="let programming of 'item'">
+        <ion-list lines="none" class="map-register">
+          <ion-item>
+            <ion-icon slot="start" name="calendar"></ion-icon>
+            <ion-label>Fecha</ion-label>
+            <ion-note slot="end"> {{programming.fechaServicio | date:'dd/MM/yyyy hh:mm'}}</ion-note>
+          </ion-item>
+          <ion-item>
+            <ion-icon slot="start" name="navigate"></ion-icon>
+            <ion-label>Latitud</ion-label>
+            <ion-note slot="end"> {{programming.latitude}}</ion-note>
+          </ion-item>
+          <ion-item>
+            <ion-icon slot="start" name="navigate"></ion-icon>
+            <ion-label>Longitud</ion-label>
+            <ion-note slot="end"> {{programming.longitude}}</ion-note>
+          </ion-item>
+          <iframe [src]="programming | mapsUrl" width="100%" height="270" frameborder="0" style="border:0"></iframe>
+        </ion-list>
+      </div>
+    </dx-accordion>
+  </div>
+
+
    
-
-    <div id="accordion">
-      <dx-accordion
-          #f18c537eb67142df96e669832ce8a7e7
-          [dataSource]="programming.passengers"
-          [collapsible]="true"
-          [multiple]="false"
-          [animationDuration]="1000"
-          noDataText="No hay datos"
-          >
-         
-             
-         
-        
-        <div text-center *dxTemplate="let passenger of 'title'">
-          <h1>PASAJEROS</h1>        
-      </div>
-          <div  *dxTemplate="let passenger of 'item'">
-            <ion-list lines="none" class="map-register">                 
-              <ion-item>
-                <ion-icon slot="start" name="person"></ion-icon>
-                <ion-label>Pasajero</ion-label>  
-                <ion-note slot="end"> {{passenger.pasajero }}</ion-note>            
-              </ion-item>  
-              <ion-item>
-                <ion-icon slot="start" name="card"></ion-icon>
-                <ion-label>Identificación</ion-label>  
-                <ion-note slot="end"> {{passenger.identification }}</ion-note>            
-              </ion-item>    
-              <ion-item>
-                <ion-icon slot="start" name="calendar"></ion-icon>
-                <ion-label>Fecha</ion-label>
-                 <ion-note slot="end"> {{passenger.entryDate | date: 'dd/MMy/yyyy hh:mm a'}}</ion-note>
-              </ion-item>     
-              <ion-item>
-                <ion-icon slot="start" name="navigate"></ion-icon>
-                <ion-label>Latitud</ion-label>
-                 <ion-note slot="end"> {{passenger.latitude}}</ion-note>
-              </ion-item> 
-              <ion-item>
-                <ion-icon slot="start" name="navigate"></ion-icon>
-                <ion-label>Longitud</ion-label>
-                <ion-note slot="end"> {{passenger.longitude}}</ion-note>
-              </ion-item>            
-            </ion-list> 
-          </div>
-      </dx-accordion>
-    </div>
-
-
 </ion-content>

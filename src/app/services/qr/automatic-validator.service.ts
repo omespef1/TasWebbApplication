@@ -68,8 +68,8 @@ export default class QrValidatorService implements IPassengerValidator   {
     }
 
 
-    uploadPassenger(companyId: number, requestId: number){
-        let passenger : any = {  CompanyId: companyId,RequestId : requestId , Identification:  this.identification}
+    uploadPassenger(companyId: number, requestId: number,latitude:number, longitude:number){
+        let passenger : any = {  CompanyId: companyId,RequestId : requestId , Identification:  this.identification, Latitude: latitude, Longitude:longitude}
        this.passengerService.setPassenger(passenger).subscribe(resp=>{
            if(resp!= null && resp.Retorno==0){
                this.alertService.successSweet('Pasajero registrado!');

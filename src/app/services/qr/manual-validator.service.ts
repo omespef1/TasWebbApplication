@@ -8,7 +8,7 @@ import { AlertService } from '../alert/alert.service';
     providedIn: 'root'
 })
 export default class ManualValidatorService implements IPassengerValidator {
-
+   private identification="";
     constructor(private passengerService:PassengerService,private alertService:AlertService){
 
     }
@@ -18,9 +18,17 @@ export default class ManualValidatorService implements IPassengerValidator {
 
     }
 
-    uploadPassenger(companyId: number, requestId: number){
-
-    }
+    uploadPassenger(companyId: number, requestId: number,latitude:number, longitude:number){
+      let passenger : any = {  CompanyId: companyId,RequestId : requestId , Identification:  this.identification, Latitude: latitude, Longitude:longitude}
+     this.passengerService.setPassenger(passenger).subscribe(resp=>{
+         if(resp!= null && resp.Retorno==0){
+             this.alertService.successSweet('Pasajero registrado!');
+         }
+         else {
+          this.alertService.errorSweet(resp.TxtError);
+         }
+     })
+  }
 
 
 
@@ -36,7 +44,8 @@ export default class ManualValidatorService implements IPassengerValidator {
                     {
                       text: "Validar",
                       role: "OK",
-                      handler: (value: any) => {                   
+                      handler: (value: any) => {                  
+                        this.identification = value.identification; 
                         this.passengerService.checkPassenger(company,requestId,value.identification).subscribe(resp=>{
                            resolve(resp);
                         })
