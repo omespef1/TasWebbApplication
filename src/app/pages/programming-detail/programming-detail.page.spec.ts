@@ -21,7 +21,8 @@ describe('ProgrammingDetailPage', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('it should validate code', () => {
+    
     expect(component).toBeTruthy();
   });
 });

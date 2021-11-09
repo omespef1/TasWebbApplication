@@ -8,10 +8,15 @@
       <ion-icon slot="start" name="clipboard"></ion-icon>
       <ion-label>INFORMACIÓN GENERAL</ion-label>       
     </ion-item>  
-    <ion-item>
+    <!-- <ion-item>
       <ion-icon slot="start" name="person"></ion-icon>
       <ion-label>Usuario</ion-label>
        <ion-note slot="end"> {{ programming.NombreRazon}} {{ programming.PrimerApellido}}</ion-note>
+    </ion-item>        -->
+    <ion-item>
+      <ion-icon slot="start" name="git-merge"></ion-icon>
+      <ion-label>Ruta</ion-label>
+       <ion-note slot="end"> {{ programming.RutaId}} {{ programming.RutaNombre}}</ion-note>
     </ion-item>       
     <ion-item>
       <ion-icon slot="start" name="car"></ion-icon>
@@ -66,6 +71,20 @@
       <ion-icon class="fa-spin" name="clipboard"></ion-icon> {{textButton}}
     </ion-button>
 
+    <ion-button (click)="validPassenger(2)" color="primary">
+      <ion-icon  name="paper"></ion-icon> 
+     &nbsp; Escanear QR
+
+
+
+    </ion-button>
+    
+<ion-button (click)="validPassenger(1)" color="secondary">
+  <ion-icon  name="card"></ion-icon> 
+  &nbsp;Identificación</ion-button>
+
+
+
     <div id="accordion">
       <dx-accordion
           #accordion
@@ -106,6 +125,54 @@
     </div>
     
    
+
+    <div id="accordion">
+      <dx-accordion
+          #f18c537eb67142df96e669832ce8a7e7
+          [dataSource]="programming.passengers"
+          [collapsible]="true"
+          [multiple]="false"
+          [animationDuration]="1000"
+          noDataText="No hay datos"
+          >
+         
+             
+         
+        
+        <div text-center *dxTemplate="let passenger of 'title'">
+          <h1>PASAJEROS</h1>        
+      </div>
+          <div  *dxTemplate="let passenger of 'item'">
+            <ion-list lines="none" class="map-register">                 
+              <ion-item>
+                <ion-icon slot="start" name="person"></ion-icon>
+                <ion-label>Pasajero</ion-label>  
+                <ion-note slot="end"> {{passenger.pasajero }}</ion-note>            
+              </ion-item>  
+              <ion-item>
+                <ion-icon slot="start" name="card"></ion-icon>
+                <ion-label>Identificación</ion-label>  
+                <ion-note slot="end"> {{passenger.identification }}</ion-note>            
+              </ion-item>    
+              <ion-item>
+                <ion-icon slot="start" name="calendar"></ion-icon>
+                <ion-label>Fecha</ion-label>
+                 <ion-note slot="end"> {{passenger.entryDate | date: 'dd/MMy/yyyy hh:mm a'}}</ion-note>
+              </ion-item>     
+              <ion-item>
+                <ion-icon slot="start" name="navigate"></ion-icon>
+                <ion-label>Latitud</ion-label>
+                 <ion-note slot="end"> {{passenger.latitude}}</ion-note>
+              </ion-item> 
+              <ion-item>
+                <ion-icon slot="start" name="navigate"></ion-icon>
+                <ion-label>Longitud</ion-label>
+                <ion-note slot="end"> {{passenger.longitude}}</ion-note>
+              </ion-item>            
+            </ion-list> 
+          </div>
+      </dx-accordion>
+    </div>
 
 
 </ion-content>

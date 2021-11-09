@@ -21,7 +21,7 @@ import { ThirdPartiesGenericPage } from './pages/third-parties-generic/third-par
 import { SignatureComponent } from './pages/signature/signature.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
 
-
+import { QRScanner } from '@ionic-native/qr-scanner/ngx';
 
 @NgModule({
   declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent],
@@ -34,6 +34,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     Network,
     FingerprintAIO,
     StatusBar,
+    QRScanner,
     SplashScreen,
     BrowserTab,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

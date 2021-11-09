@@ -29,7 +29,12 @@
         <ion-icon slot="start" name="person"></ion-icon>
         <ion-label>{{_session.isUser() && canEdit?'Conductor':'Usuario'}}</ion-label>
          <ion-note slot="end"> {{_session.isUser() && canEdit?  programming.Conductor : programming.UsuarioServicio}}</ion-note>
-      </ion-item>   
+      </ion-item>  
+      <ion-item>
+        <ion-icon slot="start" name="git-merge"></ion-icon>
+        <ion-label>Ruta</ion-label>
+         <ion-note slot="end"> {{ programming.RutaId}} {{ programming.RutaNombre}}</ion-note>
+      </ion-item>  
       <ion-item >
         <ion-icon slot="start" name="car"></ion-icon>
         <ion-label>Placa</ion-label>

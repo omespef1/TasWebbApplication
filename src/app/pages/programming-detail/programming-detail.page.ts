@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { NavController, NavParams, ModalController } from "@ionic/angular";
 import { Router } from "@angular/router";
 import { DomSanitizer } from "@angular/platform-browser";
 import { ServicesRequestService } from "../../services/services-request/services-request.service";
@@ -7,14 +6,19 @@ import { SessionService } from "../../services/session/session.service";
 import { AlertService } from "../../services/alert/alert.service";
 import { ServiceRequestDetail } from "../../models/service-request/programmings";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
-import { StatesRequestProgrammingPipe } from "src/app/pipes/states-request-programming.pipe";
 import { TransportRequestService } from '../../services/transport-request/transport-request.service';
+import { QRScanner } from '@ionic-native/qr-scanner/ngx';
+import TypeValidator from '../../enums/type-validator.enum';
+import { PassengerService } from '../../services/passenger/passenger.service';
+import { FactoryValidator } from '../../factory/validator-passenger.factory';
+
 @Component({
   selector: "app-programming-detail",
   templateUrl: "./programming-detail.page.html",
   styleUrls: ["./programming-detail.page.scss"],
 })
 export class ProgrammingDetailPage implements OnInit {
+  factoryValidator:FactoryValidator;
   programming: any={};
   loadingMap = true;
   theHtmlString: any;
@@ -25,13 +29,14 @@ export class ProgrammingDetailPage implements OnInit {
     private router: Router,
     private _san: DomSanitizer,
     private _service: ServicesRequestService,
-    private _modal: ModalController,
     private _alert: AlertService,
     public _sesion: SessionService,
     private geo: Geolocation,
-    private _request:TransportRequestService
-  ) {
-
+    private _request:TransportRequestService,
+    private qrScanner: QRScanner,
+    private passengerService:PassengerService,)
+   {
+    this.factoryValidator = new FactoryValidator(this.qrScanner,this.passengerService,_alert);
     this.programming.details = [];
   }
 
@@ -53,6 +58,7 @@ export class ProgrammingDetailPage implements OnInit {
       .subscribe((resp) => {
         if (resp.ObjTransaction) {
           this.programming.details = resp.ObjTransaction;
+          this.getPassengers();
         }
       });
   }
@@ -63,16 +69,6 @@ export class ProgrammingDetailPage implements OnInit {
     );
     
 
-    // const myLatLng = { lat: latitude, lng: long};
-    // const mapEle: HTMLElement = document.getElementById('map');
-    // this.mapRef = new google.maps.Map(mapEle, {
-    //   center: myLatLng,
-    //   zoom: 12
-    // });
-    // google.maps.event.addListenerOnce(this.mapRef, 'idle', () => {
-    //   this.loadingMap=false;
-    //   this.addMaker(myLatLng.lat, myLatLng.lng);
-    // });
   }
 
   setState() {
@@ -166,4 +162,48 @@ export class ProgrammingDetailPage implements OnInit {
     })
 
   }
+
+  validPassenger(type:TypeValidator){
+  let factory =  this.factoryValidator.createValidator(type)
+
+  factory.validPassenger(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId).then(resp=>{
+      if(resp!=null && resp.Retorno==0){
+
+        if(resp.ObjTransaction == true){
+           this._alert.successSweet("Pasajero validado correctamente!");
+          factory.uploadPassenger(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId)
+          
+        }
+        if(resp.ObjTransaction == false){
+          this._alert.errorSweet(resp.TxtError);
+        }
+      }
+      else {
+        this._alert.errorSweet(resp.TxtError);
+      }
+    })
+
+                     
+  }
+
+
+  getPassengers(){
+
+    this.passengerService.getPassengers(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId).subscribe(resp=>{
+      if(resp!=null && resp.Retorno==0){
+
+        this.programming.passengers = resp.ObjTransaction;
+      }
+    })
+
+  }
+
+
+
+
+
+
 }
+
+
+
