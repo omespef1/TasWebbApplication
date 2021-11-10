@@ -1,4 +1,4 @@
-import { QRScanner } from '@ionic-native/qr-scanner/ngx';
+
 import TypeValidator from '../enums/type-validator.enum';
 import IPassengerValidator from '../interfaces/passenger-validator';
 
@@ -9,7 +9,7 @@ import QrValidatorService from '../services/qr/automatic-validator.service';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 export class FactoryValidator {
 
-    constructor(private qrScanner: QRScanner, private passengerService: PassengerService, private alert: AlertService,private barcodeScanner: BarcodeScanner) {
+    constructor(private passengerService: PassengerService, private alert: AlertService,private barcodeScanner: BarcodeScanner) {
 
     }
 
@@ -17,7 +17,7 @@ export class FactoryValidator {
 
         switch (type) {
             case TypeValidator.Automatic:
-                return new QrValidatorService(this.qrScanner, this.alert, this.passengerService,this.barcodeScanner);
+                return new QrValidatorService(this.alert, this.passengerService,this.barcodeScanner);
             case TypeValidator.Manual:
                 return new ManualValidatorService(this.passengerService, this.alert);
         }

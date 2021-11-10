@@ -1,4 +1,4 @@
-import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
+
 import { resolve } from 'url';
 import IPassengerValidator from '../../interfaces/passenger-validator';
 import { AlertService } from '../alert/alert.service';
@@ -15,7 +15,7 @@ export default class QrValidatorService implements IPassengerValidator   {
 
 
     private identification:string;
-    constructor(private qrScanner: QRScanner, private alertService: AlertService, private passengerService: PassengerService,private barcodeScanner: BarcodeScanner) {
+    constructor(private alertService: AlertService, private passengerService: PassengerService,private barcodeScanner: BarcodeScanner) {
 
     }
 

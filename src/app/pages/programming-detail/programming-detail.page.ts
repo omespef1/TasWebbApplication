@@ -7,7 +7,6 @@ import { AlertService } from "../../services/alert/alert.service";
 import { ServiceRequestDetail } from "../../models/service-request/programmings";
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { TransportRequestService } from '../../services/transport-request/transport-request.service';
-import { QRScanner } from '@ionic-native/qr-scanner/ngx';
 import TypeValidator from '../../enums/type-validator.enum';
 import { PassengerService } from '../../services/passenger/passenger.service';
 import { FactoryValidator } from '../../factory/validator-passenger.factory';
@@ -37,12 +36,11 @@ export class ProgrammingDetailPage implements OnInit {
     public _sesion: SessionService,
     private geo: Geolocation,
     private _request:TransportRequestService,
-    private qrScanner: QRScanner,
     private passengerService:PassengerService,
     private modalController: ModalController,
     private barcodeScanner: BarcodeScanner)
    {
-    this.factoryValidator = new FactoryValidator(this.qrScanner,this.passengerService,_alert,this.barcodeScanner);
+    this.factoryValidator = new FactoryValidator(this.passengerService,_alert,this.barcodeScanner);
     this.programming.details = [];
   }
 

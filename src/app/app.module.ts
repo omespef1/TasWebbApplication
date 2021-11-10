@@ -20,8 +20,8 @@ import { BrowserTab } from "@ionic-native/browser-tab/ngx";
 import { ThirdPartiesGenericPage } from './pages/third-parties-generic/third-parties-generic.page';
 import { SignatureComponent } from './pages/signature/signature.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
-import { QRScanner } from '@ionic-native/qr-scanner/ngx';
 import { PassengersComponent } from './pages/passengers/passengers.component';
+import { BarcodeScanner } from "@ionic-native/barcode-scanner/ngx";
 
 @NgModule({
   declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent,PassengersComponent],
@@ -34,7 +34,7 @@ import { PassengersComponent } from './pages/passengers/passengers.component';
     Network,
     FingerprintAIO,
     StatusBar,
-    QRScanner,
+    BarcodeScanner,
     SplashScreen,
     BrowserTab,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
