@@ -13,6 +13,7 @@ import { PassengerService } from '../../services/passenger/passenger.service';
 import { FactoryValidator } from '../../factory/validator-passenger.factory';
 import { ModalController } from "@ionic/angular";
 import { PassengersComponent } from "../passengers/passengers.component";
+import { BarcodeScanner } from "@ionic-native/barcode-scanner/ngx";
 
 @Component({
   selector: "app-programming-detail",
@@ -25,6 +26,7 @@ export class ProgrammingDetailPage implements OnInit {
   loadingMap = true;
   theHtmlString: any;
   sending = false;
+  value = 'This is my barcode secret data';
   textButton = "Nuevo seguimiento";
   observations="";
   constructor(
@@ -37,9 +39,10 @@ export class ProgrammingDetailPage implements OnInit {
     private _request:TransportRequestService,
     private qrScanner: QRScanner,
     private passengerService:PassengerService,
-    private modalController: ModalController)
+    private modalController: ModalController,
+    private barcodeScanner: BarcodeScanner)
    {
-    this.factoryValidator = new FactoryValidator(this.qrScanner,this.passengerService,_alert);
+    this.factoryValidator = new FactoryValidator(this.qrScanner,this.passengerService,_alert,this.barcodeScanner);
     this.programming.details = [];
   }
 
