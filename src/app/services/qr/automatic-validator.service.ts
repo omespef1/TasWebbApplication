@@ -30,7 +30,7 @@ export default class QrValidatorService implements IPassengerValidator   {
                 console.log('Barcode data', barcodeData);
                 
                 // this.identification = barcodeData;
-                            this.passengerService.checkPassenger(companyId, requestId, "").subscribe(data => {
+                            this.passengerService.checkPassenger(companyId, requestId, JSON.stringify (barcodeData)).subscribe(data => {
                                 resolve(data);
                             })
                }).catch(err => {
