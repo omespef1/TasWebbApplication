@@ -19,7 +19,9 @@
     "@angular/forms": "~8.1.2",
     "@angular/platform-browser": "~8.1.2",
     "@angular/platform-browser-dynamic": "~8.1.2",
+    "@angular/pwa": "^13.0.2",
     "@angular/router": "~8.1.2",
+    "@angular/service-worker": "~8.1.2",
     "@ionic-native/barcode-scanner": "^5.36.0",
     "@ionic-native/browser-tab": "^5.25.0",
     "@ionic-native/camera": "^5.15.0",
@@ -67,7 +69,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
     "codelyzer": "^5.0.0",
-    "cordova-android": "^9.1.0",
+    "cordova-android": "^8.0.0",
     "cordova-browser": "^6.0.0",
     "cordova-ios": "^5.1.1",
     "cordova-plugin-camera": "^5.0.2",
@@ -111,7 +113,8 @@
       "cordova-plugin-camera": {
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
       },
-      "cordova-plugin-qrscanner": {}
+      "cordova-plugin-qrscanner": {},
+      "phonegap-plugin-barcodescanner": {}
     },
     "platforms": [
       "browser",

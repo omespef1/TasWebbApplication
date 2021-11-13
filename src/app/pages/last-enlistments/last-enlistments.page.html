@@ -21,6 +21,11 @@
       <ion-note slot="end">{{ enlistment.Reviso }}</ion-note>
     </ion-item>
     <ion-item>
+      <ion-icon slot="start" name="car"></ion-icon>
+      <ion-label>Placa</ion-label>
+      <ion-note slot="end">{{ enlistment.PlacaVehiculo }}</ion-note>
+    </ion-item>
+    <ion-item>
       <ion-icon slot="start"
         [name]="enlistment.Estado == 'N'? 'close-circle' :enlistment.Estado == 'A'? 'checkmark-circle':'help-circle'">
       </ion-icon>

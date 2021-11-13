@@ -22,6 +22,8 @@ import { SignatureComponent } from './pages/signature/signature.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { PassengersComponent } from './pages/passengers/passengers.component';
 import { BarcodeScanner } from "@ionic-native/barcode-scanner/ngx";
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent,PassengersComponent],
@@ -29,7 +31,7 @@ import { BarcodeScanner } from "@ionic-native/barcode-scanner/ngx";
   imports: [BrowserModule, IonicModule.forRoot(
    { mode: 'ios'}
   ), AppRoutingModule,
-  ComponentsModule,HttpClientModule, IonicStorageModule.forRoot(),SignaturePadModule ],
+  ComponentsModule,HttpClientModule, IonicStorageModule.forRoot(),SignaturePadModule, ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }) ],
   providers: [
     Network,
     FingerprintAIO,

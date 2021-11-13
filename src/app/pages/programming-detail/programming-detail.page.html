@@ -12,7 +12,7 @@
         <ion-icon class="fa-spin" name="clipboard"></ion-icon> {{textButton}}
       </ion-button>
       </ion-col>
-      <ion-col>
+      <ion-col *ngIf="programming.ManejaRuta">
         <ion-button (click)="showModalPassengers()" color="secondary"  expand="block" >
           <ion-icon name="person"></ion-icon>
           &nbsp; Histórico pasajeros
@@ -20,13 +20,13 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col>
+      <ion-col *ngIf="programming.ManejaRuta">
         <ion-button (click)="validPassenger(2)" color="primary"  expand="block" >
           <ion-icon name="paper"></ion-icon>
           &nbsp; Escanear QR
         </ion-button>
       </ion-col>
-      <ion-col>
+      <ion-col *ngIf="programming.ManejaRuta">
         <ion-button (click)="validPassenger(1)" color="success" expand="block" >
           <ion-icon name="card"></ion-icon>
           &nbsp;Identificación
@@ -45,7 +45,7 @@
       <ion-label>Usuario</ion-label>
        <ion-note slot="end"> {{ programming.NombreRazon}} {{ programming.PrimerApellido}}</ion-note>
     </ion-item>        -->
-  <ion-item>
+  <ion-item  *ngIf="programming.ManejaRuta == 1">
     <ion-icon slot="start" name="git-merge"></ion-icon>
     <ion-label>Ruta</ion-label>
     <ion-note slot="end"> {{ programming.RutaId}} {{ programming.RutaNombre}}</ion-note>
