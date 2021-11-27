@@ -172,7 +172,7 @@ export class ProgrammingDetailPage implements OnInit {
   validPassenger(type:TypeValidator){
   let factory =  this.factoryValidator.createValidator(type)
 
-  factory.validPassenger(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId).then(resp=>{
+       factory.validPassenger(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId).then(resp=>{
       if(resp!=null && resp.Retorno==0){
 
 
@@ -182,7 +182,10 @@ export class ProgrammingDetailPage implements OnInit {
             if(resp.ObjTransaction == true){
               // this._alert.successSweet("Pasajero validado correctamente!");
              factory.uploadPassenger(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId,data.coords.latitude,data.coords.longitude)
-             
+             this.validPassenger(type);
+            
+           }else {
+            this.validPassenger(type);
            }
           })
         }
@@ -195,8 +198,9 @@ export class ProgrammingDetailPage implements OnInit {
       else {
         this._alert.errorSweet(resp.TxtError);
       }
+    }, data=> {
+      console.log('qr rechazado');
     })
-
                      
   }
 

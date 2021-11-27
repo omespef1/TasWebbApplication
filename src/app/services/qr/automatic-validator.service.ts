@@ -14,7 +14,7 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 export default class QrValidatorService implements IPassengerValidator   {
 
 
-    private identification:string;
+    public identification:string;
     constructor(private alertService: AlertService, private passengerService: PassengerService,private barcodeScanner: BarcodeScanner) {
 
     }
@@ -32,10 +32,14 @@ export default class QrValidatorService implements IPassengerValidator   {
                 // this.identification = barcodeData;
                             this.passengerService.checkPassenger(companyId, requestId, barcodeData.text).subscribe(data => {
                             this.identification = barcodeData.text;
+                            if(this.identification.length>0)
                                 resolve(data);
+                                else {
+                                    reject(false);
+                                }
                             })
                }).catch(err => {
-                   console.log('Error', err);
+                  reject(false);
                });
 
             // this.qrScanner.prepare()
