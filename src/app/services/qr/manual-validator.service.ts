@@ -8,7 +8,7 @@ import { AlertService } from '../alert/alert.service';
     providedIn: 'root'
 })
 export default class ManualValidatorService implements IPassengerValidator {
-   private identification="";
+   public identification="";
     constructor(private passengerService:PassengerService,private alertService:AlertService){
 
     }

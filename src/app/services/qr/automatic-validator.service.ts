@@ -24,65 +24,21 @@ export default class QrValidatorService implements IPassengerValidator   {
     validPassenger(companyId: number, requestId: number): Promise<transactionObj<Boolean>> {
 
         let promise: Promise<transactionObj<Boolean>>  = new Promise<transactionObj<Boolean>>((resolve,reject)=>{
-  
-
             this.barcodeScanner.scan().then(barcodeData => {
                 console.log('Barcode data', barcodeData);
-                
-                // this.identification = barcodeData;
                             this.passengerService.checkPassenger(companyId, requestId, barcodeData.text).subscribe(data => {
                             this.identification = barcodeData.text;
                             if(this.identification.length>0)
                                 resolve(data);
                                 else {
+                                    this.identification="";
                                     reject(false);
                                 }
                             })
                }).catch(err => {
+                   this.identification="";
                   reject(false);
                });
-
-            // this.qrScanner.prepare()
-            //     .then((status: QRScannerStatus) => {
-            //         if (status.authorized) {
-            //             // camera permission was granted
-
-
-            //             // start scanning
-            //             let scanSub = this.qrScanner.scan().subscribe((text: any) => {
-            //                 console.log('Scanned something', text);
-
-            //                 this.qrScanner.hide(); // hide camera preview
-            //                 scanSub.unsubscribe(); // stop scanning
-            //                 this.identification = text;
-            //                 this.passengerService.checkPassenger(companyId, requestId, text).subscribe(data => {
-            //                     resolve(data);
-            //                 })
-
-            //             });
-
-            //         } else if (status.denied) {
-            //             // camera permission was permanently denied
-            //             // you must use QRScanner.openSettings() method to guide the user to the settings page
-            //             // then they can grant the permission from there
-
-
-            //             let dataData: transactionObj<Boolean> = { ObjTransaction:null, Retorno:1, TxtError:"Oops, parece que no tenemos acceso a la cámara. Dirígete a ajustes de la aplicación y habilita el acceso a la cámara de tu dispositivo." };
-            //             resolve(dataData)
-            //         } else {
-            //             // permission was denied, but not permanently. You can ask for permission again at a later time.
-            //             let dataData: transactionObj<Boolean> = { ObjTransaction:null, Retorno:1, TxtError:"Oops, parece que no tenemos acceso a la cámara. Dirígete a ajustes de la aplicación y habilita el acceso a la cámara de tu dispositivo." };
-            //             resolve(dataData)
-
-
-            //         }
-            //     })
-            //     .catch((e: any) => {
-
-            //         let dataData: transactionObj<Boolean> = { ObjTransaction:false, Retorno:1, TxtError:"Error desconocido" };
-            //         resolve(dataData)
-            //     });
-
 
         })
         return promise;

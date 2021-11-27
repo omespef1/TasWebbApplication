@@ -5,7 +5,7 @@ import { ServicesRequestService } from "../../services/services-request/services
 import { SessionService } from "../../services/session/session.service";
 import { AlertService } from "../../services/alert/alert.service";
 import { ServiceRequestDetail } from "../../models/service-request/programmings";
-import { Geolocation } from "@ionic-native/geolocation/ngx";
+import { Geolocation, Geoposition } from "@ionic-native/geolocation/ngx";
 import { TransportRequestService } from '../../services/transport-request/transport-request.service';
 import TypeValidator from '../../enums/type-validator.enum';
 import { PassengerService } from '../../services/passenger/passenger.service';
@@ -13,6 +13,7 @@ import { FactoryValidator } from '../../factory/validator-passenger.factory';
 import { ModalController } from "@ionic/angular";
 import { PassengersComponent } from "../passengers/passengers.component";
 import { BarcodeScanner } from "@ionic-native/barcode-scanner/ngx";
+import { transactionObj } from '../../models/general/transaction';
 
 @Component({
   selector: "app-programming-detail",
@@ -169,40 +170,62 @@ export class ProgrammingDetailPage implements OnInit {
 
   }
 
-  validPassenger(type:TypeValidator){
+  async validPassenger(type:TypeValidator){
   let factory =  this.factoryValidator.createValidator(type)
+factory.identification=".";
+   while(factory.identification.length>0){
 
-       factory.validPassenger(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId).then(resp=>{
+    let resp = <transactionObj<boolean>>   await factory.validPassenger(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId)
+    debugger;
       if(resp!=null && resp.Retorno==0){
-
-
-        this.geo.getCurrentPosition().then((data) => {
-        
-          setTimeout(() => {
+       
+      let data = <Geoposition> await   this.geo.getCurrentPosition()
             if(resp.ObjTransaction == true){
               // this._alert.successSweet("Pasajero validado correctamente!");
              factory.uploadPassenger(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId,data.coords.latitude,data.coords.longitude)
-             this.validPassenger(type);
-            
-           }else {
-            this.validPassenger(type);
            }
-          })
         }
-          );
-      
-        if(resp.ObjTransaction == false){
+        if(resp.ObjTransaction == false || resp.Retorno==1){
           this._alert.errorSweet(resp.TxtError);
         }
       }
-      else {
-        this._alert.errorSweet(resp.TxtError);
-      }
-    }, data=> {
-      console.log('qr rechazado');
-    })
+   }
+
+
+    
+
+
+
+   
+  
+    
+  
+  // if(type == TypeValidator.Automatic){
+
+  //   let resultScan ="";
+
+  //   while(resultScan!= undefined && resultScan.length>0){
+  //     this.barcodeScanner.scan().then(barcodeData => {
+  //       console.log('Barcode data', barcodeData);
+  //                   this.passengerService.checkPassenger(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId,barcodeData.text).subscribe(resp => {
+              
+  //                     this.geo.getCurrentPosition().then((data) => {
+  //                         if(resp!= null && resp.Retorno==0){
+  
+  //                           factory.uploadPassenger(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId,data.coords.latitude,data.coords.longitude)
+  //                         }
+  //                     });
+  
+  //                   })
+  //      }).catch(err => {
+  //         resultScan="";
+  //      });
+  //   }
+
+  
+  // }
                      
-  }
+  
 
 
   getPassengers(){
