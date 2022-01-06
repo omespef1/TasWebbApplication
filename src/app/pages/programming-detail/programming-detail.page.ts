@@ -21,14 +21,14 @@ import { transactionObj } from '../../models/general/transaction';
   styleUrls: ["./programming-detail.page.scss"],
 })
 export class ProgrammingDetailPage implements OnInit {
-  factoryValidator:FactoryValidator;
-  programming: any={};
+  factoryValidator: FactoryValidator;
+  programming: any = {};
   loadingMap = true;
   theHtmlString: any;
   sending = false;
   value = 'This is my barcode secret data';
   textButton = "Nuevo seguimiento";
-  observations="";
+  observations = "";
   constructor(
     private router: Router,
     private _san: DomSanitizer,
@@ -36,12 +36,11 @@ export class ProgrammingDetailPage implements OnInit {
     private _alert: AlertService,
     public _sesion: SessionService,
     private geo: Geolocation,
-    private _request:TransportRequestService,
-    private passengerService:PassengerService,
+    private _request: TransportRequestService,
+    private passengerService: PassengerService,
     private modalController: ModalController,
-    private barcodeScanner: BarcodeScanner)
-   {
-    this.factoryValidator = new FactoryValidator(this.passengerService,_alert,this.barcodeScanner);
+    private barcodeScanner: BarcodeScanner) {
+    this.factoryValidator = new FactoryValidator(this.passengerService, _alert, this.barcodeScanner);
     this.programming.details = [];
   }
 
@@ -50,7 +49,7 @@ export class ProgrammingDetailPage implements OnInit {
     //this.loadDetail();
   }
 
-  ionViewDidEnter(){
+  ionViewDidEnter() {
     this.loadDetail();
     this.getPassengers();
   }
@@ -62,19 +61,19 @@ export class ProgrammingDetailPage implements OnInit {
         this.programming.SolicitudId
       )
       .subscribe((resp) => {
-       
+
         if (resp.ObjTransaction) {
           this.programming.details = resp.ObjTransaction;
-        
+
         }
       });
   }
 
-  loadMap(latitude: number, long: number) {    
+  loadMap(latitude: number, long: number) {
     return this._san.bypassSecurityTrustResourceUrl(
       `https://maps.google.com/maps?q=${latitude}, ${long}&z=15&output=embed`
     );
-    
+
 
   }
 
@@ -136,7 +135,7 @@ export class ProgrammingDetailPage implements OnInit {
     log.SolicitudId = this.programming.SolicitudId;
     log.EmpresaId = this._sesion.GetThirdPartie().IdEmpresa;
     log.Estado = value;
-    this._request.SetTransportRequestFailed(log).then(()=>{
+    this._request.SetTransportRequestFailed(log).then(() => {
       this.geo.getCurrentPosition().then((data) => {
         this.textButton = "Esperando...";
         setTimeout(() => {
@@ -145,61 +144,60 @@ export class ProgrammingDetailPage implements OnInit {
           log.observations = this.observations;
           // Guardamos el intento en los fallidos en caso de que falle        
           this._service.PostServicesDetail(log).subscribe(
-              (resp: any) => {
-                this.sending = false;
-                // Borramos el intento ya que el servidor si respondió
-                this._request.deleteTransportFailed();
-                if (resp.Retorno === 0) {
-                  this.textButton = "Nuevo seguimiento";
-                  this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
-                  this.loadDetail();
-                } else {
-                  this.textButton = "Nuevo seguimiento";
-                  this._alert.showAlert("Error", resp.TxtError);
-                }
-              },
-              (err) => {
-                this.sending = false;
-                this.textButton = "Error";
-                console.log(err);
+            (resp: any) => {
+              this.sending = false;
+              // Borramos el intento ya que el servidor si respondió
+              this._request.deleteTransportFailed();
+              if (resp.Retorno === 0) {
+                this.textButton = "Nuevo seguimiento";
+                this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
+                this.loadDetail();
+              } else {
+                this.textButton = "Nuevo seguimiento";
+                this._alert.showAlert("Error", resp.TxtError);
               }
-            );
+            },
+            (err) => {
+              this.sending = false;
+              this.textButton = "Error";
+              console.log(err);
+            }
+          );
         }, 3000);
       });
     })
 
   }
 
-  async validPassenger(type:TypeValidator){
-  let factory =  this.factoryValidator.createValidator(type)
-factory.identification=".";
-   while(factory.identification.length>0){
+  async validPassenger(type: TypeValidator) {
+    let factory = this.factoryValidator.createValidator(type)
+    factory.identification = ".";
+    while (factory.identification.length > 0) {
 
-    let resp = <transactionObj<boolean>>   await factory.validPassenger(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId)
-    debugger;
-      if(resp!=null && resp.Retorno==0){
-       
-      let data = <Geoposition> await   this.geo.getCurrentPosition()
-            if(resp.ObjTransaction == true){
-              // this._alert.successSweet("Pasajero validado correctamente!");
-             factory.uploadPassenger(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId,data.coords.latitude,data.coords.longitude)
-           }
-        }
-        if(resp.ObjTransaction == false || resp.Retorno==1){
-          this._alert.errorSweet(resp.TxtError);
+      let resp = <transactionObj<boolean>>await factory.validPassenger(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId)
+      if (resp != null && resp.Retorno == 0) {
+
+        let data = <Geoposition>await this.geo.getCurrentPosition()
+        if (resp.ObjTransaction == true) {
+          // this._alert.successSweet("Pasajero validado correctamente!");
+          factory.uploadPassenger(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId, data.coords.latitude, data.coords.longitude)
         }
       }
-   }
+      if (resp.ObjTransaction == false || resp.Retorno == 1) {
+        this._alert.errorSweet(resp.TxtError);
+      }
+    }
+  }
 
 
-    
 
 
 
-   
-  
-    
-  
+
+
+
+
+
   // if(type == TypeValidator.Automatic){
 
   //   let resultScan ="";
@@ -208,30 +206,30 @@ factory.identification=".";
   //     this.barcodeScanner.scan().then(barcodeData => {
   //       console.log('Barcode data', barcodeData);
   //                   this.passengerService.checkPassenger(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId,barcodeData.text).subscribe(resp => {
-              
+
   //                     this.geo.getCurrentPosition().then((data) => {
   //                         if(resp!= null && resp.Retorno==0){
-  
+
   //                           factory.uploadPassenger(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId,data.coords.latitude,data.coords.longitude)
   //                         }
   //                     });
-  
+
   //                   })
   //      }).catch(err => {
   //         resultScan="";
   //      });
   //   }
 
-  
+
   // }
-                     
-  
 
 
-  getPassengers(){
 
-    this.passengerService.getPassengers(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId).subscribe(resp=>{
-      if(resp!=null && resp.Retorno==0){
+
+  getPassengers() {
+
+    this.passengerService.getPassengers(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId).subscribe(resp => {
+      if (resp != null && resp.Retorno == 0) {
 
         this.programming.passengers = resp.ObjTransaction;
       }
@@ -244,14 +242,14 @@ factory.identification=".";
     const modal = await this.modalController.create({
       component: PassengersComponent,
       componentProps: {
-        passengers:this.programming.passengers,     
-     }
+        passengers: this.programming.passengers,
+      }
     });
-   
+
     return await modal.present();
 
 
-}
+  }
 
 
 }
