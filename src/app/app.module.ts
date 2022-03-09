@@ -24,6 +24,7 @@ import { PassengersComponent } from './pages/passengers/passengers.component';
 import { BarcodeScanner } from "@ionic-native/barcode-scanner/ngx";
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { InAppBrowser } from "@ionic-native/in-app-browser/ngx"
 
 @NgModule({
   declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent,PassengersComponent],
@@ -39,6 +40,7 @@ import { environment } from '../environments/environment';
     BarcodeScanner,
     SplashScreen,
     BrowserTab,
+    InAppBrowser,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
 
   ],
