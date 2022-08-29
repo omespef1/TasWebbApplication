@@ -7,12 +7,8 @@ import { AlertService } from "../../services/alert/alert.service";
 import { ServiceRequestDetail } from "../../models/service-request/programmings";
 import { Geolocation, Geoposition } from "@ionic-native/geolocation/ngx";
 import { TransportRequestService } from '../../services/transport-request/transport-request.service';
-import TypeValidator from '../../enums/type-validator.enum';
-import { PassengerService } from '../../services/passenger/passenger.service';
-import { FactoryValidator } from '../../factory/validator-passenger.factory';
 import { ModalController } from "@ionic/angular";
 import { PassengersComponent } from "../passengers/passengers.component";
-import { BarcodeScanner } from "@ionic-native/barcode-scanner/ngx";
 import { transactionObj } from '../../models/general/transaction';
 
 @Component({
@@ -21,7 +17,7 @@ import { transactionObj } from '../../models/general/transaction';
   styleUrls: ["./programming-detail.page.scss"],
 })
 export class ProgrammingDetailPage implements OnInit {
-  factoryValidator: FactoryValidator;
+
   programming: any = {};
   loadingMap = true;
   theHtmlString: any;
@@ -37,10 +33,7 @@ export class ProgrammingDetailPage implements OnInit {
     public _sesion: SessionService,
     private geo: Geolocation,
     private _request: TransportRequestService,
-    private passengerService: PassengerService,
-    private modalController: ModalController,
-    private barcodeScanner: BarcodeScanner) {
-    this.factoryValidator = new FactoryValidator(this.passengerService, _alert, this.barcodeScanner);
+    private modalController: ModalController) {
     this.programming.details = [];
   }
 
@@ -51,7 +44,7 @@ export class ProgrammingDetailPage implements OnInit {
 
   ionViewDidEnter() {
     this.loadDetail();
-    this.getPassengers();
+
   }
 
   loadDetail() {
@@ -165,74 +158,6 @@ export class ProgrammingDetailPage implements OnInit {
           );
         }, 3000);
       });
-    })
-
-  }
-
-  async validPassenger(type: TypeValidator) {
-    let factory = this.factoryValidator.createValidator(type)
-    factory.identification = ".";
-    while (factory.identification.length > 0) {
-
-      let resp = <transactionObj<boolean>>await factory.validPassenger(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId)
-      if (resp != null && resp.Retorno == 0) {
-
-        let data = <Geoposition>await this.geo.getCurrentPosition()
-        if (resp.ObjTransaction == true) {
-          // this._alert.successSweet("Pasajero validado correctamente!");
-          factory.uploadPassenger(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId, data.coords.latitude, data.coords.longitude)
-        }
-      }
-      if (resp.ObjTransaction == false || resp.Retorno == 1) {
-        this._alert.errorSweet(resp.TxtError);
-      }
-    }
-  }
-
-
-
-
-
-
-
-
-
-
-  // if(type == TypeValidator.Automatic){
-
-  //   let resultScan ="";
-
-  //   while(resultScan!= undefined && resultScan.length>0){
-  //     this.barcodeScanner.scan().then(barcodeData => {
-  //       console.log('Barcode data', barcodeData);
-  //                   this.passengerService.checkPassenger(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId,barcodeData.text).subscribe(resp => {
-
-  //                     this.geo.getCurrentPosition().then((data) => {
-  //                         if(resp!= null && resp.Retorno==0){
-
-  //                           factory.uploadPassenger(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId,data.coords.latitude,data.coords.longitude)
-  //                         }
-  //                     });
-
-  //                   })
-  //      }).catch(err => {
-  //         resultScan="";
-  //      });
-  //   }
-
-
-  // }
-
-
-
-
-  getPassengers() {
-
-    this.passengerService.getPassengers(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId).subscribe(resp => {
-      if (resp != null && resp.Retorno == 0) {
-
-        this.programming.passengers = resp.ObjTransaction;
-      }
     })
 
   }

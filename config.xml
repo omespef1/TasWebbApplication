@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="co.tasweb.com" version="22.0.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="co.tasweb.com" version="22.0.8.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Tasweb</name>
     <description>Aplicación de protocolo de alistamiento</description>
     <author email="omespef1@gmail.com" href="http://ionicframework.com/">Tas Team</author>
@@ -14,7 +14,6 @@
     <preference name="ScrollEnabled" value="false" />
     <preference name="loadUrlTimeoutValue" value="70000" />
     <preference name="android-minSdkVersion" value="23" />
-    <preference name="android-compileSdkVersion" value="30" />
     <preference name="android-targetSdkVersion" value="30" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashMaintainAspectRatio" value="true" />
