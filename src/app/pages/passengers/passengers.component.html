@@ -1,0 +1,45 @@
+<app-header headerName="Pasajeros">
+</app-header>
+<ion-content> 
+<ion-content padding>
+  <div>
+    <ion-button (click)= "close()" expand="full"  color="danger">  
+      <ion-icon slot="start" color="light" name="remove-circle"></ion-icon> &nbsp; Cerrar  
+    </ion-button> 
+  </div>
+  <!-- <ion-toolbar>
+    <ion-searchbar showCancelButton="always" debounce="500" (ionChange)="filter($event)" animated placeholder="Buscar conductor" cancelButtonText="Cancelar"></ion-searchbar>
+
+  </ion-toolbar> -->
+  <div *ngFor="let passenger of passengers">
+    <ion-list lines="none">
+      <ion-list-header color="secondary">
+        <ion-label>{{passenger.pasajero }} - {{passenger.typeEntry == 'S'? 'Subida':'Bajada' }}</ion-label>
+        <ion-item lines="none">
+          <ion-icon slot="end" color="primary" name="person"></ion-icon>
+        </ion-item>
+      </ion-list-header>        
+      <ion-item>
+        <ion-icon slot="start" name="card"></ion-icon>
+        <ion-label>Identificación</ion-label>
+        <ion-note slot="end"> {{passenger.identification }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="calendar"></ion-icon>
+        <ion-label>Fecha</ion-label>
+        <ion-note slot="end"> {{passenger.entryDate | date: 'dd/MMy/yyyy hh:mm a'}}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="navigate"></ion-icon>
+        <ion-label>Latitud</ion-label>
+        <ion-note slot="end"> {{passenger.latitude}}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="navigate"></ion-icon>
+        <ion-label>Longitud</ion-label>
+        <ion-note slot="end"> {{passenger.longitude}}</ion-note>
+      </ion-item>
+    </ion-list>
+
+  </div>  
+</ion-content>

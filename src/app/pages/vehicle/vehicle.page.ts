@@ -115,14 +115,14 @@ export class VehiclePage {
   }
 
   loadFavoriteCars() {
-    this.vehicleFavorite =
-      this.vehicles.filter((v) => v.Sugerido === 2).length == 0
-        ? null
-        : this.vehicles.filter((v) => v.Sugerido === 2)[0];
-    if (this.vehicleFavorite !== undefined && this.vehicleFavorite != null) {
-      this.vehicleFavorite = this.vehicleFavorite;
-      this.vehiclesFilter.push(this.vehicleFavorite);
-    }
+    // this.vehicleFavorite =
+    //   this.vehicles.filter((v) => v.Sugerido === 2).length == 0
+    //     ? null
+    //     : this.vehicles.filter((v) => v.Sugerido === 2)[0];
+    // if (this.vehicleFavorite !== undefined && this.vehicleFavorite != null) {
+    //   this.vehicleFavorite = this.vehicleFavorite;
+    //   this.vehiclesFilter.push(this.vehicleFavorite);
+    // }
     this.vehicleFavorite =
       this.vehicles.filter((v) => v.Sugerido === 1).length == 0
         ? null

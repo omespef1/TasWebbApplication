@@ -1,37 +1,38 @@
 import { Component, OnInit } from "@angular/core";
-import { NavController, NavParams, ModalController } from "@ionic/angular";
 import { Router } from "@angular/router";
 import { DomSanitizer } from "@angular/platform-browser";
 import { ServicesRequestService } from "../../services/services-request/services-request.service";
 import { SessionService } from "../../services/session/session.service";
 import { AlertService } from "../../services/alert/alert.service";
 import { ServiceRequestDetail } from "../../models/service-request/programmings";
-import { Geolocation } from "@ionic-native/geolocation/ngx";
-import { StatesRequestProgrammingPipe } from "src/app/pipes/states-request-programming.pipe";
+import { Geolocation, Geoposition } from "@ionic-native/geolocation/ngx";
 import { TransportRequestService } from '../../services/transport-request/transport-request.service';
+import { ModalController } from "@ionic/angular";
+import { PassengersComponent } from "../passengers/passengers.component";
+import { transactionObj } from '../../models/general/transaction';
+
 @Component({
   selector: "app-programming-detail",
   templateUrl: "./programming-detail.page.html",
   styleUrls: ["./programming-detail.page.scss"],
 })
 export class ProgrammingDetailPage implements OnInit {
-  programming: any={};
+  programming: any = {};
   loadingMap = true;
   theHtmlString: any;
   sending = false;
-  textButton = "NUEVO SEGUIMIENTO";
-  observations="";
+  value = 'This is my barcode secret data';
+  textButton = "Nuevo seguimiento";
+  observations = "";
   constructor(
     private router: Router,
     private _san: DomSanitizer,
     private _service: ServicesRequestService,
-    private _modal: ModalController,
     private _alert: AlertService,
     public _sesion: SessionService,
     private geo: Geolocation,
-    private _request:TransportRequestService
-  ) {
-
+    private _request: TransportRequestService,
+    private modalController: ModalController) {
     this.programming.details = [];
   }
 
@@ -40,8 +41,9 @@ export class ProgrammingDetailPage implements OnInit {
     //this.loadDetail();
   }
 
-  ionViewDidEnter(){
+  ionViewDidEnter() {
     this.loadDetail();
+ 
   }
 
   loadDetail() {
@@ -51,28 +53,20 @@ export class ProgrammingDetailPage implements OnInit {
         this.programming.SolicitudId
       )
       .subscribe((resp) => {
+
         if (resp.ObjTransaction) {
           this.programming.details = resp.ObjTransaction;
+
         }
       });
   }
 
-  loadMap(latitude: number, long: number) {    
+  loadMap(latitude: number, long: number) {
     return this._san.bypassSecurityTrustResourceUrl(
       `https://maps.google.com/maps?q=${latitude}, ${long}&z=15&output=embed`
     );
-    
 
-    // const myLatLng = { lat: latitude, lng: long};
-    // const mapEle: HTMLElement = document.getElementById('map');
-    // this.mapRef = new google.maps.Map(mapEle, {
-    //   center: myLatLng,
-    //   zoom: 12
-    // });
-    // google.maps.event.addListenerOnce(this.mapRef, 'idle', () => {
-    //   this.loadingMap=false;
-    //   this.addMaker(myLatLng.lat, myLatLng.lng);
-    // });
+
   }
 
   setState() {
@@ -133,7 +127,7 @@ export class ProgrammingDetailPage implements OnInit {
     log.SolicitudId = this.programming.SolicitudId;
     log.EmpresaId = this._sesion.GetThirdPartie().IdEmpresa;
     log.Estado = value;
-    this._request.SetTransportRequestFailed(log).then(()=>{
+    this._request.SetTransportRequestFailed(log).then(() => {
       this.geo.getCurrentPosition().then((data) => {
         this.textButton = "Esperando...";
         setTimeout(() => {
@@ -142,28 +136,46 @@ export class ProgrammingDetailPage implements OnInit {
           log.observations = this.observations;
           // Guardamos el intento en los fallidos en caso de que falle        
           this._service.PostServicesDetail(log).subscribe(
-              (resp: any) => {
-                this.sending = false;
-                // Borramos el intento ya que el servidor si respondió
-                this._request.deleteTransportFailed();
-                if (resp.Retorno === 0) {
-                  this.textButton = "NUEVO SEGUIMIENTO";
-                  this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
-                  this.loadDetail();
-                } else {
-                  this.textButton = "NUEVO SEGUIMIENTO";
-                  this._alert.showAlert("Error", resp.TxtError);
-                }
-              },
-              (err) => {
-                this.sending = false;
-                this.textButton = "Error";
-                console.log(err);
+            (resp: any) => {
+              this.sending = false;
+              // Borramos el intento ya que el servidor si respondió
+              this._request.deleteTransportFailed();
+              if (resp.Retorno === 0) {
+                this.textButton = "Nuevo seguimiento";
+                this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
+                this.loadDetail();
+              } else {
+                this.textButton = "Nuevo seguimiento";
+                this._alert.showAlert("Error", resp.TxtError);
               }
-            );
+            },
+            (err) => {
+              this.sending = false;
+              this.textButton = "Error";
+              console.log(err);
+            }
+          );
         }, 3000);
       });
     })
 
   }
+
+
+  async showModalPassengers() {
+    const modal = await this.modalController.create({
+      component: PassengersComponent,
+      componentProps: {
+        passengers: this.programming.passengers,
+      }
+    });
+
+    return await modal.present();
+
+
+  }
+
+
 }
+
+

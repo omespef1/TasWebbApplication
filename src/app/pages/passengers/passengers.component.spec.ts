@@ -1,28 +1,27 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProgrammingDetailPage } from './programming-detail.page';
+import { PassengersComponent } from './passengers.component';
 
-describe('ProgrammingDetailPage', () => {
-  let component: ProgrammingDetailPage;
-  let fixture: ComponentFixture<ProgrammingDetailPage>;
+describe('PassengersComponent', () => {
+  let component: PassengersComponent;
+  let fixture: ComponentFixture<PassengersComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProgrammingDetailPage ],
+      declarations: [ PassengersComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProgrammingDetailPage);
+    fixture = TestBed.createComponent(PassengersComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('it should validate code', () => {
-    
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

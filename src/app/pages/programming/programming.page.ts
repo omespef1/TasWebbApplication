@@ -80,6 +80,7 @@ export class ProgrammingPage implements OnInit {
         this.loading = false;
         if (resp.ObjTransaction) {
           this.programmings = resp.ObjTransaction;
+          
         }
       });
   }

@@ -20,22 +20,24 @@ import { BrowserTab } from "@ionic-native/browser-tab/ngx";
 import { ThirdPartiesGenericPage } from './pages/third-parties-generic/third-parties-generic.page';
 import { SignatureComponent } from './pages/signature/signature.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
-
-
+import { PassengersComponent } from './pages/passengers/passengers.component';
+import { environment } from '../environments/environment';
+import { InAppBrowser } from "@ionic-native/in-app-browser/ngx"
 
 @NgModule({
-  declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent],
-  entryComponents: [ThirdPartiesGenericPage,SignatureComponent],
+  declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent,PassengersComponent],
+  entryComponents: [ThirdPartiesGenericPage,SignatureComponent,PassengersComponent],
   imports: [BrowserModule, IonicModule.forRoot(
    { mode: 'ios'}
   ), AppRoutingModule,
-  ComponentsModule,HttpClientModule, IonicStorageModule.forRoot(),SignaturePadModule ],
+  ComponentsModule,HttpClientModule, IonicStorageModule.forRoot(),SignaturePadModule],
   providers: [
     Network,
     FingerprintAIO,
     StatusBar,
     SplashScreen,
     BrowserTab,
+    InAppBrowser,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
 
   ],

@@ -17,6 +17,7 @@ export class manchecklist {
   Longitude:number;
   sending:boolean;
   drivers:number[];
+  PlacaVehiculo:string;
 }
 export class manchecklistDetalle {
 constructor(){

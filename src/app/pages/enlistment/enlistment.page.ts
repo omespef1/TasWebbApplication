@@ -157,6 +157,7 @@ export class EnlistmentPage implements OnInit {
       Longitude: longitude,
       sending: true,
       drivers: [],
+      PlacaVehiculo:''
     };
     this._thirdParties.GetThirdParties().forEach((element) => {
       answer.drivers.push(element.IdTercero);
