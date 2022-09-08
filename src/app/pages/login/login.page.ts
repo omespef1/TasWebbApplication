@@ -8,7 +8,7 @@ import { AlertService } from "../../services/alert/alert.service";
 import { SessionService } from "../../services/session/session.service";
 import { BusinessPage } from "../business/business.page";
 import { ThirdPartie } from "../../models/general/user";
-import { TouchIdService } from "../../services/touch/touch-id.service";
+// import { TouchIdService } from "../../services/touch/touch-id.service";
 import {
   NetworkService,
   ConnectionStatus
@@ -34,7 +34,7 @@ export class LoginPage implements OnInit {
     private _nav: NavController,
     public _sesion: SessionService,
     private _modal: ModalController,
-    private _touch: TouchIdService,
+    // private _touch: TouchIdService,
     private _platform: Platform,
     private _network: NetworkService,
     private _auth:AuthService
@@ -43,7 +43,7 @@ export class LoginPage implements OnInit {
   ngOnInit() {}
   ionViewWillEnter() {
     this.LoadBusiness();
-    this.GetTouchId();
+    // this.GetTouchId();
   }
 
   async LoadBusiness() {
@@ -100,41 +100,41 @@ export class LoginPage implements OnInit {
     this.showModalBusiness();
   }
 
-  async GetTouchId() {
-    if (this._platform.is("cordova")) {
-      await this._platform.ready();
-      this._touch.isAvailale().then(
-        result => {
-          // if (result === "finger" || result === "face") {
-            //console.log(`Autenticación disponible por ${result}`);
-            this.touchId = true;
-          // }
-        },
-        err => {}
-      );
-    }
-  }
+  // async GetTouchId() {
+  //   if (this._platform.is("cordova")) {
+  //     await this._platform.ready();
+  //     this._touch.isAvailale().then(
+  //       result => {
+  //         // if (result === "finger" || result === "face") {
+  //           //console.log(`Autenticación disponible por ${result}`);
+  //           this.touchId = true;
+  //         // }
+  //       },
+  //       err => {}
+  //     );
+  //   }
+  // }
 
-  logTouchId() {
-    if (this._platform.is("cordova")) {
-      this._touch
-        .verifyFingerPrint("Ingresa tu huella dactilar para ingresar")
-        .then((result: any) => {
-          //console.log(`Autenticación resultado  es ${result}`);
-          this.auth.signInDirectTouch();
-          this._auth.goApp();
-          // if (result == "Success") {
-          //   this.auth.signInDirectTouch();
-          //   this.router.navigateByUrl("tabs/vehicle");
-          // } else {
-          //   this._alert.showAlert("Error", "Verificación fallida");
-          // }
-        })
-        .catch((error: any) => {
-          this._alert.showAlert("Error", "Verificación fallida");
-        });
-    }
-  }
+  // logTouchId() {
+  //   if (this._platform.is("cordova")) {
+  //     this._touch
+  //       .verifyFingerPrint("Ingresa tu huella dactilar para ingresar")
+  //       .then((result: any) => {
+  //         //console.log(`Autenticación resultado  es ${result}`);
+  //         this.auth.signInDirectTouch();
+  //         this._auth.goApp();
+  //         // if (result == "Success") {
+  //         //   this.auth.signInDirectTouch();
+  //         //   this.router.navigateByUrl("tabs/vehicle");
+  //         // } else {
+  //         //   this._alert.showAlert("Error", "Verificación fallida");
+  //         // }
+  //       })
+  //       .catch((error: any) => {
+  //         this._alert.showAlert("Error", "Verificación fallida");
+  //       });
+  //   }
+  // }
 
   // goApp(){
 

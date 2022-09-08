@@ -14,14 +14,12 @@ import { ComponentsModule } from "./components/components.module";
 import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { Network } from '@ionic-native/network/ngx';
-import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
+// import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 import { SafePipe } from './pipes/safe.pipe';
-import { BrowserTab } from "@ionic-native/browser-tab/ngx";
 import { ThirdPartiesGenericPage } from './pages/third-parties-generic/third-parties-generic.page';
 import { SignatureComponent } from './pages/signature/signature.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { PassengersComponent } from './pages/passengers/passengers.component';
-import { environment } from '../environments/environment';
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx"
 
 @NgModule({
@@ -33,10 +31,9 @@ import { InAppBrowser } from "@ionic-native/in-app-browser/ngx"
   ComponentsModule,HttpClientModule, IonicStorageModule.forRoot(),SignaturePadModule],
   providers: [
     Network,
-    FingerprintAIO,
+    // FingerprintAIO,
     StatusBar,
     SplashScreen,
-    BrowserTab,
     InAppBrowser,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
 
