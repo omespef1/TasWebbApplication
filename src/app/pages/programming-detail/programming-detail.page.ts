@@ -10,6 +10,7 @@ import { TransportRequestService } from '../../services/transport-request/transp
 import { ModalController } from "@ionic/angular";
 import { PassengersComponent } from "../passengers/passengers.component";
 import { transactionObj } from '../../models/general/transaction';
+import { PassengerService } from '../../services/passenger/passenger.service';
 
 @Component({
   selector: "app-programming-detail",
@@ -32,7 +33,8 @@ export class ProgrammingDetailPage implements OnInit {
     public _sesion: SessionService,
     private geo: Geolocation,
     private _request: TransportRequestService,
-    private modalController: ModalController) {
+    private modalController: ModalController,
+    private passengerService:PassengerService) {
     this.programming.details = [];
   }
 
@@ -175,6 +177,37 @@ export class ProgrammingDetailPage implements OnInit {
 
   }
 
+
+  async validPassenger(type: TypeValidator) {
+    let factory = this.factoryValidator.createValidator(type)
+    factory.identification = ".";
+    while (factory.identification.length > 0) {
+
+      let resp = <transactionObj<boolean>>await factory.validPassenger(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId)
+      if (resp != null && resp.Retorno == 0) {
+
+        let data = <Geoposition>await this.geo.getCurrentPosition()
+        if (resp.ObjTransaction == true) {
+          // this._alert.successSweet("Pasajero validado correctamente!");
+          factory.uploadPassenger(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId, data.coords.latitude, data.coords.longitude)
+        }
+      }
+      if (resp.ObjTransaction == false || resp.Retorno == 1) {
+        this._alert.errorSweet(resp.TxtError);
+      }
+    }
+  }
+
+  getPassengers() {
+
+    this.passengerService.getPassengers(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId).subscribe(resp => {
+      if (resp != null && resp.Retorno == 0) {
+
+        this.programming.passengers = resp.ObjTransaction;
+      }
+    })
+
+  }
 
 }
 

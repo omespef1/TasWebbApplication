@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 import { AlertController } from "@ionic/angular";
 import { ToastController } from "@ionic/angular";
-
+import Swal from 'sweetalert2'
 @Injectable({
   providedIn: "root",
 })
@@ -64,4 +64,23 @@ export class AlertService {
     //   }
     // });
   }
+  successSweet(message:string){
+
+    Swal.fire({
+      title: 'Perfecto!',
+      text: message,
+      icon: 'success',
+      confirmButtonText: 'OK'
+    })
+  }
+
+  
+errorSweet(message:string){
+
+    Swal.fire({
+      title: 'Oops!',
+      text: message,
+      icon: 'error',
+      confirmButtonText: 'OK'
+    })
 }

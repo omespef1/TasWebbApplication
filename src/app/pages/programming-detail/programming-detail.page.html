@@ -18,7 +18,22 @@
           &nbsp; Histórico pasajeros
         </ion-button>
       </ion-col>
-    </ion-row>    
+    </ion-row>  
+    <ion-row>
+      <ion-col *ngIf="programming.ManejaRuta">
+        <ion-button (click)="validPassenger(2)" color="primary"  expand="block" >
+          <ion-icon name="paper"></ion-icon>
+          &nbsp; Escanear QR
+        </ion-button>
+      </ion-col>
+      <ion-col *ngIf="programming.ManejaRuta">
+        <ion-button (click)="validPassenger(1)" color="success" expand="block" >
+          <ion-icon name="card"></ion-icon>
+          &nbsp;Identificación
+        </ion-button>
+      
+      </ion-col>
+    </ion-row>  
   </ion-grid>
   <ion-item class="header" lines="none" color="secondary">
     <ion-icon slot="start" name="clipboard"></ion-icon>
