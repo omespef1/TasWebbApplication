@@ -269,7 +269,7 @@ export class EnlistmentPage implements OnInit {
         answer.check_foto = imageData;
       },
       (err) => {
-        // Handle error
+       console.log(err);
       }
     );
   }

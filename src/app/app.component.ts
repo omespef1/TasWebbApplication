@@ -34,7 +34,7 @@ export class AppComponent {
 
       if (this.platform.is("cordova")) {
     
-        this._push.init_Notifications();
+      //  this._push.init_Notifications();
       }
       this.statusBar.styleDefault();
     

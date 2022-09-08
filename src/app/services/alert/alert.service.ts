@@ -1,11 +1,7 @@
 import { Injectable } from "@angular/core";
+import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 import { AlertController } from "@ionic/angular";
 import { ToastController } from "@ionic/angular";
-import { BrowserTab } from "@ionic-native/browser-tab/ngx";
-import Swal from 'sweetalert2'
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-
-
 
 @Injectable({
   providedIn: "root",
@@ -14,8 +10,7 @@ export class AlertService {
   constructor(
     private _alert: AlertController,
     private _toast: ToastController,
-    private browserTab: BrowserTab,
-    private inapp:InAppBrowser
+    private browserTab: InAppBrowser
   ) {}
 
   async showAlert(title: string, message: string) {
@@ -60,6 +55,7 @@ export class AlertService {
 
   openBrowserUrl(url: string) {
     console.log(url);
+    this.browserTab.create(url, '_blank', 'location=yes');
     // this.browserTab.isAvailable().then((isAvailable) => {
     //   if (isAvailable) {
     //     this.browserTab.openUrl(url);
@@ -67,30 +63,5 @@ export class AlertService {
     //     // open URL with InAppBrowser instead or SafariViewController
     //   }
     // });
-
-    // const browser = this.iab.create(url);
-
-    const browser = this.inapp.create(url,'_system', 'location=yes');
-  }
-
-  successSweet(message:string){
-
-    Swal.fire({
-      title: 'Perfecto!',
-      text: message,
-      icon: 'success',
-      confirmButtonText: 'OK'
-    })
-  }
-
-  
-errorSweet(message:string){
-
-    Swal.fire({
-      title: 'Oops!',
-      text: message,
-      icon: 'error',
-      confirmButtonText: 'OK'
-    })
   }
 }
