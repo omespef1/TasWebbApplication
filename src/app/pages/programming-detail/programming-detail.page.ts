@@ -11,6 +11,8 @@ import { ModalController } from "@ionic/angular";
 import { PassengersComponent } from "../passengers/passengers.component";
 import { transactionObj } from '../../models/general/transaction';
 import { PassengerService } from '../../services/passenger/passenger.service';
+import TypeValidator from "src/app/enums/type-validator.enum";
+import { FactoryValidator } from '../../factory/validator-passenger.factory';
 
 @Component({
   selector: "app-programming-detail",
@@ -34,7 +36,8 @@ export class ProgrammingDetailPage implements OnInit {
     private geo: Geolocation,
     private _request: TransportRequestService,
     private modalController: ModalController,
-    private passengerService:PassengerService) {
+    private passengerService:PassengerService,
+    private factoryValidator:FactoryValidator) {
     this.programming.details = [];
   }
 

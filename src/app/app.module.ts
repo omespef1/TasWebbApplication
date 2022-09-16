@@ -21,6 +21,10 @@ import { SignatureComponent } from './pages/signature/signature.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { PassengersComponent } from './pages/passengers/passengers.component';
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx"
+import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
+import { FactoryValidator } from './factory/validator-passenger.factory';
+
+
 
 @NgModule({
   declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent,PassengersComponent],
@@ -35,6 +39,8 @@ import { InAppBrowser } from "@ionic-native/in-app-browser/ngx"
     StatusBar,
     SplashScreen,
     InAppBrowser,
+    BarcodeScanner,
+    FactoryValidator,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
 
   ],

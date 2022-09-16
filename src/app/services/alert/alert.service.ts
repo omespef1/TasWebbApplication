@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 import { AlertController } from "@ionic/angular";
 import { ToastController } from "@ionic/angular";
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 @Injectable({
   providedIn: "root",
 })
@@ -83,4 +83,5 @@ errorSweet(message:string){
       icon: 'error',
       confirmButtonText: 'OK'
     })
+}
 }

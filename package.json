@@ -20,6 +20,8 @@
     "@angular/platform-browser": "~8.1.2",
     "@angular/platform-browser-dynamic": "~8.1.2",
     "@angular/router": "~8.1.2",
+    "@awesome-cordova-plugins/barcode-scanner": "^5.45.0",
+    "@awesome-cordova-plugins/core": "^5.45.0",
     "@ionic-native/browser-tab": "^4.20.0",
     "@ionic-native/camera": "^5.15.0",
     "@ionic-native/core": "^5.0.0",
@@ -44,7 +46,7 @@
     "devextreme-angular": "20.1.7",
     "moment": "^2.24.0",
     "release": "6.1.0",
-    "rxjs": "~6.5.1",
+    "rxjs": "^6.5.5",
     "stream": "0.0.2",
     "sweetalert2": "^11.1.9",
     "tslib": "^1.9.0",
@@ -71,7 +73,6 @@
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-inappbrowser": "^4.1.0",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
-    "cordova-plugin-qrscanner": "^3.0.1",
     "cordova-plugin-splashscreen": "^5.0.2",
     "cordova-plugin-statusbar": "^2.4.2",
     "jasmine-core": "~3.4.0",
@@ -81,6 +82,7 @@
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
+    "phonegap-plugin-barcodescanner": "^8.1.0",
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
@@ -100,7 +102,9 @@
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
       },
       "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-qrscanner": {}
+      "phonegap-plugin-barcodescanner": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      }
     },
     "platforms": [
       "browser",
