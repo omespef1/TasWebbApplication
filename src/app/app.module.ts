@@ -23,6 +23,7 @@ import { PassengersComponent } from './pages/passengers/passengers.component';
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx"
 import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 import { FactoryValidator } from './factory/validator-passenger.factory';
+import { OneSignal } from '@awesome-cordova-plugins/onesignal/ngx';
 
 
 
@@ -40,6 +41,7 @@ import { FactoryValidator } from './factory/validator-passenger.factory';
     SplashScreen,
     InAppBrowser,
     BarcodeScanner,
+    OneSignal,
     FactoryValidator,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
 

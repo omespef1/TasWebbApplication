@@ -5,7 +5,6 @@ import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { SessionService } from "./services/session/session.service";
 import { AuthService } from "./services/auth/auth.service";
-import { IfStmt } from "@angular/compiler";
 import { NetworkService } from './services/network/network.service';
 import { NotificationsService } from './services/push/notifications.service';
 import { TransportRequestService } from './services/transport-request/transport-request.service';
@@ -22,7 +21,6 @@ export class AppComponent {
     private statusBar: StatusBar,
     private _sesion: SessionService,
     private _auth: AuthService,
-    private _network: NetworkService,
     private _push:NotificationsService,
     private _transport:TransportRequestService
   ) {
@@ -30,18 +28,14 @@ export class AppComponent {
   }
 
   initializeApp() {
-    this.platform.ready().then(() => {
-
-      if (this.platform.is("cordova")) {
-    
-      //  this._push.init_Notifications();
-      }
-      this.statusBar.styleDefault();
-    
+    this.platform.ready().then(() => {              
+      this.statusBar.styleDefault();    
       this.splashScreen.hide();
+      this._push.init_Notifications();
       this._auth.signInDirect();
       this.LoadFirstSettings();
       this.SetRemoteTransport();
+      
     });
   }
 

@@ -84,8 +84,7 @@ export class LastEnlistmentsPage implements OnInit {
           this._sesion.GetBussiness(),
           this._sesion.GetThirdPartie()
         )
-        .subscribe((resp) => {
-          //console.log(resp);
+        .subscribe((resp) => {          
           if (event != null) {
             event.target.complete();
           } else {
