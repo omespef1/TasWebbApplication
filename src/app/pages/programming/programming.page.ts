@@ -5,6 +5,8 @@ import { NavigationExtras } from "@angular/router";
 import { NavController, ModalController } from "@ionic/angular";
 import { AlertService } from "../../services/alert/alert.service";
 import { ThirdPartiesGenericPage } from "../third-parties-generic/third-parties-generic.page";
+import { GENTercerosService } from '../../services/GENTerceros/genterceros.service';
+import { vehicle } from '../../models/vehicle/vehicle';
 
 @Component({
   selector: "app-programming",
@@ -13,6 +15,7 @@ import { ThirdPartiesGenericPage } from "../third-parties-generic/third-parties-
 })
 export class ProgrammingPage implements OnInit {
   programmings: any[] = [];
+  vehicleApprobed:vehicle;
   loading = false;
   canEdit = true;
   constructor(
@@ -21,10 +24,11 @@ export class ProgrammingPage implements OnInit {
     private nav: NavController,
     private _alert: AlertService,
     private _nav: NavController,
-    private _modal: ModalController
-  ) {}
+    private _modal: ModalController,
+    private genTercerosService: GENTercerosService
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
   ionViewWillEnter(event: any = null) {
     if (this.validAccess()) {
       if (this._session.isUser()) {
@@ -32,10 +36,10 @@ export class ProgrammingPage implements OnInit {
           this.GetProgrammingBeneficiario(event);
         }
         if (this._session.GetUser().Grupo == "CLIENTE") {
-          this.canEdit=false;
-          if(this._session.GetThirdPartie()!= null && this._session.GetThirdPartie()!=undefined){
+          this.canEdit = false;
+          if (this._session.GetThirdPartie() != null && this._session.GetThirdPartie() != undefined) {
 
-           this.GetProgramming(event);
+            this.GetProgramming(event);
           }
           // if(this._session.GetThirdPartie==null  || this._session.GetThirdPartie()==undefined){
           //   this.showModalThirdParties();
@@ -50,7 +54,7 @@ export class ProgrammingPage implements OnInit {
     }
   }
 
-  
+
 
   async showModalThirdParties() {
     this.canEdit = false;
@@ -58,15 +62,15 @@ export class ProgrammingPage implements OnInit {
       component: ThirdPartiesGenericPage,
     });
     modal.onDidDismiss().then((resp) => {
-      if(resp.data){
+      if (resp.data) {
         this._session.SetThirdPartie(resp.data);
         this.GetProgramming(null);
       }
-    
+
     });
     return await modal.present();
   }
-  GetProgramming(event=null) {
+  GetProgramming(event = null) {
     this.loading = true;
     this._serviceRequest
       .GetServicesRequest(
@@ -80,7 +84,7 @@ export class ProgrammingPage implements OnInit {
         this.loading = false;
         if (resp.ObjTransaction) {
           this.programmings = resp.ObjTransaction;
-          
+
         }
       });
   }
@@ -135,5 +139,20 @@ export class ProgrammingPage implements OnInit {
     } else {
       return true;
     }
+  }
+
+  checkApprovedLicensePlate() {
+    this.genTercerosService.IsAuthorizedForService(this._session.GetThirdPartie().IdEmpresa, this._session.GetThirdPartie().IdTercero).subscribe(resp => {
+      if(resp!= undefined && resp.Retorno==0){
+
+            this.vehicleApprobed = resp.ObjTransaction;
+      }
+
+    })
+
+  }
+  createService() {
+
+
   }
 }

@@ -1,0 +1,16 @@
+<app-header headerName="Centros de costo">
+</app-header>
+<ion-content>
+  <ion-searchbar showCancelButton="always"  debounce="700" animated placeholder="Buscar centro costo" (ionChange)="search($event)"></ion-searchbar>
+
+
+  <div text-center>
+    <ion-spinner *ngIf="loading" slot="start"></ion-spinner>
+  </div>
+ <ion-list>
+   <ion-item tappable *ngFor="let item of dataList" (click)="setData(item)">
+     <ion-icon slot="start" name="locate"></ion-icon>
+     <p>{{item.DescripcionLarga}}</p>
+   </ion-item>
+ </ion-list>
+</ion-content>

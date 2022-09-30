@@ -1,0 +1,59 @@
+<app-header headerName="Servicio">
+  
+</app-header>
+
+
+<ion-content>
+  <ion-list lines="none">
+    <ion-item class="header" lines="none" color="secondary">
+      <ion-icon slot="start" name="clipboard"></ion-icon>
+      <ion-label>Datos del servicio</ion-label>      
+    </ion-item> 
+    <ion-item lines="none" color="secondary">
+      <ion-icon slot="start" name="locate"></ion-icon>
+      <ion-label>ORIGEN</ion-label>
+      <ion-input type="text" required name="OrigenDireccion" [(ngModel)]="request.OrigenDireccion"></ion-input>
+    </ion-item>
+    <ion-item tappable button  (click)="showPopupCitiesOrigin()">
+      <ion-icon slot="start" name="locate"></ion-icon>
+      <ion-label position="floating">Ciudad</ion-label>
+      <ion-note slot="end"> {{ cityOrigin.IdDivisionPolitica}}</ion-note>
+    </ion-item>
+    <ion-item lines="none" color="secondary">
+      <ion-icon slot="start" name="locate"></ion-icon>
+      <ion-label> DESTINO</ion-label>
+      <ion-input type="text" required name="DestinoDireccion" [(ngModel)]="request.DestinoDireccion"></ion-input>
+    </ion-item>
+    <ion-item tappable button  (click)="showPopupCitiesTarget()">
+      <ion-icon slot="start" name="locate"></ion-icon>
+      <ion-label position="floating">Ciudad</ion-label>
+      <ion-note slot="end"> {{ cityTarget.IdDivisionPolitica}}</ion-note>
+    </ion-item>
+    <ion-item lines="none" color="secondary">
+      <ion-icon slot="start" name="person"></ion-icon>
+      <ion-label position="floating">Nombres y apellidos</ion-label>
+      <ion-input type="text" required name="UsuarioServicio" [(ngModel)]="request.UsuarioServicio"></ion-input>
+    </ion-item>
+    <ion-item tappable button  (click)="showPopUpModalidad()">
+      <ion-icon slot="start" name="locate"></ion-icon>
+      <ion-label position="floating">Modalidad</ion-label>
+      <ion-note slot="end"> {{ costCenterSelected.CentrocostosNombre}}</ion-note>
+    </ion-item>
+  </ion-list>
+ 
+
+  <ion-list>
+    <ion-item class="header" lines="none" color="secondary">
+      <ion-icon slot="start" name="clipboard"></ion-icon>
+      <ion-label>Datos del servicio</ion-label>      
+    </ion-item> 
+  </ion-list>
+
+
+
+
+
+
+
+
+</ion-content>
