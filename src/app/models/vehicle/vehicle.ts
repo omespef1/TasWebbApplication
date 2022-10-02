@@ -9,4 +9,5 @@ export class vehicle  {
     PoseedorId:number;
     Sugerido:number;
     loading:boolean;
+    IdTipoVehiculo:number;
 }

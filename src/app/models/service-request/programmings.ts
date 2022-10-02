@@ -26,6 +26,9 @@ export class ServicesRequest {
   FechaCrea: Date;
   UsuarioModifica: string;
   FechaModifica: Date;
+  Firma:string;
+  GESSolicitudServiciosDetalle:ServiceRequestDetail[];
+
 }
 
 export class ServiceRequestDetail {
@@ -40,5 +43,7 @@ export class ServiceRequestDetail {
   UsuarioModifica: string;
   FechaModifica: Date;
   observations:string;
+  Kilometraje:number;
+
 }
  

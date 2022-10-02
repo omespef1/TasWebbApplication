@@ -24,12 +24,14 @@ import { InAppBrowser } from "@ionic-native/in-app-browser/ngx"
 import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 import { FactoryValidator } from './factory/validator-passenger.factory';
 import { OneSignal } from '@awesome-cordova-plugins/onesignal/ngx';
+import { PoliticalDivisionComponent } from './pages/political-division/political-division.component';
+import { CostCenterPage } from './pages/cost-center/cost-center.page';
 
 
 
 @NgModule({
-  declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent,PassengersComponent],
-  entryComponents: [ThirdPartiesGenericPage,SignatureComponent,PassengersComponent],
+  declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage],
+  entryComponents: [ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage],
   imports: [BrowserModule, IonicModule.forRoot(
    { mode: 'ios'}
   ), AppRoutingModule,

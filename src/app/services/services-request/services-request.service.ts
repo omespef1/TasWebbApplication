@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { transaction, transactionID } from "src/app/models/general/transaction";
 import { HttpManagerService } from '../httpManager/http-manager.service';
-import { ServiceRequestDetail } from "src/app/models/service-request/programmings";
+import { ServiceRequestDetail, ServicesRequest } from "src/app/models/service-request/programmings";
 
 @Injectable({
   providedIn: 'root'
@@ -24,4 +24,8 @@ export class ServicesRequestService {
    PostServicesDetail(request: ServiceRequestDetail){
      return this._http.PostRequest('/GESSolicitudServicios/PostGESSolicitudServiciosDetalle', request);
    }
+
+   PostServiceApp(request: ServicesRequest){
+    return this._http.PostRequest<transaction>('/GESSolicitudServicios/newServiceApp', request);
+  }
 }
