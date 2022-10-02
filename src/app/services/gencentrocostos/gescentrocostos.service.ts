@@ -13,6 +13,6 @@ export class GescentrocostosService {
 
 
   GetCostCenterCompany(idEmpresa:number,text:string){
-    return this._http.Get<transaction>(`/GESCentroCostos/GetByCompany?companyCode=${idEmpresa}&searchTerm= ${text}`);
+    return this._http.Get<transaction>(`/GESCentroCostos/GetByCompany?companyCode=${idEmpresa}&searchTerm=${text}`);
   }
 }

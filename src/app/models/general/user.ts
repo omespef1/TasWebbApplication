@@ -7,4 +7,6 @@ export class ThirdPartie {
     PrimerApellido:string;
     Grupo;
     TerFechaVenceLicencia:Date;
+    Bancario:number;
+    Conductor:number;
 }

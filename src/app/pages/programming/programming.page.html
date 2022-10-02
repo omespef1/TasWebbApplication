@@ -15,10 +15,13 @@
         <ion-icon slot="end" name="person"></ion-icon>
       </ion-button>
      </div>
-     <ion-button expand="block" color="secondary" *ngIf="_session.GetUser().Bancario == 1 &&  _session.GetUser().Conductor == 1" (click)="createService()">
-      NUEVO SERVICIO
-       <ion-icon slot="end" name="plus"></ion-icon>
+     <div class="btn-driver">
+     <ion-button [disabled]="vehicleApprobed==undefined" expand="block" color="danger" *ngIf="_session.GetThirdPartie().Bancario == 1 &&  _session.GetThirdPartie().Conductor == 1" (click)="goService()">
+      {{activeService.SolicitudId > 0 ? 'VER SERVICIO ACTIVO':'CREAR NUEVO SERVICIO'}} 
+       <ion-icon slot="end" name="add"></ion-icon>
      </ion-button>
+     </div>
+     <ion-list lines="none" inset="true">     
      <ion-item class="header" lines="none" color="secondary">
       <ion-icon slot="start" name="clipboard"></ion-icon>
       <ion-label>VEHÍCULO APROBADO</ion-label>      
@@ -28,6 +31,7 @@
       <ion-label>Placa</ion-label>
       <ion-note slot="end"> {{ vehicleApprobed!= undefined? vehicleApprobed.PlacaVehiculo : 'Sin asignar'}}</ion-note>
     </ion-item>
+     </ion-list>
     <ion-list lines="none" *ngFor="let programming of programmings" inset="true">
       <ion-item class="header" lines="none" color="secondary">
         <ion-icon slot="start" name="clipboard"></ion-icon>

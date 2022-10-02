@@ -110,7 +110,7 @@ export class AuthService {
   }
 
   async signOut() {
-    await   this.RemoveOneSignalId();
+    //await   this.RemoveOneSignalId();
     
     this._thirdParties.removeThirdPartiesSession();
     this.nav.navigateRoot("login");

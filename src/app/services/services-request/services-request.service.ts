@@ -21,6 +21,10 @@ export class ServicesRequestService {
     return this._http.Get<transaction>(`/GESSolicitudServicios/GetGESSolicitudServiciosDetalle?empresaId=${business}&solicitudId=${id}`);
    }
 
+   CheckPendingServices(business: number,thirdPartieId: number){
+    return this._http.Get<transaction>(`/GESSolicitudServicios/checkPendingServices?companyId=${business}&thirdPartieId=${thirdPartieId}`);
+   }
+
    PostServicesDetail(request: ServiceRequestDetail){
      return this._http.PostRequest('/GESSolicitudServicios/PostGESSolicitudServiciosDetalle', request);
    }

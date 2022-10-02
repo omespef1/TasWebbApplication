@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ServicesRequestService } from "../../services/services-request/services-request.service";
+import { ServicesRequestService } from '../../services/services-request/services-request.service';
 import { SessionService } from "../../services/session/session.service";
 import { NavigationExtras } from "@angular/router";
 import { NavController, ModalController } from "@ionic/angular";
@@ -7,6 +7,7 @@ import { AlertService } from "../../services/alert/alert.service";
 import { ThirdPartiesGenericPage } from "../third-parties-generic/third-parties-generic.page";
 import { GENTercerosService } from '../../services/GENTerceros/genterceros.service';
 import { vehicle } from '../../models/vehicle/vehicle';
+import { ServicesRequest } from '../../models/service-request/programmings';
 
 @Component({
   selector: "app-programming",
@@ -18,6 +19,7 @@ export class ProgrammingPage implements OnInit {
   vehicleApprobed:vehicle;
   loading = false;
   canEdit = true;
+  activeService : ServicesRequest = new ServicesRequest();
   constructor(
     private _serviceRequest: ServicesRequestService,
     public _session: SessionService,
@@ -50,6 +52,8 @@ export class ProgrammingPage implements OnInit {
         }
       } else {
         this.GetProgramming(event);
+        this.checkApprovedLicensePlate();
+        this.checkStatusServices();
       }
     }
   }
@@ -71,6 +75,7 @@ export class ProgrammingPage implements OnInit {
     return await modal.present();
   }
   GetProgramming(event = null) {
+  console.log( this._session.GetThirdPartie());
     this.loading = true;
     this._serviceRequest
       .GetServicesRequest(
@@ -151,8 +156,36 @@ export class ProgrammingPage implements OnInit {
     })
 
   }
-  createService() {
+  checkStatusServices() {
+
+      this._serviceRequest.CheckPendingServices(this._session.GetThirdPartie().IdEmpresa,this._session.GetThirdPartie().IdTercero).subscribe(resp=>{
+        if(resp!=undefined && resp.Retorno==0){
+          if(resp.ObjTransaction!=null)
+            this.activeService = resp.ObjTransaction;
+            else 
+            this.activeService = new ServicesRequest();
+        }
+        else {
+          this._alert.showAlert('Error', resp.TxtError);
+        }
+      })
+  }
 
 
+  goService(){
+
+
+    if(this.activeService!=undefined){
+
+      let params: NavigationExtras = {
+        state: {
+          request: this.activeService
+        }
+      };
+      this._nav.navigateForward("tabs/programming/programming-new", params);
+    }
+    else {
+      this._nav.navigateForward("tabs/programming/programming-new");
+    }
   }
 }

@@ -5,94 +5,117 @@
 
 <ion-content>
   
-  <form  #newService="ngForm">
-  <ion-list lines="none">
-    <ion-item class="header" lines="none" color="secondary">
-      <ion-icon slot="start" name="clipboard"></ion-icon>
+  <form  #newService="ngForm" autocomplete="off" (ngSubmit)="createService()">
+  <ion-list inset="true">
+    <ion-item class="header"  color="secondary">
+      <ion-icon slot="start" name="paper"></ion-icon>
       <ion-label>DATOS DEL BÁSICOS</ion-label>      
     </ion-item> 
-    <ion-item lines="none" color="secondary">
-      <ion-icon slot="start" name="locate"></ion-icon>
-      <ion-label>Origen</ion-label>
+    <ion-item >
+      <ion-icon slot="start" name="pin"></ion-icon>
+      <ion-label>Origen*</ion-label>
       <ion-input type="text" required name="OrigenDireccion" [(ngModel)]="request.OrigenDireccion"></ion-input>
     </ion-item>
     <ion-item tappable button  (click)="showPopupCitiesOrigin()">
       <ion-icon slot="start" name="locate"></ion-icon>
-      <ion-label position="floating">Ciudad</ion-label>
-      <ion-note slot="end"> {{ cityOrigin.IdDivisionPolitica}}</ion-note>
+      <ion-label>Ciudad Origen*</ion-label>
+      <ion-note slot="end"> {{ cityOrigin.DescripcionCorta}}</ion-note>
     </ion-item>
-    <ion-item lines="none" color="secondary">
-      <ion-icon slot="start" name="locate"></ion-icon>
-      <ion-label> Destino</ion-label>
+    <ion-item>
+      <ion-icon slot="start" name="pin"></ion-icon>
+      <ion-label>Destino*</ion-label>
       <ion-input type="text" required name="DestinoDireccion" [(ngModel)]="request.DestinoDireccion"></ion-input>
     </ion-item>
-    <ion-item tappable button  (click)="showPopupCitiesTarget()">
+    <ion-item tappable button>
       <ion-icon slot="start" name="locate"></ion-icon>
-      <ion-label position="floating">Ciudad</ion-label>
-      <ion-note slot="end"> {{ cityTarget.IdDivisionPolitica}}</ion-note>
+      <ion-label>Ciudad Destino</ion-label>
+      <ion-note slot="end"> {{ cityTarget.DescripcionCorta}}</ion-note>
     </ion-item>
-    <ion-item lines="none" color="secondary">
+    <ion-item>
       <ion-icon slot="start" name="person"></ion-icon>
-      <ion-label position="floating">Nombres y apellidos</ion-label>
+      <ion-label>Nombres*</ion-label>
       <ion-input type="text" required name="UsuarioServicio" [(ngModel)]="request.UsuarioServicio"></ion-input>
     </ion-item>
     <ion-item tappable button  (click)="showPopUpModalidad()">
-      <ion-icon slot="start" name="locate"></ion-icon>
-      <ion-label position="floating">Modalidad</ion-label>
+      <ion-icon slot="start" name="aperture"></ion-icon>
+      <ion-label>Modalidad*</ion-label>
       <ion-note slot="end"> {{ costCenterSelected.CentrocostosNombre}}</ion-note>
     </ion-item>
+    
     <ng-container *ngIf="request.SolicitudId==0">
-      <ion-item>
-        <ion-item class="header" lines="none" color="secondary">
-          <ion-icon slot="start" name="clipboard"></ion-icon>
-          <ion-label>INICIO DEL VIAJE</ion-label>      
+      <ng-container *ngFor="let detail of request.GESSolicitudServiciosDetalle">
+        <ng-container *ngIf="detail.Estado=='I'">
+          <ion-item class="header"  color="secondary">
+            <ion-icon slot="start" name="paper"></ion-icon>
+            <ion-label>INICIO DEL VIAJE</ion-label>      
+          </ion-item> 
+          <ion-item>
+          <ion-icon slot="start" name="car"></ion-icon>
+          <ion-label>Kilometraje*</ion-label>
+          <ion-input required type="number" required name="Kilometraje" [(ngModel)]="detail.Kilometraje"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-icon slot="start" name="pin"></ion-icon>
+          <ion-label>Posición</ion-label>
+          <ion-note slot="end"> {{ latitude}} , {{longitude }}</ion-note>
         </ion-item> 
-        <ion-icon slot="start" name="car"></ion-icon>
-        <ion-label position="floating">Kilometraje</ion-label>
-        <ion-input required type="number" required name="kilometraje" [(ngModel)]="item.GESSolicitudServiciosDetalle[0].kilometraje"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-icon slot="start" name="pin"></ion-icon>
-        <ion-label position="floating">Posición</ion-label>
-        <ion-note slot="end"> {{ item.GESSolicitudServiciosDetalle[0].latitude}} , {{item.GESSolicitudServiciosDetalle[0].longitude }}</ion-note>
-      </ion-item>      
-      <ion-button (click) = "createService()" [disabled]= "!newService.form.valid || loading" type="submit"  expand="full"  color="secondary">      
-        <ion-spinner  color="primary" *ngIf="loading" slot="end"></ion-spinner>
-        CREAR SERVICIO
-      </ion-button> 
+        <ion-button type="submit" [disabled]= "!newService.form.valid || loading || request.OrigenCiudad==0 ||  request.DestinoCiudad==0 ||  request.CentrocostosId==0 ||  request.GESSolicitudServiciosDetalle[0].Kilometraje==0" type="submit"  expand="full"  color="secondary">      
+          <ion-spinner  color="primary" *ngIf="loading" slot="end"></ion-spinner>
+          INICIAR SERVICIO
+        </ion-button> 
+        </ng-container>
+        
+      </ng-container>
+      
+      
+      
     </ng-container>
 
     <ng-container *ngIf="request.SolicitudId>0">
-      <ion-item>
-        <ion-item class="header" lines="none" color="secondary">
-          <ion-icon slot="start" name="clipboard"></ion-icon>
+      <ng-container *ngFor="let detail of request.GESSolicitudServiciosDetalle">
+        <ng-container *ngIf="detail.Estado=='F'">
+        <ion-item class="header"  color="secondary">
+          <ion-icon slot="start" name="paper"></ion-icon>
           <ion-label>FIN DEL VIAJE</ion-label>      
         </ion-item> 
+        <ion-item>
         <ion-icon slot="start" name="car"></ion-icon>
-        <ion-label position="floating">Kilometraje</ion-label>
-        <ion-input required type="number" required name="kilometraje" [(ngModel)]="item.GESSolicitudServiciosDetalle[3].kilometraje"></ion-input>
+        <ion-label >Kilometraje</ion-label>
+        <ion-input required type="number" required name="Kilometraje" [(ngModel)]="detail.Kilometraje"></ion-input>
       </ion-item>
       <ion-item>
         <ion-icon slot="start" name="pin"></ion-icon>
-        <ion-label position="floating">Posición</ion-label>
-        <ion-note slot="end"> {{ item.GESSolicitudServiciosDetalle[0].latitude}} , {{item.GESSolicitudServiciosDetalle[3].longitude }}</ion-note>
+        <ion-label>Posición</ion-label>
+        <ion-note slot="end"> {{ latitude}} , {{longitude }}</ion-note>
       </ion-item> 
-      <ion-item class="header" lines="none" color="secondary">
+      <ion-item class="header"  color="secondary">
         <ion-icon slot="start" name="globe"></ion-icon>
         <ion-label>OBSERVACIONES</ion-label>
       </ion-item>
       <ion-item>
         <ion-item>          
-          <ion-textarea rows="3" cols="12" [(ngModel)]="request.Observaciones" learOnEdit="true"></ion-textarea>
+          <ion-textarea rows="3"  name="observaciones" cols="12" [(ngModel)]="request.Observaciones" learOnEdit="true"></ion-textarea>
         </ion-item>
-      </ion-item>     
-      <ion-button (click) = "createService()" [disabled]= "!newService.form.valid || loading" type="submit"  expand="full"  color="secondary">      
+      </ion-item>  
+      
+    
+        <ion-list-header (click)="showModalSignature()"  color="secondary">      
+          <ion-label>FIRMA CONTRATANTE</ion-label>        
+        </ion-list-header>
+      
+        
+          <ion-item (click)="showModalSignature()">
+            <img [src]="request.Firma" >
+          </ion-item>
+        
+     
+      <ion-button type="submit" [disabled]= "!newService.form.valid || loading || request.GESSolicitudServiciosDetalle[3].Kilometraje==0 || request.Firma =='' " type="submit"  expand="full"  color="secondary">      
         <ion-spinner  color="primary" *ngIf="loading" slot="end"></ion-spinner>
         TERMINAR SERVICIO
       </ion-button> 
     </ng-container>
-    
-   
+      </ng-container>
+    </ng-container>
   </ion-list>
  
 

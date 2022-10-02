@@ -1,6 +1,17 @@
 
 
 export class ServicesRequest {
+
+  constructor(){
+    this.SolicitudId=0;
+    this.GESSolicitudServiciosDetalle=[];
+    this.OrigenCiudad=0;
+    this.DestinoCiudad=0;
+    this.CentrocostosId=0;
+    this.Firma="";
+    this.OrigenDireccion="";
+    this.DestinoDireccion="";
+  }
   EmpresaId: number;
   SolicitudId: number;
   FechaSolicitud: Date;
