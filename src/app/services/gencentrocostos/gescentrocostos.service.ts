@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { transaction } from 'src/app/models/general/transaction';
+import { transaction, transactionObj } from 'src/app/models/general/transaction';
+import { GESCentroCostos } from 'src/app/models/service-request/costcenter';
 import { HttpManagerService } from '../httpManager/http-manager.service';
 
 @Injectable({
@@ -12,7 +13,7 @@ export class GescentrocostosService {
 
 
 
-  GetCostCenterCompany(idEmpresa:number,text:string){
-    return this._http.Get<transaction>(`/GESCentroCostos/GetByCompany?companyCode=${idEmpresa}&searchTerm=${text}`);
+  GetCostCenterCompany(idEmpresa:number){
+    return this._http.Get<transactionObj<GESCentroCostos[]>>(`/GESCentroCostos/GetByCompany?companyCode=${idEmpresa}`);
   }
 }

@@ -36,11 +36,19 @@
       <ion-label>Nombres*</ion-label>
       <ion-input type="text" required name="UsuarioServicio" [(ngModel)]="request.UsuarioServicio"></ion-input>
     </ion-item>
-    <ion-item tappable button  (click)="showPopUpModalidad()">
+    <!-- <ion-item tappable button  (click)="showPopUpModalidad()">
       <ion-icon slot="start" name="aperture"></ion-icon>
       <ion-label>Modalidad*</ion-label>
       <ion-note slot="end"> {{ costCenterSelected.CentrocostosNombre}}</ion-note>
+    </ion-item> -->
+    <ion-item>
+      <ion-icon slot="start" name="apps"></ion-icon>
+      <ion-label>Modalidad*</ion-label>
+      <ion-select placeholder="Seleccione modalidad" okText="Aceptar" [value]="request.CentrocostosId">
+        <ion-select-option *ngFor="let modality of costCenterList" [value]="modality.CentrocostosId"> {{ modality.CentrocostosCodigo}} - {{ modality.CentrocostosNombre}}</ion-select-option>
+      </ion-select>
     </ion-item>
+ 
     
     <ng-container *ngIf="request.SolicitudId==0">
       <ng-container *ngFor="let detail of request.GESSolicitudServiciosDetalle">
@@ -63,6 +71,7 @@
           <ion-spinner  color="primary" *ngIf="loading" slot="end"></ion-spinner>
           INICIAR SERVICIO
         </ion-button> 
+        
         </ng-container>
         
       </ng-container>

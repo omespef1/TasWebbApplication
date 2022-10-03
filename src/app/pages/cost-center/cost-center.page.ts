@@ -34,7 +34,7 @@ export class CostCenterPage implements OnInit {
 
     console.log(event);
     this.loading = true;
-    this.gesCentroCostosService.GetCostCenterCompany(this.sesionService.GetThirdPartie().IdEmpresa, event.detail.value).subscribe(resp => {
+    this.gesCentroCostosService.GetCostCenterCompany(this.sesionService.GetThirdPartie().IdEmpresa).subscribe(resp => {
       this.loading = false;
       //console.log(resp);
       if (resp.Retorno === 0 && resp.ObjTransaction != null) {
