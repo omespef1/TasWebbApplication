@@ -44,7 +44,7 @@
     <ion-item>
       <ion-icon slot="start" name="apps"></ion-icon>
       <ion-label>Modalidad*</ion-label>
-      <ion-select placeholder="Seleccione modalidad" okText="Aceptar" [value]="request.CentrocostosId">
+      <ion-select name="modality" placeholder="Seleccione modalidad" okText="Aceptar" cancelText="Cancelar" [(ngModel)]="request.CentrocostosId">
         <ion-select-option *ngFor="let modality of costCenterList" [value]="modality.CentrocostosId"> {{ modality.CentrocostosCodigo}} - {{ modality.CentrocostosNombre}}</ion-select-option>
       </ion-select>
     </ion-item>
