@@ -11,6 +11,9 @@ export class ServicesRequest {
     this.Firma="";
     this.OrigenDireccion="";
     this.DestinoDireccion="";
+    this.guid =  Math.random() + new Date().getMilliseconds();
+   
+    
   }
   EmpresaId: number;
   SolicitudId: number;
@@ -39,6 +42,7 @@ export class ServicesRequest {
   FechaModifica: Date;
   Firma:string;
   GESSolicitudServiciosDetalle:ServiceRequestDetail[];
+  guid:any;
 
 }
 

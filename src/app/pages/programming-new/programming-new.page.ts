@@ -15,6 +15,12 @@ import { AlertService } from "../../services/alert/alert.service";
 import { ServicesRequestService } from "src/app/services/services-request/services-request.service";
 import { SignatureComponent } from "../signature/signature.component";
 import { Router } from "@angular/router";
+import { manchecklist } from '../../models/enlistmen/manchecklist';
+import { PoliticalDivisionService } from "src/app/services/political-division/political-division.service";
+import { VehicleService } from '../../services/vehicle/vehicle.service';
+import { ThirdPartie } from "src/app/models/general/user";
+import { transactionObj } from "src/app/models/general/transaction";
+import { of } from "rxjs";
 
 @Component({
   selector: "app-programming-new",
@@ -31,6 +37,9 @@ export class ProgrammingNewPage implements OnInit {
   longitude: number = 0;
   vehicleApprobed: vehicle = new vehicle();
   loading = false;
+  lastEnlistment: manchecklist = new manchecklist();
+  lastServiceApprobed: ServicesRequest = new ServicesRequest();
+  aliParams: any;
   constructor(
     private costCenterService: GescentrocostosService,
     private session: SessionService,
@@ -41,27 +50,42 @@ export class ProgrammingNewPage implements OnInit {
     private requestService: ServicesRequestService,
     private nav: NavController,
     private router: Router,
-    private changes: ChangeDetectorRef
+    private changes: ChangeDetectorRef,
+    private politicalDivisionService: PoliticalDivisionService,
+    private vehicleService: VehicleService
   ) {
+
     this.request = this.router.getCurrentNavigation().extras.state.request;
   }
 
   async ngOnInit() {
-    //  await this.checkStatusServices();
-this.getModalities();
-    await this.getlocation();
+    
 
-    await this.checkApprovedLicensePlate();
-      
-    this.setbehaviorLoad();
+this.loadData();
+  
+   
+  }
+
+
+  async loadData(){    
+    this.getAliParams();    
+    //  await this.checkStatusServices();
+    this.getModalities();  
+    this.getInfoVehicle();   
+    await this.getlocation();   
+    await this.checkApprovedLicensePlate();    
+    this.setbehaviorLoad();   
     console.log(this.request);
   }
 
   setbehaviorLoad() {
     if (this.request.SolicitudId > 0) {
       this.addDetailsEnd();
+      this.getNameOriginCity(this.request.OrigenCiudad);
+      this.getNameTargetCity(this.request.DestinoCiudad);
     } else {
       this.addDetailsInit();
+      this.GetLastServiceThirdPartieApproved();
     }
   }
 
@@ -195,6 +219,14 @@ this.getModalities();
         if (resp != undefined && resp.Retorno == 0) {
           this.vehicleApprobed = resp.ObjTransaction;
         }
+      }, err => {
+        if (err.ok == false) {
+
+          this.session.GetIsAuthorizedForServiceOffline().then(data => {
+            this.vehicleApprobed = data;
+          })
+        }
+
       });
   }
 
@@ -218,7 +250,46 @@ this.getModalities();
   createService() {
     try {
       this.loading = true;
+      if (this.request.GESSolicitudServiciosDetalle[0].Kilometraje < this.vehicleApprobed.Kilometraje) {
+
+        throw Error('El kilometraje especificado no puede ser inferior al kilometraje actual del vehículo');
+      }
+
+
+
+
+
+
+
       this.prepareDetailsForSending();
+
+      if (this.request.GESSolicitudServiciosDetalle.length > 2 && this.request.SolicitudId > 0) {
+        if (this.request.GESSolicitudServiciosDetalle[3].Kilometraje < this.request.GESSolicitudServiciosDetalle[0].Kilometraje) {
+
+          throw Error('El kilometraje especificado no puede ser inferior al kilometraje de inicio del servicio');
+        }
+
+        if (
+          this.request.GESSolicitudServiciosDetalle[3].Kilometraje - this.request.GESSolicitudServiciosDetalle[0].Kilometraje >
+          this.aliParams.Par_TopeKilometraje
+        ) {
+
+          throw Error(`Nuevo Kilometraje no puede ser superior al tope estipulado: ${this.aliParams.Par_TopeKilometraje}`);
+        }
+      }
+      else {
+
+
+        if (
+          this.request.GESSolicitudServiciosDetalle[0].Kilometraje - this.vehicleApprobed.Kilometraje >
+          this.aliParams.Par_TopeKilometraje
+        ) {
+
+          throw Error(`Nuevo Kilometraje no puede ser superior al tope estipulado: ${this.aliParams.Par_TopeKilometraje}`);
+        }
+      }
+
+
 
       this.request.EmpresaId = this.session.GetThirdPartie().IdEmpresa;
       this.request.VehiculoId = this.vehicleApprobed.IdVehiculo;
@@ -237,22 +308,47 @@ this.getModalities();
         }
       });
     } catch (error) {
-      this.alert.showAlert("Error", error);
-      this.loading = false;
+      if (error.ok == false) {
+        this.session.setServiceOffline(this.request);
+        this.session.setLastsServiceThirdPartieApprovedOffline(this.request).then(()=>{
+          this.alert.successSweet("Servicio creado");
+          this.nav.navigateBack("tabs/programming");
+          this.request = new ServicesRequest();
+        })
+      
+      
+      }
+      else {
+        this.alert.showAlert("Error", error);
+        this.loading = false;
+      }
+   
     }
   }
 
   FinalizeService() {
-    this.requestService.PostServiceApp(this.request).subscribe((resp) => {
-      if (resp != null && resp.Retorno == 0) {
-        this.alert.successSweet("Servicio terminado!");
-        this.nav.navigateRoot("tabs/programming");
-        this.request = new ServicesRequest();
-      } else {
-        this.alert.showAlert("Error", resp.TxtError);
-        this.loading = false;
+
+    try {
+      if (this.request.GESSolicitudServiciosDetalle[3].Kilometraje < this.request.GESSolicitudServiciosDetalle[0].Kilometraje) {
+
+        throw Error('El kilometraje especificado no puede ser inferior al kilometraje de inicio del servicio');
       }
-    });
+
+      this.requestService.PostServiceApp(this.request).subscribe((resp) => {
+        if (resp != null && resp.Retorno == 0) {
+          this.alert.successSweet("Servicio terminado!");
+          this.nav.navigateRoot("tabs/programming");
+          this.request = new ServicesRequest();
+        } else {
+          this.alert.showAlert("Error", resp.TxtError);
+          this.loading = false;
+        }
+      });
+
+    } catch (error) {
+      this.alert.showAlert('Sistema', error);
+    }
+
   }
 
   async showModalSignature() {
@@ -290,6 +386,138 @@ this.getModalities();
         if (resp != null && resp.Retorno == 0) {
           this.costCenterList = resp.ObjTransaction;
         }
+      }, err => {
+        if (err.ok == false) {
+
+          this.session.GetModalitiesOffline().then(data => {
+            this.costCenterList = data;
+          })
+        }
+
       });
   }
+
+  GetLastEnlistmentThirdPartieApproved() {
+    this.genTercerosService.GetLastEnlistmentThirdPartieApproved(this.session.GetThirdPartie().IdEmpresa, this.session.GetThirdPartie().IdTercero).subscribe(resp => {
+      if (resp != null && resp.Retorno == 0) {
+        this.lastEnlistment = resp.ObjTransaction;
+      }
+    })
+  }
+
+  GetLastServiceThirdPartieApproved() {
+    this.requestService.GetLastsServiceThirdPartieApproved(this.session.GetThirdPartie().IdEmpresa, this.session.GetThirdPartie().IdTercero).subscribe(resp => {
+      if (resp != null && resp.Retorno == 0) {
+        this.lastServiceApprobed = resp.ObjTransaction;
+
+        this.request.OrigenCiudad = this.lastServiceApprobed.OrigenCiudad;
+        this.request.DestinoCiudad = this.lastServiceApprobed.DestinoCiudad;
+
+        this.getNameTargetCity(this.request.OrigenCiudad);
+        this.getNameOriginCity(this.request.OrigenCiudad)
+      }
+    }, err => {
+      if (err.ok == false) {
+
+        this.session.GetLastsServiceThirdPartieApprovedOffline().then(data => {
+          this.lastServiceApprobed = data;
+
+          this.request.OrigenCiudad = this.lastServiceApprobed.OrigenCiudad;
+          this.request.DestinoCiudad = this.lastServiceApprobed.DestinoCiudad;
+  
+          this.getNameTargetCity(this.request.OrigenCiudad);
+          this.getNameOriginCity(this.request.OrigenCiudad)
+        })
+      }
+
+    })
+  }
+
+
+  getNameTargetCity(cityId: number) {
+    this.politicalDivisionService.GetPoliticalDivisionByID(cityId).subscribe(resp => {
+      if (resp != null && resp.Retorno == 0) {
+        this.cityTarget = resp.ObjTransaction;
+      }
+    }, err => {
+      if (err.ok == false) {
+
+        this.session.GetPoliticalDivisionOffline().then(data => {
+          this.cityTarget = data.filter(c => c.IdDivisionPolitica == cityId)[0];
+        })
+      }
+    })
+  }
+
+
+  getNameOriginCity(cityId: number) {
+    this.politicalDivisionService.GetPoliticalDivisionByID(cityId).subscribe(resp => {
+      if (resp != null && resp.Retorno == 0) {
+        this.cityOrigin = resp.ObjTransaction;
+      }
+    }, err => {
+      if (err.ok == false) {
+
+        this.session.GetPoliticalDivisionOffline().then(data => {
+          this.cityOrigin = data.filter(c => c.IdDivisionPolitica == cityId)[0];
+        })
+      }
+    })
+
+  }
+
+
+  getInfoVehicle() {
+    this.vehicleService.GetVehicleInformationById(this.vehicleApprobed.IdEmpresa, this.vehicleApprobed.IdVehiculo)
+  }
+
+
+  getAliParams() {
+    this.vehicleService.GetDocumentsValidationCompany(this.session.GetThirdPartie().IdEmpresa).subscribe(resp => {
+      if (resp != null && resp.Retorno == 0) {
+        this.aliParams = resp.ObjTransaction;
+      }
+    }, err => {
+      if (err.ok == false) {
+
+        this.session.GetAliParamsOffline().then(resp => {
+          this.aliParams = resp;
+        })
+      }
+
+    })
+  }
+
+
+//   getInformationThirdPartie() {
+
+   
+//  return   this.genTercerosService.GetById(this.session.GetThirdPartie().IdEmpresa, this.session.GetThirdPartie().IdTercero).subscribe(resp => {
+//         if (resp != null && resp.Retorno == 0) {
+
+//          return of(resp);
+//         }
+//         else {
+//           return of(null);
+//         }
+
+//       }, err => {
+
+//         if (err.ok == false) {
+
+//           this.session.GetByIdOffline().then(resp => {
+//             return of(resp);
+//           })
+//         }
+//       })
+
+   
+
+
+  
+//   }
+
+
+
+
 }

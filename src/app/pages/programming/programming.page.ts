@@ -153,6 +153,14 @@ export class ProgrammingPage implements OnInit {
             this.vehicleApprobed = resp.ObjTransaction;
       }
 
+    }, err => {
+      if (err.ok == false) {
+
+        this._session.GetIsAuthorizedForServiceOffline().then(data => {
+          this.vehicleApprobed = data;
+        })
+      }
+
     })
 
   }
@@ -176,7 +184,8 @@ export class ProgrammingPage implements OnInit {
 
 
     if(this.activeService!=undefined){
-
+console.log(this.activeService);
+debugger;
       let params: NavigationExtras = {
         state: {
           request: this.activeService

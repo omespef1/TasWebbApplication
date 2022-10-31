@@ -14,9 +14,9 @@
     <ion-item >
       <ion-icon slot="start" name="pin"></ion-icon>
       <ion-label>Origen*</ion-label>
-      <ion-input type="text" required name="OrigenDireccion" [(ngModel)]="request.OrigenDireccion"></ion-input>
+      <ion-input [disabled]="request.SolicitudId>0"  type="text" required name="OrigenDireccion" [(ngModel)]="request.OrigenDireccion"></ion-input>
     </ion-item>
-    <ion-item tappable button  (click)="showPopupCitiesOrigin()">
+    <ion-item tappable button [disabled]="request.SolicitudId>0"   (click)="showPopupCitiesOrigin()">
       <ion-icon slot="start" name="locate"></ion-icon>
       <ion-label>Ciudad Origen*</ion-label>
       <ion-note slot="end"> {{ cityOrigin.DescripcionCorta}}</ion-note>
@@ -24,9 +24,9 @@
     <ion-item>
       <ion-icon slot="start" name="pin"></ion-icon>
       <ion-label>Destino*</ion-label>
-      <ion-input type="text" required name="DestinoDireccion" [(ngModel)]="request.DestinoDireccion"></ion-input>
+      <ion-input [disabled]="request.SolicitudId>0"  type="text" required name="DestinoDireccion" [(ngModel)]="request.DestinoDireccion"></ion-input>
     </ion-item>
-    <ion-item tappable button>
+    <ion-item tappable button [disabled]="request.SolicitudId>0"  (click)="showPopupCitiesTarget()">
       <ion-icon slot="start" name="locate"></ion-icon>
       <ion-label>Ciudad Destino</ion-label>
       <ion-note slot="end"> {{ cityTarget.DescripcionCorta}}</ion-note>
@@ -34,7 +34,7 @@
     <ion-item>
       <ion-icon slot="start" name="person"></ion-icon>
       <ion-label>Nombres*</ion-label>
-      <ion-input type="text" required name="UsuarioServicio" [(ngModel)]="request.UsuarioServicio"></ion-input>
+      <ion-input  [disabled]="request.SolicitudId>0" type="text" required name="UsuarioServicio" [(ngModel)]="request.UsuarioServicio"></ion-input>
     </ion-item>
     <!-- <ion-item tappable button  (click)="showPopUpModalidad()">
       <ion-icon slot="start" name="aperture"></ion-icon>
@@ -44,7 +44,7 @@
     <ion-item>
       <ion-icon slot="start" name="apps"></ion-icon>
       <ion-label>Modalidad*</ion-label>
-      <ion-select name="modality" placeholder="Seleccione modalidad" okText="Aceptar" cancelText="Cancelar" [(ngModel)]="request.CentrocostosId">
+      <ion-select [disabled]="request.SolicitudId>0"  name="modality" placeholder="Seleccione modalidad" okText="Aceptar" cancelText="Cancelar" [(ngModel)]="request.CentrocostosId">
         <ion-select-option *ngFor="let modality of costCenterList" [value]="modality.CentrocostosId"> {{ modality.CentrocostosCodigo}} - {{ modality.CentrocostosNombre}}</ion-select-option>
       </ion-select>
     </ion-item>
@@ -70,14 +70,9 @@
         <ion-button type="submit" [disabled]= "!newService.form.valid || loading || request.OrigenCiudad==0 ||  request.DestinoCiudad==0 ||  request.CentrocostosId==0 ||  request.GESSolicitudServiciosDetalle[0].Kilometraje==0" type="submit"  expand="full"  color="secondary">      
           <ion-spinner  color="primary" *ngIf="loading" slot="end"></ion-spinner>
           INICIAR SERVICIO
-        </ion-button> 
-        
-        </ng-container>
-        
-      </ng-container>
-      
-      
-      
+        </ion-button>         
+        </ng-container>        
+      </ng-container>                  
     </ng-container>
 
     <ng-container *ngIf="request.SolicitudId>0">

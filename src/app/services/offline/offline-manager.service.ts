@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable, from, of, forkJoin } from "rxjs";
-import { switchMap, finalize } from "rxjs/operators";
+import { switchMap, finalize, tap } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 import { ToastController } from "@ionic/angular";
 import { Storage } from "@ionic/storage";
@@ -9,6 +9,8 @@ import { SessionService } from "../session/session.service";
 import { manchecklist } from "../../models/enlistmen/manchecklist";
 import { EnlistmentService } from "../enlistment/enlistment.service";
 import { pending } from "../../models/vehicle/pending";
+import { ServicesRequestService } from '../services-request/services-request.service';
+import { ServicesRequest } from "src/app/models/service-request/programmings";
 const STORAGE_REQ_KEY = "storedreq";
 
 interface StoredRequest {
@@ -30,33 +32,47 @@ export class OfflineManagerService {
     private toastController: ToastController,
     private alert: AlertService,
     private sesion: SessionService,
-    private enlistment: EnlistmentService
+    private enlistment: EnlistmentService,
+    private requestService:ServicesRequestService
   ) {}
 
   checkForEvents(): Observable<any> {
-    return from(this.storage.get(STORAGE_REQ_KEY)).pipe(
-      switchMap(storedOperations => {
-        let storedObj = JSON.parse(storedOperations);
-        if (storedObj && storedObj.length > 0) {
-          return this.sendRequests(storedObj).pipe(
-            finalize(() => {
+    return from(this.sesion.getServicesOffline()).pipe(
+      switchMap(storedObj => {       
+        if (storedObj!= undefined && storedObj!=null) {
+          return this.requestService.PostServiceApp(storedObj).pipe(tap(resp=>{
+            if(resp!=null && resp.Retorno==0){
+              let services =   this.sesion.getServicesOffline();
+              services = this.removeServices(storedObj.guid,services)
+              this.sesion.setServicesOfflineAll(services)
               let toast = this.toastController.create({
-                message: `Local data succesfully synced to API!`,
+                message: `datos sincronizados con el API!`,
                 duration: 3000,
                 position: "top"
               });
               toast.then(toast => toast.present());
-
-              this.storage.remove(STORAGE_REQ_KEY);
+            }
+           
+          }),
+            finalize(() => {                  
+         
+          
             })
           );
         } else {
-          //console.log("no local events to sync");
+          console.log("no local events to sync");
           return of(false);
         }
       })
     );
   }
+
+  removeServices(key: any,objectArray:ServicesRequest[]) {
+    objectArray.forEach((value,index)=>{
+        if(value.guid==key) objectArray.splice(index,1);
+    });
+    return objectArray;
+} 
 
   storeRequest(url, type, data) {
     let toast = this.toastController.create({

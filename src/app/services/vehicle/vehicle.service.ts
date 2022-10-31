@@ -23,6 +23,11 @@ export class VehicleService {
    return this._http.Get<transaction>(`/Vehicle?business=${ business.CodigoEmpresa}&IdTercero=${ThirdPartie.IdTercero}`)
   }
 
+  GetVehicleInformationById(companyCode:number,thirdPartieId:number){
+    //console.log('consultando vehículos...')
+   return this._http.Get<transaction>(`/Vehicle?business=${companyCode}&IdTercero=${thirdPartieId}`)
+  }
+
   GetAllActiveVehicles(companyId:number){
     //console.log('consultando vehículos...')
    return this._http.Get<transaction>(`/Vehicles/GetAllVehicles?companyId=${ companyId}`)
@@ -35,6 +40,10 @@ export class VehicleService {
 
   GetDocumentsValidation(business:business,ThirdPartie:ThirdPartie,car:vehicle){
     return this._http.Get<transaction>(`/Vehicle/ValidaDocumentos?business=${ business.CodigoEmpresa}&IdTercero=${ThirdPartie.IdTercero}&identificacion=${ThirdPartie.Identificacion}&idVehiculo=${car.IdVehiculo}`)
+  }
+
+  GetDocumentsValidationCompany(companyCode:number){
+    return this._http.Get<transaction>(`/Vehicle/ValidaDocumentosCompany?companyCode=${ companyCode}`)
   }
   GetManPendientes(business:business,vehicle:vehicle){
     return this._http.Get<transaction>(`/Vehicle/ManPendientes?business=${business.CodigoEmpresa}&idVehiculo=${vehicle.IdVehiculo}`);

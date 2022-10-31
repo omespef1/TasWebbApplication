@@ -2,11 +2,15 @@ import { Injectable } from '@angular/core';
 import { transaction, transactionID } from "src/app/models/general/transaction";
 import { HttpManagerService } from '../httpManager/http-manager.service';
 import { ServiceRequestDetail, ServicesRequest } from "src/app/models/service-request/programmings";
+import { transactionObj } from '../../models/general/transaction';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServicesRequestService {
+
+
+  
 
   constructor(private _http:HttpManagerService) { }
 
@@ -32,4 +36,8 @@ export class ServicesRequestService {
    PostServiceApp(request: ServicesRequest){
     return this._http.PostRequest<transaction>('/GESSolicitudServicios/newServiceApp', request);
   }
+
+  GetLastsServiceThirdPartieApproved(business: number,id: number){
+    return this._http.Get<transactionObj<ServicesRequest>>(`/GESSolicitudServicios/GetLastsServiceThirdPartieApproved?companyCode=${business}&thirdPartie=${id}`);
+   }
 }

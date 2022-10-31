@@ -36,7 +36,7 @@
       <ion-item class="header" lines="none" color="secondary">
         <ion-icon slot="start" name="clipboard"></ion-icon>
         <ion-label>#{{programming.SolicitudId}}</ion-label> 
-        <ion-button  color="light" slot="end"(click)="goProgrammingDetail(programming)" fill="outline">
+        <ion-button [disabled]="programming.UsuarioCrea=='APP'"  color="light" slot="end"(click)="goProgrammingDetail(programming)" fill="outline">
             <ion-icon  slot="start" name="eye"></ion-icon>           
             VER DETALLES 
           </ion-button>   

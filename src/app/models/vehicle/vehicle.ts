@@ -10,4 +10,5 @@ export class vehicle  {
     Sugerido:number;
     loading:boolean;
     IdTipoVehiculo:number;
+    IdEmpresa:number;
 }
