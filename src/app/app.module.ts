@@ -26,16 +26,20 @@ import { FactoryValidator } from './factory/validator-passenger.factory';
 import { OneSignal } from '@awesome-cordova-plugins/onesignal/ngx';
 import { PoliticalDivisionComponent } from './pages/political-division/political-division.component';
 import { CostCenterPage } from './pages/cost-center/cost-center.page';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import { ThirdPartieValidationPage } from "./pages/third-partie-validation/third-partie-validation.page";
+import { FormsModule } from '@angular/forms';
 
 
 
 @NgModule({
-  declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage],
-  entryComponents: [ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage],
+  declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage,ThirdPartieValidationPage],
+  entryComponents: [ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage,ThirdPartieValidationPage],
   imports: [BrowserModule, IonicModule.forRoot(
    { mode: 'ios'}
   ), AppRoutingModule,
-  ComponentsModule,HttpClientModule, IonicStorageModule.forRoot(),SignaturePadModule],
+  ComponentsModule,HttpClientModule,FormsModule, IonicStorageModule.forRoot(),SignaturePadModule],
   providers: [
     Network,
     // FingerprintAIO,
