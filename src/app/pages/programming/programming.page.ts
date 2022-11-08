@@ -155,10 +155,10 @@ export class ProgrammingPage implements OnInit {
 
     }, err => {
       if (err.ok == false) {
-
-        this._session.GetIsAuthorizedForServiceOffline().then(data => {
-          this.vehicleApprobed = data;
-        })
+        debugger;
+        this.vehicleApprobed = this._session.GetIsAuthorizedForServiceOffline();
+        
+   
       }
 
     })

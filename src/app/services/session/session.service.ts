@@ -97,7 +97,7 @@ removeThirdPartieBio(){
      return JSON.parse(localStorage.getItem("ServicesOffline"));
   }
 
-  setIsAuthorizedForServiceOffline(data) {
+  setIsAuthorizedForServiceOffline(data:vehicle) {
     localStorage.setItem("IsAuthorizedForServiceOffline", JSON.stringify(data));
   }
   getOfflineUser() {
@@ -109,7 +109,7 @@ removeThirdPartieBio(){
   }
 
   GetIsAuthorizedForServiceOffline(){
-    return this._storage.get("IsAuthorizedForServiceOffline");
+    return    JSON.parse(localStorage.getItem("IsAuthorizedForServiceOffline"));
   }
 
   SetByIdOffline(user) {

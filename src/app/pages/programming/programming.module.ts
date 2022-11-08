@@ -29,6 +29,7 @@ const routes: Routes = [
     DxTagBoxModule,
     DxTemplateModule
   ],
-  declarations: [ProgrammingPage]
+  declarations: [ProgrammingPage],
+  exports:[ProgrammingPage,RouterModule]
 })
 export class ProgrammingPageModule {}

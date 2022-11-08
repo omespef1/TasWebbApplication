@@ -3,6 +3,7 @@ import { RouterModule, Routes, CanActivate } from '@angular/router';
 import { TabsPage } from './tabs.page';
 import { AuthGuardService } from '../guards/auth-guard.service';
 import { RolesGuard } from '../guards/roles.guard';
+import { ProgrammingPage } from '../pages/programming/programming.page';
 
 const routes: Routes = [
   {
@@ -84,8 +85,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: () =>
-              import('../pages/programming/programming.module').then(m => m.ProgrammingPageModule)
+            component:ProgrammingPage
           },
           {
             path: 'programming-detail',
@@ -103,8 +103,7 @@ const routes: Routes = [
             children:[
             {
               path:'',
-              loadChildren: () =>
-              import('../pages/programming-new/programming-new.module').then(m => m.ProgrammingNewPageModule)
+              component:ProgrammingPage
             }
             ]
            

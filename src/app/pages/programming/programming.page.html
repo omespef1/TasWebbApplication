@@ -7,6 +7,13 @@
   <ion-refresher slot="fixed" (ionRefresh)="ionViewWillEnter($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+  
+  <div class="btn-driver">
+    <ion-button [disabled]="vehicleApprobed==undefined" expand="block" color="danger" *ngIf="_session.GetThirdPartie().Bancario == 1 &&  _session.GetThirdPartie().Conductor == 1" (click)="goService()">
+     {{activeService.SolicitudId > 0 ? 'VER SERVICIO ACTIVO':'CREAR NUEVO SERVICIO'}} 
+      <ion-icon slot="end" name="add"></ion-icon>
+    </ion-button>
+  </div>
   <div *ngIf="!loading">
 
     <div class="btn-driver">
@@ -16,10 +23,10 @@
       </ion-button>
      </div>
      <div class="btn-driver">
-     <ion-button [disabled]="vehicleApprobed==undefined" expand="block" color="danger" *ngIf="_session.GetThirdPartie().Bancario == 1 &&  _session.GetThirdPartie().Conductor == 1" (click)="goService()">
+     <!-- <ion-button [disabled]="vehicleApprobed==undefined" expand="block" color="danger" *ngIf="_session.GetThirdPartie().Bancario == 1 &&  _session.GetThirdPartie().Conductor == 1" (click)="goService()">
       {{activeService.SolicitudId > 0 ? 'VER SERVICIO ACTIVO':'CREAR NUEVO SERVICIO'}} 
        <ion-icon slot="end" name="add"></ion-icon>
-     </ion-button>
+     </ion-button> -->
      </div>
      <ion-list lines="none" inset="true">     
      <ion-item class="header" lines="none" color="secondary">

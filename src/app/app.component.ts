@@ -129,6 +129,7 @@ export class AppComponent {
       )
       .subscribe((resp) => {
         if (resp != undefined && resp.Retorno == 0) {
+          debugger;
           this._sesion.setIsAuthorizedForServiceOffline(resp.ObjTransaction);
         }
       });

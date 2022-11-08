@@ -25,6 +25,7 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [ProgrammingNewPage],
-  providers: [ Geolocation ]
+  providers: [ Geolocation ],
+  exports:[ProgrammingNewPage,RouterModule]
 })
 export class ProgrammingNewPageModule {}
