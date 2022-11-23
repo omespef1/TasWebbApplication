@@ -126,13 +126,14 @@ export class AuthService {
   
     // this.SetOneSignalId();
     console.log(this._sesion.isUser());
+    
     if (this._sesion.isUser()) {  
       if (this._sesion.GetUser().Grupo === "SUPERVISOR"){
         console.log('supervisor');
         this._nav.navigateRoot("tabs/vehicle");      
       }
      
-      if (this._sesion.GetUser().Grupo === "BENEFICIARIO"){
+      if (this._sesion.GetUser().Grupo === "VIP"){
         this._nav.navigateRoot("tabs/programming");
       }
        

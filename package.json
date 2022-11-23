@@ -19,6 +19,7 @@
     "@angular/forms": "~8.1.2",
     "@angular/platform-browser": "~8.1.2",
     "@angular/platform-browser-dynamic": "~8.1.2",
+    "@angular/pwa": "^14.0.0",
     "@angular/router": "~8.1.2",
     "@awesome-cordova-plugins/barcode-scanner": "^5.45.0",
     "@awesome-cordova-plugins/core": "^5.45.0",

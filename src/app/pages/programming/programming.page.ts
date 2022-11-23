@@ -33,8 +33,10 @@ export class ProgrammingPage implements OnInit {
   ngOnInit() { }
   ionViewWillEnter(event: any = null) {
     if (this.validAccess()) {
+     
       if (this._session.isUser()) {
-        if (this._session.GetUser().Grupo === "BENEFICIARIO") {
+        if (this._session.GetUser().Grupo === "VIP") {
+        
           this.GetProgrammingBeneficiario(event);
         }
         if (this._session.GetUser().Grupo == "CLIENTE") {
@@ -127,7 +129,7 @@ export class ProgrammingPage implements OnInit {
       console.log("valid accessssss");
       console.log(this._session.GetUser());
       if (
-        this._session.GetUser().Grupo !== "BENEFICIARIO" &&
+        this._session.GetUser().Grupo !== "VIP" &&
         this._session.GetUser().Grupo !== "CLIENTE"
       ) {
         this._alert.showAlert(
@@ -196,5 +198,12 @@ debugger;
     else {
       this._nav.navigateForward("tabs/programming/programming-new");
     }
+  }
+
+  goServiceVip(){
+
+ 
+      this._nav.navigateForward("tabs/programming/programming-user-new");
+  
   }
 }

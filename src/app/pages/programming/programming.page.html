@@ -9,10 +9,14 @@
   </ion-refresher>
   
   <div class="btn-driver">
-    <ion-button [disabled]="vehicleApprobed==undefined" expand="block" color="danger" *ngIf="_session.GetThirdPartie().Bancario == 1 &&  _session.GetThirdPartie().Conductor == 1" (click)="goService()">
+    <ion-button [disabled]="vehicleApprobed==undefined" expand="block" color="danger" *ngIf="_session.GetThirdPartie()!=undefined && _session.GetThirdPartie().Bancario == 1 &&  _session.GetThirdPartie().Conductor == 1" (click)="goService()">
      {{activeService.SolicitudId > 0 ? 'VER SERVICIO ACTIVO':'CREAR NUEVO SERVICIO'}} 
       <ion-icon slot="end" name="add"></ion-icon>
     </ion-button>
+    <ion-button expand="block" color="danger" *ngIf="_session.GetUser()!=undefined &&  _session.GetUser().Grupo == 'VIP'" (click)="goServiceVip()">
+    {{activeService.SolicitudId > 0 ? 'VER SERVICIO ACTIVO':'CREAR NUEVO SERVICIO'}} 
+       <ion-icon slot="end" name="add"></ion-icon>
+     </ion-button>
   </div>
   <div *ngIf="!loading">
 
@@ -21,13 +25,7 @@
        {{_session.GetThirdPartie()!=undefined? this._session.GetThirdPartie().NombreCompleto : 'BUSCAR CONDUCTORES'}} 
         <ion-icon slot="end" name="person"></ion-icon>
       </ion-button>
-     </div>
-     <div class="btn-driver">
-     <!-- <ion-button [disabled]="vehicleApprobed==undefined" expand="block" color="danger" *ngIf="_session.GetThirdPartie().Bancario == 1 &&  _session.GetThirdPartie().Conductor == 1" (click)="goService()">
-      {{activeService.SolicitudId > 0 ? 'VER SERVICIO ACTIVO':'CREAR NUEVO SERVICIO'}} 
-       <ion-icon slot="end" name="add"></ion-icon>
-     </ion-button> -->
-     </div>
+     </div>     
      <ion-list lines="none" inset="true">     
      <ion-item class="header" lines="none" color="secondary">
       <ion-icon slot="start" name="clipboard"></ion-icon>

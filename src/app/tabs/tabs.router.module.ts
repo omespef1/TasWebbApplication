@@ -108,6 +108,17 @@ const routes: Routes = [
             }
             ]
            
+          },
+          {
+            path: 'programming-user-new',
+            children:[
+            {
+              path:'',
+              loadChildren: () =>
+              import('../pages/programming-user-new/programming-user-new.module').then(m => m.ProgrammingUserNewPageModule)
+            }
+            ]
+           
           }
         ]
       },

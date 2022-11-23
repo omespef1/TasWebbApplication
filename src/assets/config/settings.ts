@@ -1,4 +1,4 @@
 export class config {
 
-  public static readonly  url =    "http://192.168.18.76/RTASWEB/api"
+  public static readonly  url =    "http://localhost/RTASWEB/api"
 }

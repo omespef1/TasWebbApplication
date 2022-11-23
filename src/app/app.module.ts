@@ -26,7 +26,7 @@ import { FactoryValidator } from './factory/validator-passenger.factory';
 import { OneSignal } from '@awesome-cordova-plugins/onesignal/ngx';
 import { PoliticalDivisionComponent } from './pages/political-division/political-division.component';
 import { CostCenterPage } from './pages/cost-center/cost-center.page';
-import { ServiceWorkerModule } from '@angular/service-worker';
+// import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { ThirdPartieValidationPage } from "./pages/third-partie-validation/third-partie-validation.page";
 import { FormsModule } from '@angular/forms';

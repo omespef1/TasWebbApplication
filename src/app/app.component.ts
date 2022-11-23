@@ -45,12 +45,16 @@ export class AppComponent {
       this._auth.signInDirect();
       this.LoadFirstSettings();
       this.SetRemoteTransport();
-      this.getDivisionPolitical();
+      if(this._sesion.GetUser().IdTercero>0){
+        console.log('leyendo tercero');
+        this.getDivisionPolitical();
       this.getAliParams();
       this.getModalities();
       this.getInformationThirdPartie();
       this.checkApprovedLicensePlate();
       this.GetLastServiceThirdPartieApproved();
+      }
+      
       
     });
   }
