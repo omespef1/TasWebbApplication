@@ -12,7 +12,10 @@ const routes: Routes = [
   // { path: 'vehicle', loadChildren: './pages/vehicle/vehicle.module#VehiclePageModule' },
   // { path: 'settings', loadChildren: './pages/settings/settings.module#SettingsPageModule' },
   //  { path: 'enlistment', loadChildren: './pages/enlistment/enlistment.module#EnlistmentPageModule' },
-  { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule', canActivate: [AuthGuardService] },  { path: 'programming-user-new', loadChildren: './pages/programming-user-new/programming-user-new.module#ProgrammingUserNewPageModule' }
+  { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule', canActivate: [AuthGuardService] },
+  { path: 'programming-user-new', loadChildren: './pages/programming-user-new/programming-user-new.module#ProgrammingUserNewPageModule' },
+
+
 
 
  

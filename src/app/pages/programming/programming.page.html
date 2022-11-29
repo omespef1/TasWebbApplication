@@ -26,7 +26,7 @@
         <ion-icon slot="end" name="person"></ion-icon>
       </ion-button>
      </div>     
-     <ion-list lines="none" inset="true">     
+     <ion-list *ngIf="_session.GetThirdPartie()!=undefined && _session.GetThirdPartie().Bancario == 1" lines="none" inset="true">     
      <ion-item class="header" lines="none" color="secondary">
       <ion-icon slot="start" name="clipboard"></ion-icon>
       <ion-label>VEHÍCULO APROBADO</ion-label>      

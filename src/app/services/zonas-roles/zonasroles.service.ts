@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpManagerService } from '../httpManager/http-manager.service';
 import {  transaction, transactionObj } from '../../models/general/transaction';
 import { Usuario } from '../../models/usuarios/user.model';
+import { ThirdPartie } from '../../models/general/user';
 
 @Injectable({
     providedIn: "root"
   })
-export class UsuariosService {
+export class ZonasRolesService {
 
 constructor(private http:HttpManagerService){
 
@@ -14,13 +15,11 @@ constructor(private http:HttpManagerService){
 }
 
 
-get(username:string,companyId:number){
+get(companyId:number){
 
-    return this.http.Get<transactionObj<Usuario>>(`/Usuarios/getuser?username=${username}&companyCode=${companyId}`)
+    return this.http.Get<transactionObj<ThirdPartie>>(`/ZonasRoles/GetRoleVip?companyCode=${companyId}`)
 }
 
-set(data:any){
- return this.http.Post<transaction>(`/Usuarios`,data);
-}
+
     
 }

@@ -12,6 +12,8 @@ export class ServicesRequest {
     this.OrigenDireccion="";
     this.DestinoDireccion="";
     this.guid =  Math.random() + new Date().getMilliseconds();
+    this.NumeroPasajeros =1;
+    this.typeRequest="";
    
     
   }
@@ -43,6 +45,10 @@ export class ServicesRequest {
   Firma:string;
   GESSolicitudServiciosDetalle:ServiceRequestDetail[];
   guid:any;
+  NumeroPasajeros:number;
+  typeRequest:string;
+  UsuarioEmail:string;
+  UsuarioVip:string;
 
 }
 

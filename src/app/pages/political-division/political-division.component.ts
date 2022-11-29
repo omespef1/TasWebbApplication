@@ -41,7 +41,7 @@ export class PoliticalDivisionComponent implements OnInit {
         this.dataList = resp.ObjTransaction;
       }
     }, err => {
-      debugger;
+      
       console.log(err);
 
       

@@ -30,12 +30,14 @@ import { CostCenterPage } from './pages/cost-center/cost-center.page';
 import { environment } from '../environments/environment';
 import { ThirdPartieValidationPage } from "./pages/third-partie-validation/third-partie-validation.page";
 import { FormsModule } from '@angular/forms';
+import { SucursalesPage } from './pages/sucursales/sucursales.page';
+import { ContratosPage } from './pages/contratos/contratos.page';
 
 
 
 @NgModule({
-  declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage,ThirdPartieValidationPage],
-  entryComponents: [ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage,ThirdPartieValidationPage],
+  declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage,ThirdPartieValidationPage,SucursalesPage,ContratosPage],
+  entryComponents: [ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage,ThirdPartieValidationPage,SucursalesPage,ContratosPage],
   imports: [BrowserModule, IonicModule.forRoot(
    { mode: 'ios'}
   ), AppRoutingModule,

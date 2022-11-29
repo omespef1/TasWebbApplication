@@ -157,7 +157,7 @@ export class ProgrammingPage implements OnInit {
 
     }, err => {
       if (err.ok == false) {
-        debugger;
+        
         this.vehicleApprobed = this._session.GetIsAuthorizedForServiceOffline();
         
    
@@ -187,7 +187,7 @@ export class ProgrammingPage implements OnInit {
 
     if(this.activeService!=undefined){
 console.log(this.activeService);
-debugger;
+
       let params: NavigationExtras = {
         state: {
           request: this.activeService

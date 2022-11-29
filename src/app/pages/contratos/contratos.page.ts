@@ -1,52 +1,54 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { SessionService } from 'src/app/services/session/session.service';
-import { GESCentroCostos } from '../../models/service-request/costcenter';
+import { GESContratos } from '../../models/contracts/contract.model';
 import { GescentrocostosService } from '../../services/gencentrocostos/gescentrocostos.service';
+import { GesContratosService } from '../../services/contratos/contratos.service';
 
 @Component({
-  selector: 'app-cost-center',
-  templateUrl: './cost-center.page.html',
-  styleUrls: ['./cost-center.page.scss'],
+  selector: 'app-contratos',
+  templateUrl: './contratos.page.html',
+  styleUrls: ['./contratos.page.scss'],
 })
-export class CostCenterPage implements OnInit {
+export class ContratosPage implements OnInit {
 
 
-  dataList: GESCentroCostos[] = [];
-  dataListFilter: GESCentroCostos[] = [];
+  dataList: GESContratos[] = [];
+  dataListFilter: GESContratos[] = [];
+
   loading = false;
   constructor(
     private modalController: ModalController,
-    private gesCentroCostosService: GescentrocostosService,
+    private gesContratosService: GesContratosService,
     private sesionService: SessionService
   ) { }
 
   ngOnInit() {
-   this.getCostCeter();
+   this.getContracts();
   }
 
 
-  async setData(data: GESCentroCostos) {
+  async setData(data: GESContratos) {
     await this.modalController.dismiss(data);
   }
-
 
   search(event) {
 
     this.dataListFilter = [];
     this.dataListFilter = this.dataList.filter(
       v =>
-        v.CentrocostosNombre.toUpperCase().indexOf(
+        v.ContratoNombre.toUpperCase().indexOf(
           event.target.value.toUpperCase()
         ) > -1);
 
   }
-  getCostCeter() {
 
 
+  getContracts(){
+    
     console.log(event);
     this.loading = true;
-    this.gesCentroCostosService.GetCostCenterCompany(this.sesionService.GetThirdPartie()!=undefined?this.sesionService.GetThirdPartie().IdEmpresa: this.sesionService.GetUser().IdEmpresa).subscribe(resp => {
+    this.gesContratosService.Get(this.sesionService.GetGetThirdPartieClient().IdEmpresa).subscribe(resp => {
       this.loading = false;
       //console.log(resp);
       if (resp.Retorno === 0 && resp.ObjTransaction != null) {
@@ -58,5 +60,9 @@ export class CostCenterPage implements OnInit {
 
     })
   }
+
+
+
+
 
 }

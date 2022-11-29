@@ -8,9 +8,9 @@
     <ion-spinner *ngIf="loading" slot="start"></ion-spinner>
   </div>
  <ion-list>
-   <ion-item tappable *ngFor="let item of dataList" (click)="setData(item)">
+   <ion-item tappable *ngFor="let item of dataListFilter" (click)="setData(item)">
      <ion-icon slot="start" name="locate"></ion-icon>
-     <p>{{item.CentrocostosCodigo}} - {{ item.CentrocostosNombre  }} </p>
+     <p>{{item.SucursalCodigo}} - {{ item.SucursalNombre  }} </p>
    </ion-item>
  </ion-list>
 </ion-content>

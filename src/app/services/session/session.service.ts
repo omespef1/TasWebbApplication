@@ -26,6 +26,9 @@ export class SessionService {
    SetThirdPartie(user: ThirdPartie) {
     localStorage.setItem("thirdPartie", JSON.stringify(user));
   }
+  SetThirdPartieClient(user: ThirdPartie) {
+    localStorage.setItem("thirdPartieClient", JSON.stringify(user));
+  }
   SetUserBio(user: ThirdPartie) {
     localStorage.setItem("userBio", JSON.stringify(user));
   }
@@ -34,6 +37,9 @@ export class SessionService {
   }
   GetThirdPartie(): ThirdPartie {
     return JSON.parse(localStorage.getItem("thirdPartie"));
+  }
+  GetGetThirdPartieClient():ThirdPartie {
+    return JSON.parse(localStorage.getItem("thirdPartieClient"));
   }
   GetThirdPartieBio(): ThirdPartie {
     return JSON.parse(localStorage.getItem("thirdPartieBio"));

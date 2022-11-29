@@ -1,52 +1,54 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { SessionService } from 'src/app/services/session/session.service';
-import { GESCentroCostos } from '../../models/service-request/costcenter';
-import { GescentrocostosService } from '../../services/gencentrocostos/gescentrocostos.service';
+import { GESSucursales } from '../../models/gessucursales/gessucursal.model';
+import { GESSucursalesService } from '../../services/sucursales/sucursales.service';
 
 @Component({
-  selector: 'app-cost-center',
-  templateUrl: './cost-center.page.html',
-  styleUrls: ['./cost-center.page.scss'],
+  selector: 'app-sucursales',
+  templateUrl: './sucursales.page.html',
+  styleUrls: ['./sucursales.page.scss'],
 })
-export class CostCenterPage implements OnInit {
+export class SucursalesPage implements OnInit {
 
-
-  dataList: GESCentroCostos[] = [];
-  dataListFilter: GESCentroCostos[] = [];
+  dataList: GESSucursales[] = [];
+  dataListFilter
   loading = false;
   constructor(
     private modalController: ModalController,
-    private gesCentroCostosService: GescentrocostosService,
+    private gesSucursalesService: GESSucursalesService,
     private sesionService: SessionService
   ) { }
 
   ngOnInit() {
-   this.getCostCeter();
+    this.getSucursales();
+   
   }
 
 
-  async setData(data: GESCentroCostos) {
+  async setData(data: GESSucursales) {
     await this.modalController.dismiss(data);
   }
 
-
   search(event) {
+
 
     this.dataListFilter = [];
     this.dataListFilter = this.dataList.filter(
       v =>
-        v.CentrocostosNombre.toUpperCase().indexOf(
+        v.SucursalNombre.toUpperCase().indexOf(
           event.target.value.toUpperCase()
-        ) > -1);
-
+        ) > -1 ||  v.SucursalCodigo.indexOf(
+          event.target.value
+    ) > -1);
+   
   }
-  getCostCeter() {
 
 
-    console.log(event);
+  getSucursales(){
+   
     this.loading = true;
-    this.gesCentroCostosService.GetCostCenterCompany(this.sesionService.GetThirdPartie()!=undefined?this.sesionService.GetThirdPartie().IdEmpresa: this.sesionService.GetUser().IdEmpresa).subscribe(resp => {
+    this.gesSucursalesService.get(this.sesionService.GetGetThirdPartieClient().IdTercero,this.sesionService.GetGetThirdPartieClient().IdEmpresa).subscribe(resp => {
       this.loading = false;
       //console.log(resp);
       if (resp.Retorno === 0 && resp.ObjTransaction != null) {
