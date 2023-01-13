@@ -14,6 +14,7 @@ export class ServicesRequest {
     this.guid =  Math.random() + new Date().getMilliseconds();
     this.NumeroPasajeros =1;
     this.typeRequest="";
+    this.IdTipoServicio =0;
    
     
   }
@@ -49,6 +50,7 @@ export class ServicesRequest {
   typeRequest:string;
   UsuarioEmail:string;
   UsuarioVip:string;
+  IdTipoServicio:number;
 
 }
 

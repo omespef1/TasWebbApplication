@@ -62,6 +62,18 @@
         <ion-label position="floating">Centro costo</ion-label>
         <ion-note slot="end"> {{ costCenterSelected.CentrocostosNombre}}</ion-note>
       </ion-item>
+      <ion-item tappable *ngIf="typeVehicleSelected"  tappable button  (click)="showPopupTypesVehicles()">
+        <ion-icon slot="start" name="paper"></ion-icon>
+        <ion-label position="floating">Tipo vehiculo*</ion-label>
+        <ion-note slot="end"> {{ typeVehicleSelected.Descripcion}}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="apps"></ion-icon>
+        <ion-label>Tipo servicio*</ion-label>
+        <ion-select  required name="typeService" placeholder="Seleccione tipo servicio" okText="Aceptar" cancelText="Cancelar" [(ngModel)]="request.IdTipoServicio">
+          <ion-select-option *ngFor="let typeService of typesServicesList" [value]="typeService.Id"> {{ typeService.Id}} - {{ typeService.Nombre}}</ion-select-option>
+        </ion-select>
+      </ion-item>
       <ion-item>
         <ion-icon slot="start" name="calendar"></ion-icon>
         <ion-label position="floating">Fecha y hora</ion-label>
@@ -74,7 +86,7 @@
 
 
       <ion-button type="submit"
-        [disabled]="!newService.form.valid || loading || request.OrigenCiudad==0 ||  request.DestinoCiudad==0"
+        [disabled]="!newService.form.valid || loading || request.OrigenCiudad==0 ||  request.DestinoCiudad==0 || request.IdTipoServicio==0 || request.TipoVehiculoId ==0"
         type="submit" expand="full" color="secondary">
         <ion-spinner color="primary" *ngIf="loading" slot="end"></ion-spinner>
         CREAR SERVICIO

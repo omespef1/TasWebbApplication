@@ -59,4 +59,8 @@ export class VehicleService {
   GetManCheckListDetalle(idEmpresa:number,idCheckList:number,pNo:string){
     return this._http.Get<transaction>(`/Vehicles/GetCheckListDetalle?IdCheckList=${idCheckList}&IdEmpresa=${idEmpresa}&PNo=${pNo}`);
   }
+
+  GetTypesVehicles(companyCode:number,contratoId:number){
+    return this._http.Get<transaction>(`/TRATipoVehiculoes?companyCode=${companyCode}&contratoId=${contratoId}`)
+  }
 }

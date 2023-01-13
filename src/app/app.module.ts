@@ -32,12 +32,14 @@ import { ThirdPartieValidationPage } from "./pages/third-partie-validation/third
 import { FormsModule } from '@angular/forms';
 import { SucursalesPage } from './pages/sucursales/sucursales.page';
 import { ContratosPage } from './pages/contratos/contratos.page';
+import { TypesVehiclesComponent } from './pages/types-vehicles/types-vehicles.component';
+import { PoliticaDivisionActiveComponent } from './pages/political-division/politica-division-active/politica-division-active.component';
 
 
 
 @NgModule({
-  declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage,ThirdPartieValidationPage,SucursalesPage,ContratosPage],
-  entryComponents: [ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage,ThirdPartieValidationPage,SucursalesPage,ContratosPage],
+  declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage,ThirdPartieValidationPage,SucursalesPage,ContratosPage,TypesVehiclesComponent,PoliticaDivisionActiveComponent],
+  entryComponents: [ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage,ThirdPartieValidationPage,SucursalesPage,ContratosPage,TypesVehiclesComponent,PoliticaDivisionActiveComponent],
   imports: [BrowserModule, IonicModule.forRoot(
    { mode: 'ios'}
   ), AppRoutingModule,

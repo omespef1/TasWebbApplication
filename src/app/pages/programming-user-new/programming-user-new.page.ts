@@ -5,13 +5,11 @@ import { UsuariosService } from '../../services/usuarios/usuarios.service';
 import { Usuario } from '../../models/usuarios/user.model';
 import { ServicesRequest } from '../../models/service-request/programmings';
 import { DivisionPolitical } from 'src/app/models/general/political-division';
-import { PoliticalDivisionComponent } from '../political-division/political-division.component';
 import { ModalController, NavController } from '@ionic/angular';
 import { ServicesRequestService } from '../../services/services-request/services-request.service';
 import { AlertService } from '../../services/alert/alert.service';
 import { ConfiguracionClientesService } from '../../services/configuracion-clientes/configuracion-clientes.service';
 import { ConfiguracionClientes } from '../../models/configuracion-clientes/configuracion-clientes.model';
-import { TypeContractsComponent } from '../type-contracts/type-contracts/type-contracts.component';
 import { GESContratos } from 'src/app/models/contracts/contract.model';
 import { CostCenterPage } from '../cost-center/cost-center.page';
 import { GESSucursales } from '../../models/gessucursales/gessucursal.model';
@@ -22,7 +20,11 @@ import { GESSucursalesService } from '../../services/sucursales/sucursales.servi
 import { ContratosPage } from '../contratos/contratos.page';
 import { GesContratosService } from '../../services/contratos/contratos.service';
 import { ZonasRolesService } from 'src/app/services/zonas-roles/zonasroles.service';
-import { transaction } from '../../models/general/transaction';
+import { TypesService } from '../../models/types-services/type-services';
+import { TypesVehiclesComponent } from '../types-vehicles/types-vehicles.component';
+import { TRATipoVehiculo } from '../../models/types-vehicle/types-vehicle.model';
+import { TypesServicesService } from '../../services/types-services/types-service.service';
+import { PoliticaDivisionActiveComponent } from '../political-division/politica-division-active/politica-division-active.component';
 
 @Component({
   selector: 'app-programming-user-new',
@@ -44,17 +46,22 @@ export class ProgrammingUserNewPage implements OnInit {
   costCenterList: GESCentroCostos[] = [];
   sucursalesList:GESSucursales[]=[];
   contractList:GESContratos[]=[];
+  // typeServiceSelected:TypesService=  new TypesService();
+  typeVehicleSelected:TRATipoVehiculo= new TRATipoVehiculo();
+  typesServicesList:TypesService[]= [];
 
   constructor(private _sesion: SessionService, private userService: UsuariosService, private modal: ModalController, private requestService: ServicesRequestService,
     private alert: AlertService, private nav: NavController, private configuracionClientesService: ConfiguracionClientesService,
     private costCenterService: GescentrocostosService, private gessucursalesService: GESSucursalesService,
     private gesContratosService:GesContratosService,
-    private zonasRolesService:ZonasRolesService) { }
+    private zonasRolesService:ZonasRolesService,
+    private typesServicesService:TypesServicesService) { }
 
   async ngOnInit() {
     this.getContractsList();
     this.GetClient();    
     this.loadDefaultUserData();
+    this.getTypesServices();
     
   }
 
@@ -79,6 +86,8 @@ export class ProgrammingUserNewPage implements OnInit {
     })
 
   }
+
+
   loadDefaultUserData() {
     this.userService.get(this._sesion.GetUser().NombreCompleto, this._sesion.GetUser().IdEmpresa).subscribe(resp => {
       if (resp != null && resp.Retorno == 0) {
@@ -90,6 +99,18 @@ export class ProgrammingUserNewPage implements OnInit {
       }
     })
   }
+
+  async getTypesServices(){
+    this.typesServicesService.Get(this._sesion.GetUser().IdEmpresa).subscribe(resp => {
+      if (resp != null && resp.Retorno == 0) {
+        this.typesServicesList = resp.ObjTransaction;
+      }
+      else {
+        this.alert.errorSweet(resp.TxtError);
+      }
+    })
+    }
+  
 
   async getContractsList(){
   let resp = await   this.gesContratosService.Get(this._sesion.GetUser().IdEmpresa).toPromise();
@@ -164,7 +185,7 @@ export class ProgrammingUserNewPage implements OnInit {
 
   async showPopupCitiesOrigin() {
     const modal = await this.modal.create({
-      component: PoliticalDivisionComponent,
+      component: PoliticaDivisionActiveComponent,
     });
     modal.onDidDismiss().then((resp) => {
       if (resp.data != undefined) {
@@ -179,7 +200,7 @@ export class ProgrammingUserNewPage implements OnInit {
 
   async showPopupCitiesTarget() {
     const modal = await this.modal.create({
-      component: PoliticalDivisionComponent,
+      component: PoliticaDivisionActiveComponent,
     });
     modal.onDidDismiss().then((resp) => {
       if (resp.data != undefined) {
@@ -194,6 +215,7 @@ export class ProgrammingUserNewPage implements OnInit {
     this.loading = true;
 
     try {
+      this.request.UsuarioVip = this._sesion.GetUser().NombreCompleto;
       this.requestService.PostServiceManualService(this.request).subscribe((resp) => {
         this.loading = false;
         if (resp != null && resp.Retorno == 0) {
@@ -242,6 +264,25 @@ export class ProgrammingUserNewPage implements OnInit {
 
     });
     return await modal.present();
+  }
+
+
+  async showPopupTypesVehicles(){
+    const modal = await this.modal.create({
+      component: TypesVehiclesComponent,
+      componentProps: {
+        ContratoId: this.request.ContratoId,
+      }
+    });
+    modal.onDidDismiss().then(resp => {
+      if (resp.data != undefined) {
+        this.typeVehicleSelected = resp.data;
+        this.request.TipoVehiculoId = this.typeVehicleSelected.IdTipoVehiculo;
+        // Asignar al modelo aquí
+      }
+    });
+    return await modal.present();
+
   }
 
 

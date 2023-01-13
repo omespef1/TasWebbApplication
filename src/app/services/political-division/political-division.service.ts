@@ -24,4 +24,7 @@ export class PoliticalDivisionService {
   GetPoliticalDivisionAll(countryCode:number){
     return this.http.Get<transactionObj<DivisionPolitical>>(`/GenDivisionPolitica/Get?countryCode=${countryCode}`);
   }
+  GetPoliticalDivisionAllActive(countryCode:number){
+    return this.http.Get<transactionObj<DivisionPolitical[]>>(`/GenDivisionPolitica/GetActive?countryCode=${1}`);
+  }
 }

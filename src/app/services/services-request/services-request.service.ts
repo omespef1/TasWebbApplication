@@ -37,7 +37,7 @@ export class ServicesRequestService {
     return this._http.PostRequest<transaction>('/GESSolicitudServicios/newServiceApp', request);
   }
   PostServiceManualService(request: ServicesRequest){
-    return this._http.PostRequest<transaction>('/GESSolicitudServicios/set', request);
+    return this._http.PostRequest<transaction>('/GESSolicitudServicios/setVip', request);
   }
 
   GetLastsServiceThirdPartieApproved(business: number,id: number){
