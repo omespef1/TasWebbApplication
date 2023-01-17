@@ -64,10 +64,10 @@ export class VehiclePage {
     }
   }
   validAccess(): boolean {
-    console.log("valid access");
+    // console.log("valid access");
     if (this._sesion.isUser()) {
-      console.log("valid accessssss");
-      console.log(this._sesion.GetUser());
+      // console.log("valid accessssss");
+      // console.log(this._sesion.GetUser());
       if (this._sesion.GetUser().Grupo !== "SUPERVISOR") {
         this._alert.showAlert(
           "Acceso no autorizado",

@@ -45,7 +45,7 @@ export class SignatureComponent implements OnInit {
 
   drawStart() {
     // will be notified of szimek/signature_pad's onBegin event
-    console.log('begin drawing');
+    // console.log('begin drawing');
   }
 
   drawClear(){

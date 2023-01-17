@@ -33,7 +33,7 @@ export class ThirdPartieValidationPage implements OnInit {
         const existe = this._thirdParties
           .GetThirdParties()
           .filter(d => d.IdTercero == resp.ObjTransaction.IdTercero);
-          console.log(existe);
+          // console.log(existe);
         if (existe != undefined && existe.length > 0){
           this._alert.showAlert("Error", "Tercero ya agregado");
         }

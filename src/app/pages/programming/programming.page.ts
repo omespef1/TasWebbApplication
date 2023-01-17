@@ -77,7 +77,7 @@ export class ProgrammingPage implements OnInit {
     return await modal.present();
   }
   GetProgramming(event = null) {
-  console.log( this._session.GetThirdPartie());
+  // console.log( this._session.GetThirdPartie());
     this.loading = true;
     this._serviceRequest
       .GetServicesRequest(
@@ -124,10 +124,10 @@ export class ProgrammingPage implements OnInit {
   }
 
   validAccess(): boolean {
-    console.log("valid access");
+    // console.log("valid access");
     if (this._session.isUser()) {
-      console.log("valid accessssss");
-      console.log(this._session.GetUser());
+      // console.log("valid accessssss");
+      // console.log(this._session.GetUser());
       if (
         this._session.GetUser().Grupo !== "VIP" &&
         this._session.GetUser().Grupo !== "CLIENTE"

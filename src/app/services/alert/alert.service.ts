@@ -54,7 +54,7 @@ export class AlertService {
   }
 
   openBrowserUrl(url: string) {
-    console.log(url);
+    // console.log(url);
     this.browserTab.create(url, '_blank', 'location=yes');
     // this.browserTab.isAvailable().then((isAvailable) => {
     //   if (isAvailable) {

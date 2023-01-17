@@ -37,9 +37,9 @@ export class SucursalesPage implements OnInit {
     this.dataListFilter = this.dataList.filter(
       v =>
         v.SucursalNombre.toUpperCase().indexOf(
-          event.target.value.toUpperCase()
+          event.detail.value.toUpperCase()
         ) > -1 ||  v.SucursalCodigo.indexOf(
-          event.target.value
+          event.detail.value
     ) > -1);
    
   }

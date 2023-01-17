@@ -32,12 +32,12 @@ export class CostCenterPage implements OnInit {
 
 
   search(event) {
-
+console.log(event);
     this.dataListFilter = [];
     this.dataListFilter = this.dataList.filter(
       v =>
         v.CentrocostosNombre.toUpperCase().indexOf(
-          event.target.value.toUpperCase()
+          event.detail.value.toUpperCase()
         ) > -1);
 
   }

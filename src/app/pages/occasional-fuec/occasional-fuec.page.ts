@@ -79,7 +79,7 @@ export class OccasionalFuecPage implements OnInit {
     });
     modal.onDidDismiss().then(resp => {
       if (resp.data != undefined) {
-        console.log(resp);
+        // console.log(resp);
         this.model.Firma = resp.data;
       }
     });
@@ -181,7 +181,7 @@ export class OccasionalFuecPage implements OnInit {
         this.alertService.showAlert('error',resp.TxtError);
       }
     }, err => {
-      console.log(err);
+      // console.log(err);
       this.sendingContract = false;
     })
   }

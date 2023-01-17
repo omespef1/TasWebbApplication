@@ -75,7 +75,7 @@ this.loadData();
     await this.getlocation();   
     await this.checkApprovedLicensePlate();    
     this.setbehaviorLoad();   
-    console.log(this.request);
+    // console.log(this.request);
   }
 
   setbehaviorLoad() {
@@ -357,7 +357,7 @@ this.loadData();
     });
     modal.onDidDismiss().then((resp) => {
       if (resp.data != undefined) {
-        console.log(resp);
+        // console.log(resp);
         this.request.Firma = resp.data;
       }
     });

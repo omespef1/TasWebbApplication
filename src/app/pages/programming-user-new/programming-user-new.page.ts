@@ -307,6 +307,6 @@ export class ProgrammingUserNewPage implements OnInit {
   
   
     
-    console.log(this.contractSelected);
+    // console.log(this.contractSelected);
   }
 }

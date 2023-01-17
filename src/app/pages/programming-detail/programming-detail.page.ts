@@ -157,7 +157,7 @@ export class ProgrammingDetailPage implements OnInit {
             (err) => {
               this.sending = false;
               this.textButton = "Error";
-              console.log(err);
+              // console.log(err);
             }
           );
         }, 3000);

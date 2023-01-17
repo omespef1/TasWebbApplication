@@ -45,8 +45,7 @@ export class AppComponent {
       this._auth.signInDirect();
       this.LoadFirstSettings();
       this.SetRemoteTransport();
-      if(this._sesion.GetUser().IdTercero>0){
-        console.log('leyendo tercero');
+      if(this._sesion.GetUser().IdTercero>0){       
         this.getDivisionPolitical();
       this.getAliParams();
       this.getModalities();
@@ -63,7 +62,6 @@ export class AppComponent {
   SetRemoteTransport() {
     setInterval(() => {
       this._transport.GetTransportRequestFailed().then(() => {
-        console.log('Pendientes de transporte enviados');
       });
     }, 30000);
   }

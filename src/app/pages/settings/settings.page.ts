@@ -60,7 +60,7 @@ export class SettingsPage implements OnInit {
    return this._sesion.getGroupEnlistment();
   }
   GoOut(){  
-    console.log('saliendo');
+    // console.log('saliendo');
     this._auth.signOut();
   }
   goChangePassword(){
