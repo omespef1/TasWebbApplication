@@ -8,6 +8,7 @@ import { ThirdPartiesGenericPage } from "../third-parties-generic/third-parties-
 import { GENTercerosService } from '../../services/GENTerceros/genterceros.service';
 import { vehicle } from '../../models/vehicle/vehicle';
 import { ServicesRequest } from '../../models/service-request/programmings';
+import { CallService } from "src/app/services/call/call.service";
 
 @Component({
   selector: "app-programming",
@@ -28,7 +29,8 @@ export class ProgrammingPage implements OnInit {
     private _nav: NavController,
     private _modal: ModalController,
     private genTercerosService: GENTercerosService,
-    private alertController:AlertController
+    private alertController:AlertController,
+    private callService:CallService
     
     ) { }
   ngOnInit() { }
@@ -242,6 +244,11 @@ console.log(this.activeService);
     });
 
     await alert.present();
+  }
+
+  call(callNumber:string){
+  this.callService.call(callNumber);
+
   }
 
 

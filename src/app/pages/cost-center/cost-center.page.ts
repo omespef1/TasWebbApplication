@@ -38,6 +38,8 @@ console.log(event);
       v =>
         v.CentrocostosNombre.toUpperCase().indexOf(
           event.detail.value.toUpperCase()
+        ) > -1 ||  v.CentrocostosCodigo.toUpperCase().indexOf(
+          event.detail.value.toUpperCase()
         ) > -1);
 
   }

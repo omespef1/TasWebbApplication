@@ -25,6 +25,7 @@
     "@awesome-cordova-plugins/core": "^5.45.0",
     "@awesome-cordova-plugins/onesignal": "^5.45.0",
     "@ionic-native/browser-tab": "^4.20.0",
+    "@ionic-native/call-number": "^5.22.0-beta-1",
     "@ionic-native/camera": "^5.15.0",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/fingerprint-aio": "^5.19.1",
@@ -48,7 +49,7 @@
     "devextreme-angular": "20.1.7",
     "moment": "^2.24.0",
     "release": "6.1.0",
-    "rxjs": "^6.5.5",
+    "rxjs": "^6.6.7",
     "stream": "0.0.2",
     "sweetalert2": "^11.1.9",
     "tslib": "^1.9.0",
@@ -67,10 +68,11 @@
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
+    "call-number": "^1.0.1",
     "codelyzer": "^5.0.0",
     "cordova-android": "^11.0.0",
     "cordova-browser": "^6.0.0",
-    "cordova-ios": "^5.1.1",
+    "cordova-ios": "^6.2.0",
     "cordova-plugin-camera": "^6.0.0",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-inappbrowser": "^4.1.0",
@@ -102,18 +104,20 @@
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-camera": {
-        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+        "ANDROID_SUPPORT_V4_VERSION": "27.+",
+        "ANDROIDX_CORE_VERSION": "1.6.+"
       },
       "cordova-plugin-inappbrowser": {},
       "phonegap-plugin-barcodescanner": {
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
       },
-      "onesignal-cordova-plugin": {}
+      "onesignal-cordova-plugin": {},
+      "mx.ferreyra.callnumber": {}
     },
     "platforms": [
       "browser",
-      "ios",
-      "android"
+      "android",
+      "ios"
     ]
   }
 }

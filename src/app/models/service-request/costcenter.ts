@@ -5,4 +5,5 @@ constructor(){
     EmpresaId:number;
     CentrocostosId:number;
     CentrocostosNombre:string;
+    CentrocostosCodigo:string;
 }

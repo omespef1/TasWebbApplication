@@ -51,7 +51,7 @@
         <ion-label>{{_session.isUser() && canEdit?'Conductor':'Usuario'}}</ion-label>
          <ion-note slot="end"> {{_session.isUser() && canEdit?  programming.Conductor : programming.UsuarioServicio}}</ion-note>
       </ion-item>  
-      <ion-item *ngIf="!programming.ManejaRuta">
+      <ion-item *ngIf="!programming.ManejaRuta" (click)="call(_session.isUser() && canEdit? programming.CelularConductor: programming.UsuarioCelular)">
         <ion-icon slot="start" name="call"></ion-icon>
         <ion-label>Celular {{_session.isUser() && canEdit?'Conductor':'Usuario'}}</ion-label>
          <ion-note slot="end"> {{_session.isUser() && canEdit? programming.CelularConductor: programming.UsuarioCelular}}</ion-note>

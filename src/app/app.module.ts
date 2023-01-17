@@ -34,7 +34,7 @@ import { SucursalesPage } from './pages/sucursales/sucursales.page';
 import { ContratosPage } from './pages/contratos/contratos.page';
 import { TypesVehiclesComponent } from './pages/types-vehicles/types-vehicles.component';
 import { PoliticaDivisionActiveComponent } from './pages/political-division/politica-division-active/politica-division-active.component';
-
+import { CallNumber } from '@ionic-native/call-number/ngx';
 
 
 @NgModule({
@@ -52,6 +52,7 @@ import { PoliticaDivisionActiveComponent } from './pages/political-division/poli
     InAppBrowser,
     BarcodeScanner,
     OneSignal,
+    CallNumber,
     FactoryValidator,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
 
