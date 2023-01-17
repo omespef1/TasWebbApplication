@@ -49,6 +49,7 @@ export class ProgrammingUserNewPage implements OnInit {
   // typeServiceSelected:TypesService=  new TypesService();
   typeVehicleSelected:TRATipoVehiculo= new TRATipoVehiculo();
   typesServicesList:TypesService[]= [];
+  today= new Date();
 
   constructor(private _sesion: SessionService, private userService: UsuariosService, private modal: ModalController, private requestService: ServicesRequestService,
     private alert: AlertService, private nav: NavController, private configuracionClientesService: ConfiguracionClientesService,
