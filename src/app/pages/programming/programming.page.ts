@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ServicesRequestService } from '../../services/services-request/services-request.service';
 import { SessionService } from "../../services/session/session.service";
 import { NavigationExtras } from "@angular/router";
-import { NavController, ModalController } from "@ionic/angular";
+import { NavController, ModalController, AlertController } from "@ionic/angular";
 import { AlertService } from "../../services/alert/alert.service";
 import { ThirdPartiesGenericPage } from "../third-parties-generic/third-parties-generic.page";
 import { GENTercerosService } from '../../services/GENTerceros/genterceros.service';
@@ -27,9 +27,10 @@ export class ProgrammingPage implements OnInit {
     private _alert: AlertService,
     private _nav: NavController,
     private _modal: ModalController,
-    private genTercerosService: GENTercerosService
-  ) { }
-
+    private genTercerosService: GENTercerosService,
+    private alertController:AlertController
+    
+    ) { }
   ngOnInit() { }
   ionViewWillEnter(event: any = null) {
     if (this.validAccess()) {
@@ -206,4 +207,42 @@ console.log(this.activeService);
       this._nav.navigateForward("tabs/programming/programming-user-new");
   
   }
+
+  cancelService(programming:ServicesRequest){
+
+      this._serviceRequest.CancelService(programming.SolicitudId,programming.EmpresaId).subscribe(resp=>{
+        if(resp!=null && resp.Retorno==0){
+          this._alert.successSweet("Se canceló el servicio");
+          this.GetProgrammingBeneficiario();
+        }
+      })
+
+  }
+
+
+  async confirmCancelService(request:ServicesRequest) {
+    const alert = await this.alertController.create({
+      header: 'Cuidado!',
+      message: '<strong>Está seguro de que desea cancelar el servicio? Esta acción no puede deshacerse</strong>',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Si',
+          handler: () => {
+            this.cancelService(request)
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+
 }

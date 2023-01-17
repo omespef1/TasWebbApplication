@@ -43,4 +43,10 @@ export class ServicesRequestService {
   GetLastsServiceThirdPartieApproved(business: number,id: number){
     return this._http.Get<transactionObj<ServicesRequest>>(`/GESSolicitudServicios/GetLastsServiceThirdPartieApproved?companyCode=${business}&thirdPartie=${id}`);
    }
+
+   CancelService(requestId: number,companyCode: number){
+    return this._http.Get<transactionObj<ServicesRequest>>(`/GESSolicitudServicios/cancelServiceApp?requestId=${requestId}&companyCode=${companyCode}`);
+   }
+
+
 }
