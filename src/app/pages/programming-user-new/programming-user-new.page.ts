@@ -167,6 +167,7 @@ export class ProgrammingUserNewPage implements OnInit {
         this.request.UsuarioServicio = `${this.user.Cedula} - ${this.user.Usuario}`;
         this.request.UsuarioVip =  this._sesion.GetUser().NombreCompleto;   
         this.request.UsuarioEmail = this.user.Email;
+        this.request.UsuarioCrea = this._sesion.GetUser().NombreCompleto;  
 
         if(this.costCenterList.filter(c=>c.CentrocostosId == this.request.CentrocostosId).length>0)
         this.costCenterSelected = this.costCenterList.filter(c=>c.CentrocostosId == this.request.CentrocostosId)[0];
