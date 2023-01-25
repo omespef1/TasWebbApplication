@@ -30,11 +30,13 @@ export class AuthService {
     private _thirdParties: ThirdPartiesService,
     private _push: NotificationsService,
     private _thirdPartieOneSignal: OneSignalThirdPartiesService,
-    private usersOneSignal: OneSignalUsersService
+    private usersOneSignal: OneSignalUsersService,
+    private oneSignalService:NotificationsService
   ) {}
 
   signIn(credentials: loginRequest) {
     //console.log(credentials);
+   
     return this._http.Post<transaction>("/login", credentials).pipe(
       tap(async (userData: transaction) => {
         if (userData) {
@@ -44,11 +46,11 @@ export class AuthService {
               thirdPartie.IdTercero == 0 &&
               thirdPartie.Identificacion == ""
             ) {
+              this.oneSignalService.setExternal(thirdPartie.NombreCompleto);
               this._sesion.SetUser(thirdPartie);     
               //this._thirdParties.addThirdPartie(userData.ObjTransaction);       
             } else {
-
-
+              this.oneSignalService.setExternal(thirdPartie.Identificacion);
               this._sesion.SetThirdPartie(userData.ObjTransaction);
               this._sesion.SetThirdPartieBio(userData.ObjTransaction);
               this._sesion.setOfflineUser(userData.ObjTransaction);
@@ -154,80 +156,80 @@ export class AuthService {
     }
   }
 
-  SetOneSignalId() {
-    this._sesion.getOneSignalId().then((resp) => {
-      if (resp !== undefined && resp !== null) {
-        const userOneSingnal: OneSignalEntitie = new OneSignalEntitie();
-        userOneSingnal.OneSignalId = resp.userId;
-        if (this._sesion.isUser()) {
-          userOneSingnal.UserName = this._sesion.GetUser().NombreCompleto;
-          userOneSingnal.CompanyId = this._sesion.GetUser().IdEmpresa;
-          this.usersOneSignal
-            .PostOneSignalUser(userOneSingnal)
-            .subscribe((resp: transaction) => {
-              if (resp.Retorno == 0) {
-                console.log("NOT OK");
-              }
-            });
-        } else {
-          userOneSingnal.ThirdPartie = this._sesion.GetThirdPartie().IdTercero;
-          userOneSingnal.CompanyId = this._sesion.GetThirdPartie().IdEmpresa;
-          this._thirdPartieOneSignal
-            .PostOneSignalThirdPartie(userOneSingnal)
-            .subscribe((resp: transaction) => {
-              if (resp.Retorno == 0) {
-                console.log("NOT OK");
-              }
-            });
-        }
-      }
-    });
-  }
+  // SetOneSignalId() {
+  //   this._sesion.getOneSignalId().then((resp) => {
+  //     if (resp !== undefined && resp !== null) {
+  //       const userOneSingnal: OneSignalEntitie = new OneSignalEntitie();
+  //       userOneSingnal.OneSignalId = resp.userId;
+  //       if (this._sesion.isUser()) {
+  //         userOneSingnal.UserName = this._sesion.GetUser().NombreCompleto;
+  //         userOneSingnal.CompanyId = this._sesion.GetUser().IdEmpresa;
+  //         this.usersOneSignal
+  //           .PostOneSignalUser(userOneSingnal)
+  //           .subscribe((resp: transaction) => {
+  //             if (resp.Retorno == 0) {
+  //               console.log("NOT OK");
+  //             }
+  //           });
+  //       } else {
+  //         userOneSingnal.ThirdPartie = this._sesion.GetThirdPartie().IdTercero;
+  //         userOneSingnal.CompanyId = this._sesion.GetThirdPartie().IdEmpresa;
+  //         this._thirdPartieOneSignal
+  //           .PostOneSignalThirdPartie(userOneSingnal)
+  //           .subscribe((resp: transaction) => {
+  //             if (resp.Retorno == 0) {
+  //               console.log("NOT OK");
+  //             }
+  //           });
+  //       }
+  //     }
+  //   });
+  // }
 
-  RemoveOneSignalId():Promise<any> {
+  // RemoveOneSignalId():Promise<any> {
 
 
-    let promise = new Promise((resolve,reject)=>{
-      this._sesion.getOneSignalId().then((resp) => {
-        console.log('1');
-        console.log(resp);
-        if (resp !== undefined && resp !== null) {
-          const userOneSingnal: OneSignalEntitie = new OneSignalEntitie();
-          userOneSingnal.OneSignalId = resp.userId;
-          if (this._sesion.isUser()) {
-            console.log('2');
-            userOneSingnal.UserName = this._sesion.GetUser().NombreCompleto;
-            userOneSingnal.CompanyId = this._sesion.GetUser().IdEmpresa;
-            this.usersOneSignal
-              .DeleteOneSignalUser(userOneSingnal)
-              .subscribe((resp: transaction) => {
-                if (resp.Retorno == 0) {
-                  console.log("NOT OK");
-                  resolve(true);
-                }
-              });
-          } else {
-            userOneSingnal.ThirdPartie = this._sesion.GetThirdPartie().IdTercero;
-            userOneSingnal.CompanyId = this._sesion.GetThirdPartie().IdEmpresa;
-            this._thirdPartieOneSignal
-              .DeleteOneSignalThirdPartie(userOneSingnal)
-              .subscribe((resp: transaction) => {
-                if (resp.Retorno == 0) {
-                  console.log("NOT OK");
-                  resolve(true);
-                }
-              });
-          }
-        }
-        else
-        resolve(true);
-      });
+  //   let promise = new Promise((resolve,reject)=>{
+  //     this._sesion.getOneSignalId().then((resp) => {
+  //       console.log('1');
+  //       console.log(resp);
+  //       if (resp !== undefined && resp !== null) {
+  //         const userOneSingnal: OneSignalEntitie = new OneSignalEntitie();
+  //         userOneSingnal.OneSignalId = resp.userId;
+  //         if (this._sesion.isUser()) {
+  //           console.log('2');
+  //           userOneSingnal.UserName = this._sesion.GetUser().NombreCompleto;
+  //           userOneSingnal.CompanyId = this._sesion.GetUser().IdEmpresa;
+  //           this.usersOneSignal
+  //             .DeleteOneSignalUser(userOneSingnal)
+  //             .subscribe((resp: transaction) => {
+  //               if (resp.Retorno == 0) {
+  //                 console.log("NOT OK");
+  //                 resolve(true);
+  //               }
+  //             });
+  //         } else {
+  //           userOneSingnal.ThirdPartie = this._sesion.GetThirdPartie().IdTercero;
+  //           userOneSingnal.CompanyId = this._sesion.GetThirdPartie().IdEmpresa;
+  //           this._thirdPartieOneSignal
+  //             .DeleteOneSignalThirdPartie(userOneSingnal)
+  //             .subscribe((resp: transaction) => {
+  //               if (resp.Retorno == 0) {
+  //                 console.log("NOT OK");
+  //                 resolve(true);
+  //               }
+  //             });
+  //         }
+  //       }
+  //       else
+  //       resolve(true);
+  //     });
 
        
 
-    })
+  //   })
 
-    return promise;
+  //   return promise;
 
-  }
+  // }
 }

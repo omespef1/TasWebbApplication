@@ -5,7 +5,6 @@ import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { SessionService } from "./services/session/session.service";
 import { AuthService } from "./services/auth/auth.service";
-import { NetworkService } from './services/network/network.service';
 import { NotificationsService } from './services/push/notifications.service';
 import { TransportRequestService } from './services/transport-request/transport-request.service';
 import { PoliticalDivisionService } from "./services/political-division/political-division.service";
@@ -26,13 +25,13 @@ export class AppComponent {
     private statusBar: StatusBar,
     private _sesion: SessionService,
     private _auth: AuthService,
-    private _push:NotificationsService,
     private _transport:TransportRequestService,
     private genDivisionPoliticalService:PoliticalDivisionService,
     private costCenterService:GescentrocostosService,
     private vehicleService:VehicleService,
     private genTercerosService:GENTercerosService,
     private requestService: ServicesRequestService,
+    private notifications:NotificationsService
   ) {
     this.initializeApp();
   }
@@ -41,7 +40,8 @@ export class AppComponent {
     this.platform.ready().then(() => {              
       this.statusBar.styleDefault();    
       this.splashScreen.hide();
-      this._push.init_Notifications();
+      // this._push.init_Notifications();
+      this.notifications.OneSignalInit();
       this._auth.signInDirect();
       this.LoadFirstSettings();
       this.SetRemoteTransport();
@@ -144,4 +144,6 @@ export class AppComponent {
       }
     })
   }
+
+
 }
