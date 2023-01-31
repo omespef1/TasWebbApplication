@@ -54,7 +54,9 @@ export class AlertService {
   }
 
   openBrowserUrl(url: string) {
-    // console.log(url);
+console.log(url);
+    try {
+      // console.log(url);
     this.browserTab.create(url, '_blank', 'location=yes');
     // this.browserTab.isAvailable().then((isAvailable) => {
     //   if (isAvailable) {
@@ -63,6 +65,10 @@ export class AlertService {
     //     // open URL with InAppBrowser instead or SafariViewController
     //   }
     // });
+    } catch (error) {
+      console.log(error);
+    }
+    
   }
   successSweet(message:string){
 
