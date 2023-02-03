@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 import { SessionService } from '../session/session.service';
 import OneSignal from 'onesignal-cordova-plugin';
-import { platform } from 'os';
 import { Platform } from '@ionic/angular';
 @Injectable({
   providedIn: 'root'
