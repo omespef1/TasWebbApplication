@@ -13,4 +13,9 @@
      <p>{{item.CentrocostosCodigo}} - {{ item.CentrocostosNombre  }} </p>
    </ion-item>
  </ion-list>
+
+ <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+  <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Cargando más datos...">
+  </ion-infinite-scroll-content>
+</ion-infinite-scroll>
 </ion-content>
