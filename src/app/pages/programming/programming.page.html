@@ -76,6 +76,11 @@
         <ion-label>Fecha Servicio</ion-label>
          <ion-note slot="end"> {{ programming.FechaServicio | date:'dd/MM/yyyy'}} {{ programming.HoraServicio | date : 'HH:mm'}}</ion-note>
       </ion-item> 
+      <ion-item >
+        <ion-icon slot="start" name="car"></ion-icon>
+        <ion-label>Tipo servicio</ion-label>
+         <ion-note slot="end"> {{programming.TipoServicio}}</ion-note>
+      </ion-item> 
       <ion-item *ngIf="_session.isUser() && canEdit  && programming.Estado=='S'" button (click)="confirmCancelService(programming)" color="secondary">
         <ion-icon slot="start" name="close-circle">
 

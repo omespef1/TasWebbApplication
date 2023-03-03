@@ -130,106 +130,113 @@ export class EnlistmentPage implements OnInit {
   }
 
   async buildPetition(latitude: number, longitude: number) {
-    let answers: manchecklistDetalle[] = [];
-    this.saving = true;
-    let reviso = "";
-    if (this._sesion.GetUser() != undefined && this._sesion.GetUser() != null) {
-      reviso = this._sesion.GetUser().NombreCompleto;
-    } else {
-     reviso = "CONDUCTOR"
-    }
-    let answer: manchecklist = {
-      IdEmpresa: this._sesion.GetBussiness().CodigoEmpresa,
-      Id: 0,
-      IdVehiculo: this.car.IdVehiculo,
-      CentroId: 0,
-      FechaProceso: moment(new Date()).format(),
-      Estado: "",
-      Observaciones: "",
-      Acepto: "",
-      NumeroViaje: ".",
-      Kilometraje: this.car.NuevoKilometraje,
-      IdTercero: this.third.IdTercero,
-      Reviso: reviso,
-      detalle: answers,
-      identificacion: this.third.Identificacion,
-      Latitude: latitude,
-      Longitude: longitude,
-      sending: true,
-      drivers: [],
-      PlacaVehiculo:''
-    };
-    this._thirdParties.GetThirdParties().forEach((element) => {
-      answer.drivers.push(element.IdTercero);
-    });
-    this.enlistment.forEach((item) => {
-      answer.detalle.push({
-        IdCheckList: 0,
-        Comentario: item.observaciones,
-        PNo: item.PNo,
-        Pregunta: item.Pregunta,
-        Grupo: Number(item.Seccion),
+    try {
+      let answers: manchecklistDetalle[] = [];
+      this.saving = true;
+      let reviso = "";
+      if (this._sesion.GetUser() != undefined && this._sesion.GetUser() != null) {
+        reviso = this._sesion.GetUser().NombreCompleto;
+      } else {
+       reviso = "CONDUCTOR"
+      }
+      let answer: manchecklist = {
         IdEmpresa: this._sesion.GetBussiness().CodigoEmpresa,
-        Respuesta: item.respuestaUsuario,
-        Resultado: "",
-        Check_Image: item.check_foto,
-        show: true,
-        HasImage: 0,
+        Id: 0,
+        IdVehiculo: this.car.IdVehiculo,
+        CentroId: 0,
+        FechaProceso: moment(new Date()).format(),
+        Estado: "",
+        Observaciones: "",
+        Acepto: "",
+        NumeroViaje: ".",
+        Kilometraje: this.car.NuevoKilometraje,
+        IdTercero: this.third.IdTercero,
+        Reviso: reviso,
+        detalle: answers,
+        identificacion: this.third.Identificacion,
+        Latitude: latitude,
+        Longitude: longitude,
+        sending: true,
+        drivers: [],
+        PlacaVehiculo:''
+      };
+      this._thirdParties.GetThirdParties().forEach((element) => {
+        answer.drivers.push(element.IdTercero);
       });
-    });
-
-    if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
-      let enviado = false;
-      setTimeout(async () => {
-        if (!enviado) {
-          this._alert.showAlert(
-            "Red Lenta",
-            "Parece que la red se encuentra un poco lenta. Guardaremos este alistamiento y lo enviaremos por ti cuando haya una mejor calidad de red"
-          );
-          await this.saveLocal(answer);
-          this.goLastEnlisment();
-        }
-      }, 30000);
-      this._service.PostAnswer(answer).subscribe(
-        (resp) => {
-          enviado = true;
-          this.saving = false;
-          if (resp.Retorno == 0) {
-            this._alert.showAlert("Mensaje del sistema", `${resp.message}`);
+      this.enlistment.forEach((item) => {
+        answer.detalle.push({
+          IdCheckList: 0,
+          Comentario: item.observaciones,
+          PNo: item.PNo,
+          Pregunta: item.Pregunta,
+          Grupo: Number(item.Seccion),
+          IdEmpresa: this._sesion.GetBussiness().CodigoEmpresa,
+          Respuesta: item.respuestaUsuario,
+          Resultado: "",
+          Check_Image: item.check_foto,
+          show: true,
+          HasImage: 0,
+        });
+      });
+  
+      if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
+        let enviado = false;
+        setTimeout(async () => {
+          if (!enviado) {
+            this._alert.showAlert(
+              "Red Lenta",
+              "Parece que la red se encuentra un poco lenta. Guardaremos este alistamiento y lo enviaremos por ti cuando haya una mejor calidad de red"
+            );
+            await this.saveLocal(answer);
             this.goLastEnlisment();
-
-            this._sesion.SetLastEnlistment(answer);
-          } else {
-            this._alert.showAlert("Error", resp.TxtError);
-            if (resp.TxtError == "El conductor no se encuentra activo") {
-              this._auth.signOut();
-            }
           }
-        },
-        (err) => {
-          this._alert.showAlert("Error de conexión,intente nuevamente.", err);
-          this.saving = false;
-        }
-      );
-    } else {
-      if (this._service.CheckEnlistment(answer)) {
-        answer.Estado = "A";
-        this._alert.showAlert(
-          "Mensaje del sistema",
-          "LA LISTA DE CHEQUEO HA SIDO APROBADA"
+        }, 30000);
+        this._service.PostAnswer(answer).subscribe(
+          (resp) => {
+            enviado = true;
+            this.saving = false;
+            if (resp.Retorno == 0) {
+              this._alert.showAlert("Mensaje del sistema", `${resp.message}`);
+              this.goLastEnlisment();
+  
+              this._sesion.SetLastEnlistment(answer);
+            } else {
+              this._alert.showAlert("Error", resp.TxtError);
+              if (resp.TxtError == "El conductor no se encuentra activo") {
+                this._auth.signOut();
+              }
+            }
+          },
+          (err) => {
+            this._alert.showAlert("Error de conexión,intente nuevamente.", err);
+            this.saving = false;
+          }
         );
       } else {
-        answer.Estado = "N";
-        this._alert.showAlert(
-          "Mensaje del sistema",
-          "LA LISTA DE CHEQUEO NO HA SIDO APROBADA"
-        );
+        if (this._service.CheckEnlistment(answer)) {
+          answer.Estado = "A";
+          this._alert.showAlert(
+            "Mensaje del sistema",
+            "LA LISTA DE CHEQUEO HA SIDO APROBADA"
+          );
+        } else {
+          answer.Estado = "N";
+          this._alert.showAlert(
+            "Mensaje del sistema",
+            "LA LISTA DE CHEQUEO NO HA SIDO APROBADA"
+          );
+        }
+        this._sesion.SetLastEnlistment(answer);
+        this.saving = false;
+        await this.saveLocal(answer);
+        this.goLastEnlisment();
       }
-      this._sesion.SetLastEnlistment(answer);
-      this.saving = false;
-      await this.saveLocal(answer);
-      this.goLastEnlisment();
+    } catch (error) {
+      this.loading = false;
+        this._alert.errorSweet(error);
+      
     }
+  
   }
   clear(event: any, question: enlistment) {
     if (event.target.nodeName == "ION-RADIO-GROUP") {
