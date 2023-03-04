@@ -4,6 +4,10 @@
 <div>
   <ion-progress-bar ion-fixed  color="secondary" [value]="progressValue()"></ion-progress-bar> 
  </div>
+
+
+
+
 <ion-content class="outer-content">
    
   <div *ngIf="!loading">
@@ -75,15 +79,17 @@
           </ion-list>
         </ng-container>
       </div>
+      
       <ion-button [disabled]="!enlistmentForm.form.valid || saving || done " expand="block" type="submit">
+       
         <ion-icon *ngIf="!saving" slot="start" name="checkmark-circle"></ion-icon>
         <ion-spinner *ngIf="saving" slot="start"></ion-spinner>
-        {{ saving?'ENVIANDO...':'GUARDAR'}}
+        {{ saving? 'Enviando ' + progress + '%':'GUARDAR'}}
       </ion-button>
-
+     
     </form>
 
-
+    
 
   </div>
 

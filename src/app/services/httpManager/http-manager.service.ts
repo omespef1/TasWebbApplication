@@ -2,7 +2,9 @@ import { Injectable } from "@angular/core";
 import {
   HttpClient,
   HttpHeaders,
-  HttpErrorResponse
+  HttpErrorResponse,
+  HttpEventType,
+  HttpEvent
 } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { retry, catchError, map, tap } from "rxjs/operators";
@@ -13,6 +15,7 @@ import { config } from "src/assets/config/settings";
 })
 export class HttpManagerService {
 baseUrl:string;
+progress=0;
   private httpOptions: {
     headers: HttpHeaders;
   };
@@ -112,4 +115,30 @@ this.baseUrl = config.url;
         })
         );
   }
+
+
+  PostRequestHeavy<T>(urlController: string, body: any): Observable<HttpEvent<T>> {
+    const headerDict = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Origin": "*"
+    };
+    const bodyRequest: any = {
+      headers: new HttpHeaders(headerDict),
+      reportProgress: true, // Habilitar seguimiento del progreso,
+      observe: 'events'
+    };
+    console.log(`${this.baseUrl}${urlController}`);
+    console.log(body);
+    return this._http
+      .request<T>('POST', `${this.baseUrl}${urlController}`, {
+        body,
+        ...bodyRequest
+      })   
+  }
+
+
+
+
 }

@@ -27,6 +27,7 @@ import { NavController, IonRadioGroup } from "@ionic/angular";
 import { AuthService } from "../../services/auth/auth.service";
 import { NavigationOptions } from "@ionic/angular/dist/providers/nav-controller";
 import { ThirdPartiesService } from "../../services/third-parties/third-parties.service";
+import { HttpEventType } from "@angular/common/http";
 
 @Component({
   selector: "app-enlistment",
@@ -191,21 +192,28 @@ export class EnlistmentPage implements OnInit {
             this.goLastEnlisment();
           }
         }, 30000);
-        this._service.PostAnswer(answer).subscribe(
-          (resp) => {
-            enviado = true;
-            this.saving = false;
-            if (resp.Retorno == 0) {
-              this._alert.showAlert("Mensaje del sistema", `${resp.message}`);
-              this.goLastEnlisment();
-  
-              this._sesion.SetLastEnlistment(answer);
-            } else {
-              this._alert.showAlert("Error", resp.TxtError);
-              if (resp.TxtError == "El conductor no se encuentra activo") {
-                this._auth.signOut();
+        this._service.PostAnswerHeavy(answer).subscribe(
+          (event) => {
+              debugger;
+            if (event.type === HttpEventType.UploadProgress) {
+              this.progress = Math.round((100 * event.loaded) / event.total);
+            }
+            else if (event.type === HttpEventType.Response) {
+              enviado = true;
+              this.saving = false;
+              if (event.body.Retorno == 0) {
+                this._alert.showAlert("Mensaje del sistema", `${event.body.message}`);
+                this.goLastEnlisment();
+    
+                this._sesion.SetLastEnlistment(answer);
+              } else {
+                this._alert.showAlert("Error", event.body.TxtError);
+                if (event.body.TxtError == "El conductor no se encuentra activo") {
+                  this._auth.signOut();
+                }
               }
             }
+         
           },
           (err) => {
             this._alert.showAlert("Error de conexión,intente nuevamente.", err);
@@ -293,7 +301,9 @@ export class EnlistmentPage implements OnInit {
       100
     );
   }
-
+progressValueUpload(){
+  return this.progress;
+}
   deletePhoto(answer: enlistment) {
     answer.check_foto = undefined;
   }
