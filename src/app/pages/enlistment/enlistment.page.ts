@@ -191,7 +191,7 @@ export class EnlistmentPage implements OnInit {
             await this.saveLocal(answer);
             this.goLastEnlisment();
           }
-        }, 30000);
+        }, 60000);
         this._service.PostAnswerHeavy(answer).subscribe(
           (event) => {
               debugger;
