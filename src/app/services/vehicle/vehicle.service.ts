@@ -45,6 +45,10 @@ export class VehicleService {
   GetDocumentsValidationCompany(companyCode:number){
     return this._http.Get<transaction>(`/Vehicle/ValidaDocumentosCompany?companyCode=${ companyCode}`)
   }
+
+  GetVehicleByCompany(companyCode:number,vehicleId:number){
+    return this._http.Get<transactionObj<vehicle>>(`/Vehicles/getVehicle?companyCode=${companyCode}&vehicleId=${vehicleId}`)
+  }
   GetManPendientes(business:business,vehicle:vehicle){
     return this._http.Get<transaction>(`/Vehicle/ManPendientes?business=${business.CodigoEmpresa}&idVehiculo=${vehicle.IdVehiculo}`);
   }

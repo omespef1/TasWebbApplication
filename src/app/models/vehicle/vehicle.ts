@@ -11,4 +11,6 @@ export class vehicle  {
     loading:boolean;
     IdTipoVehiculo:number;
     IdEmpresa:number;
+    ConductorId2:number;
+    ConductorId3:number;
 }

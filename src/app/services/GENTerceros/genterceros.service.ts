@@ -35,4 +35,8 @@ export class GENTercerosService {
   GetById(idEmpresa:number,thirdPartieId:number){
     return this._http.Get<transactionObj<ThirdPartie>>(`/GENTerceros/GetById?companyCode=${idEmpresa}&id=${thirdPartieId}`);
   }
+
+  GetDriversByCompany(companyCode:number){
+    return this._http.Get<transactionObj<ThirdPartie[]>>(`/GENTerceros/GetDriversByCompany?companyCode=${companyCode}`);
+  }
 }

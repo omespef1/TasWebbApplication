@@ -145,7 +145,7 @@
     <ion-list-header color="secondary">
       <ion-label>VEHÍCULO</ion-label>
     </ion-list-header>
-    <ion-item [disabled]="true" tappable button (click)="showPopupVehicles()">
+    <ion-item tappable button (click)="showPopupVehicles()">
       <ion-icon slot="start" name="car"></ion-icon>
       <ion-label position="floating">Vehículo</ion-label>
       <ion-note slot="end"> {{ carSelected.PlacaVehiculo}}</ion-note>
@@ -161,12 +161,12 @@
       <ion-label position="floating">CONDUCTOR 1</ion-label>    
       <ion-note slot="end"> {{ firstDriver.NombreCompleto}}</ion-note> 
     </ion-item>  
-    <ion-item  [disabled]="true" tappable button (click)="showPopupDrivers()">
+    <ion-item *ngIf="secondDriver"  [disabled]="true" tappable button (click)="showPopupDrivers()">
       <ion-icon slot="start" name="person"></ion-icon>
       <ion-label position="floating">CONDUCTOR 2</ion-label>    
       <ion-note slot="end"> {{ secondDriver.NombreCompleto}}</ion-note> 
     </ion-item> 
-    <ion-item [disabled]="true" tappable button (click)="showPopupDrivers3()">
+    <ion-item *ngIf="thirdDriver"   [disabled]="true" tappable button (click)="showPopupDrivers3()">
       <ion-icon slot="start" name="person"></ion-icon>
       <ion-label position="floating">CONDUCTOR 3</ion-label>    
       <ion-note slot="end"> {{ thirdDriver.NombreCompleto}}</ion-note> 
@@ -181,6 +181,7 @@
   <ion-button (click)= "stage =1" expand="full"  color="secondary">      
     ATRÁS
   </ion-button> 
+  <br>
     <ion-button [disabled]="!fuecForm.form.valid" type="submit"  expand="full"  color="danger">      
       <ion-spinner  color="primary" *ngIf="sendingFuec" slot="end"></ion-spinner>
       FINALIZAR
