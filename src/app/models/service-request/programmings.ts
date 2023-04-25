@@ -67,6 +67,7 @@ export class ServiceRequestDetail {
   FechaModifica: Date;
   observations:string;
   Kilometraje:number;
+  CodigoConfirmacion?:number;
 
 }
  

@@ -13,6 +13,7 @@ import { transactionObj } from '../../models/general/transaction';
 import { PassengerService } from '../../services/passenger/passenger.service';
 import TypeValidator from "src/app/enums/type-validator.enum";
 import { FactoryValidator } from '../../factory/validator-passenger.factory';
+import { ValidateCodePage } from "src/app/validate-code/validate-code.page";
 
 @Component({
   selector: "app-programming-detail",
@@ -84,7 +85,7 @@ export class ProgrammingDetailPage implements OnInit {
         text: "Aceptar",
         role: "OK",
         handler: (value: any) => {
-          this.setNewLog(value);
+          this.setNewLog(value,false);
         },
       },
     ];
@@ -125,44 +126,62 @@ export class ProgrammingDetailPage implements OnInit {
       true
     );
   }
-  setNewLog(value: any) {
-    this.textButton = "Localizando...";
-    this.sending = true;
-    const log: ServiceRequestDetail = new ServiceRequestDetail();
-    log.SolicitudId = this.programming.SolicitudId;
-    log.EmpresaId = this._sesion.GetThirdPartie().IdEmpresa;
-    log.Estado = value;
-    this._request.SetTransportRequestFailed(log).then(() => {
-      this.geo.getCurrentPosition().then((data) => {
-        this.textButton = "Esperando...";
-        setTimeout(() => {
-          log.Latitude = data.coords.latitude;
-          log.Longitude = data.coords.longitude;
-          log.observations = this.observations;
-          // Guardamos el intento en los fallidos en caso de que falle        
-          this._service.PostServicesDetail(log).subscribe(
-            (resp: any) => {
-              this.sending = false;
-              // Borramos el intento ya que el servidor si respondió
-              this._request.deleteTransportFailed();
-              if (resp.Retorno === 0) {
-                this.textButton = "Nuevo seguimiento";
-                this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
-                this.loadDetail();
-              } else {
-                this.textButton = "Nuevo seguimiento";
-                this._alert.showAlert("Error", resp.TxtError);
+
+
+    
+  isVip(){
+    return this._sesion.GetUser()!= undefined && this._sesion.GetUser().Grupo === "VIP";
+  }
+  
+  setNewLog(value: any,confirmed:boolean,code:number=0) {
+    if(value != "F" || confirmed == true){
+      this.textButton = "Localizando...";
+      this.sending = true;
+      const log: ServiceRequestDetail = new ServiceRequestDetail();
+      log.SolicitudId = this.programming.SolicitudId;
+      log.EmpresaId = this._sesion.GetThirdPartie().IdEmpresa;
+      log.Estado = value;
+      if(code>0){
+        log.CodigoConfirmacion = code;
+      }
+      this._request.SetTransportRequestFailed(log).then(() => {
+        this.geo.getCurrentPosition().then((data) => {
+          this.textButton = "Esperando...";
+          setTimeout(() => {
+            log.Latitude = data.coords.latitude;
+            log.Longitude = data.coords.longitude;
+            log.observations = this.observations;
+            // Guardamos el intento en los fallidos en caso de que falle        
+            this._service.PostServicesDetail(log).subscribe(
+              (resp: any) => {
+                this.sending = false;
+                // Borramos el intento ya que el servidor si respondió
+                this._request.deleteTransportFailed();
+                if (resp.Retorno === 0) {
+                  this.textButton = "Nuevo seguimiento";
+                  this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
+                  this.loadDetail();
+                } else {
+                  this.textButton = "Nuevo seguimiento";
+                  this._alert.showAlert("Error", resp.TxtError);
+                }
+              },
+              (err) => {
+                this.sending = false;
+                this.textButton = "Error";
+                // console.log(err);
               }
-            },
-            (err) => {
-              this.sending = false;
-              this.textButton = "Error";
-              // console.log(err);
-            }
-          );
-        }, 3000);
-      });
-    })
+            );
+          }, 3000);
+        });
+      })
+    }
+    else {
+
+this.showModalCode();
+
+    }
+
 
   }
 
@@ -210,6 +229,23 @@ export class ProgrammingDetailPage implements OnInit {
       }
     })
 
+  }
+
+  async showModalCode() {
+    const modal = await this.modalController.create({
+      component:  ValidateCodePage,
+      componentProps: {
+        'title': 'Ingresa el código de verificación enviado a su teléfono y/o su email.'
+      }
+    });
+    modal.onDidDismiss().then(resp => {
+      if (resp.data != undefined) {
+        // console.log(resp);
+        debugger;
+        this.setNewLog("F",true,resp.data);
+      }
+    });
+    return await modal.present();
   }
 
 }

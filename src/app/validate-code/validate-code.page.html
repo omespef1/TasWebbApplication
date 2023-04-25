@@ -1,0 +1,15 @@
+<app-header headerName="Verificación">
+
+</app-header>
+
+
+<ion-content>
+  <ion-item>
+    <ion-input type="text" [(ngModel)]="number" placeholder="Código de verificación"></ion-input>
+  </ion-item>
+  <ion-item>
+    <b style="color:red"><small> Digite aquí el código de verificación enviado a su celular y/o email.</small></b>
+  </ion-item>
+ 
+  <ion-button expand="block" (click)="validate()">Enviar</ion-button>
+</ion-content>

@@ -116,8 +116,7 @@ export class AppComponent {
   getInformationThirdPartie(){
   this.genTercerosService.GetById(this._sesion.GetThirdPartie().IdEmpresa, this._sesion.GetThirdPartie().IdTercero).subscribe(resp => {
     if (resp != null && resp.Retorno == 0) {
-      this._sesion.SetByIdOffline(resp.ObjTransaction);
-      console.log(resp.ObjTransaction);
+      this._sesion.SetByIdOffline(resp.ObjTransaction);  
     }
   })
 

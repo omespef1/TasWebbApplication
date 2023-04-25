@@ -35,11 +35,12 @@ import { ContratosPage } from './pages/contratos/contratos.page';
 import { TypesVehiclesComponent } from './pages/types-vehicles/types-vehicles.component';
 import { PoliticaDivisionActiveComponent } from './pages/political-division/politica-division-active/politica-division-active.component';
 import { CallNumber } from '@ionic-native/call-number/ngx';
+import { ValidateCodePage } from "./validate-code/validate-code.page";
 
 
 @NgModule({
-  declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage,ThirdPartieValidationPage,SucursalesPage,ContratosPage,TypesVehiclesComponent,PoliticaDivisionActiveComponent],
-  entryComponents: [ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage,ThirdPartieValidationPage,SucursalesPage,ContratosPage,TypesVehiclesComponent,PoliticaDivisionActiveComponent],
+  declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage,ThirdPartieValidationPage,SucursalesPage,ContratosPage,TypesVehiclesComponent,PoliticaDivisionActiveComponent,ValidateCodePage],
+  entryComponents: [ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage,ThirdPartieValidationPage,SucursalesPage,ContratosPage,TypesVehiclesComponent,PoliticaDivisionActiveComponent,ValidateCodePage],
   imports: [BrowserModule, IonicModule.forRoot(
    { mode: 'ios'}
   ), AppRoutingModule,

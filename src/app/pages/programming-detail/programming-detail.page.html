@@ -88,7 +88,11 @@
     <ion-label>Dirección</ion-label>
     <ion-note slot="end"> {{ programming.DestinoDireccion}}</ion-note>
   </ion-item>
-
+  <ion-item *ngIf="isVip()">
+    <ion-icon slot="start" name="clipboard"></ion-icon>
+    <ion-label>Código de confirmación</ion-label>
+    <ion-note slot="end"> {{ programming.CodigoVerificacion}}</ion-note>
+  </ion-item>
   <ion-item class="header" lines="none" color="secondary">
     <ion-icon slot="start" name="globe"></ion-icon>
     <ion-label>OBSERVACIONES</ion-label>

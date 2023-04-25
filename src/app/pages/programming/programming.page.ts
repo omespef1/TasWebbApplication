@@ -38,7 +38,7 @@ export class ProgrammingPage implements OnInit {
     if (this.validAccess()) {
      
       if (this._session.isUser()) {
-        if (this._session.GetUser().Grupo === "VIP") {
+        if (this.isVip()) {
         
           this.GetProgrammingBeneficiario(event);
         }
@@ -63,7 +63,9 @@ export class ProgrammingPage implements OnInit {
     }
   }
 
-
+  isVip(){
+    return this._session.GetUser()!= undefined && this._session.GetUser().Grupo === "VIP";
+  }
 
   async showModalThirdParties() {
     this.canEdit = false;
