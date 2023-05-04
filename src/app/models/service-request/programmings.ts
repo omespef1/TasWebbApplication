@@ -15,7 +15,7 @@ export class ServicesRequest {
     this.NumeroPasajeros =1;
     this.typeRequest="";
     this.IdTipoServicio =0;
-   
+   this.IdPasajero = 0;
     
   }
   EmpresaId: number;
@@ -51,6 +51,7 @@ export class ServicesRequest {
   UsuarioEmail:string;
   UsuarioVip:string;
   IdTipoServicio:number;
+  IdPasajero?:number;
 
 }
 

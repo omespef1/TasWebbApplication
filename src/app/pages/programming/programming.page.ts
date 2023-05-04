@@ -64,7 +64,7 @@ export class ProgrammingPage implements OnInit {
   }
 
   isVip(){
-    return this._session.GetUser()!= undefined && this._session.GetUser().Grupo === "VIP";
+    return !!this._session.GetUser() && this._session.GetUser().Grupo === "VIP";
   }
 
   async showModalThirdParties() {
@@ -106,7 +106,7 @@ export class ProgrammingPage implements OnInit {
     this._serviceRequest
       .GetServicesRequestBeneficiario(
         this._session.GetUser().IdEmpresa,
-        this._session.GetUser().NombreCompleto
+        this._session.GetUser().IdPasajero
       )
       .subscribe((resp) => {
         if (event) {

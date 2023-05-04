@@ -9,4 +9,5 @@ export class ThirdPartie {
     TerFechaVenceLicencia:Date;
     Bancario:number;
     Conductor:number;
+    IdPasajero?:number;
 }

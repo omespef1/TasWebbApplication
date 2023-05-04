@@ -18,8 +18,8 @@ export class ServicesRequestService {
   GetServicesRequest(business: number,thirdPartie: number){
    return this._http.Get<transaction>(`/GESSolicitudServicios?empresaId=${business}&conductorId=${thirdPartie}`);
   }
-  GetServicesRequestBeneficiario(business: number,user: string){
-    return this._http.Get<transaction>(`/GESSolicitudServiciosClient?empresaId=${business}&usuario=${user}`);
+  GetServicesRequestBeneficiario(business: number,idPasajero: number){
+    return this._http.Get<transaction>(`/GESSolicitudServiciosClient?empresaId=${business}&idPasajero=${idPasajero}`);
    }
   GetServicesDetail(business: number,id: number){
     return this._http.Get<transaction>(`/GESSolicitudServicios/GetGESSolicitudServiciosDetalle?empresaId=${business}&solicitudId=${id}`);

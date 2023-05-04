@@ -25,6 +25,8 @@ import { TypesVehiclesComponent } from '../types-vehicles/types-vehicles.compone
 import { TRATipoVehiculo } from '../../models/types-vehicle/types-vehicle.model';
 import { TypesServicesService } from '../../services/types-services/types-service.service';
 import { PoliticaDivisionActiveComponent } from '../political-division/politica-division-active/politica-division-active.component';
+import { GENPasajerosService } from 'src/app/services/gespasajeros/genpasajeros.service';
+import { GENPasajeros } from 'src/app/models/genpasajeros/genpasajeros.model';
 
 @Component({
   selector: 'app-programming-user-new',
@@ -34,7 +36,7 @@ import { PoliticaDivisionActiveComponent } from '../political-division/politica-
 export class ProgrammingUserNewPage implements OnInit {
 
   loading = false;
-  user: Usuario = new Usuario();
+  user: GENPasajeros = new GENPasajeros();
   client: ThirdPartie;
   request: ServicesRequest = new ServicesRequest();
   cityOrigin: DivisionPolitical = new DivisionPolitical();
@@ -56,7 +58,8 @@ export class ProgrammingUserNewPage implements OnInit {
     private costCenterService: GescentrocostosService, private gessucursalesService: GESSucursalesService,
     private gesContratosService:GesContratosService,
     private zonasRolesService:ZonasRolesService,
-    private typesServicesService:TypesServicesService) { }
+    private typesServicesService:TypesServicesService,
+    private genPasajerosService:GENPasajerosService) { }
 
   async ngOnInit() {
     this.getContractsList();
@@ -90,8 +93,9 @@ export class ProgrammingUserNewPage implements OnInit {
 
 
   loadDefaultUserData() {
-    this.userService.get(this._sesion.GetUser().NombreCompleto, this._sesion.GetUser().IdEmpresa).subscribe(resp => {
+    this.genPasajerosService.getPassengers(this._sesion.GetUser().IdPasajero).subscribe(resp => {
       if (resp != null && resp.Retorno == 0) {
+        debugger;
         this.user = resp.ObjTransaction;
 
       }
@@ -164,11 +168,11 @@ export class ProgrammingUserNewPage implements OnInit {
         this.request.Estado="S";
         
         this.request.UsuarioCelular =  this.user.Celular==undefined?"":  this.user.Celular.toString();
-        this.request.UsuarioServicio = `${this.user.Cedula} - ${this.user.Usuario}`;
+        this.request.UsuarioServicio =this._sesion.GetUser().NombreCompleto;
         this.request.UsuarioVip =  this._sesion.GetUser().NombreCompleto;   
-        this.request.UsuarioEmail = this.user.Email;
+        this.request.UsuarioEmail = this.user.Mail;
         this.request.UsuarioCrea = this._sesion.GetUser().NombreCompleto;  
-
+        this.request.IdPasajero = this.user.IdPasajero;
         if(this.costCenterList.filter(c=>c.CentrocostosId == this.request.CentrocostosId).length>0)
         this.costCenterSelected = this.costCenterList.filter(c=>c.CentrocostosId == this.request.CentrocostosId)[0];
         if(this.contractList.filter(c=>c.ContratoId == this.request.ContratoId).length>0)
@@ -217,7 +221,9 @@ export class ProgrammingUserNewPage implements OnInit {
     this.loading = true;
 
     try {
-      this.request.UsuarioVip = this._sesion.GetUser().NombreCompleto;
+      debugger;
+      this.request.UsuarioVip = this.user.NombreCompleto;
+      this.request.IdPasajero = this.user.IdPasajero;
       this.requestService.PostServiceManualService(this.request).subscribe((resp) => {
         this.loading = false;
         if (resp != null && resp.Retorno == 0) {

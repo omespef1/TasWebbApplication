@@ -43,8 +43,7 @@ export class AuthService {
           if (userData.Retorno === 0) {
             const thirdPartie: ThirdPartie = userData.ObjTransaction;
             if (
-              thirdPartie.IdTercero == 0 &&
-              thirdPartie.Identificacion == ""
+              thirdPartie.IdTercero == 0  || !!thirdPartie.IdPasajero           
             ) {
               this.oneSignalService.setExternal(thirdPartie.NombreCompleto);
               this._sesion.SetUser(thirdPartie);     
@@ -125,7 +124,7 @@ export class AuthService {
   }
 
   goApp() {
-  
+    debugger;
     // this.SetOneSignalId();
     console.log(this._sesion.isUser());
     
@@ -134,7 +133,7 @@ export class AuthService {
         console.log('supervisor');
         this._nav.navigateRoot("tabs/vehicle");      
       }
-     
+
       if (this._sesion.GetUser().Grupo === "VIP"){
         this._nav.navigateRoot("tabs/programming");
       }

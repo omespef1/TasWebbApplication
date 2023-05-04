@@ -147,7 +147,7 @@ export class ProgrammingDetailPage implements OnInit {
 
     
   isVip(){
-    return this._sesion.GetUser()!= undefined && this._sesion.GetUser().Grupo === "VIP";
+    return !!this._sesion.GetUser() && this._sesion.GetUser().Grupo === "VIP";
   }
   
   setNewLog(value: any,confirmed:boolean,code:number=0) {
