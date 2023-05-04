@@ -10,4 +10,5 @@ export class GESContratos {
     ContratoId:number;
     ContratoCodigo:number;
     ContratoNombre:string;
+    UsoCodigo:boolean;
 }

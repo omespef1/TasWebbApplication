@@ -17,4 +17,8 @@ export class GesContratosService {
   Get(idEmpresa:number){
     return this._http.Get<transactionObj<GESContratos[]>>(`/GetGESContratosClientVip?companyCode=${idEmpresa}`);
   }
+
+  getByCode(companyCode:number, contratoId:number){
+    return this._http.Get<transactionObj<GESContratos>>(`/GESContratos/GetByCode?companyCode=${companyCode}&contratoId=${contratoId}`);
+  }
 }

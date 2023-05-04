@@ -14,6 +14,8 @@ import { PassengerService } from '../../services/passenger/passenger.service';
 import TypeValidator from "src/app/enums/type-validator.enum";
 import { FactoryValidator } from '../../factory/validator-passenger.factory';
 import { ValidateCodePage } from "src/app/validate-code/validate-code.page";
+import { GesContratosService } from "src/app/services/contratos/contratos.service";
+import { GESContratos } from "src/app/models/contracts/contract.model";
 
 @Component({
   selector: "app-programming-detail",
@@ -28,6 +30,7 @@ export class ProgrammingDetailPage implements OnInit {
   value = 'This is my barcode secret data';
   textButton = "Nuevo seguimiento";
   observations = "";
+  contract:GESContratos = null;
   constructor(
     private router: Router,
     private _san: DomSanitizer,
@@ -38,18 +41,32 @@ export class ProgrammingDetailPage implements OnInit {
     private _request: TransportRequestService,
     private modalController: ModalController,
     private passengerService:PassengerService,
-    private factoryValidator:FactoryValidator) {
+    private factoryValidator:FactoryValidator,
+    private contratos:GesContratosService) {
     this.programming.details = [];
   }
 
   ngOnInit() {
     this.programming = this.router.getCurrentNavigation().extras.state.programming;
+    this.getContrato();
     //this.loadDetail();
   }
 
   ionViewDidEnter() {
     this.loadDetail();
  
+  }
+
+  getContrato(){
+    if(this._sesion.GetUser() == undefined){
+      this.contratos.getByCode(this._sesion.GetThirdPartie().IdEmpresa,this.programming.ContratoId).subscribe(resp=>{
+        if(resp!=undefined && resp.Retorno==0){
+          debugger;
+        this.contract = resp.ObjTransaction;
+        }
+      })
+    }
+
   }
 
   loadDetail() {
@@ -178,6 +195,8 @@ export class ProgrammingDetailPage implements OnInit {
     }
     else {
 
+
+      if(this.contract.UsoCodigo)
 this.showModalCode();
 
     }
