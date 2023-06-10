@@ -13,7 +13,8 @@ const routes: Routes = [
   // { path: 'settings', loadChildren: './pages/settings/settings.module#SettingsPageModule' },
   //  { path: 'enlistment', loadChildren: './pages/enlistment/enlistment.module#EnlistmentPageModule' },
   { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule', canActivate: [AuthGuardService] },
-  { path: 'programming-user-new', loadChildren: './pages/programming-user-new/programming-user-new.module#ProgrammingUserNewPageModule' },
+  { path: 'programming-user-new', loadChildren: './pages/programming-user-new/programming-user-new.module#ProgrammingUserNewPageModule' },  { path: 'genpassengers', loadChildren: './pages/genpassengers/genpassengers.module#GENPassengersPageModule' },
+
 
 
 

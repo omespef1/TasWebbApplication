@@ -10,7 +10,7 @@ export class GENPasajeros {
     CreaFecha: Date;
     UsuarioModifica: string;
     ModificaFecha: Date;
-    GESSolicitudServicios: GESSolicitudServicios[];
+    GENPasajerosInfoPropia?:GENPasajerosInfoPropia;
     Vip: boolean;
     PassKey: string;
   
@@ -26,13 +26,31 @@ export class GENPasajeros {
       this.CreaFecha = null;
       this.UsuarioModifica = '';
       this.ModificaFecha = null;
-      this.GESSolicitudServicios = [];
       this.Vip = false;
       this.PassKey = '';
     }
   }
-  
-  export class GESSolicitudServicios {
-    // Define las propiedades de esta clase según su definición en C#
-  }
-  
+  export class GENPasajerosInfoPropia {
+    Id: number;
+    IdPasajero: number;
+    IdEmpresa: number;
+    Direccion: string;
+    IdDivisionPoliticaEmpresas: number;
+    Barrio: string;
+    IdMunicipio?: number;
+    Cliente: number;
+    CreaUsuario?: string;
+    CreaFecha?: Date;
+    ModificaUsuario?: string;
+    ModificaFecha?: Date;
+    GENPasajeros?: GENPasajeros;
+    DivisionPoliticaEmpresas?: DivisionPoliticaEmpresas;
+}
+export class DivisionPoliticaEmpresas {
+  Id: number;
+  IdEmpresa: number;
+  IdDivisionPolitica: number;
+  DescripcionCorta: string;
+  DescripcionLarga: string;
+  Estado: boolean;         
+}

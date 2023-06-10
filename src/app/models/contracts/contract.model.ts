@@ -11,4 +11,6 @@ export class GESContratos {
     ContratoCodigo:number;
     ContratoNombre:string;
     UsoCodigo:boolean;
+    LiquidaYa:boolean;
+    Colectivo:boolean;
 }

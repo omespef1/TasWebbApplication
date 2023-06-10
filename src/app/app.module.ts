@@ -36,15 +36,18 @@ import { TypesVehiclesComponent } from './pages/types-vehicles/types-vehicles.co
 import { PoliticaDivisionActiveComponent } from './pages/political-division/politica-division-active/politica-division-active.component';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 import { ValidateCodePage } from "./validate-code/validate-code.page";
+import { GENPassengersPage } from "./pages/genpassengers/genpassengers.page";
 
 
 @NgModule({
-  declarations: [AppComponent, SafePipe,ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage,ThirdPartieValidationPage,SucursalesPage,ContratosPage,TypesVehiclesComponent,PoliticaDivisionActiveComponent,ValidateCodePage],
-  entryComponents: [ThirdPartiesGenericPage,SignatureComponent,PassengersComponent,PoliticalDivisionComponent,CostCenterPage,ThirdPartieValidationPage,SucursalesPage,ContratosPage,TypesVehiclesComponent,PoliticaDivisionActiveComponent,ValidateCodePage],
+  declarations: [AppComponent, SafePipe, ThirdPartiesGenericPage, SignatureComponent, PassengersComponent, PoliticalDivisionComponent, CostCenterPage, ThirdPartieValidationPage, SucursalesPage,
+     ContratosPage, TypesVehiclesComponent, PoliticaDivisionActiveComponent, ValidateCodePage, GENPassengersPage],
+  entryComponents: [ThirdPartiesGenericPage, SignatureComponent, PassengersComponent, PoliticalDivisionComponent, CostCenterPage, ThirdPartieValidationPage, SucursalesPage, ContratosPage, TypesVehiclesComponent, PoliticaDivisionActiveComponent,
+     ValidateCodePage,GENPassengersPage],
   imports: [BrowserModule, IonicModule.forRoot(
-   { mode: 'ios'}
+    { mode: 'ios' }
   ), AppRoutingModule,
-  ComponentsModule,HttpClientModule,FormsModule, IonicStorageModule.forRoot(),SignaturePadModule],
+    ComponentsModule, HttpClientModule, FormsModule, IonicStorageModule.forRoot(), SignaturePadModule],
   providers: [
     Network,
     // FingerprintAIO,
@@ -60,4 +63,4 @@ import { ValidateCodePage } from "./validate-code/validate-code.page";
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

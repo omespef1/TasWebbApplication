@@ -16,6 +16,8 @@ import { FactoryValidator } from '../../factory/validator-passenger.factory';
 import { ValidateCodePage } from "src/app/validate-code/validate-code.page";
 import { GesContratosService } from "src/app/services/contratos/contratos.service";
 import { GESContratos } from "src/app/models/contracts/contract.model";
+import { GENPasajerosService } from "src/app/services/GENPasjaeros/genpasajeros.service";
+import { GENPassengersPage } from "../genpassengers/genpassengers.page";
 
 @Component({
   selector: "app-programming-detail",
@@ -42,8 +44,10 @@ export class ProgrammingDetailPage implements OnInit {
     private modalController: ModalController,
     private passengerService:PassengerService,
     private factoryValidator:FactoryValidator,
-    private contratos:GesContratosService) {
+    private contratos:GesContratosService,
+    private GENPasajerosService:GENPasajerosService) {
     this.programming.details = [];
+    this.programming.GENPasajerosServicios = [];
   }
 
   ngOnInit() {
@@ -266,6 +270,33 @@ this.showModalCode();
     });
     return await modal.present();
   }
+
+  getPassengersService(){
+    this.GENPasajerosService.GetInfoPassengerByService(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId).subscribe(resp => {
+      if (resp != null && resp.Retorno == 0) {
+        this.programming.GENPasajerosServicios = resp.ObjTransaction;
+      }
+    })
+  }
+
+
+  async showModalGenPassengers() {
+    const modal = await this.modalController.create({
+      component: GENPassengersPage,
+      componentProps: {
+        passengers: this.programming.GENPasajerosServicios,
+      }
+    });
+
+    return await modal.present();
+
+
+  }
+
+  call(callNumber:string){
+    this.callService.call(callNumber);
+  
+    }
 
 }
 

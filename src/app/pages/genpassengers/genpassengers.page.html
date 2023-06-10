@@ -1,0 +1,59 @@
+<app-header headerName="Pasajeros">
+</app-header>
+<ion-content> 
+<ion-content padding>
+  <div>
+    <ion-button (click)= "close()" expand="full"  color="danger">  
+      <ion-icon slot="start" color="light" name="remove-circle"></ion-icon> &nbsp; Cerrar  
+    </ion-button> 
+  </div>
+  <!-- <ion-toolbar>
+    <ion-searchbar showCancelButton="always" debounce="500" (ionChange)="filter($event)" animated placeholder="Buscar conductor" cancelButtonText="Cancelar"></ion-searchbar>
+
+  </ion-toolbar> -->
+  <div *ngFor="let passenger of passengers">
+    <ion-list lines="none">
+      <ion-list-header color="secondary">
+        <ion-label>{{passenger.GENPasajeros.NombreCompleto }}</ion-label>
+        <ion-item lines="none">
+          <ion-icon slot="end" color="primary" name="person"></ion-icon>
+        </ion-item>
+      </ion-list-header>        
+      <ion-item>
+        <ion-icon slot="start" name="locate"></ion-icon>
+        <ion-label>Dirección</ion-label>
+        <ion-note slot="end"> {{passenger.GENPasajeros.GENPasajerosInfoPropia.Direccion}}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="filing"></ion-icon>
+        <ion-label>Orden</ion-label>
+        <ion-input type="number" clearInput="true" 
+        clearOnEdit="true" multiple="true" placeholder="Orden de recogida"
+        [name]="orden" [(ngModel)]="passenger.Orden"></ion-input>
+      </ion-item> 
+
+      <ion-item>
+        <ion-icon name="call"></ion-icon>
+        <ion-label>Celular</ion-label>
+        <ion-note (click)="call(passenger)" slot="end"> {{passenger.Celular}}</ion-note>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="radio-button-on"></ion-icon>
+        <ion-label>Barrio</ion-label>
+        <ion-note slot="end"> {{passenger.GENPasajeros.GENPasajerosInfoPropia.Barrio}}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="reorder"></ion-icon>
+        <ion-label>Zona</ion-label>
+        <ion-note slot="end"> {{passenger.GENPasajeros.GENPasajerosInfoPropia.DivisionPoliticaEmpresas.DescripcionCorta}}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="watch"></ion-icon>
+        <ion-label>Hora recogida</ion-label>
+        <ion-note slot="end"> {{passenger.HoraEstimada}}</ion-note>
+      </ion-item>
+    </ion-list>
+
+  </div>  
+</ion-content>

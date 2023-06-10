@@ -11,6 +11,11 @@
         color="danger">
         <ion-icon class="fa-spin" name="clipboard"></ion-icon> {{textButton}}
       </ion-button>
+      <ion-button *ngIf="!_sesion.isUser() && contratos.Colectivo" (click)="seePassengers()" expand="block"
+      color="danger">
+      <ion-icon name="person"></ion-icon>
+          &nbsp;Pasajeros
+    </ion-button>
       </ion-col>
       <ion-col *ngIf="programming.ManejaRuta">
         <ion-button (click)="showModalPassengers()" color="secondary"  expand="block" >
