@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { ModalController, NavParams } from '@ionic/angular';
 import { finalize } from 'rxjs/operators';
+import { GENPasajeros } from 'src/app/models/genpasajeros/genpasajeros.model';
 import { GENPasajerosServicios } from 'src/app/models/genpasajeroservicios/genpasajerosservicios.model';
 import { ServiceRequestDetail } from 'src/app/models/service-request/programmings';
 import { AlertService } from 'src/app/services/alert/alert.service';
@@ -25,12 +26,16 @@ request:any;
   constructor(private modalController: ModalController, private navParams: NavParams,
     private callService: CallService,private positionService:PositionService,
     private alert:AlertService,private gessolicitudServicios:ServicesRequestService,private sesion:SessionService,
-    private geo: Geolocation, private genPasajerosServicios:GENPasajerosServiciosService) { }
+    private geo: Geolocation, private genPasajerosServicios:GENPasajerosServiciosService) {
+
+      this.request = this.navParams.get('service');
+      this.passengers = this.request.GENPasajerosServicios;
+  
+     }
 
   ngOnInit() {
-    this.request = this.navParams.get('service');
-    this.passengers = this.request.passengers;
-
+   
+   
   }
 
   async close() {
@@ -69,7 +74,7 @@ request:any;
       if(resp!=undefined && resp.Retorno==0){
         passenger = resp.ObjTransaction;
         if(!!passenger.PassengerLatitude && !!passenger.PassengerLongitude)
-        this.positionService.openMapPosition(passenger.PassengerLatitude,passenger.PassengerLongitude);
+        this.positionService.openMapPosition(passenger.PassengerLatitude,passenger.PassengerLongitude,passenger.CreaFecha);
         else
         this.alert.showAlert('Oops!','El pasajero no ha compartido su ubicación aún.')
       }
@@ -80,8 +85,9 @@ request:any;
 
 
   }
-
-
+  updateOrder(){
+       
+  }
 
   setNewLog(state:string) {      
     this.sending = true;  
@@ -119,6 +125,41 @@ request:any;
       
     
 
+
+  }
+
+  UpdatePassengers(){
+    this.sending = true;
+    try {
+     
+      if(!this.validOrders()){          
+          throw Error("Orden de pasajeros no válido. Debe haber un orden incremental.");
+      }
+                   
+      this.genPasajerosServicios.update(this.passengers)
+      .pipe(finalize(()=>{
+        this.sending = false;
+      }))
+      .subscribe(resp=>{
+        if(resp!=undefined && resp.Retorno==0){
+          this.alert.showAlert('Perfecto!','Orden actualizado!')
+        }
+      })
+    } catch (err) {
+      this.sending =false;
+      this.alert.showAlert('Error',err);
+    }
+
+  }
+
+  validOrders() {
+    if(this.passengers!= null &&  !!this.passengers){
+      for (let i = 1; i <= this.passengers.length; i++) {
+        if (!this.passengers.find(x => x.Orden == i))
+          return false;
+      }
+      return true;
+    }
 
   }
 }

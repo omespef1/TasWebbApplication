@@ -16,13 +16,13 @@ export class PositionService {
     }
 
 
-    async openMapPosition(lat:number,long:number){
+    async openMapPosition(lat:number,long:number,time:Date){
 
         const modal = await this.modalController.create({
             component:  LocationComponent,
             componentProps: {
-              'latitude': lat,
-              'longitude':long
+              'detail': { Latitude:lat,Longitude:long,Time:time}
+             
             }
           });
           modal.onDidDismiss().then(resp => {
@@ -30,6 +30,6 @@ export class PositionService {
           });
           return await modal.present();
         }
-    }
+    
 
 }

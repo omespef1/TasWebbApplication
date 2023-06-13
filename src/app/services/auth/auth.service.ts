@@ -124,7 +124,7 @@ export class AuthService {
   }
 
   goApp() {
-    debugger;
+    
     // this.SetOneSignalId();
     console.log(this._sesion.isUser());
     

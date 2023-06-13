@@ -47,15 +47,7 @@
           </ion-button>   
       </ion-item> 
      
-      <ion-item class="header" lines="none" color="secondary">
-       
-       
-        <ion-button color="light" slot="start"(click)="locatePassenger()" fill="outline">
-          <ion-spinner *ngIf="locating" slot="start"></ion-spinner>
-            <ion-icon  slot="start" name="locate"></ion-icon>          
-            Enviar ubicación
-          </ion-button>            
-      </ion-item>  
+      
       <ion-item *ngIf="!programming.ManejaRuta">
         <ion-icon slot="start" name="person"></ion-icon>
         <ion-label>{{_session.isUser() && canEdit?'Conductor':'Usuario'}}</ion-label>

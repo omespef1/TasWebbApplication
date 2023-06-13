@@ -95,7 +95,7 @@ export class ProgrammingUserNewPage implements OnInit {
   loadDefaultUserData() {
     this.genPasajerosService.getPassengers(this._sesion.GetUser().IdPasajero).subscribe(resp => {
       if (resp != null && resp.Retorno == 0) {
-        debugger;
+        
         this.user = resp.ObjTransaction;
 
       }
@@ -221,7 +221,7 @@ export class ProgrammingUserNewPage implements OnInit {
     this.loading = true;
 
     try {
-      debugger;
+      
       this.request.UsuarioVip = this.user.NombreCompleto;
       this.request.IdPasajero = this.user.IdPasajero;
       this.requestService.PostServiceManualService(this.request).subscribe((resp) => {

@@ -16,20 +16,14 @@
         <ion-icon slot="end" color="primary" name="person"></ion-icon>
         <ion-label>{{passenger.GENPasajeros.NombreCompleto}}</ion-label> 
         <ion-button color="light" slot="end"(click)="checkPosition(passenger)" fill="outline">
-            <ion-icon  slot="start" name="eye"></ion-icon>
-          
+            <ion-icon  slot="start" name="eye"></ion-icon>          
             Ver posición
           </ion-button>   
       </ion-item>   
-      <ion-list-header color="secondary">
-        <ion-label>{{passenger.GENPasajeros.NombreCompleto }}</ion-label>
-        <ion-item lines="none">
-          <ion-icon slot="end" color="primary" name="person"></ion-icon>
-        </ion-item>
-      </ion-list-header>        
+     
       <ion-item>
         <ion-icon slot="start" name="locate"></ion-icon>
-        <ion-label>Dirección</ion-label>
+        <ion-label class="visible">Dirección</ion-label>
         <ion-note slot="end"> {{passenger.GENPasajeros.GENPasajerosInfoPropia.Direccion}}</ion-note>
       </ion-item>
       <ion-item>
@@ -61,10 +55,8 @@
         <ion-label>Hora recogida</ion-label>
         <ion-note slot="end"> {{passenger.HoraEstimada}}</ion-note>
       </ion-item>
-
-      <ion-item class="header" lines="none" color="secondary">
-       
-       
+     
+      <ion-item class="header" lines="none" color="secondary">              
         <ion-button color="light" slot="start"(click)="setNewLog('E')" fill="outline">
           <ion-spinner *ngIf="sending" slot="start"></ion-spinner>
             <ion-icon  slot="start" name="eye"></ion-icon>          
@@ -79,4 +71,10 @@
     </ion-list>
 
   </div>  
+
+  <ion-button color="light" slot="start"(click)="UpdatePassengers()" fill="outline">
+    <ion-spinner *ngIf="sending" slot="start"></ion-spinner>
+      <ion-icon  slot="start" name="eye"></ion-icon>          
+      Actualizar orden de recogida
+    </ion-button>         
 </ion-content>

@@ -1,5 +1,5 @@
 import { finalize } from 'rxjs/operators';
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { DomSanitizer } from "@angular/platform-browser";
 import { ServicesRequestService } from "../../services/services-request/services-request.service";
@@ -34,8 +34,9 @@ export class ProgrammingDetailPage implements OnInit {
   value = 'This is my barcode secret data';
   textButton = "Nuevo seguimiento";
   observations = "";
-  contract:GESContratos = null;
+  contract:GESContratos;
   locating=false;
+  loading=false;
   constructor(
     private router: Router,
     private _san: DomSanitizer,
@@ -49,7 +50,8 @@ export class ProgrammingDetailPage implements OnInit {
     private factoryValidator:FactoryValidator,
     private contratos:GesContratosService,
     private GENPasajerosService:GENPasajerosService,
-    private GENPasajerosServiciosService:GENPasajerosServiciosService) {
+    private GENPasajerosServiciosService:GENPasajerosServiciosService,
+    private changes:ChangeDetectorRef) {
     this.programming.details = [];
     this.programming.GENPasajerosServicios = [];
   }
@@ -68,9 +70,9 @@ export class ProgrammingDetailPage implements OnInit {
   getContrato(){
     if(this._sesion.GetUser() == undefined){
       this.contratos.getByCode(this._sesion.GetThirdPartie().IdEmpresa,this.programming.ContratoId).subscribe(resp=>{
-        if(resp!=undefined && resp.Retorno==0){
-          debugger;
+        if(resp!=undefined && resp.Retorno==0){        
         this.contract = resp.ObjTransaction;
+        this.changes.detectChanges();
         }
       })
     }
@@ -219,7 +221,7 @@ this.showModalCode();
     const modal = await this.modalController.create({
       component: PassengersComponent,
       componentProps: {
-        service: this.programming,
+        passengers: this.programming.passengers,
       }
     });
 
@@ -270,7 +272,7 @@ this.showModalCode();
     modal.onDidDismiss().then(resp => {
       if (resp.data != undefined) {
         // console.log(resp);
-        debugger;
+        
         this.setNewLog("F",true,resp.data);
       }
     });
@@ -278,9 +280,15 @@ this.showModalCode();
   }
 
   getPassengersService(){
-    this.GENPasajerosService.GetInfoPassengerByService(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId).subscribe(resp => {
+    this.loading=true;
+    this.GENPasajerosService.GetInfoPassengerByService(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId)
+    .pipe(finalize(()=>{
+      this.loading=false;
+    }))
+    .subscribe(resp => {
       if (resp != null && resp.Retorno == 0) {
         this.programming.GENPasajerosServicios = resp.ObjTransaction;
+        this.showModalGenPassengers();
       }
     })
   }
@@ -290,7 +298,7 @@ this.showModalCode();
     const modal = await this.modalController.create({
       component: GENPassengersPage,
       componentProps: {
-        passengers: this.programming.GENPasajerosServicios,
+        service: this.programming,
       }
     });
 
@@ -304,7 +312,7 @@ this.showModalCode();
     this.geo.getCurrentPosition().then((data) => {
      this.locating = true;
       setTimeout(() => {
-        let curentLocation  = { companyId: this.programming.EmpresaId, id: this.programming.SolicitudId, passengerId: this._sesion.GetThirdPartie().IdPasajero, lat: data.coords.latitude, long : data.coords.longitude  };
+        let curentLocation  = { companyId: this.programming.EmpresaId, id: this.programming.SolicitudId, passengerId: this._sesion.GetUser().IdPasajero, latitude: data.coords.latitude, longitude : data.coords.longitude  };
         // Guardamos el intento en los fallidos en caso de que falle        
         this.GENPasajerosServiciosService.setPassengerServiceLocation(curentLocation)
         .pipe(finalize(()=>{

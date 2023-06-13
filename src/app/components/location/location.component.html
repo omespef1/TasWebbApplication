@@ -9,8 +9,8 @@
     </div>
     <div>
       <!-- <div #map  [innerHTML]="theHtmlString"></div> -->     
-        <div text-center>         
+        <div text-center *ngIf="detail" >         
         </div>        
-        <iframe [src]="theHtmlString" width="100%" frameborder="0" style="border:0"></iframe>              
+        <iframe [src]="detail | mapsUrlDetail" width="100%" height="270" frameborder="0" style="border:0"></iframe>
     </div>
   </ion-content>

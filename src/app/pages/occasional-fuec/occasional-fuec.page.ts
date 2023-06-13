@@ -308,7 +308,6 @@ export class OccasionalFuecPage implements OnInit {
     
 
     this.vehicleService.getMyCar(this.thirdPartie.IdEmpresa, this.thirdPartie.IdTercero).subscribe(resp => {
-      debugger;
       if (resp.Retorno == 0) {              
         this.getVehicle(resp.ObjTransaction.IdVehiculo);
       }

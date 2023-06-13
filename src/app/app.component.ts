@@ -45,7 +45,7 @@ export class AppComponent {
       this._auth.signInDirect();
       this.LoadFirstSettings();
       this.SetRemoteTransport();
-      if(this._sesion.GetUser().IdTercero>0){       
+      if(!!this._sesion.GetUser() && this._sesion.GetUser().IdTercero>0){       
         this.getDivisionPolitical();
       this.getAliParams();
       this.getModalities();

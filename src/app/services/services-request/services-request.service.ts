@@ -22,7 +22,7 @@ export class ServicesRequestService {
     return this._http.Get<transaction>(`/GESSolicitudServiciosClient?empresaId=${business}&idPasajero=${idPasajero}`);
    }
   GetServicesDetail(business: number,id: number){
-    return this._http.Get<transaction>(`/GESSolicitudServicios/GetGESSolicitudServiciosDetalle?empresaId=${business}&solicitudId=${id}`);
+    return this._http.Get<transaction>(`/GESSolicitudServicios/GetGESSolicitudServiciosDetalleNew?empresaId=${business}&solicitudId=${id}`);
    }
 
    CheckPendingServices(business: number,thirdPartieId: number){

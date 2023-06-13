@@ -194,7 +194,6 @@ export class EnlistmentPage implements OnInit {
         }, 60000);
         this._service.PostAnswerHeavy(answer).subscribe(
           (event) => {
-              debugger;
             if (event.type === HttpEventType.UploadProgress) {
               this.progress = Math.round((100 * event.loaded) / event.total);
             }

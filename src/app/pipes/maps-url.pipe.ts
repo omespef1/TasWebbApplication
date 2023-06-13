@@ -10,7 +10,7 @@ export class MapsUrlPipe implements PipeTransform {
  }
   transform(value: any, ...args: any[]): any {
     return this._san.bypassSecurityTrustResourceUrl(
-      `https://maps.google.com/maps?q=${value.latitude},${value.longitude}&z=15&output=embed`
+      `https://maps.google.com/maps?q=${value.Latitude},${value.Longitude}&z=15&output=embed`
     );
   }
 

@@ -2,15 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpManagerService } from '../httpManager/http-manager.service';
 import { transaction } from 'src/app/models/general/transaction';
 import { SessionService } from '../session/session.service';
-import { business } from '../../models/business/business';
-import { ThirdPartie } from '../../models/general/user';
-import { vehicle } from '../../models/vehicle/vehicle';
-import { transactionObj } from '../../models/general/transaction';
-
+const API_CONTROLLER = 'GENPasajerosServicios';
 @Injectable({
   providedIn: 'root'
 })
-const API_CONTROLLER = 'GENPasajerosServicios';
 export class GENPasajerosServiciosService {
 
 
@@ -29,5 +24,7 @@ export class GENPasajerosServiciosService {
   setPassengerServiceLocation(data:any){
     return this._http.Post<transaction>(`/${API_CONTROLLER}/UpdatePassengerLocation`,data);
    }
-  
+   update(data:any){
+    return this._http.Post<transaction>(`/${API_CONTROLLER}/UpdatePassengers`,data);
+   }
 }

@@ -37,13 +37,15 @@ import { PoliticaDivisionActiveComponent } from './pages/political-division/poli
 import { CallNumber } from '@ionic-native/call-number/ngx';
 import { ValidateCodePage } from "./validate-code/validate-code.page";
 import { GENPassengersPage } from "./pages/genpassengers/genpassengers.page";
+import { LocationComponent } from "./components/location/location.component";
+import { MapsUrlPipeDetail } from "./pipes/maps-url-detail";
 
 
 @NgModule({
   declarations: [AppComponent, SafePipe, ThirdPartiesGenericPage, SignatureComponent, PassengersComponent, PoliticalDivisionComponent, CostCenterPage, ThirdPartieValidationPage, SucursalesPage,
-     ContratosPage, TypesVehiclesComponent, PoliticaDivisionActiveComponent, ValidateCodePage, GENPassengersPage],
+     ContratosPage, TypesVehiclesComponent, PoliticaDivisionActiveComponent, ValidateCodePage, GENPassengersPage,LocationComponent,MapsUrlPipeDetail],
   entryComponents: [ThirdPartiesGenericPage, SignatureComponent, PassengersComponent, PoliticalDivisionComponent, CostCenterPage, ThirdPartieValidationPage, SucursalesPage, ContratosPage, TypesVehiclesComponent, PoliticaDivisionActiveComponent,
-     ValidateCodePage,GENPassengersPage],
+     ValidateCodePage,GENPassengersPage, LocationComponent],
   imports: [BrowserModule, IonicModule.forRoot(
     { mode: 'ios' }
   ), AppRoutingModule,

@@ -1,7 +1,7 @@
+
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalController, NavParams } from '@ionic/angular';
-
 @Component({
   selector: 'app-location',
   templateUrl: './location.component.html',
@@ -9,29 +9,31 @@ import { ModalController, NavParams } from '@ionic/angular';
 })
 export class LocationComponent implements OnInit {
   theHtmlString: any;
-  latitude: number; long: number;
+  // latitude: number; long: number;
+  detail:any;
   constructor(  private _san: DomSanitizer,private navParams:NavParams,private modalCtrl:ModalController) { 
 
-    this.latitude = this.navParams.get("latitude");
-    this.long = this.navParams.get("latitude");
-    console.log('constructor');
+    this.detail = this.navParams.get("detail");
+    
+  
   }
  
 
   ngOnInit() {
-    console.log('init');
-this.loadMap();
+  
+    // this.loadMap();
+
     
   }
 
 
 
-  loadMap() {
+  // loadMap() {
 
-    this.theHtmlString = this._san.bypassSecurityTrustResourceUrl(
-      `https://maps.google.com/maps?q=${this.latitude}, ${this.long}&z=12&output=embed`
-    );
-  }
+  //   this.theHtmlString = this._san.bypassSecurityTrustResourceUrl(
+  //     `https://maps.google.com/maps?q=${this.latitude}, ${this.long}&z=15&output=embed`
+  //   );
+  // }
 
   async close(){
     await this.modalCtrl.dismiss();
