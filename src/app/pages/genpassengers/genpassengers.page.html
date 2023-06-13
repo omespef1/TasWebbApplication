@@ -1,6 +1,5 @@
 <app-header headerName="Pasajeros">
 </app-header>
-<ion-content> 
 <ion-content padding>
   <div>
     <ion-button (click)= "close()" expand="full"  color="danger">  
@@ -12,7 +11,16 @@
 
   </ion-toolbar> -->
   <div *ngFor="let passenger of passengers">
-    <ion-list lines="none">
+    <ion-list lines="none" inset="true">
+      <ion-item class="header" lines="none" color="secondary">
+        <ion-icon slot="end" color="primary" name="person"></ion-icon>
+        <ion-label>{{passenger.GENPasajeros.NombreCompleto}}</ion-label> 
+        <ion-button color="light" slot="end"(click)="checkPosition(passenger)" fill="outline">
+            <ion-icon  slot="start" name="eye"></ion-icon>
+          
+            Ver posición
+          </ion-button>   
+      </ion-item>   
       <ion-list-header color="secondary">
         <ion-label>{{passenger.GENPasajeros.NombreCompleto }}</ion-label>
         <ion-item lines="none">
@@ -53,6 +61,22 @@
         <ion-label>Hora recogida</ion-label>
         <ion-note slot="end"> {{passenger.HoraEstimada}}</ion-note>
       </ion-item>
+
+      <ion-item class="header" lines="none" color="secondary">
+       
+       
+        <ion-button color="light" slot="start"(click)="setNewLog('E')" fill="outline">
+          <ion-spinner *ngIf="sending" slot="start"></ion-spinner>
+            <ion-icon  slot="start" name="eye"></ion-icon>
+          
+            RECOGIDO
+          </ion-button>   
+          <ion-button color="light" slot="end"(click)="setNewLog('N')" fill="outline">
+            <ion-spinner *ngIf="sending" slot="start"></ion-spinner>
+            <ion-icon  slot="start" name="eye"></ion-icon>          
+            NO RECOGIDO
+          </ion-button>   
+      </ion-item>   
     </ion-list>
 
   </div>  

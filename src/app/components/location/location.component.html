@@ -1,0 +1,16 @@
+<app-header headerName="Ubicación">
+</app-header>
+  <ion-content padding>
+
+    <div>
+      <ion-button (click)= "close()" expand="full"  color="danger">  
+        <ion-icon slot="start" color="light" name="remove-circle"></ion-icon> &nbsp; Cerrar  
+      </ion-button> 
+    </div>
+    <div>
+      <!-- <div #map  [innerHTML]="theHtmlString"></div> -->     
+        <div text-center>         
+        </div>        
+        <iframe [src]="theHtmlString" width="100%" frameborder="0" style="border:0"></iframe>              
+    </div>
+  </ion-content>

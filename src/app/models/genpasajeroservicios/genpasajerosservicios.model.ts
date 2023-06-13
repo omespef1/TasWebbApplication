@@ -13,4 +13,6 @@ export class GENPasajerosServicios {
     ModificaFecha?: Date;
     GENPasajeros?: GENPasajeros; // Esto necesita ser una clase definida en tu TypeScript
     CodigoVerificacion: number;
+    PassengerLongitude:number;
+    PassengerLatitude:number;
 }

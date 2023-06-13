@@ -213,7 +213,7 @@ this.showModalCode();
     const modal = await this.modalController.create({
       component: PassengersComponent,
       componentProps: {
-        passengers: this.programming.passengers,
+        service: this.programming,
       }
     });
 
