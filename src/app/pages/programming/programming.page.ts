@@ -20,6 +20,7 @@ export class ProgrammingPage implements OnInit {
   vehicleApprobed:vehicle;
   loading = false;
   canEdit = true;
+  locating=false;
   activeService : ServicesRequest = new ServicesRequest();
   constructor(
     private _serviceRequest: ServicesRequestService,
@@ -252,6 +253,8 @@ console.log(this.activeService);
   this.callService.call(callNumber);
 
   }
+
+
 
 
 }

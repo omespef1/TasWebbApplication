@@ -16,6 +16,12 @@
       <ion-icon name="person"></ion-icon>
           &nbsp;Pasajeros
     </ion-button>
+    <ion-button *ngIf="_sesion.isUser()" (click)="locatePassenger()" expand="block"
+    color="danger">
+    <ion-spinner *ngIf="locating" slot="end"></ion-spinner>
+    <ion-icon name="locate"></ion-icon>
+        Compartir ubicación
+  </ion-button>
       </ion-col>
       <ion-col *ngIf="programming.ManejaRuta">
         <ion-button (click)="showModalPassengers()" color="secondary"  expand="block" >

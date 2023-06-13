@@ -1,3 +1,4 @@
+import { finalize } from 'rxjs/operators';
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { DomSanitizer } from "@angular/platform-browser";
@@ -18,6 +19,7 @@ import { GesContratosService } from "src/app/services/contratos/contratos.servic
 import { GESContratos } from "src/app/models/contracts/contract.model";
 import { GENPasajerosService } from "src/app/services/GENPasjaeros/genpasajeros.service";
 import { GENPassengersPage } from "../genpassengers/genpassengers.page";
+import { GENPasajerosServiciosService } from "src/app/services/genpasajerosservicios/genpasajerosservicios.service";
 
 @Component({
   selector: "app-programming-detail",
@@ -33,6 +35,7 @@ export class ProgrammingDetailPage implements OnInit {
   textButton = "Nuevo seguimiento";
   observations = "";
   contract:GESContratos = null;
+  locating=false;
   constructor(
     private router: Router,
     private _san: DomSanitizer,
@@ -45,7 +48,8 @@ export class ProgrammingDetailPage implements OnInit {
     private passengerService:PassengerService,
     private factoryValidator:FactoryValidator,
     private contratos:GesContratosService,
-    private GENPasajerosService:GENPasajerosService) {
+    private GENPasajerosService:GENPasajerosService,
+    private GENPasajerosServiciosService:GENPasajerosServiciosService) {
     this.programming.details = [];
     this.programming.GENPasajerosServicios = [];
   }
@@ -209,6 +213,8 @@ this.showModalCode();
   }
 
 
+
+
   async showModalPassengers() {
     const modal = await this.modalController.create({
       component: PassengersComponent,
@@ -293,10 +299,36 @@ this.showModalCode();
 
   }
 
-  call(callNumber:string){
-    this.callService.call(callNumber);
-  
-    }
+  locatePassenger(){
+
+    this.geo.getCurrentPosition().then((data) => {
+     this.locating = true;
+      setTimeout(() => {
+        let curentLocation  = { companyId: this.programming.EmpresaId, id: this.programming.SolicitudId, passengerId: this._sesion.GetThirdPartie().IdPasajero, lat: data.coords.latitude, long : data.coords.longitude  };
+        // Guardamos el intento en los fallidos en caso de que falle        
+        this.GENPasajerosServiciosService.setPassengerServiceLocation(curentLocation)
+        .pipe(finalize(()=>{
+          this.locating= false;
+        }))
+        .subscribe(
+          (resp: any) => {                               
+            if (resp.Retorno === 0) {
+            
+              this._alert.showAlert("Perfecto!", "Ubicación actualizada");
+              this.loadDetail();
+            } else {
+              this._alert.showAlert("Oops!", resp.TxtError);
+            }
+          },
+          (err) => {
+            this.locating = false;            
+            // console.log(err);
+          }
+        );
+      }, 3000);
+    });
+  }
+
 
 }
 

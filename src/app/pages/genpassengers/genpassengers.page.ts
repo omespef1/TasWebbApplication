@@ -6,6 +6,7 @@ import { GENPasajerosServicios } from 'src/app/models/genpasajeroservicios/genpa
 import { ServiceRequestDetail } from 'src/app/models/service-request/programmings';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { CallService } from 'src/app/services/call/call.service';
+import { GENPasajerosServiciosService } from 'src/app/services/genpasajerosservicios/genpasajerosservicios.service';
 import { PositionService } from 'src/app/services/position/position.service';
 import { ServicesRequestService } from 'src/app/services/services-request/services-request.service';
 import { SessionService } from 'src/app/services/session/session.service';
@@ -20,10 +21,11 @@ request:any;
   passengers: GENPasajerosServicios[] = [];
   passengersList: GENPasajerosServicios[] = [];
   sending = false;
+  locating = false;
   constructor(private modalController: ModalController, private navParams: NavParams,
     private callService: CallService,private positionService:PositionService,
     private alert:AlertService,private gessolicitudServicios:ServicesRequestService,private sesion:SessionService,
-    private geo: Geolocation,) { }
+    private geo: Geolocation, private genPasajerosServicios:GENPasajerosServiciosService) { }
 
   ngOnInit() {
     this.request = this.navParams.get('service');
@@ -57,10 +59,25 @@ request:any;
   }
 
   checkPosition(passenger:GENPasajerosServicios){
-    if(!!passenger.PassengerLatitude && !!passenger.PassengerLongitude)
-      this.positionService.openMapPosition(passenger.PassengerLatitude,passenger.PassengerLongitude);
-      else
-      this.alert.showAlert('Oops!','El pasajero no ha compartido su ubicación aún.')
+
+    this.locating = true;
+    this.genPasajerosServicios.GetById(passenger.Id).pipe(
+      finalize(()=>{
+        this.locating = false;
+      })
+    ).subscribe(resp=>{
+      if(resp!=undefined && resp.Retorno==0){
+        passenger = resp.ObjTransaction;
+        if(!!passenger.PassengerLatitude && !!passenger.PassengerLongitude)
+        this.positionService.openMapPosition(passenger.PassengerLatitude,passenger.PassengerLongitude);
+        else
+        this.alert.showAlert('Oops!','El pasajero no ha compartido su ubicación aún.')
+      }
+     
+    },err=>{
+      console.log(err);
+    })
+
 
   }
 
