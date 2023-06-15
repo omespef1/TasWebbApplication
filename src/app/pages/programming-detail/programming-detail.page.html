@@ -12,7 +12,7 @@
         <ion-icon class="fa-spin" name="clipboard"></ion-icon> {{textButton}}
       </ion-button>
       <ion-button *ngIf="!_sesion.isUser()  && !!contract && contract.Colectivo" (click)="getPassengersService()" expand="block"
-      color="danger">
+      color="primary">
       <ion-icon name="person"></ion-icon>
           &nbsp;Pasajeros
           <ion-spinner *ngIf="loading" slot="end"></ion-spinner>

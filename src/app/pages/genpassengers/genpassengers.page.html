@@ -1,8 +1,8 @@
 <app-header headerName="Pasajeros">
 </app-header>
 <ion-content padding>
-  <div>
-    <ion-button (click)= "close()" expand="full"  color="danger">  
+  <div padding>
+    <ion-button (click)= "close()" expand="block"  color="danger">  
       <ion-icon slot="start" color="light" name="remove-circle"></ion-icon> &nbsp; Cerrar  
     </ion-button> 
   </div>
@@ -37,7 +37,7 @@
       <ion-item>
         <ion-icon name="call"></ion-icon>
         <ion-label>Celular</ion-label>
-        <ion-note (click)="call(passenger)" slot="end"> {{passenger.Celular}}</ion-note>
+        <ion-note (click)="call(passenger)" slot="end"> {{passenger.GENPasajeros.Celular}}</ion-note>
       </ion-item>
 
       <ion-item>
@@ -57,7 +57,7 @@
       </ion-item>
      
       <ion-item class="header" lines="none" color="secondary">              
-        <ion-button color="light" slot="start"(click)="setNewLog('E')" fill="outline">
+        <ion-button color="light" slot="start"(click)="setNewLog('E',passenger)" fill="outline">
           <ion-spinner *ngIf="sending" slot="start"></ion-spinner>
             <ion-icon  slot="start" name="eye"></ion-icon>          
             RECOGIDO
@@ -72,9 +72,14 @@
 
   </div>  
 
-  <ion-button color="light" slot="start"(click)="UpdatePassengers()" fill="outline">
-    <ion-spinner *ngIf="sending" slot="start"></ion-spinner>
-      <ion-icon  slot="start" name="eye"></ion-icon>          
-      Actualizar orden de recogida
-    </ion-button>         
+<div padding>
+  <ion-button [disabled]="changing" color="secondary" expand="block" (click)="UpdatePassengers()">
+  <ion-icon name="person"></ion-icon>
+      &nbsp;   {{ changing?'Cambiando...': 'Cambiar orden recogida'}} 
+      <ion-spinner *ngIf="changing" slot="end"></ion-spinner>
+</ion-button>
+</div>
+
+
+       
 </ion-content>

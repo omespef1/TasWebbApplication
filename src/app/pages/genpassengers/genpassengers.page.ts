@@ -23,6 +23,7 @@ request:any;
   passengersList: GENPasajerosServicios[] = [];
   sending = false;
   locating = false;
+  changing=false;
   constructor(private modalController: ModalController, private navParams: NavParams,
     private callService: CallService,private positionService:PositionService,
     private alert:AlertService,private gessolicitudServicios:ServicesRequestService,private sesion:SessionService,
@@ -89,7 +90,7 @@ request:any;
        
   }
 
-  setNewLog(state:string) {      
+  setNewLog(state:string,dataPassenger:GENPasajerosServicios) {      
     this.sending = true;  
       const log: ServiceRequestDetail = new ServiceRequestDetail();            
         this.geo.getCurrentPosition().then((data) => {        
@@ -98,7 +99,8 @@ request:any;
             log.EmpresaId = this.sesion.GetThirdPartie().IdEmpresa;
             log.Estado = state;
             log.Latitude = data.coords.latitude;
-            log.Longitude = data.coords.longitude;                      
+            log.Longitude = data.coords.longitude;  
+            log.IdPasajero = dataPassenger.IdPasajero;                 
             this.gessolicitudServicios.PostServicesDetail(log).pipe(
               finalize(()=>{
                 this.sending = false;
@@ -129,7 +131,7 @@ request:any;
   }
 
   UpdatePassengers(){
-    this.sending = true;
+    this.changing = true;
     try {
      
       if(!this.validOrders()){          
@@ -138,7 +140,7 @@ request:any;
                    
       this.genPasajerosServicios.update(this.passengers)
       .pipe(finalize(()=>{
-        this.sending = false;
+        this.changing = false;
       }))
       .subscribe(resp=>{
         if(resp!=undefined && resp.Retorno==0){
@@ -146,7 +148,7 @@ request:any;
         }
       })
     } catch (err) {
-      this.sending =false;
+      this.changing =false;
       this.alert.showAlert('Error',err);
     }
 
