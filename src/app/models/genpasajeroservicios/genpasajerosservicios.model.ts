@@ -15,4 +15,6 @@ export class GENPasajerosServicios {
     CodigoVerificacion: number;
     PassengerLongitude:number;
     PassengerLatitude:number;
+    Observaciones?:string;
+    Recogido:boolean;
 }

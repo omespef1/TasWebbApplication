@@ -11,10 +11,10 @@
         color="danger">
         <ion-icon class="fa-spin" name="clipboard"></ion-icon> {{textButton}}
       </ion-button>
-      <ion-button *ngIf="!_sesion.isUser()  && !!contract && contract.Colectivo" (click)="getPassengersService()" expand="block"
+      <ion-button *ngIf="!_sesion.isUser()  && !!contract && contract.Colectivo " (click)="getPassengersService()" expand="block"
       color="primary">
       <ion-icon name="person"></ion-icon>
-          &nbsp;Pasajeros
+          &nbsp;Configurar ruta
           <ion-spinner *ngIf="loading" slot="end"></ion-spinner>
     </ion-button>
     <ion-button *ngIf="_sesion.isUser()" (click)="locatePassenger()" expand="block"

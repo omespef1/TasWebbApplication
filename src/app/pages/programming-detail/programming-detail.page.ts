@@ -89,7 +89,7 @@ export class ProgrammingDetailPage implements OnInit {
 
         if (resp.ObjTransaction) {
           this.programming.details = resp.ObjTransaction;
-
+          let details:ServiceRequestDetail[] = this.programming.details;                    
         }
       });
   }
@@ -188,6 +188,9 @@ export class ProgrammingDetailPage implements OnInit {
                   this.textButton = "Nuevo seguimiento";
                   this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
                   this.loadDetail();
+                  if(value =="I"){
+                    this.getPassengersService();
+                  }
                 } else {
                   this.textButton = "Nuevo seguimiento";
                   this._alert.showAlert("Error", resp.TxtError);
@@ -299,8 +302,14 @@ this.showModalCode();
       component: GENPassengersPage,
       componentProps: {
         service: this.programming,
+        contract: this.contract
       }
     });
+
+    modal.onDidDismiss().then(()=>{
+
+      this.loadDetail();
+    })
 
     return await modal.present();
 

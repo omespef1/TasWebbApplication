@@ -70,6 +70,7 @@ export class ServiceRequestDetail {
   Kilometraje:number;
   CodigoConfirmacion?:number;
   IdPasajero?:number;
+  observaciones?:string;
 
 }
  

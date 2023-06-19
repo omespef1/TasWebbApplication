@@ -57,8 +57,8 @@ export class ProgrammingPage implements OnInit {
           // }      
         }
       } else {
-        this.GetProgramming(event);
-        this.checkApprovedLicensePlate();
+      
+        this.checkApprovedLicensePlate(event);
         this.checkStatusServices();
       }
     }
@@ -154,11 +154,15 @@ export class ProgrammingPage implements OnInit {
     }
   }
 
-  checkApprovedLicensePlate() {
+  checkApprovedLicensePlate(event) {
     this.genTercerosService.IsAuthorizedForService(this._session.GetThirdPartie().IdEmpresa, this._session.GetThirdPartie().IdTercero).subscribe(resp => {
       if(resp!= undefined && resp.Retorno==0){
 
             this.vehicleApprobed = resp.ObjTransaction;
+            this.GetProgramming(event);
+      }
+      else {
+        this._alert.showAlert('Oops',resp.TxtError);
       }
 
     }, err => {

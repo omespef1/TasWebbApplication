@@ -2,7 +2,7 @@
 </app-header>
 <ion-content padding>
   <div padding>
-    <ion-button (click)= "close()" expand="block"  color="danger">  
+    <ion-button id="closeButton" (click)= "close()" expand="block"  color="danger">  
       <ion-icon slot="start" color="light" name="remove-circle"></ion-icon> &nbsp; Cerrar  
     </ion-button> 
   </div>
@@ -11,20 +11,20 @@
 
   </ion-toolbar> -->
   <div *ngFor="let passenger of passengers">
-    <ion-list lines="none" inset="true">
+    <ion-list *ngIf="!passenger.Recogido"  lines="none" inset="true">
       <ion-item class="header" lines="none" color="secondary">
         <ion-icon slot="end" color="primary" name="person"></ion-icon>
         <ion-label>{{passenger.GENPasajeros.NombreCompleto}}</ion-label> 
-        <ion-button color="light" slot="end"(click)="checkPosition(passenger)" fill="outline">
+        <ion-button id="positionButton" color="light" slot="end"(click)="checkPosition(passenger)" fill="outline">
             <ion-icon  slot="start" name="eye"></ion-icon>          
             Ver posición
           </ion-button>   
       </ion-item>   
      
-      <ion-item>
+      <ion-item *ngIf="!!passenger.GENPasajeros.GENPasajerosInfoPropia">
         <ion-icon slot="start" name="locate"></ion-icon>
         <ion-label class="visible">Dirección</ion-label>
-        <ion-note slot="end"> {{passenger.GENPasajeros.GENPasajerosInfoPropia.Direccion}}</ion-note>
+        <ion-note slot="end"> {{ passenger.GENPasajeros.GENPasajerosInfoPropia.Direccion}}</ion-note>
       </ion-item>
       <ion-item>
         <ion-icon name="filing"></ion-icon>
@@ -40,12 +40,12 @@
         <ion-note (click)="call(passenger)" slot="end"> {{passenger.GENPasajeros.Celular}}</ion-note>
       </ion-item>
 
-      <ion-item>
+      <ion-item *ngIf="!!passenger.GENPasajeros.GENPasajerosInfoPropia">
         <ion-icon name="radio-button-on"></ion-icon>
         <ion-label>Barrio</ion-label>
         <ion-note slot="end"> {{passenger.GENPasajeros.GENPasajerosInfoPropia.Barrio}}</ion-note>
       </ion-item>
-      <ion-item>
+      <ion-item *ngIf="passenger.GENPasajeros.GENPasajerosInfoPropia">
         <ion-icon name="reorder"></ion-icon>
         <ion-label>Zona</ion-label>
         <ion-note slot="end"> {{passenger.GENPasajeros.GENPasajerosInfoPropia.DivisionPoliticaEmpresas.DescripcionCorta}}</ion-note>
@@ -56,13 +56,13 @@
         <ion-note slot="end"> {{passenger.HoraEstimada}}</ion-note>
       </ion-item>
      
-      <ion-item class="header" lines="none" color="secondary">              
-        <ion-button color="light" slot="start"(click)="setNewLog('E',passenger)" fill="outline">
+      <ion-item *ngIf="allowTake" class="header" lines="none" color="secondary">              
+        <ion-button id="takeButton" color="light" slot="start"(click)="showModalCode('E',passenger)" fill="outline">
           <ion-spinner *ngIf="sending" slot="start"></ion-spinner>
             <ion-icon  slot="start" name="eye"></ion-icon>          
             RECOGIDO
           </ion-button>   
-          <ion-button color="light" slot="end"(click)="setNewLog('N')" fill="outline">
+          <ion-button id="noTakeButton" color="light" slot="end"(click)="askForlog('N',passenger)" fill="outline">
             <ion-spinner *ngIf="sending" slot="start"></ion-spinner>
             <ion-icon  slot="start" name="eye"></ion-icon>          
             NO RECOGIDO
@@ -73,7 +73,7 @@
   </div>  
 
 <div padding>
-  <ion-button [disabled]="changing" color="secondary" expand="block" (click)="UpdatePassengers()">
+  <ion-button *ngIf="contract.CambiarOrden && allowchange"  [disabled]="changing" color="secondary" expand="block" (click)="UpdatePassengers()">
   <ion-icon name="person"></ion-icon>
       &nbsp;   {{ changing?'Cambiando...': 'Cambiar orden recogida'}} 
       <ion-spinner *ngIf="changing" slot="end"></ion-spinner>
