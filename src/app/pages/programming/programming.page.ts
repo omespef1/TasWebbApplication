@@ -39,7 +39,7 @@ export class ProgrammingPage implements OnInit {
     if (this.validAccess()) {
      
       if (this._session.isUser()) {
-        if (this.isVip()) {
+        if (this.isPassenger()) {
         
           this.GetProgrammingBeneficiario(event);
         }
@@ -64,8 +64,8 @@ export class ProgrammingPage implements OnInit {
     }
   }
 
-  isVip(){
-    return !!this._session.GetUser() && this._session.GetUser().Grupo === "VIP";
+  isPassenger(){
+    return !!this._session.GetUser() &&  (this._session.GetUser().Grupo === "VIP1" || this._session.GetUser().Grupo === "VIP0")
   }
 
   async showModalThirdParties() {
@@ -135,7 +135,7 @@ export class ProgrammingPage implements OnInit {
       // console.log("valid accessssss");
       // console.log(this._session.GetUser());
       if (
-        this._session.GetUser().Grupo !== "VIP" &&
+        this._session.GetUser().Grupo !== "VIP1" && this._session.GetUser().Grupo !== "VIP0" &&
         this._session.GetUser().Grupo !== "CLIENTE"
       ) {
         this._alert.showAlert(

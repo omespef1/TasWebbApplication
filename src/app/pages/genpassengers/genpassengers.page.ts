@@ -88,11 +88,15 @@ request:any;
 
 
   checkTake(){
+    this.allowTake =false;
     if(this.details!= undefined && this.details.find(x=> x.Estado=="I")){
       this.allowTake = true;
     }
-    else 
-    this.allowTake =false;
+    if(this.details!= undefined && this.details.find(x=> x.Estado=="F")){
+      this.allowTake = false;
+    }
+
+   
   }
 
   checkPosition(passenger:GENPasajerosServicios){
@@ -276,10 +280,15 @@ request:any;
         }, {
           text: 'Ok',
           handler: (selectedValue) => {
-            debugger;
-            console.log('Confirm Ok', selectedValue);
-            dataPassenger.Observaciones = selectedValue; // Suponiendo que Observaciones es el campo donde se debe guardar la información seleccionada
-            this.setNewLog(state, dataPassenger); // funcion que contiene el resto del codigo de setNewLog
+            if(!!selectedValue){
+              console.log('Confirm Ok', selectedValue);
+              dataPassenger.Observaciones = selectedValue; // Suponiendo que Observaciones es el campo donde se debe guardar la información seleccionada
+              this.setNewLog(state, dataPassenger); // funcion que contiene el resto del codigo de setNewLog             
+            }
+            else {
+              return false;
+            }
+           
           }
         }
       ]

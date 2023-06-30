@@ -13,7 +13,7 @@
      {{activeService.SolicitudId > 0 ? 'VER SERVICIO ACTIVO':'CREAR NUEVO SERVICIO'}} 
       <ion-icon slot="end" name="add"></ion-icon>
     </ion-button>
-    <ion-button expand="block" color="danger" *ngIf="_session.GetUser()!=undefined &&  _session.GetUser().Grupo == 'VIP'" (click)="goServiceVip()">
+    <ion-button expand="block" color="danger" *ngIf="_session.GetUser()!=undefined &&  _session.GetUser().Grupo == 'VIP1'" (click)="goServiceVip()">
     {{activeService.SolicitudId > 0 ? 'VER SERVICIO ACTIVO':'CREAR NUEVO SERVICIO'}} 
        <ion-icon slot="end" name="add"></ion-icon>
      </ion-button>

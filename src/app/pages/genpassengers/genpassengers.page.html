@@ -11,7 +11,7 @@
 
   </ion-toolbar> -->
   <div *ngFor="let passenger of passengers">
-    <ion-list *ngIf="!passenger.Recogido"  lines="none" inset="true">
+    <ion-list *ngIf="!passenger.Recogido && passenger.Observaciones == null"  lines="none" inset="true">
       <ion-item class="header" lines="none" color="secondary">
         <ion-icon slot="end" color="primary" name="person"></ion-icon>
         <ion-label>{{passenger.GENPasajeros.NombreCompleto}}</ion-label> 

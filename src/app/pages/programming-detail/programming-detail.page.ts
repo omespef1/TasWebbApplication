@@ -1,3 +1,4 @@
+import { GENPasajerosServicios } from 'src/app/models/genpasajeroservicios/genpasajerosservicios.model';
 import { finalize } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
@@ -89,7 +90,8 @@ export class ProgrammingDetailPage implements OnInit {
 
         if (resp.ObjTransaction) {
           this.programming.details = resp.ObjTransaction;
-          let details:ServiceRequestDetail[] = this.programming.details;                    
+          let details:ServiceRequestDetail[] = this.programming.details; 
+          this.checkPassengers();                   
         }
       });
   }
@@ -112,7 +114,9 @@ export class ProgrammingDetailPage implements OnInit {
         text: "Aceptar",
         role: "OK",
         handler: (value: any) => {
-          this.setNewLog(value,false);
+          debugger;
+          let passengers :any[] = this.programming.GENPasajerosServicios;
+          this.setNewLog(value,passengers!=undefined && passengers.length>0?true:false);
         },
       },
     ];
@@ -157,11 +161,11 @@ export class ProgrammingDetailPage implements OnInit {
 
     
   isVip(){
-    return !!this._sesion.GetUser() && this._sesion.GetUser().Grupo === "VIP";
+    return !!this._sesion.GetUser() && this._sesion.GetUser().Grupo === "VIP1";
   }
   
   setNewLog(value: any,confirmed:boolean,code:number=0) {
-    if(value != "F" || confirmed == true){
+    if(value != "I" || confirmed == true ){
       this.textButton = "Localizando...";
       this.sending = true;
       const log: ServiceRequestDetail = new ServiceRequestDetail();
@@ -292,6 +296,20 @@ this.showModalCode();
       if (resp != null && resp.Retorno == 0) {
         this.programming.GENPasajerosServicios = resp.ObjTransaction;
         this.showModalGenPassengers();
+      }
+    })
+  }
+
+  checkPassengers(){
+  
+    this.GENPasajerosService.GetInfoPassengerByService(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId)
+    .pipe(finalize(()=>{
+    
+    }))
+    .subscribe(resp => {
+      if (resp != null && resp.Retorno == 0) {
+        this.programming.GENPasajerosServicios = resp.ObjTransaction;
+     
       }
     })
   }

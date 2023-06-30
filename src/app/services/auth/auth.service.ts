@@ -134,7 +134,7 @@ export class AuthService {
         this._nav.navigateRoot("tabs/vehicle");      
       }
 
-      if (this._sesion.GetUser().Grupo === "VIP"){
+      if (this._sesion.GetUser().Grupo === "VIP1" || this._sesion.GetUser().Grupo === "VIP0"){
         this._nav.navigateRoot("tabs/programming");
       }
        
