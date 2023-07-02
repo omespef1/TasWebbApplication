@@ -65,7 +65,7 @@ export class ProgrammingPage implements OnInit {
   }
 
   isPassenger(){
-    return !!this._session.GetUser() &&  (this._session.GetUser().Grupo === "VIP1" || this._session.GetUser().Grupo === "VIP0")
+    return !!this._session.GetUser() &&  (this._session.GetUser().Grupo === "VIP" || this._session.GetUser().Grupo === "VIP0")
   }
 
   async showModalThirdParties() {
@@ -135,7 +135,7 @@ export class ProgrammingPage implements OnInit {
       // console.log("valid accessssss");
       // console.log(this._session.GetUser());
       if (
-        this._session.GetUser().Grupo !== "VIP1" && this._session.GetUser().Grupo !== "VIP0" &&
+        this._session.GetUser().Grupo !== "VIP" && this._session.GetUser().Grupo !== "VIP0" &&
         this._session.GetUser().Grupo !== "CLIENTE"
       ) {
         this._alert.showAlert(
@@ -153,6 +153,7 @@ export class ProgrammingPage implements OnInit {
       return true;
     }
   }
+
 
   checkApprovedLicensePlate(event) {
     this.genTercerosService.IsAuthorizedForService(this._session.GetThirdPartie().IdEmpresa, this._session.GetThirdPartie().IdTercero).subscribe(resp => {
