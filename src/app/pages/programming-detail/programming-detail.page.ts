@@ -280,7 +280,7 @@ this.showModalCode();
       if (resp.data != undefined) {
         // console.log(resp);
         
-        this.setNewLog("F",true,resp.data);
+        this.setNewLog("I",true,resp.data);
       }
     });
     return await modal.present();
