@@ -35,9 +35,9 @@ export class ProgrammingDetailPage implements OnInit {
   value = 'This is my barcode secret data';
   textButton = "Nuevo seguimiento";
   observations = "";
-  contract:GESContratos;
-  locating=false;
-  loading=false;
+  contract: GESContratos;
+  locating = false;
+  loading = false;
   constructor(
     private router: Router,
     private _san: DomSanitizer,
@@ -47,12 +47,12 @@ export class ProgrammingDetailPage implements OnInit {
     private geo: Geolocation,
     private _request: TransportRequestService,
     private modalController: ModalController,
-    private passengerService:PassengerService,
-    private factoryValidator:FactoryValidator,
-    private contratos:GesContratosService,
-    private GENPasajerosService:GENPasajerosService,
-    private GENPasajerosServiciosService:GENPasajerosServiciosService,
-    private changes:ChangeDetectorRef) {
+    private passengerService: PassengerService,
+    private factoryValidator: FactoryValidator,
+    private contratos: GesContratosService,
+    private GENPasajerosService: GENPasajerosService,
+    private GENPasajerosServiciosService: GENPasajerosServiciosService,
+    private changes: ChangeDetectorRef) {
     this.programming.details = [];
     this.programming.GENPasajerosServicios = [];
   }
@@ -65,15 +65,15 @@ export class ProgrammingDetailPage implements OnInit {
 
   ionViewDidEnter() {
     this.loadDetail();
- 
+
   }
 
-  getContrato(){
-    if(this._sesion.GetUser() == undefined){
-      this.contratos.getByCode(this._sesion.GetThirdPartie().IdEmpresa,this.programming.ContratoId).subscribe(resp=>{
-        if(resp!=undefined && resp.Retorno==0){        
-        this.contract = resp.ObjTransaction;
-        this.changes.detectChanges();
+  getContrato() {
+    if (this._sesion.GetUser() == undefined) {
+      this.contratos.getByCode(this._sesion.GetThirdPartie().IdEmpresa, this.programming.ContratoId).subscribe(resp => {
+        if (resp != undefined && resp.Retorno == 0) {
+          this.contract = resp.ObjTransaction;
+          this.changes.detectChanges();
         }
       })
     }
@@ -90,8 +90,8 @@ export class ProgrammingDetailPage implements OnInit {
 
         if (resp.ObjTransaction) {
           this.programming.details = resp.ObjTransaction;
-          let details:ServiceRequestDetail[] = this.programming.details; 
-          this.checkPassengers();                   
+          let details: ServiceRequestDetail[] = this.programming.details;
+          this.checkPassengers();
         }
       });
   }
@@ -113,10 +113,9 @@ export class ProgrammingDetailPage implements OnInit {
       {
         text: "Aceptar",
         role: "OK",
-        handler: (value: any) => {
-          debugger;
-          let passengers :any[] = this.programming.GENPasajerosServicios;
-          this.setNewLog(value,passengers!=undefined && passengers.length>0?true:false);
+        handler: (value: any) => {          
+          let passengers: any[] = this.programming.GENPasajerosServicios;
+          this.setNewLog(value, passengers != undefined && passengers.length > 0 ? true : false);
         },
       },
     ];
@@ -159,23 +158,23 @@ export class ProgrammingDetailPage implements OnInit {
   }
 
 
-    
-  isVip(){
+
+  isVip() {
     return !!this._sesion.GetUser() && this._sesion.GetUser().Grupo === "VIP";
   }
-  
-  setNewLog(value: any,confirmed:boolean,code:number=0) {
-    if(value != "I" || confirmed == true ){
+
+  setNewLog(value: any, confirmed: boolean, code: number = 0) {    
+    if (value != "I" || confirmed == true || !this.contract.UsoCodigo) {
       this.textButton = "Localizando...";
       this.sending = true;
       const log: ServiceRequestDetail = new ServiceRequestDetail();
       log.SolicitudId = this.programming.SolicitudId;
       log.EmpresaId = this._sesion.GetThirdPartie().IdEmpresa;
       log.Estado = value;
-      if(code>0){
+      if (code > 0) {
         log.CodigoConfirmacion = code;
       }
-      this._request.SetTransportRequestFailed(log).then(() => {
+      // this._request.SetTransportRequestFailed(log).then(() => {
         this.geo.getCurrentPosition().then((data) => {
           this.textButton = "Esperando...";
           setTimeout(() => {
@@ -192,7 +191,7 @@ export class ProgrammingDetailPage implements OnInit {
                   this.textButton = "Nuevo seguimiento";
                   this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
                   this.loadDetail();
-                  if(value =="I"){
+                  if (value == "I") {
                     this.getPassengersService();
                   }
                 } else {
@@ -208,14 +207,10 @@ export class ProgrammingDetailPage implements OnInit {
             );
           }, 3000);
         });
-      })
+      // })
     }
     else {
-
-
-      if(this.contract.UsoCodigo)
-this.showModalCode();
-
+      this.showModalCode();
     }
 
 
@@ -271,7 +266,7 @@ this.showModalCode();
 
   async showModalCode() {
     const modal = await this.modalController.create({
-      component:  ValidateCodePage,
+      component: ValidateCodePage,
       componentProps: {
         'title': 'Ingresa el código de verificación enviado a su teléfono y/o su email.'
       }
@@ -279,39 +274,41 @@ this.showModalCode();
     modal.onDidDismiss().then(resp => {
       if (resp.data != undefined) {
         // console.log(resp);
-        
-        this.setNewLog("I",true,resp.data);
+
+        this.setNewLog("F", true, resp.data);
       }
     });
     return await modal.present();
   }
 
-  getPassengersService(){
-    this.loading=true;
+  getPassengersService() {
+    this.loading = true;
     this.GENPasajerosService.GetInfoPassengerByService(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId)
-    .pipe(finalize(()=>{
-      this.loading=false;
-    }))
-    .subscribe(resp => {
-      if (resp != null && resp.Retorno == 0) {
-        this.programming.GENPasajerosServicios = resp.ObjTransaction;
-        this.showModalGenPassengers();
-      }
-    })
+      .pipe(finalize(() => {
+        this.loading = false;
+      }))
+      .subscribe(resp => {
+        if (resp != null && resp.Retorno == 0) {          
+          this.programming.GENPasajerosServicios = resp.ObjTransaction;
+          // Si no tiene pasajeros detalle, es decir , no usa modelo de pasajeros no muestra el modal
+          if(resp.ObjTransaction!=null && resp.ObjTransaction!=undefined)
+          this.showModalGenPassengers();
+        }
+      })
   }
 
-  checkPassengers(){
-  
+  checkPassengers() {
+
     this.GENPasajerosService.GetInfoPassengerByService(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId)
-    .pipe(finalize(()=>{
-    
-    }))
-    .subscribe(resp => {
-      if (resp != null && resp.Retorno == 0) {
-        this.programming.GENPasajerosServicios = resp.ObjTransaction;
-     
-      }
-    })
+      .pipe(finalize(() => {
+
+      }))
+      .subscribe(resp => {
+        if (resp != null && resp.Retorno == 0) {
+          this.programming.GENPasajerosServicios = resp.ObjTransaction;
+
+        }
+      })
   }
 
 
@@ -324,7 +321,7 @@ this.showModalCode();
       }
     });
 
-    modal.onDidDismiss().then(()=>{
+    modal.onDidDismiss().then(() => {
 
       this.loadDetail();
     })
@@ -334,32 +331,32 @@ this.showModalCode();
 
   }
 
-  locatePassenger(){
+  locatePassenger() {
 
     this.geo.getCurrentPosition().then((data) => {
-     this.locating = true;
+      this.locating = true;
       setTimeout(() => {
-        let curentLocation  = { companyId: this.programming.EmpresaId, id: this.programming.SolicitudId, passengerId: this._sesion.GetUser().IdPasajero, latitude: data.coords.latitude, longitude : data.coords.longitude  };
+        let curentLocation = { companyId: this.programming.EmpresaId, id: this.programming.SolicitudId, passengerId: this._sesion.GetUser().IdPasajero, latitude: data.coords.latitude, longitude: data.coords.longitude };
         // Guardamos el intento en los fallidos en caso de que falle        
         this.GENPasajerosServiciosService.setPassengerServiceLocation(curentLocation)
-        .pipe(finalize(()=>{
-          this.locating= false;
-        }))
-        .subscribe(
-          (resp: any) => {                               
-            if (resp.Retorno === 0) {
-            
-              this._alert.showAlert("Perfecto!", "Ubicación actualizada");
-              this.loadDetail();
-            } else {
-              this._alert.showAlert("Oops!", resp.TxtError);
+          .pipe(finalize(() => {
+            this.locating = false;
+          }))
+          .subscribe(
+            (resp: any) => {
+              if (resp.Retorno === 0) {
+
+                this._alert.showAlert("Perfecto!", "Ubicación actualizada");
+                this.loadDetail();
+              } else {
+                this._alert.showAlert("Oops!", resp.TxtError);
+              }
+            },
+            (err) => {
+              this.locating = false;
+              // console.log(err);
             }
-          },
-          (err) => {
-            this.locating = false;            
-            // console.log(err);
-          }
-        );
+          );
       }, 3000);
     });
   }
