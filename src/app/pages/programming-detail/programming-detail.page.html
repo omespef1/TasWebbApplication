@@ -100,10 +100,20 @@
     <ion-label>Dirección</ion-label>
     <ion-note slot="end"> {{ programming.DestinoDireccion}}</ion-note>
   </ion-item>
-  <ion-item *ngIf="isVip()">
+  <ion-item *ngIf="programming.CodigoVerificacion!=undefined">
     <ion-icon slot="start" name="clipboard"></ion-icon>
     <ion-label>Código de confirmación</ion-label>
     <ion-note slot="end"> {{ programming.CodigoVerificacion}}</ion-note>
+  </ion-item>
+  <ion-item *ngIf="programming.CodigoVerificacion2!=undefined">
+    <ion-icon slot="start" name="clipboard"></ion-icon>
+    <ion-label>Código de confirmación</ion-label>
+    <ion-note slot="end"> {{ programming.CodigoVerificacion2}}</ion-note>
+  </ion-item>
+  <ion-item *ngIf="programming.HoraEstimada!=undefined">
+    <ion-icon slot="start" name="time"></ion-icon>
+    <ion-label>Hora estimada</ion-label>
+    <ion-note slot="end"> {{ programming.HoraEstimada}}</ion-note>
   </ion-item>
   <ion-item class="header" lines="none" color="secondary">
     <ion-icon slot="start" name="globe"></ion-icon>
