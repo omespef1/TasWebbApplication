@@ -272,25 +272,63 @@ export class EnlistmentPage implements OnInit {
   }
   takePicture(answer: enlistment) {
     answer.snapshot = true;
-    const options: CameraOptions = {
-      quality: 40,
-      destinationType: this.camera.DestinationType.DATA_URL,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-    };
-    this.camera.getPicture(options).then(
-      (imageData) => {
-        answer.snapshot = false;
-        // imageData is either a base64 encoded string or a file URI
-        // If it's base64 (DATA_URL):
-        // const base64Image =  imageData;
-        answer.check_foto = imageData;
-      },
-      (err) => {
-       console.log(err);
-      }
-    );
+  
+    // Verificar si la aplicación se está ejecutando en un navegador
+    const isBrowser = !window.hasOwnProperty('cordova');
+  
+    if (isBrowser) {
+      // La aplicación se está ejecutando en un navegador, solicitar imagen de la fototeca
+      const inputElement = document.createElement('input');
+      inputElement.type = 'file';
+      inputElement.accept = 'image/jpeg';
+  
+      inputElement.addEventListener('change', (event: Event) => {
+        const target = event.target as HTMLInputElement;
+        if (target.files && target.files.length > 0) {
+          const file = target.files[0];
+  
+          const reader = new FileReader();
+  
+          reader.onload = () => {
+            answer.snapshot = false;
+            answer.check_foto = this.eliminarEncabezadoBase64(reader.result) as string;
+          };
+  
+          reader.readAsDataURL(file);
+        }
+      });
+  
+      inputElement.click();
+    } else {
+      // La aplicación se está ejecutando en un dispositivo móvil, utilizar la cámara
+      const options: CameraOptions = {
+        quality: 40,
+        destinationType: this.camera.DestinationType.DATA_URL,
+        encodingType: this.camera.EncodingType.JPEG,
+        mediaType: this.camera.MediaType.PICTURE,
+      };
+  
+      this.camera.getPicture(options).then(
+        (imageData) => {
+          answer.snapshot = false;
+          answer.check_foto = imageData;
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    }
   }
+   eliminarEncabezadoBase64(variable) {
+    const encabezado = 'data:image/jpeg;base64,';
+    
+    if (variable.startsWith(encabezado)) {
+      return variable.substring(encabezado.length);
+    }
+    
+    return variable;
+  }
+  
 
   // progressUp() {
   //   this.progress += 1;
