@@ -1,14 +1,14 @@
 {
     "name": "Tasweb",
     "short_name": "App",
-    "start_url": "/",
+    "start_url": "/taswebapplication",
     "display": "standalone",
     "background_color": "#fff",
     "description": "Descripción de mi app PWA.",
     "icons": [
       {
         "src": "assets/icon/icon.png",
-        "sizes": "512x512",
+        "sizes": "1024x1024",
         "type": "image/png"
       }
     ]
