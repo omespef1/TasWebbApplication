@@ -193,6 +193,7 @@ export class VehiclePage {
                           let params: NavigationExtras = {
                             state: {
                               car: car,
+                              params: paramValid
                             },
                           };
                           car.loading = false;
@@ -218,7 +219,7 @@ export class VehiclePage {
         this._sesion.SetKilometerCar(car.NuevoKilometraje);
         let params: NavigationExtras = {
           state: {
-            car: car,
+            car: car,           
           },
         };
         car.loading = false;
@@ -259,6 +260,8 @@ export class VehiclePage {
   }
 
   goEnlistment(params: NavigationExtras) {
+
+
     this._nav.navigateForward("tabs/vehicle/enlistemnt", params);
     // this.router.navigateByUrl("tabs/enlistment", params);
   }

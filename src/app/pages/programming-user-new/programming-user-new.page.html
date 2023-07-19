@@ -79,6 +79,16 @@
         <ion-label position="floating">Fecha y hora</ion-label>
         <ion-datetime doneText="Hecho" cancelText="Cancelar" name="fechaInicial" required [(ngModel)]="request.FechaServicio" displayFormat="DD/MM/YYYY H:m"  [min]="today"  ></ion-datetime>
       </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="person"></ion-icon>
+        <ion-label>Número Pasajeros*</ion-label>
+        <ion-input type="number" required name="numeroP" [(ngModel)]="request.NumeroPasajeros"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="create"></ion-icon>
+        <ion-label position="floating">Observaciones del Cliente*</ion-label>
+        <ion-textarea required name="ObservCliente" [(ngModel)]="request.ObservCliente"></ion-textarea>
+      </ion-item>
 
      
 

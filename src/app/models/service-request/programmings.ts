@@ -52,7 +52,7 @@ export class ServicesRequest {
   UsuarioVip:string;
   IdTipoServicio:number;
   IdPasajero?:number;
-
+  ObservCliente?:string;
 }
 
 export class ServiceRequestDetail {

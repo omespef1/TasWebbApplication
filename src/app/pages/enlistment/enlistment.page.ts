@@ -28,6 +28,7 @@ import { AuthService } from "../../services/auth/auth.service";
 import { NavigationOptions } from "@ionic/angular/dist/providers/nav-controller";
 import { ThirdPartiesService } from "../../services/third-parties/third-parties.service";
 import { HttpEventType } from "@angular/common/http";
+import { aliparam } from "src/app/models/vehicle/aliparam";
 
 @Component({
   selector: "app-enlistment",
@@ -59,12 +60,15 @@ export class EnlistmentPage implements OnInit {
   predefined: boolean = false;
   third: ThirdPartie = new ThirdPartie();
   done = false;
+  aliparams:aliparam= new aliparam();
 
   ngOnInit() {
     //console.log(this.router.getCurrentNavigation().extras);
     this.car = this.router.getCurrentNavigation().extras.state.car;
+
     this.predefined = false;
     this.third = this._sesion.GetThirdPartie();
+    this.aliparams = this.router.getCurrentNavigation().extras.state.params;
     this.GetQuestions();
   }
   ionViewWillEnter() {

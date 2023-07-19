@@ -16,7 +16,7 @@
         <ion-list >
           <ion-item>
             <ion-label>Seleccionar predefinidas</ion-label>
-            <ion-toggle name="predefined" (ionChange)="MarkPredefined()" [(ngModel)]="predefined"></ion-toggle>
+            <ion-toggle name="predefined" (ionChange)="MarkPredefined()" [(ngModel)]="predefined" [disabled]="!aliparams.Predefinidos"></ion-toggle>
           </ion-item>
         </ion-list>
       <div *ngFor="let question of enlistment;let i = index">
