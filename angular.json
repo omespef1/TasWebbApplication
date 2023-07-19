@@ -20,6 +20,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
+              "src/manifest.json",
               {
                 "glob": "**/*",
                 "input": "src/assets",
@@ -103,6 +104,11 @@
             "assets": [
               {
                 "glob": "favicon.ico",
+                "input": "src/",
+                "output": "/"
+              },
+              {
+                "glob": "manifest.json",
                 "input": "src/",
                 "output": "/"
               },
