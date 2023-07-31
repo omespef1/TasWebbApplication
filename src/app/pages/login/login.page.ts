@@ -27,6 +27,7 @@ export class LoginPage implements OnInit {
   user: loginRequest = new loginRequest();
   touchId: boolean = false;
   businessName:string='INGRESO';
+  logoApp: string = "assets/imgs/icon.png"; // URL predeterminada
   constructor(
     private auth: AuthService,
     private router: Router,
@@ -47,21 +48,27 @@ export class LoginPage implements OnInit {
   }
 
   async LoadBusiness() {
+    debugger;
     const business = this._sesion.GetBussiness();
-    //console.log(business);
+    if (business) {
+      this.logoApp = !!business.LogoApp? business.LogoApp:this.logoApp; // Asumiendo que LogoApp es la propiedad del objeto business
+    }
+  
     if (business == null) {
       await this.showModalBusiness();
     }
   }
-
+  
   async showModalBusiness() {
     const modal = await this._modal.create({
       component: BusinessPage
     });
     modal.onDidDismiss().then(resp => {
+      debugger;
      const _businessName: business= resp.data;
       this._sesion.SetBusiness(resp.data);
       this.businessName = _businessName.NombreEmpresa;
+      this.logoApp = !!_businessName.LogoApp?_businessName.LogoApp:'assets/imgs/icon.png';
     });
     return await modal.present();
   }
@@ -100,60 +107,4 @@ export class LoginPage implements OnInit {
     this.showModalBusiness();
   }
 
-  // async GetTouchId() {
-  //   if (this._platform.is("cordova")) {
-  //     await this._platform.ready();
-  //     this._touch.isAvailale().then(
-  //       result => {
-  //         // if (result === "finger" || result === "face") {
-  //           //console.log(`Autenticación disponible por ${result}`);
-  //           this.touchId = true;
-  //         // }
-  //       },
-  //       err => {}
-  //     );
-  //   }
-  // }
-
-  // logTouchId() {
-  //   if (this._platform.is("cordova")) {
-  //     this._touch
-  //       .verifyFingerPrint("Ingresa tu huella dactilar para ingresar")
-  //       .then((result: any) => {
-  //         //console.log(`Autenticación resultado  es ${result}`);
-  //         this.auth.signInDirectTouch();
-  //         this._auth.goApp();
-  //         // if (result == "Success") {
-  //         //   this.auth.signInDirectTouch();
-  //         //   this.router.navigateByUrl("tabs/vehicle");
-  //         // } else {
-  //         //   this._alert.showAlert("Error", "Verificación fallida");
-  //         // }
-  //       })
-  //       .catch((error: any) => {
-  //         this._alert.showAlert("Error", "Verificación fallida");
-  //       });
-  //   }
-  // }
-
-  // goApp(){
-
-  // if (this._sesion.GetUser()!==undefined){
-  //   this._alert.showAlert(
-  //     "Bienvenido!",
-  //     `Ingresaste como usuario ${ this._sesion.GetUser().NombreCompleto}`
-  //   );
-
-  //   this._nav.navigateRoot("tabs/thirdparties");
-  // }
-  // else {
-    
-  //   this._alert.showAlert(
-  //     "Bienvenido!",
-  //     `Ingresaste como ${ this._sesion.GetThirdPartie().NombreCompleto}`
-  //   );
-  //   this._nav.navigateRoot("tabs/vehicle");
-
-  // }
-  // }
 }
