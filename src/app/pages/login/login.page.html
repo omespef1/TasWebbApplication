@@ -74,7 +74,18 @@
         <ion-row>
           <ion-col padding>
               <!-- <ion-button class="btn-facebook"  expand="block"  >INGRESAR CON FACEBOOK</ion-button> -->
-              <ion-button (click)="changeBusiness()"  class="btn-google" expand="block"  >CAMBIAR EMPRESA</ion-button>
+              <ion-button (click)="changeBusiness()"  class="btn-google" expand="block"  >
+                <ion-icon slot="start" name="sync"></ion-icon>
+                CAMBIAR EMPRESA</ion-button>
+             
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col padding>
+              <!-- <ion-button class="btn-facebook"  expand="block"  >INGRESAR CON FACEBOOK</ion-button> -->
+              <ion-button (click)="cleanSessions()"  class="btn-google" expand="block"  >
+                <ion-icon slot="start" name="refresh-circle"></ion-icon>
+                RESTABLECER</ion-button>
              
           </ion-col>
         </ion-row>

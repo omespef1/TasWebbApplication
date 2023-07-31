@@ -48,7 +48,7 @@ export class LoginPage implements OnInit {
   }
 
   async LoadBusiness() {
-    debugger;
+    
     const business = this._sesion.GetBussiness();
     if (business) {
       this.logoApp = !!business.LogoApp? business.LogoApp:this.logoApp; // Asumiendo que LogoApp es la propiedad del objeto business
@@ -64,7 +64,7 @@ export class LoginPage implements OnInit {
       component: BusinessPage
     });
     modal.onDidDismiss().then(resp => {
-      debugger;
+      
      const _businessName: business= resp.data;
       this._sesion.SetBusiness(resp.data);
       this.businessName = _businessName.NombreEmpresa;
@@ -104,6 +104,11 @@ export class LoginPage implements OnInit {
     }
   }
   changeBusiness() {
+    this.showModalBusiness();
+  }
+
+  cleanSessions(){
+    localStorage.clear();
     this.showModalBusiness();
   }
 
