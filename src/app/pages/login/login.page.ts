@@ -109,7 +109,7 @@ export class LoginPage implements OnInit {
 
   cleanSessions(){
     localStorage.clear();
-    this.showModalBusiness();
+    location.reload();
   }
 
 }
