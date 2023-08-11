@@ -9,6 +9,7 @@ import { GENTercerosService } from '../../services/GENTerceros/genterceros.servi
 import { vehicle } from '../../models/vehicle/vehicle';
 import { ServicesRequest } from '../../models/service-request/programmings';
 import { CallService } from "src/app/services/call/call.service";
+import { AuthService } from "src/app/services/auth/auth.service";
 
 @Component({
   selector: "app-programming",
@@ -31,7 +32,8 @@ export class ProgrammingPage implements OnInit {
     private _modal: ModalController,
     private genTercerosService: GENTercerosService,
     private alertController:AlertController,
-    private callService:CallService
+    private callService:CallService,
+    private auth:AuthService
     
     ) { }
   ngOnInit() { }
@@ -61,6 +63,9 @@ export class ProgrammingPage implements OnInit {
         this.checkApprovedLicensePlate(event);
         this.checkStatusServices();
       }
+    }
+    else {
+      this.auth.goApp(false);
     }
   }
 

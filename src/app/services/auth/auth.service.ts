@@ -123,7 +123,7 @@ export class AuthService {
     return this._http.Post<transaction>("/login/ChangePassword", changePass);
   }
 
-  goApp() {
+  goApp(shownName=true) {
     
     // this.SetOneSignalId();
     console.log(this._sesion.isUser());
@@ -141,11 +141,13 @@ export class AuthService {
       if (this._sesion.GetUser().Grupo === "CLIENTE"){
         this._nav.navigateRoot("tabs/programming");
       }
+      if(shownName)
       this._alert.showAlert(
         "Bienvenido!",
         `Ingresaste como usuario ${this._sesion.GetUser().NombreCompleto}`
       );
     } else {
+      if(shownName)
       this._alert.showAlert(
         "Bienvenido!",
         `Ingresaste como ${this._sesion.GetThirdPartie().NombreCompleto}`

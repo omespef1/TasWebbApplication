@@ -16,6 +16,7 @@ import {
 import { NavController, ModalController } from "@ionic/angular";
 import { ThirdPartiesService } from "../../services/third-parties/third-parties.service";
 import { ThirdPartiesPage } from "../third-parties/third-parties.page";
+import { AuthService } from "src/app/services/auth/auth.service";
 
 @Component({
   selector: "app-vehicle",
@@ -41,7 +42,8 @@ export class VehiclePage {
     private _network: NetworkService,
     private _nav: NavController,
     public _thirdParties: ThirdPartiesService,
-    private _modal: ModalController
+    private _modal: ModalController,
+    private auth:AuthService
   ) {}
 
   ionViewWillEnter() {    
@@ -61,6 +63,9 @@ export class VehiclePage {
           this.thirdPartiesSelected = this._thirdParties.GetThirdParties();
         }
       }
+    }
+    else {
+      this.auth.goApp(false);
     }
   }
   validAccess(): boolean {

@@ -13,6 +13,7 @@ import { manchecklistDetalle } from "../../models/enlistmen/manchecklist";
 import { Router } from "@angular/router";
 import { AlertService } from '../../services/alert/alert.service';
 import { NavController } from '@ionic/angular';
+import { AuthService } from "src/app/services/auth/auth.service";
 
 @Component({
   selector: "app-last-enlistments",
@@ -35,7 +36,8 @@ export class LastEnlistmentsPage implements OnInit {
     private _san: DomSanitizer,
     private router: Router,
     private _alert:AlertService,
-    private _nav:NavController
+    private _nav:NavController,
+    private auth:AuthService
   ) {}
   enlistment: manchecklist = new manchecklist();
   groupEnlistment = false;
@@ -53,6 +55,9 @@ export class LastEnlistmentsPage implements OnInit {
       this.groupEnlistment = this._sesion.getGroupEnlistment();
       this.GetLastEnlistment();
       this.lastQuestions = this._sesion.GetQuestions();
+    }
+    else {
+      this.auth.goApp(false);
     }
   }
 
