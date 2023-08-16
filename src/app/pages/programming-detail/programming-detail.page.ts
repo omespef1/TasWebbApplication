@@ -210,7 +210,7 @@ export class ProgrammingDetailPage implements OnInit {
       // })
     }
     else {
-      this.showModalCode();
+      this.showModalCode(value);
     }
 
 
@@ -264,7 +264,7 @@ export class ProgrammingDetailPage implements OnInit {
 
   }
 
-  async showModalCode() {
+  async showModalCode(value:string) {
     const modal = await this.modalController.create({
       component: ValidateCodePage,
       componentProps: {
@@ -275,7 +275,7 @@ export class ProgrammingDetailPage implements OnInit {
       if (resp.data != undefined) {
         // console.log(resp);
 
-        this.setNewLog("F", true, resp.data);
+        this.setNewLog(value, true, resp.data);
       }
     });
     return await modal.present();
