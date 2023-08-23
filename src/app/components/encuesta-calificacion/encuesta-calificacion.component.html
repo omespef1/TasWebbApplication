@@ -1,0 +1,45 @@
+<!-- encuesta-calificacion.component.html -->
+
+<ion-grid>
+  <ion-row>
+      <ion-col>
+          <ion-button (click)="setCalificacion(3)">
+              😊<br>
+              BUENA
+          </ion-button>
+      </ion-col>
+      <ion-col>
+          <ion-button (click)="setCalificacion(2)">
+              😐<br>
+              REGULAR
+          </ion-button>
+      </ion-col>
+      <ion-col>
+          <ion-button (click)="setCalificacion(1)">
+              ☹️<br>
+              MALA
+          </ion-button>
+      </ion-col>
+  </ion-row>
+</ion-grid>
+
+<ion-list *ngIf="calificacion">
+  <ion-radio-group [(ngModel)]="observacion">
+      <ion-item *ngIf="calificacion === 3">
+          <ion-label>Excelente Servicio</ion-label>
+          <ion-radio value="Excelente Servicio"></ion-radio>
+      </ion-item>
+      <ion-item *ngIf="calificacion === 3">
+          <ion-label>Llegada a tiempo</ion-label>
+          <ion-radio value="Llegada a tiempo"></ion-radio>
+      </ion-item>
+      <ion-item *ngIf="calificacion === 2">
+          <ion-label>Llegada tarde</ion-label>
+          <ion-radio value="Llegada tarde"></ion-radio>
+      </ion-item>
+      <ion-item *ngIf="calificacion === 2">
+          <ion-label>Conductor imprudente</ion-label>
+          <ion-radio value="Conductor imprudente"></ion-radio>
+      </ion-item>
+  </ion-radio-group>
+</ion-list>

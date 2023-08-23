@@ -39,13 +39,14 @@ import { ValidateCodePage } from "./validate-code/validate-code.page";
 import { GENPassengersPage } from "./pages/genpassengers/genpassengers.page";
 import { LocationComponent } from "./components/location/location.component";
 import { MapsUrlPipeDetail } from "./pipes/maps-url-detail";
+import { EncuestaCalificacionComponent } from "./components/encuesta-calificacion/encuesta-calificacion.component";
 
 
 @NgModule({
   declarations: [AppComponent, SafePipe, ThirdPartiesGenericPage, SignatureComponent, PassengersComponent, PoliticalDivisionComponent, CostCenterPage, ThirdPartieValidationPage, SucursalesPage,
-     ContratosPage, TypesVehiclesComponent, PoliticaDivisionActiveComponent, ValidateCodePage, GENPassengersPage,LocationComponent,MapsUrlPipeDetail],
+     ContratosPage, TypesVehiclesComponent, PoliticaDivisionActiveComponent, ValidateCodePage, GENPassengersPage,LocationComponent,MapsUrlPipeDetail,EncuestaCalificacionComponent],
   entryComponents: [ThirdPartiesGenericPage, SignatureComponent, PassengersComponent, PoliticalDivisionComponent, CostCenterPage, ThirdPartieValidationPage, SucursalesPage, ContratosPage, TypesVehiclesComponent, PoliticaDivisionActiveComponent,
-     ValidateCodePage,GENPassengersPage, LocationComponent],
+     ValidateCodePage,GENPassengersPage, LocationComponent,EncuestaCalificacionComponent],
   imports: [BrowserModule, IonicModule.forRoot(
     { mode: 'ios' }
   ), AppRoutingModule,
