@@ -185,6 +185,10 @@ export class ProgrammingPage implements OnInit {
         programming: programming,
       }
     });
+
+    modal.onDidDismiss().then(()=>{
+      this.GetProgrammingBeneficiario(null);
+    })
     return await modal.present();
   }
   checkStatusServices() {

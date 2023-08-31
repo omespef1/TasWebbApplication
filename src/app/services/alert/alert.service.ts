@@ -90,4 +90,31 @@ errorSweet(message:string){
       confirmButtonText: 'OK'
     })
 }
+
+async showConfirmationAlert(
+  title: string,
+  message: string,
+  confirmHandler: () => void,
+  cancelHandler?: () => void
+) {
+  const alert = await this._alert.create({
+    header: title,
+    message: message,
+    buttons: [
+      {
+        text: 'Cancelar',
+        role: 'cancel',
+        cssClass: 'secondary',
+        handler: cancelHandler || (() => {
+          console.log('Confirm Cancel');
+        })
+      }, {
+        text: 'Confirmar',
+        handler: confirmHandler
+      }
+    ]
+  });
+
+  await alert.present();
+}
 }

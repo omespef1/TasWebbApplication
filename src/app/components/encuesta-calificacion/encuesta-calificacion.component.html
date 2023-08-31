@@ -1,45 +1,71 @@
-<!-- encuesta-calificacion.component.html -->
+<app-header headerName="Encuesta">
+  
+</app-header>
 
-<ion-grid>
-  <ion-row>
-      <ion-col>
-          <ion-button (click)="setCalificacion(3)">
-              😊<br>
-              BUENA
-          </ion-button>
-      </ion-col>
-      <ion-col>
-          <ion-button (click)="setCalificacion(2)">
-              😐<br>
-              REGULAR
-          </ion-button>
-      </ion-col>
-      <ion-col>
-          <ion-button (click)="setCalificacion(1)">
-              ☹️<br>
-              MALA
-          </ion-button>
-      </ion-col>
-  </ion-row>
-</ion-grid>
+<ion-content fullscreen class="ion-padding">
+    <ion-grid>
+        <ion-row justify-content-center>
+            <ion-col>
+                <ion-button [disabled]="calificacion!=null && calificacion!=0" fill="outline" color="tertiary" (click)="setCalificacion(1)">
+                    ☹️
+                   
+                </ion-button>
+            </ion-col>           
+            <ion-col>
+                <ion-button [disabled]="calificacion!=null && calificacion!=0" fill="outline" color="tertiary" (click)="setCalificacion(2)">
+                    😐
+                  
+                </ion-button>
+            </ion-col>
+            <ion-col>
+                <ion-button [disabled]="calificacion!=null && calificacion!=0" fill="outline"  color="tertiary" (click)="setCalificacion(3)">
+                    😊
+                   
+                </ion-button>
+            </ion-col>
+           
+        </ion-row>
+      </ion-grid>
+      
+      <ion-list *ngIf="calificacion" lines="none" inset="true">
+        <ion-item class="header"  color="secondary">
+            <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
+            <ion-label>Confirma tu respuesta</ion-label>              
+          </ion-item> 
+          <ion-radio-group [(ngModel)]="observacion" (ionChange)="calificar()">
+              <ion-item *ngIf="calificacion === 3">
+                  <ion-label>Excelente Servicio</ion-label>
+                  <ion-radio value="Excelente Servicio"></ion-radio>
+              </ion-item>
+              <ion-item *ngIf="calificacion === 3">
+                  <ion-label>Llegada a tiempo</ion-label>
+                  <ion-radio value="Llegada a tiempo"></ion-radio>
+              </ion-item>
+              <ion-item *ngIf="calificacion === 2">
+                  <ion-label>Llegada tarde</ion-label>
+                  <ion-radio value="Llegada tarde"></ion-radio>
+              </ion-item>
+              <ion-item *ngIf="calificacion === 2">
+                  <ion-label>Conductor imprudente</ion-label>
+                  <ion-radio value="Conductor imprudente"></ion-radio>
+              </ion-item>
+              <ion-item *ngIf="calificacion === 1">
+                  <ion-label>Conductor grosero</ion-label>
+                  <ion-radio value="Conductor grosero"></ion-radio>
+              </ion-item>
+              <ion-item *ngIf="calificacion === 1">
+                  <ion-label>Vehículo en desaseo</ion-label>
+                  <ion-radio value="Vehículo en desaseo"></ion-radio>
+              </ion-item>
+              <ion-item *ngIf="calificacion === 1">
+                  <ion-label>Maneja mal</ion-label>
+                  <ion-radio value="Maneja mal"></ion-radio>
+              </ion-item>
+              <ion-item *ngIf="calificacion === 1">
+                  <ion-label>Habla sin manos libres</ion-label>
+                  <ion-radio value="Habla sin manos libres"></ion-radio>
+              </ion-item>
+          </ion-radio-group>
+      </ion-list>
+</ion-content>
 
-<ion-list *ngIf="calificacion">
-  <ion-radio-group [(ngModel)]="observacion">
-      <ion-item *ngIf="calificacion === 3">
-          <ion-label>Excelente Servicio</ion-label>
-          <ion-radio value="Excelente Servicio"></ion-radio>
-      </ion-item>
-      <ion-item *ngIf="calificacion === 3">
-          <ion-label>Llegada a tiempo</ion-label>
-          <ion-radio value="Llegada a tiempo"></ion-radio>
-      </ion-item>
-      <ion-item *ngIf="calificacion === 2">
-          <ion-label>Llegada tarde</ion-label>
-          <ion-radio value="Llegada tarde"></ion-radio>
-      </ion-item>
-      <ion-item *ngIf="calificacion === 2">
-          <ion-label>Conductor imprudente</ion-label>
-          <ion-radio value="Conductor imprudente"></ion-radio>
-      </ion-item>
-  </ion-radio-group>
-</ion-list>
