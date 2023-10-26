@@ -26,14 +26,19 @@ export class LocationComponent implements OnInit {
     
   }
 
+  openLocation() {
+    // Reemplaza las comas si existen
+    let lat = this.detail.Latitude.replace(',', '.');
+    let long = this.detail.Longitude.replace(',', '.');
+    
+    // Construye la URL para Google Maps como ejemplo. 
+    // La mayoría de las veces, esto desencadenará el comportamiento del selector de aplicaciones si hay múltiples apps que pueden manejar la URL.
+    const url = `https://www.google.com/maps/search/?api=1&query=${lat},${long}`;
+    
+    // Abre la URL
+    window.open(url, '_system');
+}
 
-
-  // loadMap() {
-
-  //   this.theHtmlString = this._san.bypassSecurityTrustResourceUrl(
-  //     `https://maps.google.com/maps?q=${this.latitude}, ${this.long}&z=15&output=embed`
-  //   );
-  // }
 
   async close(){
     await this.modalCtrl.dismiss();

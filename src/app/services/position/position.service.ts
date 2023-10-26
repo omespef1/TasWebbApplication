@@ -16,7 +16,7 @@ export class PositionService {
     }
 
 
-    async openMapPosition(lat:number,long:number,time:Date){
+    async openMapPosition(lat:string,long:string,time:Date){
 
         const modal = await this.modalController.create({
             component:  LocationComponent,

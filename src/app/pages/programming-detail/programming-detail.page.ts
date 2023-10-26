@@ -21,6 +21,8 @@ import { GESContratos } from "src/app/models/contracts/contract.model";
 import { GENPasajerosService } from "src/app/services/GENPasjaeros/genpasajeros.service";
 import { GENPassengersPage } from "../genpassengers/genpassengers.page";
 import { GENPasajerosServiciosService } from "src/app/services/genpasajerosservicios/genpasajerosservicios.service";
+import { MonitoreoService } from 'src/app/services/monitoreo/monitoreo.service';
+import { PositionService } from 'src/app/services/position/position.service';
 
 @Component({
   selector: "app-programming-detail",
@@ -52,7 +54,9 @@ export class ProgrammingDetailPage implements OnInit {
     private contratos: GesContratosService,
     private GENPasajerosService: GENPasajerosService,
     private GENPasajerosServiciosService: GENPasajerosServiciosService,
-    private changes: ChangeDetectorRef) {
+    private changes: ChangeDetectorRef,
+    private monitoreoService:MonitoreoService,
+    private positionService:PositionService) {
     this.programming.details = [];
     this.programming.GENPasajerosServicios = [];
   }
@@ -299,7 +303,8 @@ export class ProgrammingDetailPage implements OnInit {
 
   checkPassengers() {
 
-    this.GENPasajerosService.GetInfoPassengerByService(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId)
+    if(!this._sesion.isUser() ){
+      this.GENPasajerosService.GetInfoPassengerByService(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId)
       .pipe(finalize(() => {
 
       }))
@@ -309,6 +314,8 @@ export class ProgrammingDetailPage implements OnInit {
 
         }
       })
+    }
+   
   }
 
 
@@ -359,6 +366,22 @@ export class ProgrammingDetailPage implements OnInit {
           );
       }, 3000);
     });
+  }
+
+  locateDriver(){
+    this.locating=true;
+      this.monitoreoService.GetLastPosition(this.programming.VehiculoId,this.programming.EmpresaId)
+      .pipe(
+        finalize(()=>{
+          this.locating=false;
+        })
+      )
+      .subscribe(resp=>{
+        if(resp!=null && resp.Retorno==0){
+          this.positionService.openMapPosition(resp.ObjTransaction.Latitud,resp.ObjTransaction.Longitud,new Date());
+        }
+      })
+
   }
 
 
