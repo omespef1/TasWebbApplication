@@ -6,8 +6,11 @@
       <ion-button (click)= "close()" expand="full"  color="danger">  
         <ion-icon slot="start" color="light" name="remove-circle"></ion-icon> &nbsp; Cerrar  
       </ion-button> 
-      <ion-button (click)= "openLocation()" expand="full"  color="success">  
-        <ion-icon slot="start" color="light" name="locate"></ion-icon> &nbsp; Navegar  
+      <ion-button (click)= "openLocation('maps')" expand="full"  color="success">  
+        <ion-icon slot="start" color="light" name="locate"></ion-icon> &nbsp; Navegar con Maps  
+      </ion-button> 
+      <ion-button (click)= "openLocation('waze')" expand="full"  color="success">  
+        <ion-icon slot="start" color="light" name="locate"></ion-icon> &nbsp; Navegar con Waze  
       </ion-button> 
     </div>
     <div>

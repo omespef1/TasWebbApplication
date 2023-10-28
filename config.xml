@@ -23,6 +23,7 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="WKWebViewOnly" value="true" />
+    <preference name="deployment-target" value="12.0" />
     <platform name="android">
         <preference name="InAppBrowserStatusBarStyle" value="lightcontent" />
         <config-file parent="/*" target="AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
