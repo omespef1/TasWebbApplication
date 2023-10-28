@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalController, NavParams } from '@ionic/angular';
+import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 @Component({
   selector: 'app-location',
   templateUrl: './location.component.html',
@@ -11,7 +12,7 @@ export class LocationComponent implements OnInit {
   theHtmlString: any;
   // latitude: number; long: number;
   detail:any;
-  constructor(  private _san: DomSanitizer,private navParams:NavParams,private modalCtrl:ModalController) { 
+  constructor(  private _san: DomSanitizer,private navParams:NavParams,private modalCtrl:ModalController,    private browserTab: InAppBrowser) { 
 
     this.detail = this.navParams.get("detail");
     
@@ -36,7 +37,8 @@ export class LocationComponent implements OnInit {
     const url = `https://www.google.com/maps/search/?api=1&query=${lat},${long}`;
     
     // Abre la URL
-    window.open(url, '_system');
+    // window.open(url, '_system');
+    this.browserTab.create(url, '_system', 'location=yes');
 }
 
 
