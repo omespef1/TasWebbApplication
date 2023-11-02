@@ -73,14 +73,15 @@ export class ProgrammingDetailPage implements OnInit {
   }
 
   getContrato() {
-    if (this._sesion.GetUser() == undefined) {
-      this.contratos.getByCode(this._sesion.GetThirdPartie().IdEmpresa, this.programming.ContratoId).subscribe(resp => {
+    let company = this._sesion.GetUser() == undefined? this._sesion.GetThirdPartie().IdEmpresa:this._sesion.GetUser().IdEmpresa
+
+      this.contratos.getByCode( company, this.programming.ContratoId).subscribe(resp => {
         if (resp != undefined && resp.Retorno == 0) {
           this.contract = resp.ObjTransaction;
           this.changes.detectChanges();
         }
       })
-    }
+    
 
   }
 
