@@ -1,0 +1,26 @@
+/* Estilo por defecto (para móviles) */
+.logo {
+    max-width: 15vw;
+    max-height: 15vw;
+
+}
+
+
+/* Estilo para tablets y desktops */
+@media (min-width: 768px) {
+    .logo {
+        width: 10vw;
+    }
+}
+
+/* En tu CSS */
+.logo-small {
+    max-width: 15vw;
+    max-height: 15vw;
+}
+
+.logo-large {
+    max-width: 10vw;
+    max-height: 10vw;
+}
+
