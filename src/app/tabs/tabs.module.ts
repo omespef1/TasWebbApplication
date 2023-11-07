@@ -6,12 +6,11 @@ import { FormsModule } from '@angular/forms';
 import { TabsPageRoutingModule } from './tabs.router.module';
 
 import { TabsPage } from './tabs.page';
-import { LogoComponentComponent } from '../components/logo-component/logo-component.component';
 
 
 @NgModule({
   entryComponents: [
-    LogoComponentComponent,
+    
   ],
   imports: [
     IonicModule,
@@ -19,6 +18,6 @@ import { LogoComponentComponent } from '../components/logo-component/logo-compon
     FormsModule,
     TabsPageRoutingModule
   ],
-  declarations: [TabsPage,LogoComponentComponent]
+  declarations: [TabsPage]
 })
 export class TabsPageModule {}

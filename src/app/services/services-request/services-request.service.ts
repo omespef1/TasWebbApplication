@@ -48,5 +48,10 @@ export class ServicesRequestService {
     return this._http.Get<transactionObj<ServicesRequest>>(`/GESSolicitudServicios/cancelServiceApp?requestId=${requestId}&companyCode=${companyCode}`);
    }
 
+   updateDriver(companyCode:number,driverId:number,requestId:number){
+    return this._http.Get<transactionObj<any>>(`/GESSolicitudServicios/updateDriver?companyCode=${companyCode}&driverId=${driverId}&requestId=${requestId}`);
+  }
+   
+
 
 }

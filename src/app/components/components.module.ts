@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header/header.component';
 import { IonicModule } from '@ionic/angular';
+import { LogoComponentComponent } from './logo-component/logo-component.component';
 
 
 
@@ -9,11 +10,12 @@ import { IonicModule } from '@ionic/angular';
 
 @NgModule({
   declarations: [
-    HeaderComponent,
+    HeaderComponent,LogoComponentComponent
   ],
+  entryComponents:[LogoComponentComponent ],
   imports: [
     IonicModule,
-    CommonModule
+    CommonModule,
   ],
   exports:[
     HeaderComponent
