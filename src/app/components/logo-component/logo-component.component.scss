@@ -2,6 +2,9 @@
 .logo {
     max-width: 15vw;
     max-height: 15vw;
+    margin: auto;
+    margin-bottom: 5px;
+
 
 }
 
@@ -10,6 +13,9 @@
 @media (min-width: 768px) {
     .logo {
         width: 10vw;
+        margin: auto;
+        margin-bottom: 5px;
+    
     }
 }
 
@@ -17,10 +23,16 @@
 .logo-small {
     max-width: 15vw;
     max-height: 15vw;
+    margin: auto;
+    margin-bottom: 5px;
+
 }
 
 .logo-large {
     max-width: 10vw;
     max-height: 10vw;
+    margin: auto;
+    margin-bottom: 5px;
+
 }
 
