@@ -4,4 +4,5 @@ export interface business {
   Estado: number;
   EmpresaSigla: string;
   LogoApp?:string;
+  LogoAppHori?:string;
 }

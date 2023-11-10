@@ -8,7 +8,8 @@ import { SessionService } from '../../services/session/session.service';
 })
 export class LogoComponentComponent implements OnInit {
   screenWidth: number;
-  logoApp: string = "assets/imgs/icon.png";  // URL predeterminada
+  logoApp: string = "assets/imgs/icon.png";
+  logoAppHori: string = "assets/imgs/iconHori.png";  // URL predeterminada
 
   constructor(public _sesion: SessionService) { }
 
@@ -23,7 +24,7 @@ export class LogoComponentComponent implements OnInit {
   loadLogo() {
     const business = this._sesion.GetBussiness();
     if (business) {
-      this.logoApp = !!business.LogoApp ? business.LogoApp : this.logoApp; // Asumiendo que LogoApp es la propiedad del objeto business
+      this.logoAppHori = !!business.LogoAppHori ? business.LogoAppHori : this.logoAppHori; // Asumiendo que LogoApp es la propiedad del objeto business
     }
   }
 
