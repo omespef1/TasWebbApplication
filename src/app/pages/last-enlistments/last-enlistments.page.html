@@ -116,11 +116,10 @@
             <ion-input type="text" clearInput="true" disabled multiple="true" [name]="'observacion' + i"
               [(ngModel)]="question.Comentario"></ion-input>
           </ion-item>
-          <ion-item *ngIf="question.HasImage==1">
-              <ion-spinner *ngIf="question.Check_Image==null" slot="start"></ion-spinner>
+          <ion-item *ngIf="question.HasImage==1">            
             <ion-thumbnail slot="start">
                
-              <img *ngIf="question.Check_Image!=null" [src]="question.Check_Image" />
+              <img *ngIf="question.ImageUrl!=null" [src]="question.ImageUrl" />
             </ion-thumbnail>
           </ion-item>       
       </div>

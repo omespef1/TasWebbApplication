@@ -100,9 +100,9 @@ export class LastEnlistmentsPage implements OnInit {
             this.FixEnlistment(this.enlistment.detalle);
             this.loadMap(this.enlistment.Latitude, this.enlistment.Longitude);
 
-            this.enlistment.detalle.forEach((element) => {
-              this.GetManCheckListDetalle(element);
-            });
+            // this.enlistment.detalle.forEach((element) => {
+            //   this.GetManCheckListDetalle(element);
+            // });
           }
         });
     } else {
