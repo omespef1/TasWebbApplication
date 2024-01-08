@@ -3,7 +3,7 @@
     [
         {
             "appId": "870bf83c",           
-            "dependencyInstallCommand": "ionic build --prod"                                
+            "dependencyInstallCommand": "npm install node-sass@4.14.1 npm install --legacy-peer-deps=true ionic cordova build --prod"                                
         }
    
     
