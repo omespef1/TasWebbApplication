@@ -3,7 +3,7 @@
     [
         {
             "appId": "870bf83c",           
-            "dependencyInstallCommand": "npm install @angular/cli --save-dev npm install node-sass@4.14.1 npm install --legacy-peer-deps=true"                                
+            "dependencyInstallCommand": "npm install @angular/cli npm install node-sass@4.14.1 npm install --legacy-peer-deps=true"                                
         }
    
     
