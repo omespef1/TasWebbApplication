@@ -14,4 +14,5 @@ export class GESContratos {
     LiquidaYa:boolean;
     Colectivo:boolean;
     CambiarOrden?:boolean;
+    GpsMonitoreo:boolean;
 }

@@ -36,6 +36,10 @@ export class GENTercerosService {
     return this._http.Get<transactionObj<ThirdPartie>>(`/GENTerceros/GetById?companyCode=${idEmpresa}&id=${thirdPartieId}`);
   }
 
+  GetDriversCar(idEmpresa:number,vehicleId:number){
+    return this._http.Get<transactionObj<ThirdPartie[]>>(`/GENTerceros/GetDriversCar?companyCode=${idEmpresa}&vehicleId=${vehicleId}`);
+  }
+
   GetDriversByCompany(companyCode:number){
     return this._http.Get<transactionObj<ThirdPartie[]>>(`/GENTerceros/GetDriversByCompany?companyCode=${companyCode}`);
   }

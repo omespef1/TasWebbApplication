@@ -1,15 +1,16 @@
+import { ServicesRequestService } from './../../services/services-request/services-request.service';
+import { GENTercerosService } from 'src/app/services/GENTerceros/genterceros.service';
 import { GENPasajerosServicios } from 'src/app/models/genpasajeroservicios/genpasajerosservicios.model';
 import { finalize } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { DomSanitizer } from "@angular/platform-browser";
-import { ServicesRequestService } from "../../services/services-request/services-request.service";
 import { SessionService } from "../../services/session/session.service";
 import { AlertService } from "../../services/alert/alert.service";
 import { ServiceRequestDetail } from "../../models/service-request/programmings";
 import { Geolocation, Geoposition } from "@ionic-native/geolocation/ngx";
 import { TransportRequestService } from '../../services/transport-request/transport-request.service';
-import { ModalController } from "@ionic/angular";
+import { ModalController, NavController } from "@ionic/angular";
 import { PassengersComponent } from "../passengers/passengers.component";
 import { transactionObj } from '../../models/general/transaction';
 import { PassengerService } from '../../services/passenger/passenger.service';
@@ -21,6 +22,10 @@ import { GESContratos } from "src/app/models/contracts/contract.model";
 import { GENPasajerosService } from "src/app/services/GENPasjaeros/genpasajeros.service";
 import { GENPassengersPage } from "../genpassengers/genpassengers.page";
 import { GENPasajerosServiciosService } from "src/app/services/genpasajerosservicios/genpasajerosservicios.service";
+import { MonitoreoService } from 'src/app/services/monitoreo/monitoreo.service';
+import { PositionService } from 'src/app/services/position/position.service';
+import { ThirdPartie } from 'src/app/models/general/user';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: "app-programming-detail",
@@ -38,6 +43,9 @@ export class ProgrammingDetailPage implements OnInit {
   contract: GESContratos;
   locating = false;
   loading = false;
+  drivers :  BehaviorSubject<ThirdPartie[]> = new BehaviorSubject<ThirdPartie[]>(null);
+  oldDriver :ThirdPartie = new ThirdPartie();
+
   constructor(
     private router: Router,
     private _san: DomSanitizer,
@@ -52,14 +60,20 @@ export class ProgrammingDetailPage implements OnInit {
     private contratos: GesContratosService,
     private GENPasajerosService: GENPasajerosService,
     private GENPasajerosServiciosService: GENPasajerosServiciosService,
-    private changes: ChangeDetectorRef) {
+    private changes: ChangeDetectorRef,
+    private monitoreoService:MonitoreoService,
+    private positionService:PositionService, private gentercerosService:GENTercerosService,
+    private gessolicitudServiciosService:ServicesRequestService,
+    private nav:NavController) {
     this.programming.details = [];
     this.programming.GENPasajerosServicios = [];
   }
 
   ngOnInit() {
     this.programming = this.router.getCurrentNavigation().extras.state.programming;
+     this.oldDriver = this.programming.ConductorId;
     this.getContrato();
+    this.getDrivers();
     //this.loadDetail();
   }
 
@@ -69,14 +83,15 @@ export class ProgrammingDetailPage implements OnInit {
   }
 
   getContrato() {
-    if (this._sesion.GetUser() == undefined) {
-      this.contratos.getByCode(this._sesion.GetThirdPartie().IdEmpresa, this.programming.ContratoId).subscribe(resp => {
+    let company = this._sesion.GetUser() == undefined? this._sesion.GetThirdPartie().IdEmpresa:this._sesion.GetUser().IdEmpresa
+
+      this.contratos.getByCode( company, this.programming.ContratoId).subscribe(resp => {
         if (resp != undefined && resp.Retorno == 0) {
           this.contract = resp.ObjTransaction;
           this.changes.detectChanges();
         }
       })
-    }
+    
 
   }
 
@@ -264,6 +279,22 @@ export class ProgrammingDetailPage implements OnInit {
 
   }
 
+  getDrivers() {
+
+
+    if(!this._sesion.isUser()){
+
+      this.gentercerosService.GetDriversCar(this._sesion.GetThirdPartie().IdEmpresa, this.programming.VehiculoId).subscribe(resp => {
+        if (resp != null && resp.Retorno == 0) {
+  
+        this.drivers.next(resp.ObjTransaction);
+        }
+      })
+  
+    }
+  
+  }
+
   async showModalCode(value:string) {
     const modal = await this.modalController.create({
       component: ValidateCodePage,
@@ -299,7 +330,8 @@ export class ProgrammingDetailPage implements OnInit {
 
   checkPassengers() {
 
-    this.GENPasajerosService.GetInfoPassengerByService(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId)
+    if(!this._sesion.isUser() ){
+      this.GENPasajerosService.GetInfoPassengerByService(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId)
       .pipe(finalize(() => {
 
       }))
@@ -309,6 +341,8 @@ export class ProgrammingDetailPage implements OnInit {
 
         }
       })
+    }
+   
   }
 
 
@@ -359,6 +393,59 @@ export class ProgrammingDetailPage implements OnInit {
           );
       }, 3000);
     });
+  }
+
+  locateDriver(){
+    this.locating=true;
+      this.monitoreoService.GetLastPosition(this.programming.VehiculoId,this.programming.EmpresaId)
+      .pipe(
+        finalize(()=>{
+          this.locating=false;
+        })
+      )
+      .subscribe(resp=>{
+        if(resp!=null && resp.Retorno==0){
+          this.positionService.openMapPosition(resp.ObjTransaction.Latitud,resp.ObjTransaction.Longitud,new Date());
+        }
+        else{
+          this._alert.errorSweet(resp.TxtError);
+        }
+      })
+
+  }
+
+  changeDriver(){
+
+
+    if(this.oldDriver == this.programming.ConductorId){
+      this._alert.errorSweet('El conductor no puede ser el mismo.');
+      return;
+    }
+
+    
+
+    this._alert.showConfirmationAlert(
+      'Cambiar?', 
+      '¿Se cambiará este servicio de conductor, por el conductor seleccionado, desea continuar?', 
+      () => {
+        // Lógica cuando se confirma.
+        this.gessolicitudServiciosService.updateDriver(this.programming.EmpresaId, this.programming.ConductorId,this.programming.SolicitudId).subscribe(resp=>{
+          if(resp!=null && resp.Retorno==0){
+            this._alert.successSweet('Conductor actualizado!'!);
+            this.modalController.dismiss();
+            this.nav.navigateBack('tabs/programming');
+          }
+          else {
+            this._alert.errorSweet(resp.TxtError);
+          }
+        })
+      }, 
+      () => {
+        // Lógica cuando se cancela (opcional).
+        console.log('Acción cancelada.');
+        this.modalController.dismiss();
+      }
+    );
   }
 
 

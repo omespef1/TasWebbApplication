@@ -1,0 +1,17 @@
+ion-row {
+    --ion-grid-column-padding: 0; // Elimina el padding entre columnas
+  }
+  
+  ion-button {
+    --padding-start: 0;  
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+    font-size: 3rem;  // Ajusta el tamaño según tu preferencia
+    width: 100%;
+  }
+  
+  ion-col {
+    padding: 0 10px;  // Este padding determina el espacio entre botones. Puedes ajustarlo según tu necesidad.
+  }
+

@@ -92,6 +92,14 @@
         </ion-label>
       </ion-item>  
       
+      <ion-item *ngIf="_session.isUser() && canEdit && programming.Estado=='T'" color="tertiary">
+        <ion-icon slot="start" name="help-circle-outline"></ion-icon>        
+        <ion-button color="light" slot="end" (click)="setCalification(programming)" fill="outline">
+            <ion-icon  slot="start" [name]="programming.Calificacion == null ||  programming.Calificacion==0? 'heart-empty':'heart-half'"></ion-icon>           
+            {{programming.Calificacion == null ||  programming.Calificacion==0? 'CALIFICAR SERVICIO':'CAMBIAR CALIFICACION' }}   
+          </ion-button>   
+      </ion-item> 
+      
     </ion-list>
   </div>
   <div *ngIf="loading">

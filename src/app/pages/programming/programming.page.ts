@@ -1,3 +1,4 @@
+import { EncuestaCalificacionComponent } from './../../components/encuesta-calificacion/encuesta-calificacion.component';
 import { Component, OnInit } from "@angular/core";
 import { ServicesRequestService } from '../../services/services-request/services-request.service';
 import { SessionService } from "../../services/session/session.service";
@@ -50,13 +51,7 @@ export class ProgrammingPage implements OnInit {
           if (this._session.GetThirdPartie() != null && this._session.GetThirdPartie() != undefined) {
 
             this.GetProgramming(event);
-          }
-          // if(this._session.GetThirdPartie==null  || this._session.GetThirdPartie()==undefined){
-          //   this.showModalThirdParties();
-          // }
-          // else {
-          //   this.GetProgramming(event);
-          // }      
+          }        
         }
       } else {
       
@@ -181,6 +176,20 @@ export class ProgrammingPage implements OnInit {
 
     })
 
+  }
+
+  async setCalification(programming:any){
+    const modal = await this._modal.create({
+      component: EncuestaCalificacionComponent,
+      componentProps: {
+        programming: programming,
+      }
+    });
+
+    modal.onDidDismiss().then(()=>{
+      this.GetProgrammingBeneficiario(null);
+    })
+    return await modal.present();
   }
   checkStatusServices() {
 
