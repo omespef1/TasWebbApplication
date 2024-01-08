@@ -123,9 +123,9 @@
       "onesignal-cordova-plugin": {},
       "call-number": {},
       "cordova-plugin-ionic": {
-        "APP_ID": "870bf83c",
         "CHANNEL_NAME": "Production",
-        "UPDATE_METHOD": "background"
+        "UPDATE_METHOD": "background",
+        "APP_ID": "870bf83c"
       }
     },
     "platforms": [
