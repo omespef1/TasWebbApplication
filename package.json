@@ -117,7 +117,12 @@
       "mx.ferreyra.callnumber": {},
       "cordova-plugin-ionic-webview": {},
       "onesignal-cordova-plugin": {},
-      "call-number": {}
+      "call-number": {},
+      "cordova-plugin-ionic": {
+        "APP_ID": "870bf83c",
+        "CHANNEL_NAME": "Master",
+        "UPDATE_METHOD": "background"
+      }
     },
     "platforms": [
       "browser",
