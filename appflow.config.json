@@ -3,7 +3,7 @@
     [
         {
             "appId": "870bf83c",           
-            "dependencyInstallCommand": "ionic cordova build --prod android"                                
+            "dependencyInstallCommand": "ionic build --prod"                                
         }
    
     
