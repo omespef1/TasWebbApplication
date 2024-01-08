@@ -96,6 +96,9 @@
     "tslint": "~5.15.0",
     "typescript": "~3.4.3"
   },
+  "engines": {
+    "node": "14.20.1"
+  },
   "description": "An Ionic project",
   "cordova": {
     "plugins": {
@@ -128,9 +131,7 @@
       "browser",
       "android",
       "ios"
-    ],
-    "engines": {
-      "node": "14.20.1"
-    }
+    ]
+ 
   }
 }
