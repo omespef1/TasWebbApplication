@@ -133,3 +133,9 @@ ion-item{
     animation-name: bounceIn;
   }
   
+  @media (min-width: 600px) {
+    ion-app {
+        max-width: 400px; /* Ancho máximo del contenedor */
+        margin: 0 auto; /* Centrar el contenedor */
+    }
+}
