@@ -21,6 +21,14 @@ export class AlertService {
     });
     alert.present();
   }
+  async showBlockMessage(title: string, message: string) {
+    let alert = await this._alert.create({
+      header: title,
+      message: message,
+      buttons: [],
+    });
+    alert.present();
+  }
 
   async presentToast(msg: string, time: number) {
     const toast = await this._toast.create({

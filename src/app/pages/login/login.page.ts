@@ -1,13 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../../services/auth/auth.service";
-import { Router } from "@angular/router";
-import { NgForm } from "@angular/forms";
 import { loginRequest } from "../../models/general/loginRequest";
 import { NavController, ModalController, Platform } from "@ionic/angular";
 import { AlertService } from "../../services/alert/alert.service";
 import { SessionService } from "../../services/session/session.service";
 import { BusinessPage } from "../business/business.page";
-import { ThirdPartie } from "../../models/general/user";
 // import { TouchIdService } from "../../services/touch/touch-id.service";
 import {
   NetworkService,
@@ -15,6 +12,7 @@ import {
 } from "src/app/services/network/network.service";
 import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller';
 import { business } from '../../models/business/business';
+import { config } from "src/assets/config/settings";
 
 @Component({
   selector: "app-login",
@@ -28,9 +26,9 @@ export class LoginPage implements OnInit {
   touchId: boolean = false;
   businessName:string='INGRESO';
   logoApp: string = "assets/imgs/icon.png"; // URL predeterminada
+  currentVersion = config.currentVersion;
   constructor(
     private auth: AuthService,
-    private router: Router,
     private _alert: AlertService,
     private _nav: NavController,
     public _sesion: SessionService,

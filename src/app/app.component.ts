@@ -12,6 +12,9 @@ import { GescentrocostosService } from './services/gencentrocostos/gescentrocost
 import { VehicleService } from './services/vehicle/vehicle.service';
 import { GENTercerosService } from './services/GENTerceros/genterceros.service';
 import { ServicesRequestService } from "./services/services-request/services-request.service";
+import { AppVersionControlService } from "./services/app-version-control/app-version-control.service";
+import { config } from "src/assets/config/settings";
+import { AlertService } from "./services/alert/alert.service";
 
 @Component({
   selector: "app-root",
@@ -31,7 +34,9 @@ export class AppComponent {
     private vehicleService:VehicleService,
     private genTercerosService:GENTercerosService,
     private requestService: ServicesRequestService,
-    private notifications:NotificationsService
+    private notifications:NotificationsService,
+    private versionCheckService: AppVersionControlService,
+    private alert:AlertService
   ) {
     this.initializeApp();
   }
@@ -40,6 +45,7 @@ export class AppComponent {
     this.platform.ready().then(() => {              
       this.statusBar.styleDefault();    
       this.splashScreen.hide();
+      this.checkForAppUpdate();
       // this._push.init_Notifications();
       this.notifications.OneSignalInit();
       this._auth.signInDirect();
@@ -57,7 +63,31 @@ export class AppComponent {
       
     });
   }
-
+  checkForAppUpdate() {
+    const platformName = this.platform.is('android') ? 'android' : 'ios';
+    
+    this.versionCheckService.checkAppVersion(platformName).subscribe(
+      (resp) => {
+      
+      if(resp!=null && resp.Retorno==0){
+        let data = resp.ObjTransaction;
+        debugger;
+        if (data && config.currentVersion !== data.LatestVersion) {
+        
+          // Muestra un alerta o redirige al usuario a la URL de actualización
+          this.alert.showBlockMessage('Actualización obligatoria','Para continuar debes actualizar la aplicación. Descarga la nueva versión desde la tienda de aplicaciones.')
+          
+          this.alert.openBrowserUrl(data.UpdateURL);
+        }
+      }
+        
+    
+      },
+      (error) => {
+        console.error('Error al verificar la versión de la aplicación', error);
+      }
+    );
+  }
 
   SetRemoteTransport() {
     setInterval(() => {
