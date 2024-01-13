@@ -26,6 +26,7 @@ export class AlertService {
       header: title,
       message: message,
       buttons: [],
+      backdropDismiss: false
     });
     alert.present();
   }
