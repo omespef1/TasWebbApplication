@@ -75,9 +75,11 @@ export class AppComponent {
         if (data && config.currentVersion !== data.LatestVersion) {
         
           // Muestra un alerta o redirige al usuario a la URL de actualización
-          this.alert.showBlockMessage('Actualización obligatoria','Para continuar debes actualizar la aplicación. Descarga la nueva versión desde la tienda de aplicaciones.')
-          
-          this.alert.openBrowserUrl(data.UpdateURL);
+          this.alert.showBlockMessage('Actualización obligatoria','Para continuar debes actualizar la aplicación. Te llevaremos a la tienda de aplicacioes para que descargues la aplicación.')
+          setTimeout(() => {
+            this.alert.openBrowserUrl(data.UpdateURL);
+          }, 6000);
+         
         }
       }
         
