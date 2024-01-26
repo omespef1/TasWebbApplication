@@ -4,6 +4,7 @@ import {
   ViewChildren,
   QueryList,
   ElementRef,
+  ViewChild,
 } from "@angular/core";
 import { EnlistmentService } from "../../services/enlistment/enlistment.service";
 import { SessionService } from "../../services/session/session.service";
@@ -29,6 +30,9 @@ import { NavigationOptions } from "@ionic/angular/dist/providers/nav-controller"
 import { ThirdPartiesService } from "../../services/third-parties/third-parties.service";
 import { HttpEventType } from "@angular/common/http";
 import { aliparam } from "src/app/models/vehicle/aliparam";
+;
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 @Component({
   selector: "app-enlistment",
@@ -61,6 +65,7 @@ export class EnlistmentPage implements OnInit {
   third: ThirdPartie = new ThirdPartie();
   done = false;
   aliparams:aliparam= new aliparam();
+  @ViewChild('htmlData',{static:false}) htmlData: ElementRef;
 
   ngOnInit() {
     //console.log(this.router.getCurrentNavigation().extras);
@@ -352,5 +357,23 @@ progressValueUpload(){
   goLastEnlisment() {
     this.done = true;
     this._nav.navigateRoot("tabs/last-enlistments");
+  }
+
+  generatePDF() {
+    this.loading=true;
+    let DATA = this.htmlData.nativeElement;
+    html2canvas(DATA).then(canvas => {
+        
+        let fileWidth = 208;
+        let fileHeight = canvas.height * fileWidth / canvas.width;
+        
+        const FILEURI = canvas.toDataURL('image/png');
+        let PDF = new jsPDF('p', 'mm', 'a4');
+        let position = 0;
+        PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
+        
+        PDF.save('alistamiento-vehiculo.pdf');
+        this.loading=true;
+    });  
   }
 }

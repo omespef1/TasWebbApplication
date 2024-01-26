@@ -19,6 +19,9 @@
             <ion-toggle name="predefined" (ionChange)="MarkPredefined()" [(ngModel)]="predefined" [disabled]="!!aliparams && !aliparams.Predefinidos"></ion-toggle>
           </ion-item>
         </ion-list>
+        <div #htmlData>
+
+        
       <div *ngFor="let question of enlistment;let i = index">
         <ng-container [ngSwitch]="question.Seccion">
           <ion-list inset="true">
@@ -54,7 +57,7 @@
                  <ion-icon  color="success" slot="end" name="checkmark-circle"></ion-icon>
                 </ion-item>
 
-                <ion-item *ngIf="question.respuestaUsuario != question.respuesta && question.respuestaUsuario !=undefined">
+                <ion-item *ngIf="question.respuestaUsuario !=undefined">
                   <ion-icon slot="start" name="eye"></ion-icon>
                   <ion-label>Evidencia</ion-label>
                   <ion-button color="secondary" slot="end" (click)="takePicture(question)" fill="outline">
@@ -79,12 +82,19 @@
           </ion-list>
         </ng-container>
       </div>
-      
+        </div>
       <ion-button [disabled]="!enlistmentForm.form.valid || saving || done " expand="block" type="submit">
        
         <ion-icon *ngIf="!saving" slot="start" name="checkmark-circle"></ion-icon>
         <ion-spinner *ngIf="saving" slot="start"></ion-spinner>
         {{ saving? 'Enviando ' + progress + '%':'GUARDAR'}}
+      </ion-button>
+
+      <ion-button   [disabled]="!enlistmentForm.form.valid || saving || done " expand="block" (click)="generatePDF()">
+       
+        <ion-icon  slot="start" name="clipboard"></ion-icon>
+        <ion-spinner *ngIf="saving" slot="start"></ion-spinner>
+        {{ saving? 'Generando... ':'Generar Pdf'}}
       </ion-button>
      
     </form>
