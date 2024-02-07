@@ -11,6 +11,12 @@
     <div text-center>
       <ion-spinner *ngIf="loading" slot="start"></ion-spinner>
     </div>
+    <ion-button  expand="block" type="button" (click)="print()">
+       
+      <ion-icon *ngIf="!generating" slot="start" name="ios-print"></ion-icon>
+      <ion-spinner *ngIf="generating" slot="start"></ion-spinner>
+      {{ generating? 'Generando':'Generar PDF'}}
+    </ion-button>
   <ion-list-header color="secondary">
     <ion-label>Información General</ion-label>
   </ion-list-header>

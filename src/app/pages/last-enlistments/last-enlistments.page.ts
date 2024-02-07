@@ -41,6 +41,7 @@ export class LastEnlistmentsPage implements OnInit {
   ) {}
   enlistment: manchecklist = new manchecklist();
   groupEnlistment = false;
+  generating=false;
   ngOnInit() {
     //this.GetLastEnlistment();
   }
@@ -228,5 +229,11 @@ export class LastEnlistmentsPage implements OnInit {
       return true;
     }
   
+  }
+
+  print(){
+    this._alert.openBrowserUrl(
+      `https://tas.com.co/tasweb/MANImpAlistApp.aspx?Modo=REP&Emp=${this._sesion.GetThirdPartie().IdEmpresa}&Id=${this.enlistment.Id}`
+    );
   }
 }
