@@ -135,7 +135,13 @@ ion-item{
   
   @media (min-width: 600px) {
     ion-app {
-        max-width: 400px; /* Ancho máximo del contenedor */
-        margin: 0 auto; /* Centrar el contenedor */
+      max-width: 500px; /* Ancho máximo del contenedor */
+      margin: 0 auto; /* Centrar el contenedor */
     }
-}
+  
+    /* Reducir el tamaño de la fuente para pantallas de escritorio */
+    ion-label, ion-note {
+      font-size: 0.65rem; /* Ajusta este valor según sea necesario */
+    }
+  }
+  

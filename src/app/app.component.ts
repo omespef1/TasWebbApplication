@@ -64,8 +64,8 @@ export class AppComponent {
     });
   }
   checkForAppUpdate() {
-    const platformName = this.platform.is('android') ? 'android' : 'ios';
-    
+    const platformName = this.platform.is('android') ? 'android' : this.platform.is('ios') ? 'ios':'web';
+    console.log(platformName);
     this.versionCheckService.checkAppVersion(platformName).subscribe(
       (resp) => {
       
