@@ -21,5 +21,11 @@ get(clientId:number,companyId:number){
 }
 
 
+
+ getByContractdId(companyId:number,contractId){
+
+  return this.http.Get<transactionObj<GESSucursales[]>>(`/GESSucursales/GetByContractId?companyCode=${companyId}&contratoId=${contractId}`)
+}
+
     
 }

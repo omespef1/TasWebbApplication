@@ -9,7 +9,6 @@ export class MapsUrlPipeDetail implements PipeTransform {
    
  }
   transform(value: any, ...args: any[]): any {
-    debugger;
    let lat:string = value.Latitude;
    let long:string = value.Longitude;
    if(lat.indexOf(',')>-1)

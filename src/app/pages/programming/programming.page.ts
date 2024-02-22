@@ -158,7 +158,6 @@ export class ProgrammingPage implements OnInit {
   checkApprovedLicensePlate(event) {
     this.genTercerosService.IsAuthorizedForService(this._session.GetThirdPartie().IdEmpresa, this._session.GetThirdPartie().IdTercero).subscribe(resp => {
       if(resp!= undefined && resp.Retorno==0){
-
             this.vehicleApprobed = resp.ObjTransaction;
             this.GetProgramming(event);
       }
@@ -195,10 +194,11 @@ export class ProgrammingPage implements OnInit {
 
       this._serviceRequest.CheckPendingServices(this._session.GetThirdPartie().IdEmpresa,this._session.GetThirdPartie().IdTercero).subscribe(resp=>{
         if(resp!=undefined && resp.Retorno==0){
+          
           if(resp.ObjTransaction!=null)
             this.activeService = resp.ObjTransaction;
-            else 
-            this.activeService = new ServicesRequest();
+        else 
+        this.activeService = new ServicesRequest();           
         }
         else {
           this._alert.showAlert('Error', resp.TxtError);
@@ -210,8 +210,7 @@ export class ProgrammingPage implements OnInit {
   goService(){
 
 
-    if(this.activeService!=undefined){
-console.log(this.activeService);
+    if(this.activeService.SolicitudId>0){
 
       let params: NavigationExtras = {
         state: {

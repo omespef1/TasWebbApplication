@@ -3,23 +3,22 @@ import { transaction, transactionObj } from 'src/app/models/general/transaction'
 import { GESCentroCostos } from 'src/app/models/service-request/costcenter';
 import { HttpManagerService } from '../httpManager/http-manager.service';
 import { GESContratos } from '../../models/contracts/contract.model';
+import { GENContratosTransportadora } from 'src/app/models/transportadora/contratos-transportadora.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class GesContratosService {
+export class GENContratosTransportadoraService {
 
   constructor(private _http:HttpManagerService) { }
 
 
 
 
-  Get(idEmpresa:number){
-    return this._http.Get<transactionObj<GESContratos[]>>(`/GetGESContratosClientVip?companyCode=${idEmpresa}`);
+  getGENContratosTransportadora(idEmpresa:number,idTransportadora:number){
+    return this._http.Get<transactionObj<GENContratosTransportadora>>(`/GENContratosTransportadoras?companyId=${idEmpresa}&transportadoraId=${idTransportadora}`);
   }
 
-  getByCode(companyCode:number, contratoId:number){
-    return this._http.Get<transactionObj<GESContratos>>(`/GESContratos/GetByCode?companyCode=${companyCode}&contratoId=${contratoId}`);
-  }
+
   
 }

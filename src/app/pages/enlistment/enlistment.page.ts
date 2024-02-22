@@ -127,10 +127,12 @@ export class EnlistmentPage implements OnInit {
     }
   }
   Guardar() {
+    
     this.saving = true;
     this.geolocation
       .getCurrentPosition()
       .then((resp) => {
+        
         this.buildPetition(resp.coords.latitude, resp.coords.longitude);
       })
       .catch((error) => {

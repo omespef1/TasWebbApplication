@@ -17,4 +17,8 @@ export class TypesServicesService {
   Get(idEmpresa:number){
     return this._http.Get<transactionObj<TypesService[]>>(`/GESTiposServicios?companyCode=${idEmpresa}`);
   }
+
+  GetByContract(idEmpresa:number,contractId:number){
+    return this._http.Get<transactionObj<TypesService[]>>(`/GESTiposServicios/GetByContract?companyCode=${idEmpresa}&contractId=${contractId}`);
+  }
 }

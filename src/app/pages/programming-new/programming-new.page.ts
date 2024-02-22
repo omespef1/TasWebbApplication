@@ -1,3 +1,4 @@
+import { GESSucursales } from './../../models/gessucursales/gessucursal.model';
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { GESCentroCostos } from "src/app/models/service-request/costcenter";
 import { ServicesRequest } from "../../models/service-request/programmings";
@@ -20,7 +21,17 @@ import { PoliticalDivisionService } from "src/app/services/political-division/po
 import { VehicleService } from '../../services/vehicle/vehicle.service';
 import { ThirdPartie } from "src/app/models/general/user";
 import { transactionObj } from "src/app/models/general/transaction";
-import { of } from "rxjs";
+import { Subject, of } from "rxjs";
+import { GENContratosTransportadoraService } from "src/app/services/contratos-transportadora/transportadora.service";
+import { GENContratosTransportadora } from "src/app/models/transportadora/contratos-transportadora.model";
+import { SucursalesPage } from "../sucursales/sucursales.page";
+import { TypesServicesService } from "src/app/services/types-services/types-service.service";
+import { TypesService } from "src/app/models/types-services/type-services";
+import { KunasoftService } from "src/app/services/kunasoft/kunasoft.service";
+import { KunasofResponse } from "src/app/models/kunasot/infokunasoft.model";
+import { STRING_TYPE } from "@angular/compiler/src/output/output_ast";
+import { GESSucursalesService } from 'src/app/services/sucursales/sucursales.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: "app-programming-new",
@@ -40,6 +51,13 @@ export class ProgrammingNewPage implements OnInit {
   lastEnlistment: manchecklist = new manchecklist();
   lastServiceApprobed: ServicesRequest = new ServicesRequest();
   aliParams: any;
+  transportadora: GENContratosTransportadora | undefined;
+  sucursalSelected: GESSucursales = new GESSucursales();
+  sucursalesList :GESSucursales[]=[];
+  typesServicesList:TypesService[]= [];
+  odometerInfo :KunasofResponse|undefined;
+  private destroy$ = new Subject<void>();
+  vinculationList: {  id:number, name:string}[]=[  {  id:1 , name:'Fijo' }, { id:2, name:'Ocasional' }  ]
   constructor(
     private costCenterService: GescentrocostosService,
     private session: SessionService,
@@ -52,37 +70,101 @@ export class ProgrammingNewPage implements OnInit {
     private router: Router,
     private changes: ChangeDetectorRef,
     private politicalDivisionService: PoliticalDivisionService,
-    private vehicleService: VehicleService
+    private vehicleService: VehicleService,
+    private contratosTransportadoraService:GENContratosTransportadoraService,
+    private typesServicesService:TypesServicesService, private kunasoftService:KunasoftService,
+    private sucursalesService:GESSucursalesService
   ) {
 
-    this.request = this.router.getCurrentNavigation().extras.state.request;
+
+    
+  }
+
+
+  getSucursales(){
+
+    this.sucursalesService.getByContractdId(this.session.GetThirdPartie().IdEmpresa,this.transportadora.ContratoId)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(resp=>{
+
+      if(resp!=null && resp.Retorno==0){
+          this.sucursalesList = resp.ObjTransaction;
+          if(this.request.SucursalId>0){
+            this.sucursalSelected = this.sucursalesList.find(x=>x.SucursalId == this.request.SucursalId);
+          }
+      }
+    })
   }
 
   async ngOnInit() {
     
-
-this.loadData();
+    
+    if(this.router.getCurrentNavigation().extras.state)
+    this.request = this.router.getCurrentNavigation().extras.state.request;
+    this.loadData();
   
    
   }
 
 
+  getKilometraje(){
+    this.kunasoftService.getKilometraje(this.session.GetThirdPartie().IdEmpresa,this.vehicleApprobed.PlacaVehiculo )
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(resp=>{
+      if(resp!= null && resp.Retorno==0){
+          this.odometerInfo = resp.ObjTransaction;
+         if(this.request.GESSolicitudServiciosDetalle!= null && this.request.GESSolicitudServiciosDetalle.length>0){
+
+            this.request.GESSolicitudServiciosDetalle[this.request.GESSolicitudServiciosDetalle.length-1].Kilometraje = this.odometerInfo.ODOMETRO;
+         }
+       
+      }
+      
+    })
+  }
+
+  getTransportadoraContrato() {
+    
+    this.contratosTransportadoraService.getGENContratosTransportadora(this.session.GetThirdPartie().IdEmpresa,this.vehicleApprobed.IdTransportadora)
+    .pipe(takeUntil(this.destroy$))
+      .subscribe((resp) => {
+        
+        if (resp != null && resp.Retorno == 0) {
+          this.transportadora = resp.ObjTransaction;
+          
+          this.getTypesServices();
+          this.getModalities();  
+          this.getKilometraje(); 
+          this.setbehaviorLoad();  
+          this.getSucursales();
+         
+        }
+        else {
+          this.alert.showAlert('Oops!',resp.TxtError);
+        }
+      }, err => {
+      });
+  }
+
   async loadData(){    
     this.getAliParams();    
-    //  await this.checkStatusServices();
-    this.getModalities();  
-    this.getInfoVehicle();   
+    //  this.getInfoVehicle();   
+   
+    this.checkApprovedLicensePlate();  
     await this.getlocation();   
-    await this.checkApprovedLicensePlate();    
-    this.setbehaviorLoad();   
-    // console.log(this.request);
+   
+    
+
+   
+
   }
 
   setbehaviorLoad() {
+    
     if (this.request.SolicitudId > 0) {
       this.addDetailsEnd();
       this.getNameOriginCity(this.request.OrigenCiudad);
-      this.getNameTargetCity(this.request.DestinoCiudad);
+      this.getNameTargetCity(this.request.DestinoCiudad);   
     } else {
       this.addDetailsInit();
       this.GetLastServiceThirdPartieApproved();
@@ -95,6 +177,19 @@ this.loadData();
       this.longitude = data.coords.longitude;
     });
   }
+
+  async getTypesServices(){
+    this.typesServicesService.GetByContract(this.session.GetThirdPartie().IdEmpresa,this.transportadora.ContratoId)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(resp => {
+      if (resp != null && resp.Retorno == 0) {
+        this.typesServicesList = resp.ObjTransaction;
+      }
+      else {
+        this.alert.errorSweet(resp.TxtError);
+      }
+    })
+    }
 
   async showPopUpModalidad() {
     const modal = await this.modal.create({
@@ -137,7 +232,30 @@ this.loadData();
     return await modal.present();
   }
 
+  async showPopupSucursals() {
+    if(this.request.SolicitudId==0){
+      const modal = await this.modal.create({
+        component: SucursalesPage,
+        componentProps: {
+          mode: 2,
+          contractId:this.transportadora.ContratoId
+        }
+      });
+      modal.onDidDismiss().then(resp => {
+        if (resp.data != undefined) {
+          this.sucursalSelected = resp.data;
+          this.request.SucursalId = this.sucursalSelected.SucursalId;
+          // Asignar al modelo aquí
+        }
+  
+      });
+      return await modal.present();
+    }
+
+  }
+
   addDetailsInit() {
+    
     if (
       this.request.SolicitudId == 0 &&
       this.request.GESSolicitudServiciosDetalle.length == 0
@@ -185,9 +303,12 @@ this.loadData();
         FechaModifica: new Date(),
       });
     }
+
+
   }
 
   addDetailsEnd() {
+    
     if (
       this.request.SolicitudId > 0 &&
       this.request.GESSolicitudServiciosDetalle.length == 3
@@ -215,9 +336,11 @@ this.loadData();
         this.session.GetThirdPartie().IdEmpresa,
         this.session.GetThirdPartie().IdTercero
       )
+      .pipe(takeUntil(this.destroy$))
       .subscribe((resp) => {
         if (resp != undefined && resp.Retorno == 0) {
           this.vehicleApprobed = resp.ObjTransaction;
+          this.getTransportadoraContrato();
         }
       }, err => {
         if (err.ok == false) {
@@ -247,22 +370,11 @@ this.loadData();
       this.request.GESSolicitudServiciosDetalle[3].Longitude = this.longitude;
     }
   }
-  createService() {
+  createService(state="") {
     try {
+      
       this.loading = true;
-      if (this.request.GESSolicitudServiciosDetalle[0].Kilometraje < this.vehicleApprobed.Kilometraje) {
-
-        throw Error('El kilometraje especificado no puede ser inferior al kilometraje actual del vehículo');
-      }
-
-
-
-
-
-
-
       this.prepareDetailsForSending();
-
       if (this.request.GESSolicitudServiciosDetalle.length > 2 && this.request.SolicitudId > 0) {
         if (this.request.GESSolicitudServiciosDetalle[3].Kilometraje < this.request.GESSolicitudServiciosDetalle[0].Kilometraje) {
 
@@ -295,11 +407,15 @@ this.loadData();
       this.request.VehiculoId = this.vehicleApprobed.IdVehiculo;
       this.request.TipoVehiculoId = this.vehicleApprobed.IdTipoVehiculo;
       this.request.ConductorId = this.session.GetThirdPartie().IdTercero;
-      this.request.Estado = "A";
+      this.request.ContratoId = this.transportadora.ContratoId;
+      this.request.Estado = "A"
       this.loading = true;
-      this.requestService.PostServiceApp(this.request).subscribe((resp) => {
+      this.requestService.PostServiceApp(this.request)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((resp) => {
         if (resp != null && resp.Retorno == 0) {
-          this.alert.successSweet("Servicio creado");
+          let msg:string = this.request.SolicitudId==0?'Servicio creado!':'Servicio terminado!';
+          this.alert.successSweet(msg);
           this.nav.navigateBack("tabs/programming");
           this.request = new ServicesRequest();
         } else {
@@ -326,30 +442,7 @@ this.loadData();
     }
   }
 
-  FinalizeService() {
 
-    try {
-      if (this.request.GESSolicitudServiciosDetalle[3].Kilometraje < this.request.GESSolicitudServiciosDetalle[0].Kilometraje) {
-
-        throw Error('El kilometraje especificado no puede ser inferior al kilometraje de inicio del servicio');
-      }
-
-      this.requestService.PostServiceApp(this.request).subscribe((resp) => {
-        if (resp != null && resp.Retorno == 0) {
-          this.alert.successSweet("Servicio terminado!");
-          this.nav.navigateRoot("tabs/programming");
-          this.request = new ServicesRequest();
-        } else {
-          this.alert.showAlert("Error", resp.TxtError);
-          this.loading = false;
-        }
-      });
-
-    } catch (error) {
-      this.alert.showAlert('Sistema', error);
-    }
-
-  }
 
   async showModalSignature() {
     const modal = await this.modal.create({
@@ -370,6 +463,7 @@ this.loadData();
         this.session.GetThirdPartie().IdEmpresa,
         this.session.GetThirdPartie().IdTercero
       )
+      .pipe(takeUntil(this.destroy$))
       .subscribe((resp) => {
         if (resp != undefined && resp.Retorno == 0) {
           this.request = resp.ObjTransaction;
@@ -381,7 +475,8 @@ this.loadData();
 
   getModalities() {
     this.costCenterService
-      .GetCostCenterCompany(this.session.GetThirdPartie().IdEmpresa)
+      .GetCostCenterByContractId(this.session.GetThirdPartie().IdEmpresa,this.transportadora.ContratoId)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((resp) => {
         if (resp != null && resp.Retorno == 0) {
           this.costCenterList = resp.ObjTransaction;
@@ -398,7 +493,9 @@ this.loadData();
   }
 
   GetLastEnlistmentThirdPartieApproved() {
-    this.genTercerosService.GetLastEnlistmentThirdPartieApproved(this.session.GetThirdPartie().IdEmpresa, this.session.GetThirdPartie().IdTercero).subscribe(resp => {
+    this.genTercerosService.GetLastEnlistmentThirdPartieApproved(this.session.GetThirdPartie().IdEmpresa, this.session.GetThirdPartie().IdTercero)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(resp => {
       if (resp != null && resp.Retorno == 0) {
         this.lastEnlistment = resp.ObjTransaction;
       }
@@ -406,13 +503,18 @@ this.loadData();
   }
 
   GetLastServiceThirdPartieApproved() {
-    this.requestService.GetLastsServiceThirdPartieApproved(this.session.GetThirdPartie().IdEmpresa, this.session.GetThirdPartie().IdTercero).subscribe(resp => {
+    this.requestService.GetLastsServiceThirdPartieApproved(this.session.GetThirdPartie().IdEmpresa, this.session.GetThirdPartie().IdTercero)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(resp => {
       if (resp != null && resp.Retorno == 0) {
         this.lastServiceApprobed = resp.ObjTransaction;
 
         this.request.OrigenCiudad = this.lastServiceApprobed.OrigenCiudad;
         this.request.DestinoCiudad = this.lastServiceApprobed.DestinoCiudad;
-
+        this.request.CentrocostosId =this.lastServiceApprobed.CentrocostosId;
+        this.request.IdTipoServicio = this.lastServiceApprobed.IdTipoServicio;
+        this.request.SucursalId =  this.lastServiceApprobed.SucursalId;
+        this.request.IdVinculacionRutas = this.lastServiceApprobed.IdVinculacionRutas;
         this.getNameTargetCity(this.request.OrigenCiudad);
         this.getNameOriginCity(this.request.OrigenCiudad)
       }
@@ -435,7 +537,9 @@ this.loadData();
 
 
   getNameTargetCity(cityId: number) {
-    this.politicalDivisionService.GetPoliticalDivisionByID(cityId).subscribe(resp => {
+    this.politicalDivisionService.GetPoliticalDivisionByID(cityId)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(resp => {
       if (resp != null && resp.Retorno == 0) {
         this.cityTarget = resp.ObjTransaction;
       }
@@ -451,7 +555,9 @@ this.loadData();
 
 
   getNameOriginCity(cityId: number) {
-    this.politicalDivisionService.GetPoliticalDivisionByID(cityId).subscribe(resp => {
+    this.politicalDivisionService.GetPoliticalDivisionByID(cityId)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(resp => {
       if (resp != null && resp.Retorno == 0) {
         this.cityOrigin = resp.ObjTransaction;
       }
@@ -473,7 +579,10 @@ this.loadData();
 
 
   getAliParams() {
-    this.vehicleService.GetDocumentsValidationCompany(this.session.GetThirdPartie().IdEmpresa).subscribe(resp => {
+    
+    this.vehicleService.GetDocumentsValidationCompany(this.session.GetThirdPartie().IdEmpresa)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(resp => {
       if (resp != null && resp.Retorno == 0) {
         this.aliParams = resp.ObjTransaction;
       }
@@ -516,7 +625,11 @@ this.loadData();
 
   
 //   }
-
+ngOnDestroy() {
+  console.log('destruyendo');
+  this.destroy$.next();
+  this.destroy$.complete();
+}
 
 
 

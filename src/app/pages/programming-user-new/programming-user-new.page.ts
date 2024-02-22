@@ -69,6 +69,7 @@ export class ProgrammingUserNewPage implements OnInit {
     
   }
 
+ 
   GetClient(){
     this.zonasRolesService.get(this._sesion.GetUser().IdEmpresa).subscribe(resp => {
       if (resp != null && resp.Retorno == 0) {

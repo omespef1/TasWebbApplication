@@ -13,4 +13,5 @@ export class vehicle  {
     IdEmpresa:number;
     ConductorId2:number;
     ConductorId3:number;
+    IdTransportadora:number;
 }

@@ -63,15 +63,26 @@ export class AppComponent {
       
     });
   }
+getPlatform(){
+
+  if(this.platform.is('cordova')){
+
+   return  this.platform.is('android') ? 'android' :'ios';
+  }
+  else {
+  return 'web';
+  }
+  
+}
+
   checkForAppUpdate() {
-    const platformName = this.platform.is('android') ? 'android' : this.platform.is('ios') ? 'ios':'web';
+    const platformName = this.getPlatform();
     console.log(platformName);
     this.versionCheckService.checkAppVersion(platformName).subscribe(
       (resp) => {
       
       if(resp!=null && resp.Retorno==0){
         let data = resp.ObjTransaction;
-        debugger;
         if (data && config.currentVersion !== data.LatestVersion) {
         
           // Muestra un alerta o redirige al usuario a la URL de actualización
