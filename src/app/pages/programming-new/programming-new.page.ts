@@ -112,10 +112,18 @@ export class ProgrammingNewPage implements OnInit {
     .pipe(takeUntil(this.destroy$))
     .subscribe(resp=>{
       if(resp!= null && resp.Retorno==0){
+        debugger; 
           this.odometerInfo = resp.ObjTransaction;
          if(this.request.GESSolicitudServiciosDetalle!= null && this.request.GESSolicitudServiciosDetalle.length>0){
 
-            this.request.GESSolicitudServiciosDetalle[this.request.GESSolicitudServiciosDetalle.length-1].Kilometraje = this.odometerInfo.ODOMETRO;
+          var init =  this.request.GESSolicitudServiciosDetalle.find(x=>x.Estado=="I");
+          if(init != undefined){
+            init.Kilometraje = this.odometerInfo.ODOMETRO;
+          }
+          var endTravel =  this.request.GESSolicitudServiciosDetalle.find(x=>x.Estado=="F");
+          if(endTravel != undefined){
+            endTravel.Kilometraje = this.odometerInfo.ODOMETRO;
+          }
          }
        
       }
