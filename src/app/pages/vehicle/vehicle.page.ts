@@ -180,48 +180,27 @@ export class VehiclePage {
                 );
               }
               this._vehicle
-                .GetManPendientes(this._sesion.GetBussiness(), car)
-                .subscribe((resp) => {
-                  if (resp.Retorno === 0) {
-                    car.loading = false;
-                    let pendings: pending[] = resp.ObjTransaction;
-                    if (pendings != null && pendings.length > 0) {
-                      let paramsPendings: NavigationExtras = {
-                        state: {
-                          pendings: pendings,
-                          car: car,
-                        },
-                      };
-                      this._nav.navigateForward(
-                        "tabs/vehicle/pendings",
-                        paramsPendings
-                      );
-                    } else {
-                      this._vehicle
-                        .ArmaProtocolo(
-                          this._sesion.GetBussiness(),
-                          car,
-                          this._sesion.GetThirdPartie()
-                        )
-                        .subscribe((resp) => {
-                          if (resp.Retorno === 1) {
-                            throw Error(resp.TxtError);
-                          }
-                          this._sesion.SetKilometerCar(car.NuevoKilometraje);
-                          let params: NavigationExtras = {
-                            state: {
-                              car: car,
-                              params: paramValid
-                            },
-                          };
-                          car.loading = false;
+              .ArmaProtocolo(
+                this._sesion.GetBussiness(),
+                car,
+                this._sesion.GetThirdPartie()
+              )
+              .subscribe((resp) => {
+                if (resp.Retorno === 1) {
+                  throw Error(resp.TxtError);
+                }
+                this._sesion.SetKilometerCar(car.NuevoKilometraje);
+                let params: NavigationExtras = {
+                  state: {
+                    car: car,
+                    params: paramValid
+                  },
+                };
+                car.loading = false;
 
-                          // this.router.navigateByUrl("tabs/enlistment", params);
-                          this.goEnlistment(params);
-                        });
-                    }
-                  }
-                });
+                // this.router.navigateByUrl("tabs/enlistment", params);
+                this.goEnlistment(params);
+              });
             } catch (err) {
               //console.log(err);
               car.loading = false;

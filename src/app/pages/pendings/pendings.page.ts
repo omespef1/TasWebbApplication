@@ -69,8 +69,8 @@ export class PendingsPage implements OnInit {
         }
       });
     } catch (err) {
-      this.saving=false;
       //console.log(err);
+      this.saving=false;
      this.alert.showAlert('Error',err);
     }
   }
