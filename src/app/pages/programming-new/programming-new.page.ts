@@ -112,7 +112,6 @@ export class ProgrammingNewPage implements OnInit {
     .pipe(takeUntil(this.destroy$))
     .subscribe(resp=>{
       if(resp!= null && resp.Retorno==0){
-        debugger; 
           this.odometerInfo = resp.ObjTransaction;
          if(this.request.GESSolicitudServiciosDetalle!= null && this.request.GESSolicitudServiciosDetalle.length>0){
 
