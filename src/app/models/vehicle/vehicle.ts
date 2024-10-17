@@ -9,4 +9,9 @@ export class vehicle  {
     PoseedorId:number;
     Sugerido:number;
     loading:boolean;
+    IdTipoVehiculo:number;
+    IdEmpresa:number;
+    ConductorId2:number;
+    ConductorId3:number;
+    IdTransportadora:number;
 }

@@ -1,16 +1,31 @@
-import { Component, OnInit } from "@angular/core";
+import { ServicesRequestService } from './../../services/services-request/services-request.service';
+import { GENTercerosService } from 'src/app/services/GENTerceros/genterceros.service';
+import { GENPasajerosServicios } from 'src/app/models/genpasajeroservicios/genpasajerosservicios.model';
+import { finalize } from 'rxjs/operators';
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { DomSanitizer } from "@angular/platform-browser";
-import { ServicesRequestService } from "../../services/services-request/services-request.service";
 import { SessionService } from "../../services/session/session.service";
 import { AlertService } from "../../services/alert/alert.service";
 import { ServiceRequestDetail } from "../../models/service-request/programmings";
 import { Geolocation, Geoposition } from "@ionic-native/geolocation/ngx";
 import { TransportRequestService } from '../../services/transport-request/transport-request.service';
-import { ModalController } from "@ionic/angular";
+import { ModalController, NavController } from "@ionic/angular";
 import { PassengersComponent } from "../passengers/passengers.component";
 import { transactionObj } from '../../models/general/transaction';
 import { PassengerService } from '../../services/passenger/passenger.service';
+import TypeValidator from "src/app/enums/type-validator.enum";
+import { FactoryValidator } from '../../factory/validator-passenger.factory';
+import { ValidateCodePage } from "src/app/validate-code/validate-code.page";
+import { GesContratosService } from "src/app/services/contratos/contratos.service";
+import { GESContratos } from "src/app/models/contracts/contract.model";
+import { GENPasajerosService } from "src/app/services/GENPasjaeros/genpasajeros.service";
+import { GENPassengersPage } from "../genpassengers/genpassengers.page";
+import { GENPasajerosServiciosService } from "src/app/services/genpasajerosservicios/genpasajerosservicios.service";
+import { MonitoreoService } from 'src/app/services/monitoreo/monitoreo.service';
+import { PositionService } from 'src/app/services/position/position.service';
+import { ThirdPartie } from 'src/app/models/general/user';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: "app-programming-detail",
@@ -18,7 +33,6 @@ import { PassengerService } from '../../services/passenger/passenger.service';
   styleUrls: ["./programming-detail.page.scss"],
 })
 export class ProgrammingDetailPage implements OnInit {
-
   programming: any = {};
   loadingMap = true;
   theHtmlString: any;
@@ -26,6 +40,12 @@ export class ProgrammingDetailPage implements OnInit {
   value = 'This is my barcode secret data';
   textButton = "Nuevo seguimiento";
   observations = "";
+  contract: GESContratos;
+  locating = false;
+  loading = false;
+  drivers :  BehaviorSubject<ThirdPartie[]> = new BehaviorSubject<ThirdPartie[]>(null);
+  oldDriver :ThirdPartie = new ThirdPartie();
+
   constructor(
     private router: Router,
     private _san: DomSanitizer,
@@ -35,17 +55,43 @@ export class ProgrammingDetailPage implements OnInit {
     private geo: Geolocation,
     private _request: TransportRequestService,
     private modalController: ModalController,
-    private passengerService:PassengerService) {
+    private passengerService: PassengerService,
+    private factoryValidator: FactoryValidator,
+    private contratos: GesContratosService,
+    private GENPasajerosService: GENPasajerosService,
+    private GENPasajerosServiciosService: GENPasajerosServiciosService,
+    private changes: ChangeDetectorRef,
+    private monitoreoService:MonitoreoService,
+    private positionService:PositionService, private gentercerosService:GENTercerosService,
+    private gessolicitudServiciosService:ServicesRequestService,
+    private nav:NavController) {
     this.programming.details = [];
+    this.programming.GENPasajerosServicios = [];
   }
 
   ngOnInit() {
     this.programming = this.router.getCurrentNavigation().extras.state.programming;
+     this.oldDriver = this.programming.ConductorId;
+    this.getContrato();
+    this.getDrivers();
     //this.loadDetail();
   }
 
   ionViewDidEnter() {
     this.loadDetail();
+
+  }
+
+  getContrato() {
+    let company = this._sesion.GetUser() == undefined? this._sesion.GetThirdPartie().IdEmpresa:this._sesion.GetUser().IdEmpresa
+
+      this.contratos.getByCode( company, this.programming.ContratoId).subscribe(resp => {
+        if (resp != undefined && resp.Retorno == 0) {
+          this.contract = resp.ObjTransaction;
+          this.changes.detectChanges();
+        }
+      })
+    
 
   }
 
@@ -59,7 +105,8 @@ export class ProgrammingDetailPage implements OnInit {
 
         if (resp.ObjTransaction) {
           this.programming.details = resp.ObjTransaction;
-
+          let details: ServiceRequestDetail[] = this.programming.details;
+          this.checkPassengers();
         }
       });
   }
@@ -81,8 +128,9 @@ export class ProgrammingDetailPage implements OnInit {
       {
         text: "Aceptar",
         role: "OK",
-        handler: (value: any) => {
-          this.setNewLog(value);
+        handler: (value: any) => {          
+          let passengers: any[] = this.programming.GENPasajerosServicios;
+          this.setNewLog(value, passengers != undefined && passengers.length > 0 ? true : false);
         },
       },
     ];
@@ -123,46 +171,67 @@ export class ProgrammingDetailPage implements OnInit {
       true
     );
   }
-  setNewLog(value: any) {
-    this.textButton = "Localizando...";
-    this.sending = true;
-    const log: ServiceRequestDetail = new ServiceRequestDetail();
-    log.SolicitudId = this.programming.SolicitudId;
-    log.EmpresaId = this._sesion.GetThirdPartie().IdEmpresa;
-    log.Estado = value;
-    this._request.SetTransportRequestFailed(log).then(() => {
-      this.geo.getCurrentPosition().then((data) => {
-        this.textButton = "Esperando...";
-        setTimeout(() => {
-          log.Latitude = data.coords.latitude;
-          log.Longitude = data.coords.longitude;
-          log.observations = this.observations;
-          // Guardamos el intento en los fallidos en caso de que falle        
-          this._service.PostServicesDetail(log).subscribe(
-            (resp: any) => {
-              this.sending = false;
-              // Borramos el intento ya que el servidor si respondió
-              this._request.deleteTransportFailed();
-              if (resp.Retorno === 0) {
-                this.textButton = "Nuevo seguimiento";
-                this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
-                this.loadDetail();
-              } else {
-                this.textButton = "Nuevo seguimiento";
-                this._alert.showAlert("Error", resp.TxtError);
+
+
+
+  isVip() {
+    return !!this._sesion.GetUser() && this._sesion.GetUser().Grupo === "VIP";
+  }
+
+  setNewLog(value: any, confirmed: boolean, code: number = 0) {    
+    if (value != "I" || confirmed == true || !this.contract.UsoCodigo) {
+      this.textButton = "Localizando...";
+      this.sending = true;
+      const log: ServiceRequestDetail = new ServiceRequestDetail();
+      log.SolicitudId = this.programming.SolicitudId;
+      log.EmpresaId = this._sesion.GetThirdPartie().IdEmpresa;
+      log.Estado = value;
+      if (code > 0) {
+        log.CodigoConfirmacion = code;
+      }
+      // this._request.SetTransportRequestFailed(log).then(() => {
+        this.geo.getCurrentPosition().then((data) => {
+          this.textButton = "Esperando...";
+          setTimeout(() => {
+            log.Latitude = data.coords.latitude;
+            log.Longitude = data.coords.longitude;
+            log.observations = this.observations;
+            // Guardamos el intento en los fallidos en caso de que falle        
+            this._service.PostServicesDetail(log).subscribe(
+              (resp: any) => {
+                this.sending = false;
+                // Borramos el intento ya que el servidor si respondió
+                this._request.deleteTransportFailed();
+                if (resp.Retorno === 0) {
+                  this.textButton = "Nuevo seguimiento";
+                  this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
+                  this.loadDetail();
+                  if (value == "I") {
+                    this.getPassengersService();
+                  }
+                } else {
+                  this.textButton = "Nuevo seguimiento";
+                  this._alert.showAlert("Error", resp.TxtError);
+                }
+              },
+              (err) => {
+                this.sending = false;
+                this.textButton = "Error";
+                // console.log(err);
               }
-            },
-            (err) => {
-              this.sending = false;
-              this.textButton = "Error";
-              console.log(err);
-            }
-          );
-        }, 3000);
-      });
-    })
+            );
+          }, 3000);
+        });
+      // })
+    }
+    else {
+      this.showModalCode(value);
+    }
+
 
   }
+
+
 
 
   async showModalPassengers() {
@@ -209,6 +278,176 @@ export class ProgrammingDetailPage implements OnInit {
     })
 
   }
+
+  getDrivers() {
+
+
+    if(!this._sesion.isUser()){
+
+      this.gentercerosService.GetDriversCar(this._sesion.GetThirdPartie().IdEmpresa, this.programming.VehiculoId).subscribe(resp => {
+        if (resp != null && resp.Retorno == 0) {
+  
+        this.drivers.next(resp.ObjTransaction);
+        }
+      })
+  
+    }
+  
+  }
+
+  async showModalCode(value:string) {
+    const modal = await this.modalController.create({
+      component: ValidateCodePage,
+      componentProps: {
+        'title': 'Ingresa el código de verificación enviado a su teléfono y/o su email.'
+      }
+    });
+    modal.onDidDismiss().then(resp => {
+      if (resp.data != undefined) {
+        // console.log(resp);
+
+        this.setNewLog(value, true, resp.data);
+      }
+    });
+    return await modal.present();
+  }
+
+  getPassengersService() {
+    this.loading = true;
+    this.GENPasajerosService.GetInfoPassengerByService(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId)
+      .pipe(finalize(() => {
+        this.loading = false;
+      }))
+      .subscribe(resp => {
+        if (resp != null && resp.Retorno == 0) {          
+          this.programming.GENPasajerosServicios = resp.ObjTransaction;
+          // Si no tiene pasajeros detalle, es decir , no usa modelo de pasajeros no muestra el modal
+          if(resp.ObjTransaction!=null && resp.ObjTransaction!=undefined)
+          this.showModalGenPassengers();
+        }
+      })
+  }
+
+  checkPassengers() {
+
+    if(!this._sesion.isUser() ){
+      this.GENPasajerosService.GetInfoPassengerByService(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId)
+      .pipe(finalize(() => {
+
+      }))
+      .subscribe(resp => {
+        if (resp != null && resp.Retorno == 0) {
+          this.programming.GENPasajerosServicios = resp.ObjTransaction;
+
+        }
+      })
+    }
+   
+  }
+
+
+  async showModalGenPassengers() {
+    const modal = await this.modalController.create({
+      component: GENPassengersPage,
+      componentProps: {
+        service: this.programming,
+        contract: this.contract
+      }
+    });
+
+    modal.onDidDismiss().then(() => {
+
+      this.loadDetail();
+    })
+
+    return await modal.present();
+
+
+  }
+
+  locatePassenger() {
+
+    this.geo.getCurrentPosition().then((data) => {
+      this.locating = true;
+      setTimeout(() => {
+        let curentLocation = { companyId: this.programming.EmpresaId, id: this.programming.SolicitudId, passengerId: this._sesion.GetUser().IdPasajero, latitude: data.coords.latitude, longitude: data.coords.longitude };
+        // Guardamos el intento en los fallidos en caso de que falle        
+        this.GENPasajerosServiciosService.setPassengerServiceLocation(curentLocation)
+          .pipe(finalize(() => {
+            this.locating = false;
+          }))
+          .subscribe(
+            (resp: any) => {
+              if (resp.Retorno === 0) {
+
+                this._alert.showAlert("Perfecto!", "Ubicación actualizada");
+                this.loadDetail();
+              } else {
+                this._alert.showAlert("Oops!", resp.TxtError);
+              }
+            },
+            (err) => {
+              this.locating = false;
+              // console.log(err);
+            }
+          );
+      }, 3000);
+    });
+  }
+
+  locateDriver(){
+    this.locating=true;
+      this.monitoreoService.GetLastPosition(this.programming.VehiculoId,this.programming.EmpresaId)
+      .pipe(
+        finalize(()=>{
+          this.locating=false;
+        })
+      )
+      .subscribe(resp=>{
+        if(resp!=null && resp.Retorno==0){
+          this.positionService.openMapPosition(resp.ObjTransaction.Latitud,resp.ObjTransaction.Longitud,new Date());
+        }
+        else{
+          this._alert.errorSweet(resp.TxtError);
+        }
+      })
+
+  }
+
+  changeDriver(){
+
+
+    if(this.oldDriver == this.programming.ConductorId){
+      this._alert.errorSweet('El conductor no puede ser el mismo.');
+      return;
+    }
+
+    
+
+    this._alert.showConfirmationAlert(
+      'Cambiar?', 
+      '¿Se cambiará este servicio de conductor, por el conductor seleccionado, desea continuar?', 
+      () => {
+        // Lógica cuando se confirma.
+        this.gessolicitudServiciosService.updateDriver(this.programming.EmpresaId, this.programming.ConductorId,this.programming.SolicitudId).subscribe(resp=>{
+          if(resp!=null && resp.Retorno==0){
+            this._alert.successSweet('Conductor actualizado!'!);
+            this.modalController.dismiss();
+            this.nav.navigateBack('tabs/programming');
+          }
+          else {
+            this._alert.errorSweet(resp.TxtError);
+          }
+        })
+      }, 
+      () => {
+        // Lógica cuando se cancela (opcional).
+        console.log('Acción cancelada.');
+        this.modalController.dismiss();
+      }
+    );
+  }
+
 
 }
 

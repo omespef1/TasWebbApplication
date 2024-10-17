@@ -1,14 +1,17 @@
 <ion-header>
-  <ion-toolbar color="primary">
-    <ion-buttons slot="start">
-       <!-- <ion-back-button text="Atrás" *ngIf="logged() && showBackButton" defaultHref="/tabs/vehicle"></ion-back-button>  -->
-    </ion-buttons>
-
-    <ion-buttons slot="end">
-      <ion-button (click)="goSettings()" *ngIf="logged()">
-        <ion-icon slot="icon-only" name="cog"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-title>{{headerName}}</ion-title>
+  <ion-toolbar color="primary"> 
+    <div class="header-container">
+      <div class="logo-container">
+        <app-logo-component></app-logo-component>
+      </div>
+      <ion-title>{{headerName}}</ion-title>
+    </div>   
+   <ion-buttons slot="end">
+     <ion-button (click)="goSettings()" *ngIf="logged()">
+       <ion-icon slot="icon-only" name="cog"></ion-icon>
+     </ion-button>
+   </ion-buttons>
+   
+    <!-- Tus otros botones aquí -->
   </ion-toolbar>
 </ion-header>

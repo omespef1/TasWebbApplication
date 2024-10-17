@@ -7,6 +7,9 @@ import { vehicle } from "src/app/models/vehicle/vehicle";
 import { enlistment } from "src/app/models/enlistmen/enlistmen";
 import { manchecklist } from "src/app/models/enlistmen/manchecklist";
 import { Storage } from "@ionic/storage";
+import { DivisionPolitical } from "src/app/models/general/political-division";
+import { GESCentroCostos } from "src/app/models/service-request/costcenter";
+import { ServicesRequest } from "src/app/models/service-request/programmings";
 
 @Injectable({
   providedIn: "root",
@@ -20,8 +23,11 @@ export class SessionService {
   GetBussiness(): business {
     return JSON.parse(localStorage.getItem("business"));
   }
-  SetThirdPartie(user: ThirdPartie) {
+   SetThirdPartie(user: ThirdPartie) {
     localStorage.setItem("thirdPartie", JSON.stringify(user));
+  }
+  SetThirdPartieClient(user: ThirdPartie) {
+    localStorage.setItem("thirdPartieClient", JSON.stringify(user));
   }
   SetUserBio(user: ThirdPartie) {
     localStorage.setItem("userBio", JSON.stringify(user));
@@ -31,6 +37,9 @@ export class SessionService {
   }
   GetThirdPartie(): ThirdPartie {
     return JSON.parse(localStorage.getItem("thirdPartie"));
+  }
+  GetGetThirdPartieClient():ThirdPartie {
+    return JSON.parse(localStorage.getItem("thirdPartieClient"));
   }
   GetThirdPartieBio(): ThirdPartie {
     return JSON.parse(localStorage.getItem("thirdPartieBio"));
@@ -76,8 +85,41 @@ removeThirdPartieBio(){
   setOfflineUser(user) {
     localStorage.setItem("offlineUser", JSON.stringify(user));
   }
+
+  setServiceOffline(service:ServicesRequest){    
+      let services = this.getServicesOffline();
+      services.push(service);
+      localStorage.setItem("ServicesOffline", JSON.stringify(services));
+    
+    return this.getServicesOffline();
+  }
+
+  setServicesOfflineAll(service:ServicesRequest[]){
+    return localStorage.setItem("ServicesOffline", JSON.stringify(service));
+  }
+
+
+  getServicesOffline():ServicesRequest[]{     
+     return JSON.parse(localStorage.getItem("ServicesOffline"));
+  }
+
+  setIsAuthorizedForServiceOffline(data:vehicle) {
+    localStorage.setItem("IsAuthorizedForServiceOffline", JSON.stringify(data));
+  }
   getOfflineUser() {
     return JSON.parse(localStorage.getItem("offlineUser"));
+  }
+
+  GetByIdOffline():Promise<any>{
+    return this._storage.get("GetByIdOffline");
+  }
+
+  GetIsAuthorizedForServiceOffline(){
+    return    JSON.parse(localStorage.getItem("IsAuthorizedForServiceOffline"));
+  }
+
+  SetByIdOffline(user) {
+    localStorage.setItem("GetByIdOffline", JSON.stringify(user));
   }
   SetVehicles(vehicles: vehicle[]) {
     localStorage.setItem("vehicles", JSON.stringify(vehicles));
@@ -107,6 +149,35 @@ removeThirdPartieBio(){
     return this._storage.set("LastEnlistment", answer);
   }
 
+  SetPoliticalDivisionOffline(data:DivisionPolitical){
+    return this._storage.set("politicalDivision", data);
+  }
+
+  setModalitiesOffline(data:any){
+    return this._storage.set("modalities", data);
+  }
+
+  setAliParamsOffline(data:any[]){
+    return this._storage.set("aliParameters", data);
+  }
+
+  setLastsServiceThirdPartieApprovedOffline(data){
+    return this._storage.set("LastsServiceThirdPartieApprovedOffline", data);
+  }
+  GetLastsServiceThirdPartieApprovedOffline(): Promise<ServicesRequest> {
+    return this._storage.get("LastsServiceThirdPartieApprovedOffline");
+  }
+  GetPoliticalDivisionOffline(): Promise<DivisionPolitical[]> {
+    return this._storage.get("politicalDivision");
+  }
+
+  GetAliParamsOffline(): Promise<any> {
+    return this._storage.get("aliParameters");
+  }
+
+  GetModalitiesOffline(): Promise<GESCentroCostos[]> {
+    return this._storage.get("modalities");
+  }
   removeLastEnlistment() {
     localStorage.removeItem("LastEnlistment");
   }

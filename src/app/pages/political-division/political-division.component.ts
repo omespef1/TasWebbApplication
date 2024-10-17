@@ -41,6 +41,18 @@ export class PoliticalDivisionComponent implements OnInit {
         this.dataList = resp.ObjTransaction;
       }
     }, err => {
+      
+      console.log(err);
+
+      
+    
+      if(err.ok == false){
+     
+        this.sesionService.GetPoliticalDivisionOffline().then(data=>{
+            this.dataList = data.filter(c=>c.DescripcionCorta.toUpperCase().indexOf(event.detail.value.toUpperCase())>-1);
+          })
+      }
+
       this.loading = false;
 
     })

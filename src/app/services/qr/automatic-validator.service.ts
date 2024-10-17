@@ -4,7 +4,7 @@ import IPassengerValidator from '../../interfaces/passenger-validator';
 import { AlertService } from '../alert/alert.service';
 import { PassengerService } from '../passenger/passenger.service';
 import { transactionObj } from '../../models/general/transaction';
-import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 
 
 

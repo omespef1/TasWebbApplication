@@ -13,6 +13,7 @@ import { manchecklistDetalle } from "../../models/enlistmen/manchecklist";
 import { Router } from "@angular/router";
 import { AlertService } from '../../services/alert/alert.service';
 import { NavController } from '@ionic/angular';
+import { AuthService } from "src/app/services/auth/auth.service";
 
 @Component({
   selector: "app-last-enlistments",
@@ -35,10 +36,12 @@ export class LastEnlistmentsPage implements OnInit {
     private _san: DomSanitizer,
     private router: Router,
     private _alert:AlertService,
-    private _nav:NavController
+    private _nav:NavController,
+    private auth:AuthService
   ) {}
   enlistment: manchecklist = new manchecklist();
   groupEnlistment = false;
+  generating=false;
   ngOnInit() {
     //this.GetLastEnlistment();
   }
@@ -53,6 +56,9 @@ export class LastEnlistmentsPage implements OnInit {
       this.groupEnlistment = this._sesion.getGroupEnlistment();
       this.GetLastEnlistment();
       this.lastQuestions = this._sesion.GetQuestions();
+    }
+    else {
+      this.auth.goApp(false);
     }
   }
 
@@ -84,8 +90,7 @@ export class LastEnlistmentsPage implements OnInit {
           this._sesion.GetBussiness(),
           this._sesion.GetThirdPartie()
         )
-        .subscribe((resp) => {
-          //console.log(resp);
+        .subscribe((resp) => {          
           if (event != null) {
             event.target.complete();
           } else {
@@ -96,9 +101,9 @@ export class LastEnlistmentsPage implements OnInit {
             this.FixEnlistment(this.enlistment.detalle);
             this.loadMap(this.enlistment.Latitude, this.enlistment.Longitude);
 
-            this.enlistment.detalle.forEach((element) => {
-              this.GetManCheckListDetalle(element);
-            });
+            // this.enlistment.detalle.forEach((element) => {
+            //   this.GetManCheckListDetalle(element);
+            // });
           }
         });
     } else {
@@ -224,5 +229,11 @@ export class LastEnlistmentsPage implements OnInit {
       return true;
     }
   
+  }
+
+  print(){
+    this._alert.openBrowserUrl(
+      `https://tas.com.co/tasweb/MANImpAlistApp.aspx?Modo=REP&Emp=${this._sesion.GetThirdPartie().IdEmpresa}&Id=${this.enlistment.Id}`
+    );
   }
 }

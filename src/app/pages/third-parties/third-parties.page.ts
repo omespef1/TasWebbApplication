@@ -82,7 +82,7 @@ export class ThirdPartiesPage implements OnInit {
       }
     });
     modal.onDidDismiss().then(()=>{
-      console.log('modal cerrado');
+      // console.log('modal cerrado');
       this._nav.navigateRoot("tabs/vehicle");
     });
     return await modal.present();

@@ -22,6 +22,7 @@ import { AlertService } from '../../services/alert/alert.service';
 import { Router } from '@angular/router';
 import { PoliticalDivisionService } from '../../services/political-division/political-division.service';
 import { ContractTypeService } from '../../services/contracts-type/contract-type.service';
+import { GENTercerosService } from 'src/app/services/GENTerceros/genterceros.service';
 
 
 @Component({
@@ -35,13 +36,14 @@ export class OccasionalFuecPage implements OnInit {
     private sesion: SessionService, private vehicleService: VehicleService, private ocasionalFuec: OccasionalFuecService,
     private alertService: AlertService, private router: NavController,
     private politicalService: PoliticalDivisionService,
-    private typeContractService: ContractTypeService) {
+    private typeContractService: ContractTypeService,private genTercerosService:GENTercerosService) {
 
 
     this.thirdPartie = this.sesion.GetThirdPartie();
     this.setFirstDriver();
 
   }
+  driversList:ThirdPartie[]=[];
   stage: number = 1;
   sendingContract = false;
   sendingFuec = false;
@@ -61,15 +63,62 @@ export class OccasionalFuecPage implements OnInit {
   ngOnInit() {
 
     this.getMyCar();
+    this.loadTravehicle();
 
   }
   scrollTop() {
     this.ionContent.scrollToTop(300);
   }
 
+
+  getVehicle(vehicleId:number){
+
+
+    this.vehicleService.GetVehicleByCompany(this.thirdPartie.IdEmpresa, vehicleId).subscribe(resp=>{
+      if (resp.Retorno == 0 && resp.ObjTransaction != null) {
+        this.carSelected = resp.ObjTransaction; 
+        this.model2.VehiculoId = vehicleId;
+        
+        if(this.carSelected  != undefined && this.carSelected.ConductorId2!=undefined ){
+          this.model2.ConductorId2 = this.carSelected.ConductorId2;
+          this.secondDriver = this.driversList.find(x=>x.IdTercero ==this.model2.ConductorId2 && x.IdEmpresa == this.thirdPartie.IdEmpresa )
+        }
+        else {
+          this.model2.ConductorId2=undefined;
+          this.secondDriver = undefined;
+        }
+
+        if(this.carSelected  != undefined && this.carSelected.ConductorId3!=undefined ){
+
+          this.model2.ConductorId3 = this.carSelected.ConductorId3;  
+          this.thirdDriver = this.driversList.find(x=>x.IdTercero ==this.model2.ConductorId3 && x.IdEmpresa == this.thirdPartie.IdEmpresa ) 
+        }
+        else {
+          this.model2.ConductorId3=undefined;
+          this.thirdDriver = undefined;
+        }
+     
+       
+      
+       
+      }
+    })
+  }
+
+
+
+
+  loadTravehicle(){
+
+    this.genTercerosService.GetDriversByCompany(this.thirdPartie.IdEmpresa).subscribe(resp=>{
+      if (resp.Retorno == 0 && resp.ObjTransaction != null) {
+        this.driversList = resp.ObjTransaction;
+      }
+    })
+  }
   setFirstDriver() {
-    this.firstDriver = this.thirdPartie;
-    this.model2.ConductorId1 = this.firstDriver.IdTercero;
+    this.firstDriver = this.thirdPartie;   
+    this.model2.ConductorId1 = this.firstDriver.IdTercero;   
   }
 
 
@@ -79,7 +128,7 @@ export class OccasionalFuecPage implements OnInit {
     });
     modal.onDidDismiss().then(resp => {
       if (resp.data != undefined) {
-        console.log(resp);
+        // console.log(resp);
         this.model.Firma = resp.data;
       }
     });
@@ -149,7 +198,7 @@ export class OccasionalFuecPage implements OnInit {
     modal.onDidDismiss().then(resp => {
       if (resp.data != undefined) {
         this.carSelected = resp.data;
-        this.model2.VehiculoId = this.carSelected.IdVehiculo;
+        this.getVehicle(this.carSelected.IdVehiculo);
       }
     });
     return await modal.present();
@@ -181,7 +230,7 @@ export class OccasionalFuecPage implements OnInit {
         this.alertService.showAlert('error',resp.TxtError);
       }
     }, err => {
-      console.log(err);
+      // console.log(err);
       this.sendingContract = false;
     })
   }
@@ -256,13 +305,18 @@ export class OccasionalFuecPage implements OnInit {
 
 
   getMyCar() {
+    
 
     this.vehicleService.getMyCar(this.thirdPartie.IdEmpresa, this.thirdPartie.IdTercero).subscribe(resp => {
-      if (resp.Retorno == 0) {
-        this.carSelected = resp.ObjTransaction;
-        this.model2.VehiculoId = this.carSelected.IdVehiculo;
+      if (resp.Retorno == 0) {              
+        this.getVehicle(resp.ObjTransaction.IdVehiculo);
       }
     })
+  }
+
+  getTraVehicle(){
+
+    
   }
 
 

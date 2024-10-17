@@ -11,45 +11,57 @@
         color="danger">
         <ion-icon class="fa-spin" name="clipboard"></ion-icon> {{textButton}}
       </ion-button>
-      </ion-col>
-      <ion-col *ngIf="programming.ManejaRuta">
-        <ion-button (click)="showModalPassengers()" color="secondary"  expand="block" >
-          <ion-icon name="person"></ion-icon>
-          &nbsp; Histórico pasajeros
-        </ion-button>
-      </ion-col>
-    </ion-row>  
-    <ion-row>
-      <ion-col *ngIf="programming.ManejaRuta">
-        <ion-button (click)="validPassenger(2)" color="primary"  expand="block" >
-          <ion-icon name="paper"></ion-icon>
-          &nbsp; Escanear QR
-        </ion-button>
-      </ion-col>
-      <ion-col *ngIf="programming.ManejaRuta">
-        <ion-button (click)="validPassenger(1)" color="success" expand="block" >
-          <ion-icon name="card"></ion-icon>
-          &nbsp;Identificación
-        </ion-button>
-      
-      </ion-col>
-    </ion-row>  
+      <ion-button *ngIf="!_sesion.isUser()  && !!contract && contract.Colectivo " (click)="getPassengersService()" expand="block"
+      color="primary">
+      <ion-icon name="person"></ion-icon>
+          &nbsp;Configurar ruta
+          <ion-spinner *ngIf="loading" slot="end"></ion-spinner>
+    </ion-button>
+    <ion-button *ngIf="_sesion.isUser()" (click)="locatePassenger()" expand="block"
+    color="danger">
+    <ion-spinner *ngIf="locating" slot="end"></ion-spinner>
+    <ion-icon name="locate"></ion-icon>
+        Compartir ubicación
+  </ion-button>
+  <ion-button *ngIf="_sesion.isUser() && contract?.GpsMonitoreo" (click)="locateDriver()" expand="block"
+  color="danger">
+  <ion-spinner *ngIf="locating" slot="end"></ion-spinner>
+  <ion-icon name="car"></ion-icon>
+      Ver ubicación vehículo
+</ion-button>
+       </ion-col> 
+     </ion-row>   
   </ion-grid>
+
+  <ion-item class="header" lines="none" color="secondary">
+    <ion-icon slot="start" name="clipboard"></ion-icon>
+    <ion-label>CAMBIAR CONDUCTOR</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-icon slot="end" name="apps"></ion-icon>
+    <ion-label>Conductor actual</ion-label>
+    <ion-note>  {{programming.Conductor}}</ion-note>
+  </ion-item>
+  <ion-item>
+    <ion-icon slot="end" name="apps"></ion-icon>
+    <ion-label>Conductor nuevo</ion-label>
+    <ion-select   name="driver" placeholder="Seleccione conductor" okText="Aceptar" cancelText="Cancelar" [(ngModel)]="programming.ConductorId">
+      <ion-select-option *ngFor="let driver of drivers | async" [value]="driver.IdTercero"> {{ driver.NombreRazon}}  {{ driver.PrimerApellido}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-button *ngIf="!_sesion.isUser()" (click)="changeDriver()" expand="block"
+    color="success">   
+    <ion-icon name="sync"></ion-icon>
+       Cambiar conductor
+  </ion-button>
+  </ion-item>
+  
   <ion-item class="header" lines="none" color="secondary">
     <ion-icon slot="start" name="clipboard"></ion-icon>
     <ion-label>INFORMACIÓN GENERAL</ion-label>
   </ion-item>
-  <!-- <ion-item>
-      <ion-icon slot="start" name="person"></ion-icon>
-      <ion-label>Usuario</ion-label>
-       <ion-note slot="end"> {{ programming.NombreRazon}} {{ programming.PrimerApellido}}</ion-note>
-    </ion-item>        -->
-  <ion-item  *ngIf="programming.ManejaRuta == 1">
-    <ion-icon slot="start" name="git-merge"></ion-icon>
-    <ion-label>Ruta</ion-label>
-    <ion-note slot="end"> {{ programming.RutaId}} {{ programming.RutaNombre}}</ion-note>
-  </ion-item>
-  <ion-item>
+  <ion-item> 
     <ion-icon slot="start" name="car"></ion-icon>
     <ion-label>Placa</ion-label>
     <ion-note slot="end"> {{ programming.PlacaVehiculo}}</ion-note>
@@ -88,7 +100,21 @@
     <ion-label>Dirección</ion-label>
     <ion-note slot="end"> {{ programming.DestinoDireccion}}</ion-note>
   </ion-item>
-
+  <ion-item *ngIf="programming.CodigoVerificacion!=undefined">
+    <ion-icon slot="start" name="clipboard"></ion-icon>
+    <ion-label>Código de confirmación</ion-label>
+    <ion-note slot="end"> {{ programming.CodigoVerificacion}}</ion-note>
+  </ion-item>
+  <ion-item *ngIf="programming.CodigoVerificacion2!=undefined">
+    <ion-icon slot="start" name="clipboard"></ion-icon>
+    <ion-label>Código de confirmación</ion-label>
+    <ion-note slot="end"> {{ programming.CodigoVerificacion2}}</ion-note>
+  </ion-item>
+  <ion-item *ngIf="programming.HoraEstimada!=undefined">
+    <ion-icon slot="start" name="time"></ion-icon>
+    <ion-label>Hora estimada</ion-label>
+    <ion-note slot="end"> {{ programming.HoraEstimada}}</ion-note>
+  </ion-item>
   <ion-item class="header" lines="none" color="secondary">
     <ion-icon slot="start" name="globe"></ion-icon>
     <ion-label>OBSERVACIONES</ion-label>
@@ -98,48 +124,33 @@
       <ion-label position="stacked">Solo se enviarán si el seguimiento es FINAL</ion-label>
       <ion-textarea rows="3" cols="12" [(ngModel)]="observations" learOnEdit="true"></ion-textarea>
     </ion-item>
-  </ion-item>
- 
-
-  
-    
-
-
-
-
+  </ion-item>       
   <div id="accordion">
     <dx-accordion #accordion [dataSource]="programming.details" [collapsible]="true" [multiple]="false"
       [animationDuration]="1000" noDataText="No hay datos">
-
-
-
-
-      <div text-center *dxTemplate="let programming of 'title'">
-        <h1>{{programming.estado | statesRequestProgramming}}</h1>
+      <div text-center *dxTemplate="let detail of 'title'">
+        <h1>{{detail.Estado | statesRequestProgramming}}</h1>
       </div>
-      <div *dxTemplate="let programming of 'item'">
+      <div *dxTemplate="let detail of 'item'">
         <ion-list lines="none" class="map-register">
           <ion-item>
             <ion-icon slot="start" name="calendar"></ion-icon>
             <ion-label>Fecha</ion-label>
-            <ion-note slot="end"> {{programming.fechaServicio | date:'dd/MM/yyyy hh:mm'}}</ion-note>
+            <ion-note slot="end"> {{detail.FechaCrea | date:'dd/MM/yyyy HH:mm'}}</ion-note>
           </ion-item>
           <ion-item>
             <ion-icon slot="start" name="navigate"></ion-icon>
             <ion-label>Latitud</ion-label>
-            <ion-note slot="end"> {{programming.latitude}}</ion-note>
+            <ion-note slot="end"> {{detail.Latitude}}</ion-note>
           </ion-item>
           <ion-item>
             <ion-icon slot="start" name="navigate"></ion-icon>
             <ion-label>Longitud</ion-label>
-            <ion-note slot="end"> {{programming.longitude}}</ion-note>
+            <ion-note slot="end"> {{detail.Longitude}}</ion-note>
           </ion-item>
-          <iframe [src]="programming | mapsUrl" width="100%" height="270" frameborder="0" style="border:0"></iframe>
+          <iframe *ngIf="detail" [src]="detail | mapsUrl" width="100%" height="270" frameborder="0" style="border:0"></iframe>
         </ion-list>
       </div>
     </dx-accordion>
-  </div>
-
-
-   
+  </div>   
 </ion-content>

@@ -33,7 +33,7 @@ const routes: Routes = [
     ComponentsModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [FueqPage,OccasionalFuecPage,TypeContractsComponent,PoliticalDivisionComponent,OcassionalRutesComponent,DriversComponent,AllVehiclesComponent],
-  entryComponents:[TypeContractsComponent,PoliticalDivisionComponent,OcassionalRutesComponent,DriversComponent,AllVehiclesComponent]
+  declarations: [FueqPage,OccasionalFuecPage,TypeContractsComponent,OcassionalRutesComponent,DriversComponent,AllVehiclesComponent],
+  entryComponents:[TypeContractsComponent,OcassionalRutesComponent,DriversComponent,AllVehiclesComponent]
 })
 export class FueqPageModule {}

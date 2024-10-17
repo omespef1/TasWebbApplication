@@ -1,0 +1,145 @@
+<app-header headerName="Servicio">
+  
+</app-header>
+<ion-content>
+  <form  #newService="ngForm" autocomplete="off" (ngSubmit)="createService()">
+  <ion-list inset="true">
+    <ion-item class="header"  color="secondary">
+      <ion-icon slot="start" name="paper"></ion-icon>
+      <ion-label>DATOS DEL BÁSICOS</ion-label>      
+    </ion-item> 
+    <ion-item >
+      <ion-icon slot="start" name="pin"></ion-icon>
+      <ion-label>Origen*</ion-label>
+      <ion-input [disabled]="request.SolicitudId>0"  type="text" required name="OrigenDireccion" [(ngModel)]="request.OrigenDireccion"></ion-input>
+    </ion-item>
+    <ion-item tappable button [disabled]="request.SolicitudId>0"   (click)="showPopupCitiesOrigin()">
+      <ion-icon slot="start" name="locate"></ion-icon>
+      <ion-label>Ciudad Origen*</ion-label>
+      <ion-note slot="end"> {{ cityOrigin.DescripcionCorta}}</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="pin"></ion-icon>
+      <ion-label>Destino*</ion-label>
+      <ion-input [disabled]="request.SolicitudId>0"  type="text" required name="DestinoDireccion" [(ngModel)]="request.DestinoDireccion"></ion-input>
+    </ion-item>
+    <ion-item tappable button [disabled]="request.SolicitudId>0"  (click)="showPopupCitiesTarget()">
+      <ion-icon slot="start" name="locate"></ion-icon>
+      <ion-label>Ciudad Destino</ion-label>
+      <ion-note slot="end"> {{ cityTarget.DescripcionCorta}}</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="person"></ion-icon>
+      <ion-label>Nombres*</ion-label>
+      <ion-input  [disabled]="request.SolicitudId>0" type="text" required name="UsuarioServicio" [(ngModel)]="request.UsuarioServicio"></ion-input>
+    </ion-item>
+    <ion-item tappable button [disabled]="request.SolicitudId>0" *ngIf="sucursalSelected" tappable button  (click)="showPopupSucursals()">
+      <ion-icon slot="start" name="paper"></ion-icon>
+      <ion-label position="floating">Sucursal</ion-label>
+      <ion-note slot="end"> {{ sucursalSelected.SucursalNombre}}</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="apps"></ion-icon>
+      <ion-label>Turno*</ion-label>
+      <ion-select [disabled]="request.SolicitudId>0"  required name="typeService" placeholder="Seleccione" okText="Aceptar" cancelText="Cancelar" [(ngModel)]="request.IdTipoServicio">
+        <ion-select-option *ngFor="let typeService of typesServicesList" [value]="typeService.Id"> {{ typeService.Id}} - {{ typeService.Nombre}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="list-box"></ion-icon>
+      <ion-label>Tipo Servicio*</ion-label>
+      <ion-select [disabled]="request.SolicitudId>0" required name="IdVinculacionRutas" placeholder="Seleccione tipo" okText="Aceptar" cancelText="Cancelar" [(ngModel)]="request.IdVinculacionRutas">
+        <ion-select-option *ngFor="let vinculation of vinculationList" [value]="vinculation.id"> {{ vinculation.name }} </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <!-- <ion-item tappable button  (click)="showPopUpModalidad()">
+      <ion-icon slot="start" name="aperture"></ion-icon>
+      <ion-label>Modalidad*</ion-label>
+      <ion-note slot="end"> {{ costCenterSelected.CentrocostosNombre}}</ion-note>
+    </ion-item> -->
+    <ion-item>
+      <ion-icon slot="start" name="apps"></ion-icon>
+      <ion-label>Modalidad*</ion-label>
+      <ion-select [disabled]="request.SolicitudId>0"  name="modality" placeholder="Seleccione modalidad" okText="Aceptar" cancelText="Cancelar" [(ngModel)]="request.CentrocostosId">
+        <ion-select-option *ngFor="let modality of costCenterList" [value]="modality.CentrocostosId"> {{ modality.CentrocostosCodigo}} - {{ modality.CentrocostosNombre}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+ 
+    
+    <ng-container *ngIf="request.SolicitudId==0">
+      <ng-container *ngFor="let detail of request.GESSolicitudServiciosDetalle">
+        <ng-container *ngIf="detail.Estado=='I'">
+          <ion-item class="header"  color="secondary">
+            <ion-icon slot="start" name="paper"></ion-icon>
+            <ion-label>INICIO DEL VIAJE</ion-label>      
+          </ion-item> 
+          <ion-item>
+          <ion-icon slot="start" name="car"></ion-icon>
+          <ion-label>Kilometraje*</ion-label>
+          <ion-input required type="number" required name="Kilometraje" [(ngModel)]="detail.Kilometraje"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-icon slot="start" name="pin"></ion-icon>
+          <ion-label>Posición</ion-label>
+          <ion-note slot="end"> {{ latitude}} , {{longitude }}</ion-note>
+        </ion-item> 
+        <ion-button type="submit" [disabled]= "!newService.form.valid || loading || request.OrigenCiudad==0 ||  request.DestinoCiudad==0 ||  request.CentrocostosId==0 ||  request.GESSolicitudServiciosDetalle[0].Kilometraje==0 || request.IdTipoServicio==0 || request.IdVinculacionRutas==0 || request.SucursalId ==0" type="submit"  expand="full"  color="secondary">      
+          <ion-spinner  color="primary" *ngIf="loading" slot="end"></ion-spinner>
+          INICIAR SERVICIO
+        </ion-button>         
+        </ng-container>        
+      </ng-container>                  
+    </ng-container>
+
+    <ng-container *ngIf="request.SolicitudId>0">
+      <ng-container *ngFor="let detail of request.GESSolicitudServiciosDetalle">
+        <ng-container *ngIf="detail.Estado=='F'">
+        <ion-item class="header"  color="secondary">
+          <ion-icon slot="start" name="paper"></ion-icon>
+          <ion-label>FIN DEL VIAJE</ion-label>      
+        </ion-item> 
+        <ion-item>
+        <ion-icon slot="start" name="car"></ion-icon>
+        <ion-label >Kilometraje</ion-label>
+        <ion-input required type="number" required name="Kilometraje" [(ngModel)]="detail.Kilometraje"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="pin"></ion-icon>
+        <ion-label>Posición</ion-label>
+        <ion-note slot="end"> {{ latitude}} , {{longitude }}</ion-note>
+      </ion-item> 
+      <ion-item class="header"  color="secondary">
+        <ion-icon slot="start" name="globe"></ion-icon>
+        <ion-label>OBSERVACIONES</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-item>          
+          <ion-textarea rows="3"  name="observaciones" cols="12" [(ngModel)]="request.Observaciones" learOnEdit="true"></ion-textarea>
+        </ion-item>
+      </ion-item>  
+      
+    
+        <ion-list-header (click)="showModalSignature()"  color="secondary">      
+          <ion-label>FIRMA CONTRATANTE</ion-label>        
+        </ion-list-header>
+      
+        
+          <ion-item (click)="showModalSignature()">
+            <img [src]="request.Firma" >
+          </ion-item>
+        
+     
+      <ion-button type="submit"  [disabled]= "!newService.form.valid || loading || request.GESSolicitudServiciosDetalle[3].Kilometraje==0 || request.Firma =='' || request.IdTipoServicio==0 || request.IdVinculacionRutas==0 || request.SucursalId ==0"  expand="full"  color="secondary">
+        <ion-spinner  color="primary" *ngIf="loading" slot="end"></ion-spinner>
+        TERMINAR SERVICIO
+      </ion-button> 
+    </ng-container>
+      </ng-container>
+    </ng-container>
+  </ion-list>
+ 
+
+
+
+</form>
+</ion-content>

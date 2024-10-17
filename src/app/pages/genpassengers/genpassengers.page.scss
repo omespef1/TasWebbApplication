@@ -1,0 +1,30 @@
+ion-list {
+    border-radius: 10px;
+}
+
+
+.list-ios.list-inset ion-item.header {
+
+    ion-icon{
+        color:white;
+    }
+    ion-label{
+        color:white;
+    }
+    ion-note {
+        color:white;
+    }
+    --border-width: 0 0 0px 0; 
+    --inner-border-width: 0;
+}
+
+
+ion-item{
+    ion-note{
+        font-size: 0.8rem;
+    }
+    ion-label {
+        font-size: 0.8rem;    
+    }
+}
+

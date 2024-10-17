@@ -4,6 +4,10 @@
 <div>
   <ion-progress-bar ion-fixed  color="secondary" [value]="progressValue()"></ion-progress-bar> 
  </div>
+
+
+
+
 <ion-content class="outer-content">
    
   <div *ngIf="!loading">
@@ -12,9 +16,12 @@
         <ion-list >
           <ion-item>
             <ion-label>Seleccionar predefinidas</ion-label>
-            <ion-toggle name="predefined" (ionChange)="MarkPredefined()" [(ngModel)]="predefined"></ion-toggle>
+            <ion-toggle name="predefined" (ionChange)="MarkPredefined()" [(ngModel)]="predefined" [disabled]="!!aliparams && !aliparams.Predefinidos"></ion-toggle>
           </ion-item>
         </ion-list>
+      
+
+        
       <div *ngFor="let question of enlistment;let i = index">
         <ng-container [ngSwitch]="question.Seccion">
           <ion-list inset="true">
@@ -50,7 +57,7 @@
                  <ion-icon  color="success" slot="end" name="checkmark-circle"></ion-icon>
                 </ion-item>
 
-                <ion-item *ngIf="question.respuestaUsuario != question.respuesta && question.respuestaUsuario !=undefined">
+                <ion-item *ngIf="question.respuestaUsuario !=undefined">
                   <ion-icon slot="start" name="eye"></ion-icon>
                   <ion-label>Evidencia</ion-label>
                   <ion-button color="secondary" slot="end" (click)="takePicture(question)" fill="outline">
@@ -75,15 +82,19 @@
           </ion-list>
         </ng-container>
       </div>
+  
       <ion-button [disabled]="!enlistmentForm.form.valid || saving || done " expand="block" type="submit">
+       
         <ion-icon *ngIf="!saving" slot="start" name="checkmark-circle"></ion-icon>
         <ion-spinner *ngIf="saving" slot="start"></ion-spinner>
-        {{ saving?'ENVIANDO...':'GUARDAR'}}
+        {{ saving? 'Enviando ' + progress + '%':'GUARDAR'}}
       </ion-button>
 
+    
+     
     </form>
 
-
+    
 
   </div>
 

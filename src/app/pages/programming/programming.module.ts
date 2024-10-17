@@ -22,13 +22,8 @@ const routes: Routes = [
     FormsModule,
     ComponentsModule,
     IonicModule,
-    RouterModule.forChild(routes),
-    DxAccordionModule,
-    DxCheckBoxModule,
-    DxSliderModule,
-    DxTagBoxModule,
-    DxTemplateModule
+    RouterModule.forChild(routes)
   ],
-  declarations: [ProgrammingPage]
+  declarations: [ProgrammingPage],
 })
 export class ProgrammingPageModule {}

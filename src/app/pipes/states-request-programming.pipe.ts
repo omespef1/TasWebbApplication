@@ -14,6 +14,10 @@ export class StatesRequestProgrammingPipe implements PipeTransform {
         return "ORIGEN";
       case "R":
         return "EN RUTA";
+        case "E":
+        return "RECOGIDA";
+        case "N":
+        return "NO RECOGIDA";
       default:
         return "NO DEFINIDO";
     }

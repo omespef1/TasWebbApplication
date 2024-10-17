@@ -3,4 +3,6 @@ export interface business {
   NombreEmpresa: string;
   Estado: number;
   EmpresaSigla: string;
+  LogoApp?:string;
+  LogoAppHori?:string;
 }

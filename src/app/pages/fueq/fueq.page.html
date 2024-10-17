@@ -15,15 +15,15 @@
         <ion-spinner  color="primary" *ngIf="chekingThirdPartie" slot="end"></ion-spinner>
     </ion-button> 
     <ion-list lines="none" *ngFor="let fueq of fueqs" inset="true">
-      <ion-item class="header" lines="none" color="secondary">
-        <ion-icon slot="start" name="clipboard"></ion-icon>
-        <ion-label>FUEC</ion-label> 
-        <ion-button color="light" slot="end"(click)="seeFueq(fueq)" fill="outline">
-            <ion-icon  slot="start" name="eye"></ion-icon>
-           
-            Ver 
-          </ion-button>   
-      </ion-item>   
+        <ion-item class="header" lines="none" color="secondary">
+          <ion-icon slot="start" name="clipboard"></ion-icon>
+          <ion-label>FUEC</ion-label> 
+          <ion-button color="light" slot="end"(click)="seeFueq(fueq)" fill="outline">
+              <ion-icon  slot="start" name="eye"></ion-icon>
+            
+              Ver 
+            </ion-button>   
+        </ion-item>   
       <ion-item>
         <ion-icon slot="start" name="ios-information-circle"></ion-icon>
         <ion-label>Número</ion-label>

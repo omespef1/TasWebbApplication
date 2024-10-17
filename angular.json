@@ -15,11 +15,14 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "www",
+            "baseHref": "/taswebapplication/",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.app.json",
+            "tsConfig": "tsconfig.app.json",           
             "assets": [
+              "src/manifest.json",
+              "src/web.config",
               {
                 "glob": "**/*",
                 "input": "src/assets",
@@ -106,6 +109,16 @@
             "assets": [
               {
                 "glob": "favicon.ico",
+                "input": "src/",
+                "output": "/"
+              },
+              {
+                "glob": "manifest.json",
+                "input": "src/",
+                "output": "/"
+              },
+              {
+                "glob": "web.config",
                 "input": "src/",
                 "output": "/"
               },

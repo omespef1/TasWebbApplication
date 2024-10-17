@@ -40,8 +40,9 @@ export class PendingsPage implements OnInit {
       }
       this._service.UpdatePendings(this.pendings).subscribe(resp => {
         this.saving = false;
-        if (resp.Retorno === 1) {
-         throwError(resp.TxtError);
+        if (resp.Retorno === 1) {          
+         this.alert.showAlert('Error',resp.TxtError);
+         return;
         }       
         if(resp.Retorno==0){
           this._vehicle
@@ -68,9 +69,8 @@ export class PendingsPage implements OnInit {
         }
       });
     } catch (err) {
-
-      this.saving=false;
       //console.log(err);
+      this.saving=false;
      this.alert.showAlert('Error',err);
     }
   }

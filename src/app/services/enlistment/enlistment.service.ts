@@ -39,6 +39,20 @@ export class EnlistmentService {
     // return this.http.post<transactionID>(`${config.url} /vehicle`, answers, bodyRequest as object).pipe(retry(5));
   }
 
+
+  PostAnswerHeavy(answers: manchecklist) {
+    return this._http.PostRequestHeavy<transactionID>("/vehicle", answers);
+    // const headerDict = {
+    //   "Content-Type": "application/json",
+    //   Accept: "application/json",
+    //   "Access-Control-Allow-Headers": "Content-Type",
+    //   "Access-Control-Allow-Origin": "*"
+    // };
+    // let bodyRequest: any = {
+    //   headers: new HttpHeaders(headerDict)
+    // };
+    // return this.http.post<transactionID>(`${config.url} /vehicle`, answers, bodyRequest as object).pipe(retry(5));
+  }
   CheckEnlistment(enlistment: manchecklist) {
     let valid = true;
     let answersWaited = this._sesion.GetQuestions();

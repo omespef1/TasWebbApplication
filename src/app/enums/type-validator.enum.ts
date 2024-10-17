@@ -1,4 +1,4 @@
- enum TypeValidator{
+enum TypeValidator{
 
     Manual = 1,
     Automatic = 2

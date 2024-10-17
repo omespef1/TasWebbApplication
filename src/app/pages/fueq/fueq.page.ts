@@ -8,6 +8,7 @@ import { NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { GENTercerosService } from '../../services/GENTerceros/genterceros.service';
 import { ThirdPartie } from '../../models/general/user';
+import { AuthService } from "src/app/services/auth/auth.service";
 
 @Component({
   selector: "app-fueq",
@@ -27,7 +28,8 @@ export class FueqPage implements OnInit {
     private _sesion:SessionService,
     private _nav:NavController,
     private thirdPartieService:GENTercerosService,
-    private router:Router
+    private router:Router,
+    private auth:AuthService
   ) {
     this.thirdPartie = this._sesion.GetThirdPartie();
 
@@ -38,6 +40,9 @@ export class FueqPage implements OnInit {
   ionViewWillEnter(){
     if(this.validAccess()){
       this.GetFueqs();
+    }
+    else {
+      this.auth.goApp(false);
     }
    
   }

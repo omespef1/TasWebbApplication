@@ -1,1 +1,10 @@
+.logo-container {
+    width: 100%;
+    text-align: center; /* Centra el contenido horizontalmente */
+    position: absolute; /* Posiciona el contenedor en la parte superior */
+    top: 10;
+}
 
+app-logo-component {
+    display: inline-block; /* Permite que el contenedor del logo se centre con text-align */
+}

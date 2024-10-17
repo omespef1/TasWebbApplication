@@ -11,6 +11,12 @@
     <div text-center>
       <ion-spinner *ngIf="loading" slot="start"></ion-spinner>
     </div>
+    <ion-button  expand="block" type="button" (click)="print()">
+       
+      <ion-icon *ngIf="!generating" slot="start" name="ios-print"></ion-icon>
+      <ion-spinner *ngIf="generating" slot="start"></ion-spinner>
+      {{ generating? 'Generando':'Generar PDF'}}
+    </ion-button>
   <ion-list-header color="secondary">
     <ion-label>Información General</ion-label>
   </ion-list-header>
@@ -116,11 +122,10 @@
             <ion-input type="text" clearInput="true" disabled multiple="true" [name]="'observacion' + i"
               [(ngModel)]="question.Comentario"></ion-input>
           </ion-item>
-          <ion-item *ngIf="question.HasImage==1">
-              <ion-spinner *ngIf="question.Check_Image==null" slot="start"></ion-spinner>
+          <ion-item *ngIf="question.ImageUrl!=null">            
             <ion-thumbnail slot="start">
                
-              <img *ngIf="question.Check_Image!=null" [src]="question.Check_Image" />
+              <img  [src]="question.ImageUrl" />
             </ion-thumbnail>
           </ion-item>       
       </div>

@@ -97,6 +97,28 @@ const routes: Routes = [
             }
             ]
            
+          },
+          {
+            path: 'programming-new',
+            children:[
+            {
+              path:'',
+              loadChildren: () =>
+              import('../pages/programming-new/programming-new.module').then(m => m.ProgrammingNewPageModule)
+            }
+            ]
+           
+          },
+          {
+            path: 'programming-user-new',
+            children:[
+            {
+              path:'',
+              loadChildren: () =>
+              import('../pages/programming-user-new/programming-user-new.module').then(m => m.ProgrammingUserNewPageModule)
+            }
+            ]
+           
           }
         ]
       },

@@ -14,6 +14,7 @@ import { NotificationsService } from "../push/notifications.service";
 // import { OneSignalThirdPartiesService } from "../OneSignalThirdParties/one-signal-third-parties.service";
 import { OneSignalEntitie } from "../../models/one-signal-third-parties/one-signal-third-parties";
 import { OneSignalUsersService } from "../oneSignalUsers/one-signal-users.service";
+import { OneSignalThirdPartiesService } from "../OneSignalThirdParties/one-signal-third-parties.service";
 
 @Injectable({
   providedIn: "root",
@@ -28,26 +29,27 @@ export class AuthService {
     private _nav: NavController,
     private _thirdParties: ThirdPartiesService,
     private _push: NotificationsService,
-    // private _thirdPartieOneSignal: OneSignalThirdPartiesService,
-    private usersOneSignal: OneSignalUsersService
+    private _thirdPartieOneSignal: OneSignalThirdPartiesService,
+    private usersOneSignal: OneSignalUsersService,
+    private oneSignalService:NotificationsService
   ) {}
 
   signIn(credentials: loginRequest) {
     //console.log(credentials);
+   
     return this._http.Post<transaction>("/login", credentials).pipe(
       tap(async (userData: transaction) => {
         if (userData) {
           if (userData.Retorno === 0) {
             const thirdPartie: ThirdPartie = userData.ObjTransaction;
             if (
-              thirdPartie.IdTercero == 0 &&
-              thirdPartie.Identificacion == ""
+              thirdPartie.IdTercero == 0  || !!thirdPartie.IdPasajero           
             ) {
+              this.oneSignalService.setExternal(thirdPartie.NombreCompleto);
               this._sesion.SetUser(thirdPartie);     
               //this._thirdParties.addThirdPartie(userData.ObjTransaction);       
             } else {
-
-
+              this.oneSignalService.setExternal(thirdPartie.Identificacion);
               this._sesion.SetThirdPartie(userData.ObjTransaction);
               this._sesion.SetThirdPartieBio(userData.ObjTransaction);
               this._sesion.setOfflineUser(userData.ObjTransaction);
@@ -109,8 +111,7 @@ export class AuthService {
   }
 
   async signOut() {
-    // await this.storage.set("user", null);
-  //  await   this.RemoveOneSignalId();
+    //await   this.RemoveOneSignalId();
     
     this._thirdParties.removeThirdPartiesSession();
     this.nav.navigateRoot("login");
@@ -122,28 +123,31 @@ export class AuthService {
     return this._http.Post<transaction>("/login/ChangePassword", changePass);
   }
 
-  goApp() {
-  
+  goApp(shownName=true) {
+    
     // this.SetOneSignalId();
     console.log(this._sesion.isUser());
+    
     if (this._sesion.isUser()) {  
       if (this._sesion.GetUser().Grupo === "SUPERVISOR"){
         console.log('supervisor');
         this._nav.navigateRoot("tabs/vehicle");      
       }
-     
-      if (this._sesion.GetUser().Grupo === "BENEFICIARIO"){
+
+      if (this._sesion.GetUser().Grupo === "VIP" || this._sesion.GetUser().Grupo === "VIP0"){
         this._nav.navigateRoot("tabs/programming");
       }
        
       if (this._sesion.GetUser().Grupo === "CLIENTE"){
         this._nav.navigateRoot("tabs/programming");
       }
+      if(shownName)
       this._alert.showAlert(
         "Bienvenido!",
         `Ingresaste como usuario ${this._sesion.GetUser().NombreCompleto}`
       );
     } else {
+      if(shownName)
       this._alert.showAlert(
         "Bienvenido!",
         `Ingresaste como ${this._sesion.GetThirdPartie().NombreCompleto}`
@@ -183,15 +187,18 @@ export class AuthService {
   //   });
   // }
 
-  // RemoveOneSignalId() {
+  // RemoveOneSignalId():Promise<any> {
 
 
   //   let promise = new Promise((resolve,reject)=>{
   //     this._sesion.getOneSignalId().then((resp) => {
+  //       console.log('1');
+  //       console.log(resp);
   //       if (resp !== undefined && resp !== null) {
   //         const userOneSingnal: OneSignalEntitie = new OneSignalEntitie();
   //         userOneSingnal.OneSignalId = resp.userId;
   //         if (this._sesion.isUser()) {
+  //           console.log('2');
   //           userOneSingnal.UserName = this._sesion.GetUser().NombreCompleto;
   //           userOneSingnal.CompanyId = this._sesion.GetUser().IdEmpresa;
   //           this.usersOneSignal
@@ -199,7 +206,7 @@ export class AuthService {
   //             .subscribe((resp: transaction) => {
   //               if (resp.Retorno == 0) {
   //                 console.log("NOT OK");
-  //                 resolve();
+  //                 resolve(true);
   //               }
   //             });
   //         } else {
@@ -210,13 +217,13 @@ export class AuthService {
   //             .subscribe((resp: transaction) => {
   //               if (resp.Retorno == 0) {
   //                 console.log("NOT OK");
-  //                 resolve();
+  //                 resolve(true);
   //               }
   //             });
   //         }
   //       }
   //       else
-  //       resolve();
+  //       resolve(true);
   //     });
 
        

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
@@ -10,6 +10,7 @@ import { DxAccordionModule, DxCheckBoxModule, DxSliderModule, DxTagBoxModule, Dx
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { StatesRequestProgrammingPipe } from "src/app/pipes/states-request-programming.pipe";
 import { MapsUrlPipe } from "src/app/pipes/maps-url.pipe";
+
 const routes: Routes = [
   {
     path: '',
@@ -28,7 +29,8 @@ const routes: Routes = [
     DxCheckBoxModule,
     DxSliderModule,
     DxTagBoxModule,
-    DxTemplateModule
+    DxTemplateModule,
+    ReactiveFormsModule 
   ],
   providers:[
     Geolocation

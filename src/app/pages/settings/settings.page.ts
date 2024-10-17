@@ -14,7 +14,7 @@ export class SettingsPage implements OnInit {
   mobile=false;
   wifi=false;
   groupEnlistment=false;
-  constructor(private _sesion: SessionService,private _auth:AuthService,private _nav:NavController,public sesion:SessionService) {
+  constructor(public _sesion: SessionService,private _auth:AuthService,private _nav:NavController,public sesion:SessionService) {
 
    
   }
@@ -60,7 +60,7 @@ export class SettingsPage implements OnInit {
    return this._sesion.getGroupEnlistment();
   }
   GoOut(){  
-    console.log('saliendo');
+    // console.log('saliendo');
     this._auth.signOut();
   }
   goChangePassword(){

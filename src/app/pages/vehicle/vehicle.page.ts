@@ -6,7 +6,6 @@ import { vehicle } from "../../models/vehicle/vehicle";
 import { Router, NavigationExtras } from "@angular/router";
 import { AlertService } from "../../services/alert/alert.service";
 import { aliparam } from "src/app/models/vehicle/aliparam";
-import { async } from "@angular/core/testing";
 import { error } from "@angular/compiler/src/util";
 import { pending } from "../../models/vehicle/pending";
 import {
@@ -16,6 +15,10 @@ import {
 import { NavController, ModalController } from "@ionic/angular";
 import { ThirdPartiesService } from "../../services/third-parties/third-parties.service";
 import { ThirdPartiesPage } from "../third-parties/third-parties.page";
+import { AuthService } from "src/app/services/auth/auth.service";
+import { KunasoftService } from "src/app/services/kunasoft/kunasoft.service";
+import { takeUntil } from "rxjs/operators";
+import { KunasofResponse } from "src/app/models/kunasot/infokunasoft.model";
 
 @Component({
   selector: "app-vehicle",
@@ -32,6 +35,8 @@ export class VehiclePage {
   vehicleFavorite: vehicle = new vehicle();
   loading = false;
   working = false;
+  odometerInfo:KunasofResponse|undefined;
+  calculating:boolean =false;
 
   constructor(
     private _sesion: SessionService,
@@ -41,7 +46,9 @@ export class VehiclePage {
     private _network: NetworkService,
     private _nav: NavController,
     public _thirdParties: ThirdPartiesService,
-    private _modal: ModalController
+    private _modal: ModalController,
+    private auth:AuthService,
+    private kunasoftService:KunasoftService
   ) {}
 
   ionViewWillEnter() {    
@@ -62,12 +69,15 @@ export class VehiclePage {
         }
       }
     }
+    else {
+      this.auth.goApp(false);
+    }
   }
   validAccess(): boolean {
-    console.log("valid access");
+    // console.log("valid access");
     if (this._sesion.isUser()) {
-      console.log("valid accessssss");
-      console.log(this._sesion.GetUser());
+      // console.log("valid accessssss");
+      // console.log(this._sesion.GetUser());
       if (this._sesion.GetUser().Grupo !== "SUPERVISOR") {
         this._alert.showAlert(
           "Acceso no autorizado",
@@ -115,14 +125,6 @@ export class VehiclePage {
   }
 
   loadFavoriteCars() {
-    // this.vehicleFavorite =
-    //   this.vehicles.filter((v) => v.Sugerido === 2).length == 0
-    //     ? null
-    //     : this.vehicles.filter((v) => v.Sugerido === 2)[0];
-    // if (this.vehicleFavorite !== undefined && this.vehicleFavorite != null) {
-    //   this.vehicleFavorite = this.vehicleFavorite;
-    //   this.vehiclesFilter.push(this.vehicleFavorite);
-    // }
     this.vehicleFavorite =
       this.vehicles.filter((v) => v.Sugerido === 1).length == 0
         ? null
@@ -131,8 +133,24 @@ export class VehiclePage {
       this.vehiclesFilter = [];
       this.vehicleFavorite = this.vehicleFavorite;
       this.vehiclesFilter.push(this.vehicleFavorite);
+      // this.getKilometrajeFavoritecards();
     }
   }
+
+
+  getKilometrajeFavoritecards(){
+    this.calculating = true;
+    this.vehiclesFilter.forEach(item=>{
+      this.getKilometraje(item)
+
+    })
+    this.calculating = false;
+  }
+
+
+
+
+
   checkVehicle(car: vehicle) {
     car.loading = true;
     if (this._network.getCurrentNetworkStatus() == ConnectionStatus.Online) {
@@ -162,47 +180,27 @@ export class VehiclePage {
                 );
               }
               this._vehicle
-                .GetManPendientes(this._sesion.GetBussiness(), car)
-                .subscribe((resp) => {
-                  if (resp.Retorno === 0) {
-                    car.loading = false;
-                    let pendings: pending[] = resp.ObjTransaction;
-                    if (pendings != null && pendings.length > 0) {
-                      let paramsPendings: NavigationExtras = {
-                        state: {
-                          pendings: pendings,
-                          car: car,
-                        },
-                      };
-                      this._nav.navigateForward(
-                        "tabs/vehicle/pendings",
-                        paramsPendings
-                      );
-                    } else {
-                      this._vehicle
-                        .ArmaProtocolo(
-                          this._sesion.GetBussiness(),
-                          car,
-                          this._sesion.GetThirdPartie()
-                        )
-                        .subscribe((resp) => {
-                          if (resp.Retorno === 1) {
-                            throw Error(resp.TxtError);
-                          }
-                          this._sesion.SetKilometerCar(car.NuevoKilometraje);
-                          let params: NavigationExtras = {
-                            state: {
-                              car: car,
-                            },
-                          };
-                          car.loading = false;
+              .ArmaProtocolo(
+                this._sesion.GetBussiness(),
+                car,
+                this._sesion.GetThirdPartie()
+              )
+              .subscribe((resp) => {
+                if (resp.Retorno === 1) {
+                  throw Error(resp.TxtError);
+                }
+                this._sesion.SetKilometerCar(car.NuevoKilometraje);
+                let params: NavigationExtras = {
+                  state: {
+                    car: car,
+                    params: paramValid
+                  },
+                };
+                car.loading = false;
 
-                          // this.router.navigateByUrl("tabs/enlistment", params);
-                          this.goEnlistment(params);
-                        });
-                    }
-                  }
-                });
+                // this.router.navigateByUrl("tabs/enlistment", params);
+                this.goEnlistment(params);
+              });
             } catch (err) {
               //console.log(err);
               car.loading = false;
@@ -218,7 +216,7 @@ export class VehiclePage {
         this._sesion.SetKilometerCar(car.NuevoKilometraje);
         let params: NavigationExtras = {
           state: {
-            car: car,
+            car: car,           
           },
         };
         car.loading = false;
@@ -259,8 +257,10 @@ export class VehiclePage {
   }
 
   goEnlistment(params: NavigationExtras) {
+
+
     this._nav.navigateForward("tabs/vehicle/enlistemnt", params);
-    // this.router.navigateByUrl("tabs/enlistment", params);
+
   }
 
   async goThirdParties() {
@@ -281,5 +281,19 @@ export class VehiclePage {
 
   isUserLoogued() {
     this.isUser = this._sesion.isUser();
+  }
+
+
+  getKilometraje(vehicle:vehicle){
+    this.calculating=true;
+    this.kunasoftService.getKilometraje(this._sesion.GetThirdPartie().IdEmpresa,vehicle.PlacaVehiculo )
+    .subscribe(resp=>{
+      this.calculating=false;
+      if(resp!= null && resp.Retorno==0){
+          this.odometerInfo = resp.ObjTransaction;
+         vehicle.NuevoKilometraje = this.odometerInfo.ODOMETRO;
+      }
+      
+    })
   }
 }
