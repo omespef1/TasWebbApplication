@@ -83,7 +83,7 @@ getPlatform(){
       
       if(resp!=null && resp.Retorno==0){
         let data = resp.ObjTransaction;
-        if (data && config.currentVersion !== data.LatestVersion) {
+        if (data && this.isVersionOlder(config.currentVersion, data.LatestVersion)) {
         
           // Muestra un alerta o redirige al usuario a la URL de actualización
           this.alert.showBlockMessage('Actualización obligatoria','Para continuar debes actualizar la aplicación. Te llevaremos a la tienda de aplicacioes para que descargues la aplicación.')
@@ -109,7 +109,23 @@ getPlatform(){
     }, 30000);
   }
 
-
+  isVersionOlder(currentVersion: string, latestVersion: string): boolean {
+    const currentParts = currentVersion.split('.').map(Number);
+    const latestParts = latestVersion.split('.').map(Number);
+  
+    // Comparar año
+    if (currentParts[0] < latestParts[0]) return true;
+    if (currentParts[0] > latestParts[0]) return false;
+  
+    // Comparar mes (se asume que el segundo dígito siempre es 0)
+    if (currentParts[2] < latestParts[2]) return true;
+    if (currentParts[2] > latestParts[2]) return false;
+  
+    // Comparar compilación
+    if (currentParts[3] < latestParts[3]) return true;
+  
+    return false;
+  }
 
 
   LoadFirstSettings() {
