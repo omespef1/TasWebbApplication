@@ -111,7 +111,7 @@ export class ProgrammingNewPage implements OnInit {
     this.kunasoftService.getKilometraje(this.session.GetThirdPartie().IdEmpresa,this.vehicleApprobed.PlacaVehiculo )
     .pipe(takeUntil(this.destroy$))
     .subscribe(resp=>{
-      if(resp!= null && resp.Retorno==0){
+      if(resp!= null && resp.Retorno==0){        
           this.odometerInfo = resp.ObjTransaction;
          if(this.request.GESSolicitudServiciosDetalle!= null && this.request.GESSolicitudServiciosDetalle.length>0){
 

@@ -162,9 +162,13 @@ export class VehiclePage {
             car
           )
           .subscribe((resp) => {
-            try {
+            try {              
               if (resp.Retorno === 1) {
                 throw error(resp.TxtError);
+              }
+
+              if(resp.Retorno===2){
+                this._alert.showAlert("Advertencia", resp.TxtError);
               }
               //console.log(car);
               const paramValid: aliparam = resp.ObjTransaction;
