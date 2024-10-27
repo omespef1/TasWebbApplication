@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AlertController } from '@ionic/angular';
+import { AlertService } from '../services/alert/alert.service';
 
 @Component({
   selector: 'app-tabs',
@@ -7,6 +9,12 @@ import { Component } from '@angular/core';
 })
 export class TabsPage {
 
-  constructor() {}
+  constructor(private alert:AlertService) {}
+
+
+  showDefaultAlert(){
+    this.alert.showAlert('Advertencia','No está configurado para esta empresa')
+
+  }
 
 }

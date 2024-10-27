@@ -1,0 +1,33 @@
+::ng-deep .panic-button {
+    bottom: 10px;
+    left: 50%;
+    background-color: red;
+    border-radius: 50%;
+    width: 10vw;
+    height: 10vw;
+    max-width: 45px;
+    max-height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    box-shadow: 0 0 0 2px #43d6fb; /* Borde azul alrededor del botón */
+  }
+  
+  ::ng-deep .panic-button ion-icon {
+    color: white;
+    font-size: 5vw;
+    max-font-size: 30px;
+  }
+  
+  @media (max-width: 480px) {
+    ::ng-deep .panic-button {
+      width: 15vw;
+      height: 15vw;
+    }
+  
+    ::ng-deep .panic-button ion-icon {
+      font-size: 7vw;
+    }
+  }
+  
