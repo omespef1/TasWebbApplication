@@ -478,7 +478,8 @@ export class ProgrammingDetailPage implements OnInit {
       if (resp.data != undefined) {
         this.programming.DestinoCiudad = resp.data.IdDivisionPolitica;
         this.programming.Destino = resp.data.DescripcionCorta;
-        let observations = this.SetObservationsTargetChangued()
+        let observations = this.SetObservationsTargetChangued();
+        this.observations = this.SetObservationsTargetChangued();
         this.gessolicitudServiciosService.ChagueTarget(this.programming.SolicitudId,
           this.programming.DestinoCiudad, this.programming.Destino, this.programming.EmpresaId,observations).subscribe(resp => {
             if (resp != null && resp.Retorno == 0) {
