@@ -72,6 +72,8 @@ export class ServiceRequestDetail {
   CodigoConfirmacion?:number;
   IdPasajero?:number;
   observaciones?:string;
+  rejectedSign?:boolean;
+  firma?:string;
 
 }
  

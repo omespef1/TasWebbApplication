@@ -36,6 +36,17 @@ export class ServicesRequestService {
    PostServiceApp(request: ServicesRequest){
     return this._http.PostRequest<transaction>('/GESSolicitudServicios/newServiceApp', request);
   }
+
+  ChagueTarget(requestId:number, requestTargetId:number, requestTargetAddres:string,companyId:number,Observations:string){
+    return this._http.PostRequest<transaction>('/GESSolicitudServicios/updateTarget', {
+
+      IdTarget:requestTargetId,
+      CompanyId:companyId,
+      RequestId:requestId,
+      Address:requestTargetAddres,
+      Observations:Observations
+    });
+  }
   PostServiceManualService(request: ServicesRequest){
     return this._http.PostRequest<transaction>('/GESSolicitudServicios/setVip', request);
   }

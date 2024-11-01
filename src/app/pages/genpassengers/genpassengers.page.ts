@@ -29,6 +29,7 @@ request:any;
   changing=false;
   allowchange = false;
   allowTake=false;
+  freezePassenger = false;
   contract:GESContratos;
   constructor(private modalController: ModalController, private navParams: NavParams,
     private callService: CallService,private positionService:PositionService,
@@ -38,7 +39,7 @@ request:any;
    ) {
 
       this.request = this.navParams.get('service');
-
+      this.freezePassenger = this.navParams.get('freeze');
       this.passengers = this.request.GENPasajerosServicios;
       this.contract =  this.navParams.get('contract');
       this.details = this.request.details;
