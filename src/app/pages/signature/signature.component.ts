@@ -9,8 +9,13 @@ import { NavParams, ModalController } from '@ionic/angular';
 })
 export class SignatureComponent implements OnInit {
   signatureImg:string;
+  rejectedAvailable=false;
 @ViewChild(SignaturePad,{static:true}) public signaturePad;
-  constructor(private navParams:NavParams,private modal:ModalController) { }
+  constructor(private navParams:NavParams,private modal:ModalController) {
+    
+     this.rejectedAvailable =    this.navParams.get('rejectedAvailable');
+      
+   }
 
 
   public signatureOptions= {
@@ -50,6 +55,10 @@ export class SignatureComponent implements OnInit {
 
   drawClear(){
     this.signaturePad.clear();
+  }
+
+  async reject(){
+    await this.modal.dismiss(false);
   }
 
   async setSignature() {

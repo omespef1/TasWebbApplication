@@ -2,7 +2,7 @@
 
 </app-header>
 
-<ion-content>
+<ion-content *ngIf="contract">
 
   <ion-grid>
     <ion-row>
@@ -11,7 +11,7 @@
         color="danger">
         <ion-icon class="fa-spin" name="clipboard"></ion-icon> {{textButton}}
       </ion-button>
-      <ion-button *ngIf="!_sesion.isUser()  && !!contract && contract.Colectivo " (click)="getPassengersService()" expand="block"
+      <ion-button *ngIf="!_sesion.isUser()  && !!contract && contract.Colectivo" (click)="getPassengersService()" expand="block"
       color="primary">
       <ion-icon name="person"></ion-icon>
           &nbsp;Configurar ruta
@@ -92,13 +92,23 @@
   </ion-item>
   <ion-item>
     <ion-icon slot="start" name="map"></ion-icon>
+    <!-- <ion-button (click)="showPopupCitiesTarget()" slot="start">Cambiar destino</ion-button> -->
     <ion-label>Ciudad</ion-label>
-    <ion-note slot="end"> {{ programming.Destino}}</ion-note>
+    <ion-note slot="end"> {{ programming.Destino}}</ion-note>   
   </ion-item>
+
   <ion-item>
     <ion-icon slot="start" name="navigate"></ion-icon>
     <ion-label>Dirección</ion-label>
-    <ion-note slot="end"> {{ programming.DestinoDireccion}}</ion-note>
+    <ion-note slot="end" *ngIf="!targetChanged"> {{ programming.DestinoDireccion}}</ion-note>
+    <ion-input type="text" slot="end" [(ngModel)]="programming.DestinoDireccion" placeholder="Ingrese dirección" *ngIf="targetChanged" ></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-button *ngIf="!_sesion.isUser() && !contract.InteraccionPasajero" (click)="askForTargetChangued()" expand="block"
+    color="success">   
+    <ion-icon name="locate"></ion-icon>
+       Cambiar destino
+  </ion-button>
   </ion-item>
   <ion-item *ngIf="programming.CodigoVerificacion!=undefined">
     <ion-icon slot="start" name="clipboard"></ion-icon>

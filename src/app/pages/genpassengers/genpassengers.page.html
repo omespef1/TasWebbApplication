@@ -26,7 +26,7 @@
         <ion-label class="visible">Dirección</ion-label>
         <ion-note slot="end"> {{ passenger.GENPasajeros.GENPasajerosInfoPropia.Direccion}}</ion-note>
       </ion-item>
-      <ion-item>
+      <ion-item *ngIf="!freezePassenger">
         <ion-icon name="filing"></ion-icon>
         <ion-label>Orden</ion-label>
         <ion-input type="number" clearInput="true" 
@@ -56,7 +56,7 @@
         <ion-note slot="end"> {{passenger.HoraEstimada}}</ion-note>
       </ion-item>
      
-      <ion-item *ngIf="allowTake" class="header" lines="none" color="secondary">              
+      <ion-item *ngIf="allowTake && !freezePassenger" class="header" lines="none" color="secondary">              
         <ion-button id="takeButton" color="light" slot="start"(click)="showModalCode('E',passenger)" fill="outline">
           <ion-spinner *ngIf="sending" slot="start"></ion-spinner>
             <ion-icon  slot="start" name="eye"></ion-icon>          
@@ -72,13 +72,15 @@
 
   </div>  
 
-<div padding>
+<div *ngIf="!freezePassenger" padding>
   <ion-button *ngIf="contract.CambiarOrden && allowchange"  [disabled]="changing" color="secondary" expand="block" (click)="UpdatePassengers()">
   <ion-icon name="person"></ion-icon>
       &nbsp;   {{ changing?'Cambiando...': 'Cambiar orden recogida'}} 
       <ion-spinner *ngIf="changing" slot="end"></ion-spinner>
 </ion-button>
 </div>
+
+
 
 
        

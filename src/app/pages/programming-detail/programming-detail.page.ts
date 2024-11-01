@@ -26,6 +26,8 @@ import { MonitoreoService } from 'src/app/services/monitoreo/monitoreo.service';
 import { PositionService } from 'src/app/services/position/position.service';
 import { ThirdPartie } from 'src/app/models/general/user';
 import { BehaviorSubject } from 'rxjs';
+import { PoliticalDivisionComponent } from '../political-division/political-division.component';
+import { SignatureComponent } from '../signature/signature.component';
 
 @Component({
   selector: "app-programming-detail",
@@ -43,9 +45,12 @@ export class ProgrammingDetailPage implements OnInit {
   contract: GESContratos;
   locating = false;
   loading = false;
-  drivers :  BehaviorSubject<ThirdPartie[]> = new BehaviorSubject<ThirdPartie[]>(null);
-  oldDriver :ThirdPartie = new ThirdPartie();
-
+  drivers: BehaviorSubject<ThirdPartie[]> = new BehaviorSubject<ThirdPartie[]>(null);
+  oldDriver: ThirdPartie = new ThirdPartie();
+  targetChanged = false;
+  oldTarget: { id: number, text: string } = { id: 0, text: "" };
+  Firma:string="";
+  signatureRejected=false;
   constructor(
     private router: Router,
     private _san: DomSanitizer,
@@ -61,17 +66,17 @@ export class ProgrammingDetailPage implements OnInit {
     private GENPasajerosService: GENPasajerosService,
     private GENPasajerosServiciosService: GENPasajerosServiciosService,
     private changes: ChangeDetectorRef,
-    private monitoreoService:MonitoreoService,
-    private positionService:PositionService, private gentercerosService:GENTercerosService,
-    private gessolicitudServiciosService:ServicesRequestService,
-    private nav:NavController) {
+    private monitoreoService: MonitoreoService,
+    private positionService: PositionService, private gentercerosService: GENTercerosService,
+    private gessolicitudServiciosService: ServicesRequestService,
+    private nav: NavController) {
     this.programming.details = [];
     this.programming.GENPasajerosServicios = [];
   }
 
   ngOnInit() {
     this.programming = this.router.getCurrentNavigation().extras.state.programming;
-     this.oldDriver = this.programming.ConductorId;
+    this.oldDriver = this.programming.ConductorId;
     this.getContrato();
     this.getDrivers();
     //this.loadDetail();
@@ -83,15 +88,15 @@ export class ProgrammingDetailPage implements OnInit {
   }
 
   getContrato() {
-    let company = this._sesion.GetUser() == undefined? this._sesion.GetThirdPartie().IdEmpresa:this._sesion.GetUser().IdEmpresa
+    let company = this._sesion.GetUser() == undefined ? this._sesion.GetThirdPartie().IdEmpresa : this._sesion.GetUser().IdEmpresa
 
-      this.contratos.getByCode( company, this.programming.ContratoId).subscribe(resp => {
-        if (resp != undefined && resp.Retorno == 0) {
-          this.contract = resp.ObjTransaction;
-          this.changes.detectChanges();
-        }
-      })
-    
+    this.contratos.getByCode(company, this.programming.ContratoId).subscribe(resp => {
+      if (resp != undefined && resp.Retorno == 0) {
+        this.contract = resp.ObjTransaction;
+        this.changes.detectChanges();
+      }
+    })
+
 
   }
 
@@ -105,6 +110,7 @@ export class ProgrammingDetailPage implements OnInit {
 
         if (resp.ObjTransaction) {
           this.programming.details = resp.ObjTransaction;
+          this.oldTarget = { id: this.programming.DestinoCiudad, text: this.programming.Destino };
           let details: ServiceRequestDetail[] = this.programming.details;
           this.checkPassengers();
         }
@@ -128,9 +134,15 @@ export class ProgrammingDetailPage implements OnInit {
       {
         text: "Aceptar",
         role: "OK",
-        handler: (value: any) => {          
-          let passengers: any[] = this.programming.GENPasajerosServicios;
-          this.setNewLog(value, passengers != undefined && passengers.length > 0 ? true : false);
+        handler: (value: any) => {
+          let passengers: any[] = this.programming.GENPasajerosServicios;    
+          if(!this.contract.InteraccionPasajero && value=='F')    {
+            this.showModalSignature(value,passengers);
+          }  
+          else{
+            this.setNewLog(value, passengers != undefined && passengers.length > 0 ? true : false);
+          }
+         
         },
       },
     ];
@@ -178,7 +190,7 @@ export class ProgrammingDetailPage implements OnInit {
     return !!this._sesion.GetUser() && this._sesion.GetUser().Grupo === "VIP";
   }
 
-  setNewLog(value: any, confirmed: boolean, code: number = 0) {    
+  setNewLog(value: any, confirmed: boolean, code: number = 0) {
     if (value != "I" || confirmed == true || !this.contract.UsoCodigo) {
       this.textButton = "Localizando...";
       this.sending = true;
@@ -186,42 +198,45 @@ export class ProgrammingDetailPage implements OnInit {
       log.SolicitudId = this.programming.SolicitudId;
       log.EmpresaId = this._sesion.GetThirdPartie().IdEmpresa;
       log.Estado = value;
+      log.firma = this.Firma;
+      log.rejectedSign = this.signatureRejected;
       if (code > 0) {
         log.CodigoConfirmacion = code;
       }
       // this._request.SetTransportRequestFailed(log).then(() => {
-        this.geo.getCurrentPosition().then((data) => {
-          this.textButton = "Esperando...";
-          setTimeout(() => {
-            log.Latitude = data.coords.latitude;
-            log.Longitude = data.coords.longitude;
-            log.observations = this.observations;
-            // Guardamos el intento en los fallidos en caso de que falle        
-            this._service.PostServicesDetail(log).subscribe(
-              (resp: any) => {
-                this.sending = false;
-                // Borramos el intento ya que el servidor si respondió
-                this._request.deleteTransportFailed();
-                if (resp.Retorno === 0) {
-                  this.textButton = "Nuevo seguimiento";
-                  this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
-                  this.loadDetail();
-                  if (value == "I") {
-                    this.getPassengersService();
-                  }
-                } else {
-                  this.textButton = "Nuevo seguimiento";
-                  this._alert.showAlert("Error", resp.TxtError);
+      this.geo.getCurrentPosition().then((data) => {
+        this.textButton = "Esperando...";
+        setTimeout(() => {
+          log.Latitude = data.coords.latitude;
+          log.Longitude = data.coords.longitude;
+          log.observations = this.observations;
+          log.rejectedSign = this.signatureRejected;
+          // Guardamos el intento en los fallidos en caso de que falle        
+          this._service.PostServicesDetail(log).subscribe(
+            (resp: any) => {
+              this.sending = false;
+              // Borramos el intento ya que el servidor si respondió
+              this._request.deleteTransportFailed();
+              if (resp.Retorno === 0) {
+                this.textButton = "Nuevo seguimiento";
+                this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
+                this.loadDetail();
+                if (value == "I") {
+                  this.getPassengersService();
                 }
-              },
-              (err) => {
-                this.sending = false;
-                this.textButton = "Error";
-                // console.log(err);
+              } else {
+                this.textButton = "Nuevo seguimiento";
+                this._alert.showAlert("Error", resp.TxtError);
               }
-            );
-          }, 3000);
-        });
+            },
+            (err) => {
+              this.sending = false;
+              this.textButton = "Error";
+              // console.log(err);
+            }
+          );
+        }, 3000);
+      });
       // })
     }
     else {
@@ -282,20 +297,20 @@ export class ProgrammingDetailPage implements OnInit {
   getDrivers() {
 
 
-    if(!this._sesion.isUser()){
+    if (!this._sesion.isUser()) {
 
       this.gentercerosService.GetDriversCar(this._sesion.GetThirdPartie().IdEmpresa, this.programming.VehiculoId).subscribe(resp => {
         if (resp != null && resp.Retorno == 0) {
-  
-        this.drivers.next(resp.ObjTransaction);
+
+          this.drivers.next(resp.ObjTransaction);
         }
       })
-  
+
     }
-  
+
   }
 
-  async showModalCode(value:string) {
+  async showModalCode(value: string) {
     const modal = await this.modalController.create({
       component: ValidateCodePage,
       componentProps: {
@@ -319,30 +334,33 @@ export class ProgrammingDetailPage implements OnInit {
         this.loading = false;
       }))
       .subscribe(resp => {
-        if (resp != null && resp.Retorno == 0) {          
+        if (resp != null && resp.Retorno == 0) {
+          
           this.programming.GENPasajerosServicios = resp.ObjTransaction;
           // Si no tiene pasajeros detalle, es decir , no usa modelo de pasajeros no muestra el modal
-          if(resp.ObjTransaction!=null && resp.ObjTransaction!=undefined)
-          this.showModalGenPassengers();
+          if (resp.ObjTransaction != null && resp.ObjTransaction != undefined)
+            this.showModalGenPassengers();
+          else
+        this._alert.showAlert('Sin pasajeros','El servicio no tiene pasajeros');
         }
       })
   }
 
   checkPassengers() {
 
-    if(!this._sesion.isUser() ){
+    if (!this._sesion.isUser()) {
       this.GENPasajerosService.GetInfoPassengerByService(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId)
-      .pipe(finalize(() => {
+        .pipe(finalize(() => {
 
-      }))
-      .subscribe(resp => {
-        if (resp != null && resp.Retorno == 0) {
-          this.programming.GENPasajerosServicios = resp.ObjTransaction;
+        }))
+        .subscribe(resp => {
+          if (resp != null && resp.Retorno == 0) {
+            this.programming.GENPasajerosServicios = resp.ObjTransaction;
 
-        }
-      })
+          }
+        })
     }
-   
+
   }
 
 
@@ -351,7 +369,8 @@ export class ProgrammingDetailPage implements OnInit {
       component: GENPassengersPage,
       componentProps: {
         service: this.programming,
-        contract: this.contract
+        contract: this.contract,
+        freeze: !this.contract.InteraccionPasajero
       }
     });
 
@@ -395,42 +414,42 @@ export class ProgrammingDetailPage implements OnInit {
     });
   }
 
-  locateDriver(){
-    this.locating=true;
-      this.monitoreoService.GetLastPosition(this.programming.VehiculoId,this.programming.EmpresaId)
+  locateDriver() {
+    this.locating = true;
+    this.monitoreoService.GetLastPosition(this.programming.VehiculoId, this.programming.EmpresaId)
       .pipe(
-        finalize(()=>{
-          this.locating=false;
+        finalize(() => {
+          this.locating = false;
         })
       )
-      .subscribe(resp=>{
-        if(resp!=null && resp.Retorno==0){
-          this.positionService.openMapPosition(resp.ObjTransaction.Latitud,resp.ObjTransaction.Longitud,new Date());
+      .subscribe(resp => {
+        if (resp != null && resp.Retorno == 0) {
+          this.positionService.openMapPosition(resp.ObjTransaction.Latitud, resp.ObjTransaction.Longitud, new Date());
         }
-        else{
+        else {
           this._alert.errorSweet(resp.TxtError);
         }
       })
 
   }
 
-  changeDriver(){
+  changeDriver() {
 
 
-    if(this.oldDriver == this.programming.ConductorId){
+    if (this.oldDriver == this.programming.ConductorId) {
       this._alert.errorSweet('El conductor no puede ser el mismo.');
       return;
     }
 
-    
+
 
     this._alert.showConfirmationAlert(
-      'Cambiar?', 
-      '¿Se cambiará este servicio de conductor, por el conductor seleccionado, desea continuar?', 
+      'Cambiar?',
+      '¿Se cambiará este servicio de conductor, por el conductor seleccionado, desea continuar?',
       () => {
         // Lógica cuando se confirma.
-        this.gessolicitudServiciosService.updateDriver(this.programming.EmpresaId, this.programming.ConductorId,this.programming.SolicitudId).subscribe(resp=>{
-          if(resp!=null && resp.Retorno==0){
+        this.gessolicitudServiciosService.updateDriver(this.programming.EmpresaId, this.programming.ConductorId, this.programming.SolicitudId).subscribe(resp => {
+          if (resp != null && resp.Retorno == 0) {
             this._alert.successSweet('Conductor actualizado!'!);
             this.modalController.dismiss();
             this.nav.navigateBack('tabs/programming');
@@ -439,7 +458,7 @@ export class ProgrammingDetailPage implements OnInit {
             this._alert.errorSweet(resp.TxtError);
           }
         })
-      }, 
+      },
       () => {
         // Lógica cuando se cancela (opcional).
         console.log('Acción cancelada.');
@@ -448,6 +467,84 @@ export class ProgrammingDetailPage implements OnInit {
     );
   }
 
+
+
+  async showPopupCitiesTarget() {
+    const modal = await this.modalController.create({
+      component: PoliticalDivisionComponent,
+    });
+    modal.onDidDismiss().then((resp) => {
+      
+      if (resp.data != undefined) {
+        this.programming.DestinoCiudad = resp.data.IdDivisionPolitica;
+        this.programming.Destino = resp.data.DescripcionCorta;
+        let observations = this.SetObservationsTargetChangued()
+        this.gessolicitudServiciosService.ChagueTarget(this.programming.SolicitudId,
+          this.programming.DestinoCiudad, this.programming.Destino, this.programming.EmpresaId,observations).subscribe(resp => {
+            if (resp != null && resp.Retorno == 0) {
+              this._alert.successSweet('Destino actualizado!');
+              this.modalController.dismiss();
+              this.loadDetail();
+              this.targetChanged = true;
+            }
+            else {
+              this._alert.errorSweet(resp.TxtError);
+            }
+          })
+
+      }
+    });
+    return await modal.present();
+  }
+
+  askForTargetChangued() {
+    this._alert.showConfirmationAlert(
+      'Cambiar?',
+      '¿Se cambiará el destino del servicio,  desea continuar?',
+      () => {
+        this.showPopupCitiesTarget();
+      },
+      () => {
+        // Lógica cuando se cancela (opcional).
+        console.log('Acción cancelada.');
+        this.modalController.dismiss();
+      }
+    );
+  }
+
+
+
+  SetObservationsTargetChangued() {
+
+    return `Destino cambiado. Destino anterior : ${this.oldTarget.id}-${this.oldTarget.text}.
+    Destino actual :  ${this.programming.DestinoCiudad}-${this.programming.Destino}`
+
+  }
+
+  async showModalSignature(value:string,passengers:any[]) {
+    const modal = await this.modalController.create({
+      component: SignatureComponent,
+      componentProps: {
+        rejectedAvailable: true,
+      }
+    });
+    modal.onDidDismiss().then(resp => {
+      
+      if(resp.data!=undefined){
+        if(resp.data==false){
+          this.signatureRejected = true;
+        }
+        else {          
+          this.Firma = resp.data;           
+      }
+      this.setNewLog(value, passengers != undefined && passengers.length > 0 ? true : false);
+      }
+   
+
+   
+    });
+    return await modal.present();
+  }
 
 }
 
