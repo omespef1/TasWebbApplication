@@ -34,7 +34,7 @@
       <ion-item tappable button (click)="showPopupCitiesOrigin()">
         <ion-icon slot="start" name="locate"></ion-icon>
         <ion-label>Ciudad Origen*</ion-label>
-        <ion-note slot="end"> {{ cityOrigin.DescripcionCorta}}</ion-note>
+        <ion-note slot="end"> {{ cityOrigin.DescripcionCorta}} - {{cityOrigin.DescripcionLarga}}</ion-note>
       </ion-item>
       <ion-item>
         <ion-icon slot="start" name="pin"></ion-icon>
@@ -45,7 +45,7 @@
       <ion-item tappable button [disabled]="request.SolicitudId>0" (click)="showPopupCitiesTarget()">
         <ion-icon slot="start" name="locate"></ion-icon>
         <ion-label>Ciudad Destino</ion-label>
-        <ion-note slot="end"> {{ cityTarget.DescripcionCorta}}</ion-note>
+        <ion-note slot="end"> {{ cityTarget.DescripcionCorta}}-{{ cityTarget.DescripcionLarga}}</ion-note>
       </ion-item>
       <ion-item *ngIf="contractSelected" button>
         <ion-icon slot="start" name="paper"></ion-icon>

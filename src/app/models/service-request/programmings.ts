@@ -54,6 +54,8 @@ export class ServicesRequest {
   IdPasajero?:number;
   ObservCliente?:string;
   IdVinculacionRutas?:number;
+  OrigenID?:number;
+  DestinoID?:number;
 }
 
 export class ServiceRequestDetail {

@@ -1,3 +1,4 @@
+import { DivisionPoliticaEmpresas } from './../../models/genpasajeros/genpasajeros.model';
 import { Component, OnInit } from '@angular/core';
 import { ThirdPartie } from '../../models/general/user';
 import { SessionService } from '../../services/session/session.service';
@@ -24,9 +25,9 @@ import { TypesService } from '../../models/types-services/type-services';
 import { TypesVehiclesComponent } from '../types-vehicles/types-vehicles.component';
 import { TRATipoVehiculo } from '../../models/types-vehicle/types-vehicle.model';
 import { TypesServicesService } from '../../services/types-services/types-service.service';
-import { PoliticaDivisionActiveComponent } from '../political-division/politica-division-active/politica-division-active.component';
 import { GENPasajerosService } from 'src/app/services/gespasajeros/genpasajeros.service';
 import { GENPasajeros } from 'src/app/models/genpasajeros/genpasajeros.model';
+import { PoliticaDivisionNewComponent } from '../political-division/political-division-new/politica-division-new.component';
 
 @Component({
   selector: 'app-programming-user-new',
@@ -39,8 +40,8 @@ export class ProgrammingUserNewPage implements OnInit {
   user: GENPasajeros = new GENPasajeros();
   client: ThirdPartie;
   request: ServicesRequest = new ServicesRequest();
-  cityOrigin: DivisionPolitical = new DivisionPolitical();
-  cityTarget: DivisionPolitical = new DivisionPolitical();
+  cityOrigin: DivisionPoliticaEmpresas = new DivisionPoliticaEmpresas();
+  cityTarget: DivisionPoliticaEmpresas = new DivisionPoliticaEmpresas();
   configuracionCliente: ConfiguracionClientes = new ConfiguracionClientes();
   contractSelected: GESContratos = new GESContratos();
   sucursalSelected: GESSucursales = new GESSucursales();
@@ -192,7 +193,7 @@ export class ProgrammingUserNewPage implements OnInit {
 
   async showPopupCitiesOrigin() {
     const modal = await this.modal.create({
-      component: PoliticaDivisionActiveComponent,
+      component: PoliticaDivisionNewComponent,
     });
     modal.onDidDismiss().then((resp) => {
       if (resp.data != undefined) {
@@ -200,6 +201,8 @@ export class ProgrammingUserNewPage implements OnInit {
         this.cityTarget = resp.data;
         this.request.OrigenCiudad = this.cityOrigin.IdDivisionPolitica;
         this.request.DestinoCiudad = this.cityOrigin.IdDivisionPolitica;
+        this.request.OrigenID = this.cityOrigin.Id;
+        this.request.DestinoID = this.cityOrigin.Id;
       }
     });
     return await modal.present();
@@ -207,12 +210,13 @@ export class ProgrammingUserNewPage implements OnInit {
 
   async showPopupCitiesTarget() {
     const modal = await this.modal.create({
-      component: PoliticaDivisionActiveComponent,
+      component: PoliticaDivisionNewComponent,
     });
     modal.onDidDismiss().then((resp) => {
       if (resp.data != undefined) {
         this.cityTarget = resp.data;
         this.request.DestinoCiudad = this.cityTarget.IdDivisionPolitica;
+        this.request.DestinoID = this.cityTarget.Id;
       }
     });
     return await modal.present();
@@ -316,6 +320,6 @@ export class ProgrammingUserNewPage implements OnInit {
   
   
     
-    // console.log(this.contractSelected);
+   
   }
 }

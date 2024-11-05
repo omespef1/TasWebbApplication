@@ -1,3 +1,4 @@
+import { DivisionPoliticaEmpresas } from './../../models/genpasajeros/genpasajeros.model';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { transactionObj } from '../../models/general/transaction';
@@ -26,5 +27,9 @@ export class PoliticalDivisionService {
   }
   GetPoliticalDivisionAllActive(countryCode:number){
     return this.http.Get<transactionObj<DivisionPolitical[]>>(`/GenDivisionPolitica/GetActive?countryCode=${1}`);
+  }
+
+  GetPoliticalDivisionAllActiveNew(){
+    return this.http.Get<transactionObj<DivisionPoliticaEmpresas[]>>(`/DivisionPoliticaEmpresas/Get`);
   }
 }
