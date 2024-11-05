@@ -51,4 +51,8 @@ export class PoliticaDivisionNewComponent implements OnInit {
     })
   }
 
+  async closeModal(){
+    await this.modalController.dismiss();
+  }
+  
 }
