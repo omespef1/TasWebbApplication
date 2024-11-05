@@ -29,7 +29,7 @@ export class PoliticalDivisionService {
     return this.http.Get<transactionObj<DivisionPolitical[]>>(`/GenDivisionPolitica/GetActive?countryCode=${1}`);
   }
 
-  GetPoliticalDivisionAllActiveNew(){
-    return this.http.Get<transactionObj<DivisionPoliticaEmpresas[]>>(`/DivisionPoliticaEmpresas/Get`);
+  GetPoliticalDivisionAllActiveNew(companyCode:number,search:string){
+    return this.http.Get<transactionObj<DivisionPoliticaEmpresas[]>>(`/DivisionPoliticaEmpresas/Search?companyCode=${companyCode}&searchTerm=${search}`);
   }
 }

@@ -48,7 +48,7 @@ import { PoliticaDivisionNewComponent } from "./pages/political-division/politic
   declarations: [AppComponent, SafePipe, ThirdPartiesGenericPage, SignatureComponent, PassengersComponent, PoliticalDivisionComponent, CostCenterPage, ThirdPartieValidationPage, SucursalesPage,
      ContratosPage, TypesVehiclesComponent, PoliticaDivisionActiveComponent,PoliticaDivisionNewComponent, ValidateCodePage, GENPassengersPage,LocationComponent,MapsUrlPipeDetail,EncuestaCalificacionComponent],
   entryComponents: [ThirdPartiesGenericPage, SignatureComponent, PassengersComponent, PoliticalDivisionComponent, CostCenterPage, ThirdPartieValidationPage, SucursalesPage, ContratosPage, TypesVehiclesComponent, PoliticaDivisionActiveComponent,
-     ValidateCodePage,GENPassengersPage, LocationComponent,EncuestaCalificacionComponent],
+     ValidateCodePage,GENPassengersPage, LocationComponent,EncuestaCalificacionComponent,PoliticaDivisionNewComponent],
   imports: [BrowserModule, IonicModule.forRoot(
     { mode: 'ios' }
   ), AppRoutingModule,

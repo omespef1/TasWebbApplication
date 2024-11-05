@@ -1,12 +1,13 @@
 import { DivisionPoliticaEmpresas } from './../../../models/genpasajeros/genpasajeros.model';
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { PoliticalDivisionService } from '../../../services/political-division/political-division.service';
+import { PoliticalDivisionService } from 'src/app/services/political-division/political-division.service';
+import { SessionService } from 'src/app/services/session/session.service';
 
 
 
 @Component({
-  selector: 'app-politica-division-new',
+  selector: 'app-political-division',
   templateUrl: './politica-division-new.component.html',
   styleUrls: ['./politica-division-new.component.scss'],
 })
@@ -14,17 +15,15 @@ export class PoliticaDivisionNewComponent implements OnInit {
 
 
   dataList: DivisionPoliticaEmpresas[] = [];
-  dataListFilter: DivisionPoliticaEmpresas[] = [];
-  contractId:number;
-
   loading = false;
   constructor(
     private modalController: ModalController,
-    private itemsServices: PoliticalDivisionService
+    private politicalDivisionService: PoliticalDivisionService,
+    private sesionService: SessionService
   ) { }
 
   ngOnInit() {
-   this.getItems();
+   
   }
 
 
@@ -34,33 +33,22 @@ export class PoliticaDivisionNewComponent implements OnInit {
 
   search(event) {
 
-    this.dataListFilter = [];
-    this.dataListFilter = this.dataList.filter(
-      v =>
-        v.DescripcionLarga.toUpperCase().indexOf(
-          event.target.value.toUpperCase()
-        ) > -1);
 
-  }
-
-
-  getItems(){   
     console.log(event);
     this.loading = true;
-    this.itemsServices.GetPoliticalDivisionAllActiveNew().subscribe(resp => {
-      this.loading = false;     
+    this.politicalDivisionService.GetPoliticalDivisionAllActiveNew(this.sesionService.GetGetThirdPartieClient().IdEmpresa,event.detail.value).subscribe(resp => {
+      this.loading = false;
+      //console.log(resp);
       if (resp.Retorno === 0 && resp.ObjTransaction != null) {
         this.dataList = resp.ObjTransaction;
-        this.dataListFilter = resp.ObjTransaction;
       }
     }, err => {
+      
+      console.log(err);
+
       this.loading = false;
 
     })
   }
 
-
-  async closeModal(){
-    await this.modalController.dismiss();
-  }
-  }
+}
