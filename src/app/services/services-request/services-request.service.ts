@@ -32,7 +32,9 @@ export class ServicesRequestService {
    PostServicesDetail(request: ServiceRequestDetail){
      return this._http.PostRequest('/GESSolicitudServicios/PostGESSolicitudServiciosDetalle', request);
    }
-
+   PostServicesDetailNoInteraccion(request: ServiceRequestDetail){
+    return this._http.PostRequest('/GESSolicitudServicios/PostGESSolicitudServiciosDetalleNoInteraccion', request);
+  }
    PostServiceApp(request: ServicesRequest){
     return this._http.PostRequest<transaction>('/GESSolicitudServicios/newServiceApp', request);
   }

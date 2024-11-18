@@ -50,6 +50,7 @@ export class ProgrammingDetailPage implements OnInit {
   targetChanged = false;
   oldTarget: { id: number, text: string } = { id: 0, text: "" };
   Firma:string="";
+  kilometraje:number=0;
   signatureRejected=false;
   constructor(
     private router: Router,
@@ -136,8 +137,22 @@ export class ProgrammingDetailPage implements OnInit {
         role: "OK",
         handler: (value: any) => {
           let passengers: any[] = this.programming.GENPasajerosServicios;    
-          if(!this.contract.InteraccionPasajero && value=='F')    {
-            this.showModalSignature(value,passengers);
+          if(!this.contract.InteraccionPasajero)    {
+            if(value =='F')
+            {
+              this.showKilometerModal().then(resp=>{
+                debugger;
+                this.showModalSignature(value,passengers);
+              })
+            }
+            if(value=='I')
+            {
+              this.showKilometerModal().then(resp=>{
+                this.setNewLog(value, passengers != undefined && passengers.length > 0 ? true : false);
+              })
+            }
+       
+         
           }  
           else{
             this.setNewLog(value, passengers != undefined && passengers.length > 0 ? true : false);
@@ -174,17 +189,73 @@ export class ProgrammingDetailPage implements OnInit {
       },
     ];
 
+    let radiosNoInteraccion: any[] = [        
+      {
+        type: "radio",
+        value: "I",
+        label: "INICIO",
+        checked: false,
+      },
+      {
+        type: "radio",
+        value: "F",
+        label: "FINAL",
+        checked: false,
+      },
+    ];
+
     this._alert.showCustomAlert(
       "Estado",
       "¿Cual es el estado del servicio a ingresar?",
       "",
       buttons,
-      radios,
+      this.contract.InteraccionPasajero ? radios : radiosNoInteraccion,
       true
     );
   }
 
+  showKilometerModal(){
 
+    let promise : Promise<Boolean>  = new Promise<Boolean>( (resolve, reject) => {
+
+        const buttons: any[] = [
+            {
+              text: "Cancelar",
+              role: "Cancel",
+            },
+            {
+              text: "Aceptar",
+              role: "OK",
+              handler: (value: any) => {                                 
+                this.kilometraje = value.kilometraje; 
+                resolve(true);
+              },
+            },
+          ];
+      
+          let inputs: any[] = [
+            {
+              name: 'kilometraje',
+              type: 'text',
+              placeholder: 'kilometraje'
+            }]
+      
+          this._alert.showCustomAlert(
+            "kilometraje",
+            "Digite el kilometraje actual del vehículo",
+            "",
+            buttons,
+            inputs,
+            true
+          );
+
+
+    })
+
+    return promise;
+
+
+}
 
   isVip() {
     return !!this._sesion.GetUser() && this._sesion.GetUser().Grupo === "VIP";
@@ -212,29 +283,57 @@ export class ProgrammingDetailPage implements OnInit {
           log.observations = this.observations;
           log.rejectedSign = this.signatureRejected;
           // Guardamos el intento en los fallidos en caso de que falle        
-          this._service.PostServicesDetail(log).subscribe(
-            (resp: any) => {
-              this.sending = false;
-              // Borramos el intento ya que el servidor si respondió
-              this._request.deleteTransportFailed();
-              if (resp.Retorno === 0) {
-                this.textButton = "Nuevo seguimiento";
-                this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
-                this.loadDetail();
-                if (value == "I") {
-                  this.getPassengersService();
-                }
-              } else {
-                this.textButton = "Nuevo seguimiento";
-                this._alert.showAlert("Error", resp.TxtError);
-              }
-            },
-            (err) => {
-              this.sending = false;
-              this.textButton = "Error";
-              // console.log(err);
-            }
-          );
+   if(this.contract.InteraccionPasajero){
+    this._service.PostServicesDetail(log).subscribe(
+      (resp: any) => {
+        this.sending = false;
+        // Borramos el intento ya que el servidor si respondió
+        this._request.deleteTransportFailed();
+        if (resp.Retorno === 0) {
+          this.textButton = "Nuevo seguimiento";
+          this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
+          this.loadDetail();
+          if (value == "I") {
+            this.getPassengersService();
+          }
+        } else {
+          this.textButton = "Nuevo seguimiento";
+          this._alert.showAlert("Error", resp.TxtError);
+        }
+      },
+      (err) => {
+        this.sending = false;
+        this.textButton = "Error";
+        // console.log(err);
+      }
+    );
+   }
+   else {
+    log.Kilometraje = this.kilometraje;
+    this._service.PostServicesDetailNoInteraccion(log).subscribe(
+      (resp: any) => {
+        this.sending = false;
+        // Borramos el intento ya que el servidor si respondió
+        this._request.deleteTransportFailed();
+        if (resp.Retorno === 0) {
+          this.textButton = "Nuevo seguimiento";
+          this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
+          this.loadDetail();
+          if (value == "I") {
+            this.getPassengersService();
+          }
+        } else {
+          this.textButton = "Nuevo seguimiento";
+          this._alert.showAlert("Error", resp.TxtError);
+        }
+      },
+      (err) => {
+        this.sending = false;
+        this.textButton = "Error";
+        // console.log(err);
+      }
+    );
+   }
         }, 3000);
       });
       // })
