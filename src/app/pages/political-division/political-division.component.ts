@@ -1,3 +1,4 @@
+import { DivisionPoliticaEmpresas } from './../../models/genpasajeros/genpasajeros.model';
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { SessionService } from '../../services/session/session.service';
@@ -12,7 +13,7 @@ import { DivisionPolitical } from '../../models/general/political-division';
 export class PoliticalDivisionComponent implements OnInit {
 
 
-  dataList: DivisionPolitical[] = [];
+  dataList: DivisionPoliticaEmpresas[] = [];
   loading = false;
   constructor(
     private modalController: ModalController,
@@ -34,7 +35,7 @@ export class PoliticalDivisionComponent implements OnInit {
 
     console.log(event);
     this.loading = true;
-    this.politicalDivisionService.GetPoliticalDivision(event.detail.value).subscribe(resp => {
+    this.politicalDivisionService.GetPoliticalDivisionAllActiveNew(this.sesionService.GetThirdPartie().IdEmpresa, event.detail.value).subscribe(resp => {
       this.loading = false;
       //console.log(resp);
       if (resp.Retorno === 0 && resp.ObjTransaction != null) {
@@ -46,12 +47,12 @@ export class PoliticalDivisionComponent implements OnInit {
 
       
     
-      if(err.ok == false){
+      // if(err.ok == false){
      
-        this.sesionService.GetPoliticalDivisionOffline().then(data=>{
-            this.dataList = data.filter(c=>c.DescripcionCorta.toUpperCase().indexOf(event.detail.value.toUpperCase())>-1);
-          })
-      }
+      //   this.sesionService.GetPoliticalDivisionOffline().then(data=>{
+      //       this.dataList = data.filter(c=>c.DescripcionCorta.toUpperCase().indexOf(event.detail.value.toUpperCase())>-1);
+      //     })
+      // }
 
       this.loading = false;
 

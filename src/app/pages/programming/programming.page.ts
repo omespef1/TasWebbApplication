@@ -209,7 +209,6 @@ export class ProgrammingPage implements OnInit {
 
   goService(){
 
-
     if(this.activeService.SolicitudId>0){
 
       let params: NavigationExtras = {
@@ -226,7 +225,6 @@ export class ProgrammingPage implements OnInit {
 
   goServiceVip(){
 
- 
       this._nav.navigateForward("tabs/programming/programming-user-new");
   
   }
