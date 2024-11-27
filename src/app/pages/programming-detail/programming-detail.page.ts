@@ -140,14 +140,22 @@ export class ProgrammingDetailPage implements OnInit {
           if(!this.contract.InteraccionPasajero)    {
             if(value =='F')
             {
-              this.showKilometerModal().then(resp=>{
-                debugger;
+              this.showKilometerModal().then(resp=>{                 
+                if(this.kilometraje==0){
+                  this._alert.showAlert('Kilometraje','El kilometraje no puede ser 0');
+                  return;
+                }
                 this.showModalSignature(value,passengers);
               })
             }
             if(value=='I')
             {
               this.showKilometerModal().then(resp=>{
+                
+                if(this.kilometraje==0){
+                  this._alert.showAlert('Kilometraje','El kilometraje no puede ser 0');
+                  return;
+                }
                 this.setNewLog(value, passengers != undefined && passengers.length > 0 ? true : false);
               })
             }
@@ -218,11 +226,7 @@ export class ProgrammingDetailPage implements OnInit {
 
     let promise : Promise<Boolean>  = new Promise<Boolean>( (resolve, reject) => {
 
-        const buttons: any[] = [
-            {
-              text: "Cancelar",
-              role: "Cancel",
-            },
+        const buttons: any[] = [           
             {
               text: "Aceptar",
               role: "OK",
