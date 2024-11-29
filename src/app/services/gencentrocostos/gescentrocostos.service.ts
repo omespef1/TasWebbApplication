@@ -17,6 +17,10 @@ export class GescentrocostosService {
     return this._http.Get<transactionObj<GESCentroCostos[]>>(`/GESCentroCostos/GetByCompany?companyCode=${idEmpresa}`);
   }
 
+  GetCostCenterByClientPasseenger(idEmpresa:number,idPassenger:string){
+    return this._http.Get<transactionObj<GESCentroCostos[]>>(`/GESCentroCostos/GetCostCenterByClientPasseenger?companyCode=${idEmpresa}&identificacion=${idPassenger}`);
+  }
+
   GetCostCenterByContractId(idEmpresa:number,contractId:number){
     return this._http.Get<transactionObj<GESCentroCostos[]>>(`/GESCentroCostos/GetByContractId?companyCode=${idEmpresa}&contractId=${contractId}`);
   }

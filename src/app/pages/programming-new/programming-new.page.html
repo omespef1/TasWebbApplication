@@ -83,7 +83,7 @@
           <ion-label>Posición</ion-label>
           <ion-note slot="end"> {{ latitude}} , {{longitude }}</ion-note>
         </ion-item> 
-        <ion-button type="submit" [disabled]= "!newService.form.valid || loading || request.OrigenCiudad==0 ||  request.DestinoCiudad==0 ||  request.GESSolicitudServiciosDetalle[0].Kilometraje==0 || request.IdTipoServicio==0 || request.IdVinculacionRutas==0 || request.SucursalId ==0 || modality.CentrocostosId==undefined" type="submit"  expand="full"  color="secondary">      
+        <ion-button type="submit" [disabled]= "!newService.form.valid || loading || request.OrigenCiudad==0 ||  request.DestinoCiudad==0 ||  request.CentrocostosId==0 ||  request.GESSolicitudServiciosDetalle[0].Kilometraje==0 || request.IdTipoServicio==0 || request.IdVinculacionRutas==0 || request.SucursalId ==0" type="submit"  expand="full"  color="secondary">      
           <ion-spinner  color="primary" *ngIf="loading" slot="end"></ion-spinner>
           INICIAR SERVICIO
         </ion-button>         

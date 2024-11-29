@@ -28,6 +28,7 @@ import { TypesServicesService } from '../../services/types-services/types-servic
 import { GENPasajerosService } from 'src/app/services/gespasajeros/genpasajeros.service';
 import { GENPasajeros } from 'src/app/models/genpasajeros/genpasajeros.model';
 import { PoliticaDivisionNewComponent } from '../political-division/political-division-new/politica-division-new.component';
+import { CostCenterClientPage } from '../cost-center-client/cost-center-client.page';
 
 @Component({
   selector: 'app-programming-user-new',
@@ -266,7 +267,7 @@ export class ProgrammingUserNewPage implements OnInit {
 
   async showPopupCostCenter() {
     const modal = await this.modal.create({
-      component: CostCenterPage
+      component: CostCenterClientPage
     });
     modal.onDidDismiss().then(resp => {
       if (resp.data != undefined) {

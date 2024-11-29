@@ -26,6 +26,7 @@ import { FactoryValidator } from './factory/validator-passenger.factory';
 import { OneSignal } from '@awesome-cordova-plugins/onesignal/ngx';
 import { PoliticalDivisionComponent } from './pages/political-division/political-division.component';
 import { CostCenterPage } from './pages/cost-center/cost-center.page';
+import { CostCenterClientPage } from './pages/cost-center-client/cost-center-client.page';
 // import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { ThirdPartieValidationPage } from "./pages/third-partie-validation/third-partie-validation.page";
@@ -47,7 +48,7 @@ import { PoliticaDivisionNewComponent } from "./pages/political-division/politic
 @NgModule({
   declarations: [AppComponent, SafePipe, ThirdPartiesGenericPage, SignatureComponent, PassengersComponent, PoliticalDivisionComponent, CostCenterPage, ThirdPartieValidationPage, SucursalesPage,
      ContratosPage, TypesVehiclesComponent, PoliticaDivisionActiveComponent,PoliticaDivisionNewComponent, ValidateCodePage, GENPassengersPage,LocationComponent,MapsUrlPipeDetail,EncuestaCalificacionComponent],
-  entryComponents: [ThirdPartiesGenericPage, SignatureComponent, PassengersComponent, PoliticalDivisionComponent, CostCenterPage, ThirdPartieValidationPage, SucursalesPage, ContratosPage, TypesVehiclesComponent, PoliticaDivisionActiveComponent,
+  entryComponents: [ThirdPartiesGenericPage, SignatureComponent, PassengersComponent, PoliticalDivisionComponent, CostCenterPage,CostCenterClientPage, ThirdPartieValidationPage, SucursalesPage, ContratosPage, TypesVehiclesComponent, PoliticaDivisionActiveComponent,
      ValidateCodePage,GENPassengersPage, LocationComponent,EncuestaCalificacionComponent,PoliticaDivisionNewComponent],
   imports: [BrowserModule, IonicModule.forRoot(
     { mode: 'ios' }
