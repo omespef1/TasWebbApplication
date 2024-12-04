@@ -70,16 +70,30 @@ export class ProgrammingDetailPage implements OnInit {
     private monitoreoService: MonitoreoService,
     private positionService: PositionService, private gentercerosService: GENTercerosService,
     private gessolicitudServiciosService: ServicesRequestService,
-    private nav: NavController) {
+    private nav: NavController,
+  private _session:SessionService  ) {
+    this.programming = this.router.getCurrentNavigation().extras.state.programming;
     this.programming.details = [];
     this.programming.GENPasajerosServicios = [];
   }
 
+  isPassenger(){
+    return !!this._session.GetUser() &&  (this._session.GetUser().Grupo === "VIP" || this._session.GetUser().Grupo === "VIP0")
+  }
   ngOnInit() {
-    this.programming = this.router.getCurrentNavigation().extras.state.programming;
-    this.oldDriver = this.programming.ConductorId;
-    this.getContrato();
-    this.getDrivers();
+    
+   
+
+    if(this.isPassenger() && this._session.isUser()){
+      debugger;
+      this.getRequestByIdPassneger();
+    }
+    else {
+      
+      this.oldDriver = this.programming.ConductorId;
+      this.getContrato();
+      this.getDrivers();
+    }
     //this.loadDetail();
   }
 
@@ -116,6 +130,20 @@ export class ProgrammingDetailPage implements OnInit {
           this.checkPassengers();
         }
       });
+  }
+
+
+  getRequestByIdPassneger(){
+
+    this._service.GetServicesRequestByIdPassenger(this._session.GetUser().IdEmpresa,this.programming.SolicitudId,this._sesion.GetUser().IdPasajero).subscribe(resp=>{
+      debugger;
+      if(resp!=undefined && resp.ObjTransaction!=null && resp.Retorno==0){
+        this.programming = resp.ObjTransaction[0];
+        this.oldDriver = this.programming.ConductorId;
+        this.getContrato();
+        this.getDrivers();
+      }
+    })
   }
 
   loadMap(latitude: number, long: number) {
