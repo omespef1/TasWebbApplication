@@ -15,6 +15,7 @@ import { NotificationsService } from "../push/notifications.service";
 import { OneSignalEntitie } from "../../models/one-signal-third-parties/one-signal-third-parties";
 import { OneSignalUsersService } from "../oneSignalUsers/one-signal-users.service";
 import { OneSignalThirdPartiesService } from "../OneSignalThirdParties/one-signal-third-parties.service";
+import { GESListaPasajerosRutas } from "src/app/models/geslistapasajerosrutas/geslistapasajerosrutas.model";
 
 @Injectable({
   providedIn: "root",
@@ -68,6 +69,17 @@ export class AuthService {
       })
     );
   }
+
+
+
+  registerPassengerPublic(credentials: GESListaPasajerosRutas) {
+    return this._http.Post<transaction>("/GESListaPasajerosRutas", credentials).pipe(
+      tap(async (userData: transaction) => {
+        return userData;
+      })
+    );
+  }
+
 
   signInDirect() {
     if (

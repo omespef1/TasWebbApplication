@@ -11,3 +11,10 @@ export class ThirdPartie {
     Conductor:number;
     IdPasajero?:number;
 }
+
+
+export class ThirdPartiePublic extends ThirdPartie {
+   
+    Dominio:string;
+    ContratoId:number;
+}

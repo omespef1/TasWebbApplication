@@ -265,7 +265,7 @@ export class ProgrammingDetailPage implements OnInit {
     return !!this._sesion.GetUser() && this._sesion.GetUser().Grupo === "VIP";
   }
 
-  setNewLog(value: any, confirmed: boolean, code: number = 0) {
+  setNewLog(value: any, confirmed: boolean, code: number = 0) {    
     if (value != "I" || confirmed == true || !this.contract.UsoCodigo) {
       this.textButton = "Localizando...";
       this.sending = true;
@@ -300,6 +300,9 @@ export class ProgrammingDetailPage implements OnInit {
           if (value == "I") {
             this.getPassengersService();
           }
+          if (value === 'F') {
+            this.nav.navigateBack("tabs/programming");
+          }
         } else {
           this.textButton = "Nuevo seguimiento";
           this._alert.showAlert("Error", resp.TxtError);
@@ -325,6 +328,9 @@ export class ProgrammingDetailPage implements OnInit {
           this.loadDetail();
           if (value == "I") {
             this.getPassengersService();
+          }
+          if (value === 'F') {
+            this.nav.navigateBack("tabs/programming");
           }
         } else {
           this.textButton = "Nuevo seguimiento";

@@ -3,6 +3,8 @@ export class loginRequest {
     Password:string;
     business:number;
 }
+
+
 export class changePassword {
 
     idEmpresa:number;
