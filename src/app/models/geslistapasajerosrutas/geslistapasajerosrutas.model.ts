@@ -8,4 +8,5 @@ export class GESListaPasajerosRutas {
     FechaCrea:Date;
     IdCliente:number;
     ContratoId:number;
+	SolicitudId:number;
 }

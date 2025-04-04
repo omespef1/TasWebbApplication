@@ -10,7 +10,7 @@ import { DxAccordionModule, DxCheckBoxModule, DxSliderModule, DxTagBoxModule, Dx
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { StatesRequestProgrammingPipe } from "src/app/pipes/states-request-programming.pipe";
 import { MapsUrlPipe } from "src/app/pipes/maps-url.pipe";
-
+import { Camera } from '@ionic-native/camera/ngx';
 const routes: Routes = [
   {
     path: '',
@@ -33,7 +33,7 @@ const routes: Routes = [
     ReactiveFormsModule 
   ],
   providers:[
-    Geolocation
+    Geolocation,Camera
   ],
   declarations: [ProgrammingDetailPage,StatesRequestProgrammingPipe,MapsUrlPipe]
 })

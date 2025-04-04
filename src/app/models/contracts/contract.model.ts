@@ -16,4 +16,6 @@ export class GESContratos {
     CambiarOrden?:boolean;
     GpsMonitoreo:boolean;
     InteraccionPasajero:boolean;
+    PasajerosExternos:boolean;
+    
 }

@@ -3,6 +3,7 @@ import { transaction, transactionID } from "src/app/models/general/transaction";
 import { HttpManagerService } from '../httpManager/http-manager.service';
 import { ServiceRequestDetail, ServicesRequest } from "src/app/models/service-request/programmings";
 import { transactionObj } from '../../models/general/transaction';
+import { DtoPointControl } from 'src/app/models/gessolicitudpuntoscontrol/gessolicitudpuntoscontrol.model';
 
 @Injectable({
   providedIn: 'root'
@@ -65,6 +66,16 @@ export class ServicesRequestService {
     return this._http.Get<transactionObj<any>>(`/GESSolicitudServicios/updateDriver?companyCode=${companyCode}&driverId=${driverId}&requestId=${requestId}`);
   }
    
+  
+  getPointsControl(companyCode:number, requestId:number){
+
+    return this._http.Get<transaction>(`/GESSolicitudServicios/GESSolicitudServiciosPuntosControlsApp?companyCode=${companyCode}&solicitudId=${requestId}`)
+  }
+
+
+  postPointControl(request: DtoPointControl){
+    return this._http.PostRequest<transaction>('/GESSolicitudServicios/GESSolicitudServiciosPuntosControlsApp', request);
+  }
 
 
 }

@@ -1,0 +1,30 @@
+<app-header  [headerName]="'Validar código'">
+  
+</app-header>
+
+<ion-content padding>
+  <form autocomplete="off" (ngSubmit)="validatePassenger();" #codeForm="ngForm" class="bounceIn">
+  <ion-item>
+    <ion-label position="floating" style="font-size: 1.5em;">Código de Verificación</ion-label>
+    <ion-input inputmode="numeric"   required
+     placeholder="Digite código"
+      type="numeric" 
+      [(ngModel)]="verificationCode" 
+      minlength="4" 
+      name="code"
+      style="font-size: 2em; height: 60px; text-align: center;">
+    </ion-input>
+  </ion-item>
+  <div text-center style="margin-top: 30px;">
+    <ion-button expand="block" color="secondary"            
+    [disabled]="!isCodeValid() || loading" (click)="validatePassenger()"
+            style="font-size: 1.5em;">
+      {{loading?'Validando':'Validar'}}
+
+      <div text-center>
+        <ion-spinner color="primary" *ngIf="loading" slot="start"></ion-spinner>
+      </div>
+    </ion-button>
+  </div>
+</form>
+</ion-content>

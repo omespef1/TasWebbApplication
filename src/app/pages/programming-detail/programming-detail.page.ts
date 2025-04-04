@@ -28,14 +28,18 @@ import { ThirdPartie } from 'src/app/models/general/user';
 import { BehaviorSubject } from 'rxjs';
 import { PoliticalDivisionComponent } from '../political-division/political-division.component';
 import { SignatureComponent } from '../signature/signature.component';
-
+import { ValidCodeComponent } from 'src/app/components/valid-code/valid-code.component';
+import { DtoPointControl, GESSolicitudServiciosPuntosControl } from 'src/app/models/gessolicitudpuntoscontrol/gessolicitudpuntoscontrol.model';
+import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
 @Component({
   selector: "app-programming-detail",
   templateUrl: "./programming-detail.page.html",
   styleUrls: ["./programming-detail.page.scss"],
 })
 export class ProgrammingDetailPage implements OnInit {
+  showExternPassengerButton=false;
   programming: any = {};
+  serviceInit=false;
   loadingMap = true;
   theHtmlString: any;
   sending = false;
@@ -52,6 +56,8 @@ export class ProgrammingDetailPage implements OnInit {
   Firma:string="";
   kilometraje:number=0;
   signatureRejected=false;
+  loadingPhoto=false;
+  allPointsControls: BehaviorSubject<DtoPointControl[]> = new BehaviorSubject<DtoPointControl[]>([]);
   constructor(
     private router: Router,
     private _san: DomSanitizer,
@@ -70,7 +76,9 @@ export class ProgrammingDetailPage implements OnInit {
     private monitoreoService: MonitoreoService,
     private positionService: PositionService, private gentercerosService: GENTercerosService,
     private gessolicitudServiciosService: ServicesRequestService,
-    private nav: NavController) {
+    private nav: NavController,
+  private camera: Camera,
+      private geolocation: Geolocation,) {
     this.programming.details = [];
     this.programming.GENPasajerosServicios = [];
   }
@@ -80,6 +88,8 @@ export class ProgrammingDetailPage implements OnInit {
     this.oldDriver = this.programming.ConductorId;
     this.getContrato();
     this.getDrivers();
+    this.getPointsControl();
+    
     //this.loadDetail();
   }
 
@@ -94,6 +104,7 @@ export class ProgrammingDetailPage implements OnInit {
     this.contratos.getByCode(company, this.programming.ContratoId).subscribe(resp => {
       if (resp != undefined && resp.Retorno == 0) {
         this.contract = resp.ObjTransaction;
+        this.shouldShowValidatePassengerButton();
         this.changes.detectChanges();
       }
     })
@@ -114,10 +125,18 @@ export class ProgrammingDetailPage implements OnInit {
           this.oldTarget = { id: this.programming.DestinoCiudad, text: this.programming.Destino };
           let details: ServiceRequestDetail[] = this.programming.details;
           this.checkPassengers();
+          this.checkServiceInit();
         }
       });
   }
 
+  getPointsControl(){  
+    this.gessolicitudServiciosService.getPointsControl(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId).subscribe(resp=>{
+      if(resp && resp.Retorno==0){
+        this.allPointsControls.next(resp.ObjTransaction);
+      }
+    })
+  }
   loadMap(latitude: number, long: number) {
     return this._san.bypassSecurityTrustResourceUrl(
       `https://maps.google.com/maps?q=${latitude}, ${long}&z=15&output=embed`
@@ -126,6 +145,101 @@ export class ProgrammingDetailPage implements OnInit {
 
   }
 
+    takePicture(point: DtoPointControl) {
+     this.loadingPhoto = true;         
+      // Verificar si la aplicación se está ejecutando en un navegador
+      const isBrowser = !window.hasOwnProperty('cordova');
+    
+      if (isBrowser) {
+        // La aplicación se está ejecutando en un navegador, solicitar imagen de la fototeca
+        const inputElement = document.createElement('input');
+        inputElement.type = 'file';
+        inputElement.accept = 'image/jpeg';
+    
+        inputElement.addEventListener('change', (event: Event) => {
+          const target = event.target as HTMLInputElement;
+          if (target.files && target.files.length > 0) {
+            const file = target.files[0];
+    
+            const reader = new FileReader();
+    
+            reader.onload = () => {
+             this.loadingPhoto = false;
+             point.ImageUrl = this.eliminarEncabezadoBase64(reader.result) as string;
+            };
+    
+            reader.readAsDataURL(file);
+          }
+        });
+    
+        inputElement.click();
+      } else {
+        // La aplicación se está ejecutando en un dispositivo móvil, utilizar la cámara
+        const options: CameraOptions = {
+          quality: 40,
+          destinationType: this.camera.DestinationType.DATA_URL,
+          encodingType: this.camera.EncodingType.JPEG,
+          mediaType: this.camera.MediaType.PICTURE,
+        };
+    
+        this.camera.getPicture(options).then(
+          (imageData) => {
+            this.loadingPhoto= false;
+            point.ImageUrl = imageData;
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      }
+    }
+    eliminarEncabezadoBase64(variable) {
+      const encabezado = 'data:image/jpeg;base64,';
+      
+      if (variable.startsWith(encabezado)) {
+        return variable.substring(encabezado.length);
+      }
+      
+      return variable;
+    }
+
+    checkServiceInit(){
+    const detials: any[] =  this.programming.details;
+      this.serviceInit =  detials.filter(x=>x.Estado=='I').length>0;
+          }
+    sendPointControl(point:DtoPointControl){
+        this.locating=true;
+      this.geolocation
+      .getCurrentPosition()
+      .then((resp) => {
+        this.locating=false;
+        this.postPointControl(point,resp.coords.latitude, resp.coords.longitude);
+      })
+      .catch((error) => {
+        this.locating=false;
+        //console.log("Error getting location", error);
+        this.postPointControl(point,0, 0);
+      });
+    }
+
+    postPointControl(point:DtoPointControl,latitude:number,longitude:number){      
+        point.Longitude = longitude;
+        point.Latitude = latitude;
+        this.gessolicitudServiciosService.postPointControl(point).subscribe(
+
+          resp=>{  
+
+            if(resp!=null && resp.Retorno==0){
+              this._alert.successSweet('Punto de control guardado!')
+            }
+            else {
+              this._alert.errorSweet(resp.TxtError)
+            }
+          }, err=>{
+            this._alert.errorSweet('Error inesperado');
+          }
+        )
+    }
   setState() {
     const buttons: any[] = [
       {
@@ -652,6 +766,31 @@ export class ProgrammingDetailPage implements OnInit {
    
 
    
+    });
+    return await modal.present();
+  }
+
+  shouldShowValidatePassengerButton() {    
+    // Suponemos que cuando no hay usuario (this._sesion.isUser() === false) se está logueando como conductor
+    // Y que el contrato debe existir y tener la propiedad PasajerosExternos en true.
+    this.showExternPassengerButton = !this._sesion.isUser() && this.contract && this.contract.PasajerosExternos;
+  }
+
+
+
+  async openValidatePassengerModal() {
+    const modal = await this.modalController.create({
+      component:  ValidCodeComponent,
+      componentProps: {
+        requestId: this.programming.SolicitudId
+      }
+    });
+    modal.onDidDismiss().then(resp => {
+      if (resp.data != undefined) {
+        // console.log(resp);
+        
+       
+      }
     });
     return await modal.present();
   }

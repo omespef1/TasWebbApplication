@@ -29,8 +29,15 @@
   <ion-icon name="car"></ion-icon>
       Ver ubicación vehículo
 </ion-button>
+<ion-button expand="block"
+*ngIf="showExternPassengerButton"
+(click)="openValidatePassengerModal()">
+<ion-icon name="person"></ion-icon>
+Validar pasajero
+</ion-button>
        </ion-col> 
-     </ion-row>   
+     </ion-row> 
+  
   </ion-grid>
 
   <ion-item class="header" lines="none" color="secondary">
@@ -134,7 +141,51 @@
       <ion-label position="stacked">Solo se enviarán si el seguimiento es FINAL</ion-label>
       <ion-textarea rows="3" cols="12" [(ngModel)]="observations" learOnEdit="true"></ion-textarea>
     </ion-item>
-  </ion-item>       
+  </ion-item>     
+  
+  <ng-container *ngIf="serviceInit && (allPointsControls | async).length>0 ">
+    <ion-item class="header" lines="none" color="secondary">
+      <ion-icon slot="start" name="locate"></ion-icon>
+      <ion-label>PUNTOS DE CONTROL</ion-label>
+    </ion-item>
+    <ng-container *ngFor="let point of allPointsControls | async ; let i = index">
+      <ion-item class="header" lines="none" color="primary">
+        <ion-icon slot="start" name="pin"></ion-icon>
+        <ion-label>{{point.Name}}</ion-label>
+      </ion-item>
+     
+      <ion-item>
+        <ion-icon slot="start" name="eye"></ion-icon>
+        <ion-label>Foto</ion-label>
+        <ion-button color="secondary" slot="end" (click)="takePicture(point)" fill="outline"  [disabled]="i > 0 && !(allPointsControls | async)[i - 1]?.ImageUrl">
+          <ion-icon  slot="start" name="camera"></ion-icon>
+          <ion-spinner *ngIf="loadingPhoto"  slot="start"></ion-spinner>
+          Foto 
+        </ion-button>                  
+      </ion-item>
+      <ion-item *ngIf="point.ImageUrl">    
+        <ion-label>Evidencia</ion-label>  
+        <ion-thumbnail slot="start">
+          <img [src]="'data:image/jpeg;base64,' + point.ImageUrl" />
+        </ion-thumbnail>     
+     </ion-item>
+     <ion-item>
+      <ion-icon slot="start" name="clipboard"></ion-icon>      
+      <ion-textarea placeholder="Notas" rows="3" cols="12" [(ngModel)]="point.Notas" learOnEdit="true"></ion-textarea>
+    </ion-item>
+     <ion-item *ngIf="point.ImageUrl">         
+      <ion-button color="secondary" slot="end" (click)="sendPointControl(point)" expand="block" color="success">
+        <ion-icon  slot="start" name="save"></ion-icon>
+        <ion-spinner *ngIf="locating"  slot="start"></ion-spinner>
+       Guardar seguimiento
+      </ion-button>                  
+    </ion-item>
+    
+    </ng-container>
+  </ng-container>
+
+  
+
   <div id="accordion">
     <dx-accordion #accordion [dataSource]="programming.details" [collapsible]="true" [multiple]="false"
       [animationDuration]="1000" noDataText="No hay datos">

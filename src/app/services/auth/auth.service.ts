@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Observable, of, BehaviorSubject, observable } from "rxjs";
 import { filter, tap, take, map } from "rxjs/operators";
-import { transaction } from "src/app/models/general/transaction";
+import { transaction, transactionObj } from "src/app/models/general/transaction";
 import { HttpManagerService } from "../httpManager/http-manager.service";
 import { loginRequest } from "../../models/general/loginRequest";
 import { SessionService } from "../session/session.service";
@@ -79,7 +79,14 @@ export class AuthService {
       })
     );
   }
-
+  validatePassengerPublic(payload: any): Observable<transaction> {
+    return this._http.Post<transaction>("/GESListaPasajerosRutas/validate", payload)
+      .pipe(
+        tap(async (response: transaction) => {
+          return response;
+        })
+      );
+  }
 
   signInDirect() {
     if (

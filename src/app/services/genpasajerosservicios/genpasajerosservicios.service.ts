@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpManagerService } from '../httpManager/http-manager.service';
 import { transaction } from 'src/app/models/general/transaction';
 import { SessionService } from '../session/session.service';
+import { GESSolicitudServiciosPuntosControl } from 'src/app/models/gessolicitudpuntoscontrol/gessolicitudpuntoscontrol.model';
 const API_CONTROLLER = 'GENPasajerosServicios';
 @Injectable({
   providedIn: 'root'
@@ -27,4 +28,5 @@ export class GENPasajerosServiciosService {
    update(data:any){
     return this._http.Post<transaction>(`/${API_CONTROLLER}/UpdatePassengers`,data);
    }
+
 }

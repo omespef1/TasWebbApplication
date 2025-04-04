@@ -43,13 +43,14 @@ import { LocationComponent } from "./components/location/location.component";
 import { MapsUrlPipeDetail } from "./pipes/maps-url-detail";
 import { EncuestaCalificacionComponent } from "./components/encuesta-calificacion/encuesta-calificacion.component";
 import { PoliticaDivisionNewComponent } from "./pages/political-division/political-division-new/politica-division-new.component";
+import { ValidCodeComponent } from "./components/valid-code/valid-code.component";
 
 
 @NgModule({
-  declarations: [AppComponent, SafePipe, ThirdPartiesGenericPage, SignatureComponent, PassengersComponent, PoliticalDivisionComponent, CostCenterPage, ThirdPartieValidationPage, SucursalesPage,
+  declarations: [AppComponent, SafePipe, ThirdPartiesGenericPage, SignatureComponent, PassengersComponent, PoliticalDivisionComponent, CostCenterPage, ThirdPartieValidationPage,ValidCodeComponent, SucursalesPage,
      ContratosPage, TypesVehiclesComponent, PoliticaDivisionActiveComponent,PoliticaDivisionNewComponent, ValidateCodePage, GENPassengersPage,LocationComponent,MapsUrlPipeDetail,EncuestaCalificacionComponent,CostCenterClientPage],
   entryComponents: [ThirdPartiesGenericPage, SignatureComponent, PassengersComponent, PoliticalDivisionComponent, CostCenterPage,CostCenterClientPage, ThirdPartieValidationPage, SucursalesPage, ContratosPage, TypesVehiclesComponent, PoliticaDivisionActiveComponent,
-     ValidateCodePage,GENPassengersPage, LocationComponent,EncuestaCalificacionComponent,PoliticaDivisionNewComponent],
+     ValidateCodePage,GENPassengersPage, LocationComponent,EncuestaCalificacionComponent,PoliticaDivisionNewComponent,ValidCodeComponent],
   imports: [BrowserModule, IonicModule.forRoot(
     { mode: 'ios' }
   ), AppRoutingModule,
