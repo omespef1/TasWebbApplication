@@ -131,11 +131,14 @@ export class ProgrammingDetailPage implements OnInit {
   }
 
   getPointsControl(){  
-    this.gessolicitudServiciosService.getPointsControl(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId).subscribe(resp=>{
-      if(resp && resp.Retorno==0){
-        this.allPointsControls.next(resp.ObjTransaction);
-      }
-    })
+    if(this._sesion.GetThirdPartie()!=undefined){
+      this.gessolicitudServiciosService.getPointsControl(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId).subscribe(resp=>{
+        if(resp && resp.Retorno==0){
+          this.allPointsControls.next(resp.ObjTransaction);
+        }
+      })
+    }
+
   }
   loadMap(latitude: number, long: number) {
     return this._san.bypassSecurityTrustResourceUrl(
