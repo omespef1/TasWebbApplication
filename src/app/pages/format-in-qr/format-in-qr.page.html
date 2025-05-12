@@ -1,0 +1,54 @@
+
+<app-header headerName="Firmar formato ingreso">
+  
+</app-header>
+<ion-content padding>  
+ <<ng-container *ngIf="isDataLoaded">
+
+  
+
+    <ion-list inset="true">
+      <ion-list-header color="secondary">
+        <ion-label>DATOS DEL CONDUCTOR</ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-icon slot="start" name="man"></ion-icon>
+        <ion-label position="floating">Cèdula</ion-label>
+       <ion-note slot="end"> {{ driverIdentification}} </ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="man"></ion-icon>
+        <ion-label position="floating">Nombre</ion-label>
+       <ion-note slot="end"> {{ driverName}} </ion-note>
+      </ion-item>
+    </ion-list>
+
+  <ion-button expand="full" color="secondary"            
+  [disabled]="!isDataLoaded" (click)="showModalSignature()"
+          >
+    {{loading?'Firmando':'Firmar'}}
+    <div text-center>
+      <ion-spinner color="primary" *ngIf="loading" slot="start"></ion-spinner>
+      
+    </div>
+    <ion-icon slot="start" name="create"></ion-icon>
+  </ion-button>
+  <ion-item  *ngIf="isSigned">
+    <img [src]="driverSign" >
+  </ion-item>
+  <ion-button *ngIf="isDataLoaded && isSigned" expand="full" color="primary"            
+  [disabled]="!isDataLoaded || singing" (click)="sendData()"
+          >
+    {{loading?'Guardando...':'Guardar'}}
+    <div text-center>
+      <ion-spinner color="secondary" *ngIf="singing" slot="start"></ion-spinner>
+      
+    </div>
+    <ion-icon slot="start" name="checkmark-circle"></ion-icon>
+  </ion-button>
+  
+ 
+
+</ng-container>
+
+</ion-content>
