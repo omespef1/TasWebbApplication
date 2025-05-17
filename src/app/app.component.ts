@@ -15,6 +15,7 @@ import { ServicesRequestService } from "./services/services-request/services-req
 import { AppVersionControlService } from "./services/app-version-control/app-version-control.service";
 import { config } from "src/assets/config/settings";
 import { AlertService } from "./services/alert/alert.service";
+import { SwUpdate } from '@angular/service-worker';
 
 @Component({
   selector: "app-root",
@@ -36,12 +37,14 @@ export class AppComponent {
     private requestService: ServicesRequestService,
     private notifications:NotificationsService,
     private versionCheckService: AppVersionControlService,
-    private alert:AlertService
+    private alert:AlertService,
+    private swUpdate: SwUpdate
   ) {
     this.initializeApp();
   }
 
   initializeApp() {
+    
     this.platform.ready().then(() => {              
       this.statusBar.styleDefault();    
       this.splashScreen.hide();
@@ -60,7 +63,11 @@ export class AppComponent {
       this.GetLastServiceThirdPartieApproved();
       }
       
-      
+      if (this.swUpdate.isEnabled) {
+        this.swUpdate.available.subscribe(() => {
+          this.swUpdate.activateUpdate().then(() => document.location.reload());
+        });
+      }
     });
   }
 getPlatform(){

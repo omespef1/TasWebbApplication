@@ -1,12 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
-import { SignaturePad } from 'angular2-signaturepad';
-import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import {  ModalController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { ManFormatoIngresoService } from 'src/app/services/format-in/format-in.service';
 import { SignatureComponent } from '../signature/signature.component';
-import { ThirdPartiesService } from 'src/app/services/third-parties/third-parties.service';
 import { AlertService } from 'src/app/services/alert/alert.service';
 @Component({
   selector: 'app-format-in-qr',

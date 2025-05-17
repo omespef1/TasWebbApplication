@@ -44,7 +44,7 @@ import { MapsUrlPipeDetail } from "./pipes/maps-url-detail";
 import { EncuestaCalificacionComponent } from "./components/encuesta-calificacion/encuesta-calificacion.component";
 import { PoliticaDivisionNewComponent } from "./pages/political-division/political-division-new/politica-division-new.component";
 import { ValidCodeComponent } from "./components/valid-code/valid-code.component";
-
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [AppComponent, SafePipe, ThirdPartiesGenericPage, SignatureComponent, PassengersComponent, PoliticalDivisionComponent, CostCenterPage, ThirdPartieValidationPage,ValidCodeComponent, SucursalesPage,
@@ -54,7 +54,10 @@ import { ValidCodeComponent } from "./components/valid-code/valid-code.component
   imports: [BrowserModule, IonicModule.forRoot(
     { mode: 'ios' }
   ), AppRoutingModule,
-    ComponentsModule, HttpClientModule, FormsModule, IonicStorageModule.forRoot(), SignaturePadModule],
+    ComponentsModule, HttpClientModule, FormsModule, IonicStorageModule.forRoot(), SignaturePadModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production
+    })],
   providers: [
     Network,
     // FingerprintAIO,
@@ -66,6 +69,7 @@ import { ValidCodeComponent } from "./components/valid-code/valid-code.component
     CallNumber,
     FactoryValidator,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    
 
   ],
   bootstrap: [AppComponent]

@@ -44,7 +44,7 @@
             ],
             "scripts": []
           },
-          "configurations": {
+          "configurations": {            
             "production": {
               "fileReplacements": [
                 {
@@ -52,6 +52,8 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
+              "serviceWorker": true,
+              "ngswConfigPath": "ngsw-config.json",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
