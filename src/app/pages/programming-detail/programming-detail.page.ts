@@ -3,7 +3,7 @@ import { GENTercerosService } from 'src/app/services/GENTerceros/genterceros.ser
 import { GENPasajerosServicios } from 'src/app/models/genpasajeroservicios/genpasajerosservicios.model';
 import { finalize } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { DomSanitizer } from "@angular/platform-browser";
 import { SessionService } from "../../services/session/session.service";
 import { AlertService } from "../../services/alert/alert.service";
@@ -77,6 +77,7 @@ export class ProgrammingDetailPage implements OnInit {
     private positionService: PositionService, private gentercerosService: GENTercerosService,
     private gessolicitudServiciosService: ServicesRequestService,
     private nav: NavController,
+    private route: ActivatedRoute,
   private camera: Camera,
       private geolocation: Geolocation,) {
     this.programming.details = [];
@@ -84,19 +85,50 @@ export class ProgrammingDetailPage implements OnInit {
   }
 
   ngOnInit() {
-    this.programming = this.router.getCurrentNavigation().extras.state.programming;
+    const idServicioQR = this.route.snapshot.queryParamMap.get('serviceId');
+    const modoProximo = this.route.snapshot.queryParamMap.get('nearest');
+
+    if (idServicioQR) {
+      const companyId = this._sesion.GetThirdPartie().IdEmpresa;
+      const serviceId = +idServicioQR;
+      this._service.GetServicesDetailById(companyId, serviceId).subscribe(resp => {
+        if (resp?.Retorno === 0) {
+          this.programming = resp.ObjTransaction;
+          this.initializeAfterProgrammingLoaded();
+        } else {
+          this._alert.errorSweet('No se pudo cargar el servicio por ID');
+        }
+      });
+    } else if (modoProximo === 'true') {
+      const companyId = this._sesion.GetThirdPartie().IdEmpresa;
+      const thirdPartieId = this._sesion.GetThirdPartie().Id;
+      this._service.GetCurrentService(companyId, thirdPartieId).subscribe(resp => {
+        if (resp?.Retorno === 0) {
+          this.programming = resp.ObjTransaction;
+          this.initializeAfterProgrammingLoaded();
+        } else {
+          this._alert.errorSweet('No se encontró servicio próximo.');
+        }
+      });
+    } else {
+      this.programming = this.router.getCurrentNavigation().extras.state.programming;
+      this.initializeAfterProgrammingLoaded();
+    }
+  }
+
+    initializeAfterProgrammingLoaded() {
     this.oldDriver = this.programming.ConductorId;
     this.getContrato();
     this.getDrivers();
     this.getPointsControl();
-    
-    //this.loadDetail();
   }
 
   ionViewDidEnter() {
-    this.loadDetail();
-
+    if (this.programming?.EmpresaId && this.programming?.SolicitudId) {
+      this.loadDetail();
+    }
   }
+
 
   getContrato() {
     let company = this._sesion.GetUser() == undefined ? this._sesion.GetThirdPartie().IdEmpresa : this._sesion.GetUser().IdEmpresa
@@ -129,6 +161,9 @@ export class ProgrammingDetailPage implements OnInit {
         }
       });
   }
+
+
+
 
   getPointsControl(){  
     if(this._sesion.GetThirdPartie()!=undefined){
