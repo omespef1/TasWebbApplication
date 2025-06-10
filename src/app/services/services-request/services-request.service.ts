@@ -25,12 +25,6 @@ export class ServicesRequestService {
   GetServicesDetail(business: number,id: number){
     return this._http.Get<transaction>(`/GESSolicitudServicios/GetGESSolicitudServiciosDetalleNew?empresaId=${business}&solicitudId=${id}`);
    }
-     GetServicesDetailById(business: number,id: number){
-    return this._http.Get<transaction>(`/GESSolicitudServicios/GetGESSolicitudServiciosDetalleNew?empresaId=${business}&solicitudId=${id}`);
-   }
-     GetCurrentService(business: number,id: number){
-    return this._http.Get<transaction>(`/GESSolicitudServicios/GetGESSolicitudServiciosDetalleNew?empresaId=${business}&solicitudId=${id}`);
-   }
 
    CheckPendingServices(business: number,thirdPartieId: number){
     return this._http.Get<transaction>(`/GESSolicitudServicios/checkPendingServices?companyId=${business}&thirdPartieId=${thirdPartieId}`);

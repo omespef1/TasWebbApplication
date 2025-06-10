@@ -45,13 +45,12 @@ import { EncuestaCalificacionComponent } from "./components/encuesta-calificacio
 import { PoliticaDivisionNewComponent } from "./pages/political-division/political-division-new/politica-division-new.component";
 import { ValidCodeComponent } from "./components/valid-code/valid-code.component";
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { BusinessPage } from "./pages/business/business.page";
 
 @NgModule({
   declarations: [AppComponent, SafePipe, ThirdPartiesGenericPage, SignatureComponent, PassengersComponent, PoliticalDivisionComponent, CostCenterPage, ThirdPartieValidationPage,ValidCodeComponent, SucursalesPage,
-     ContratosPage, TypesVehiclesComponent, PoliticaDivisionActiveComponent,PoliticaDivisionNewComponent, ValidateCodePage, GENPassengersPage,LocationComponent,MapsUrlPipeDetail,EncuestaCalificacionComponent,CostCenterClientPage,BusinessPage],
+     ContratosPage, TypesVehiclesComponent, PoliticaDivisionActiveComponent,PoliticaDivisionNewComponent, ValidateCodePage, GENPassengersPage,LocationComponent,MapsUrlPipeDetail,EncuestaCalificacionComponent,CostCenterClientPage],
   entryComponents: [ThirdPartiesGenericPage, SignatureComponent, PassengersComponent, PoliticalDivisionComponent, CostCenterPage,CostCenterClientPage, ThirdPartieValidationPage, SucursalesPage, ContratosPage, TypesVehiclesComponent, PoliticaDivisionActiveComponent,
-     ValidateCodePage,GENPassengersPage, LocationComponent,EncuestaCalificacionComponent,PoliticaDivisionNewComponent,ValidCodeComponent,BusinessPage],
+     ValidateCodePage,GENPassengersPage, LocationComponent,EncuestaCalificacionComponent,PoliticaDivisionNewComponent,ValidCodeComponent],
   imports: [BrowserModule, IonicModule.forRoot(
     { mode: 'ios' }
   ), AppRoutingModule,
