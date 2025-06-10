@@ -11,6 +11,7 @@ import { NavController } from '@ionic/angular';
 })
 export class SettingsPage implements OnInit {
   ThirdPartie:ThirdPartie;
+  isPassenger = false;
   mobile=false;
   wifi=false;
   groupEnlistment=false;
@@ -21,7 +22,11 @@ export class SettingsPage implements OnInit {
 
 
   ngOnInit() {
+    debugger;
     this.ThirdPartie = this._sesion.GetThirdPartie();
+    if(this.ThirdPartie != null && this.ThirdPartie.IdPasajero>0){
+      this.isPassenger = true;
+    }
    
 
   }
