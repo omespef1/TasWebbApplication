@@ -44,7 +44,7 @@
           <ion-icon slot="start" name="person"></ion-icon>
          <ion-note slot="end">{{ sesion.GetUser().NombreCompleto    }}</ion-note>
         </ion-item>
-        <ion-item *ngIf="!_sesion.isUser()">
+        <ion-item *ngIf="!_sesion.isUser() || sesion.GetUser().IdPasajero>0">
             <ion-label>Contraseña</ion-label>
             <ion-icon slot="start" name="lock"></ion-icon>
             <ion-button (click)="goChangePassword()" color="primary" fill="outline">Cambiar</ion-button>

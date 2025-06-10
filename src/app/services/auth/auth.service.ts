@@ -145,6 +145,8 @@ export class AuthService {
   goApp(shownName=true) {
     
     // this.SetOneSignalId();
+
+    debugger;
     console.log(this._sesion.isUser());
     
     if (this._sesion.isUser()) {  
@@ -174,10 +176,6 @@ export class AuthService {
 
       this._nav.navigateRoot("tabs/vehicle");
     }
-  }
-
-  goProgramming(){
-    this._nav.navigateRoot("tabs/programming")
   }
 
   // SetOneSignalId() {
