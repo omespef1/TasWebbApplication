@@ -1,0 +1,110 @@
+<app-header (click)="changeBusiness()" [headerName]="businessName">
+  
+</app-header>
+
+<ion-content>
+  <div>
+    <form autocomplete="off" (ngSubmit)="signIn();" #loginForm="ngForm" class="bounceIn">
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col	 padding>
+            <div text-center>
+                <!-- <ion-img class="logo" src="assets/imgs/icon.png"></ion-img> -->
+                <ion-img class="logo" [src]="logoApp"></ion-img>
+            </div>           
+          </ion-col>
+        </ion-row>
+        <!-- <ion-row>
+          <ion-col padding>
+            <h2><b>BIENVENIDO!</b></h2>
+          </ion-col>
+        </ion-row> -->
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <!-- <ion-label position="stacked">Email</ion-label> -->
+              <ion-input position="fixed" required autofocus="true" name="email" clear-input type="text" placeholder="Usuario"
+                [(ngModel)]="user.user"></ion-input>
+              <ion-icon name="person" slot="start"></ion-icon>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <!-- <ion-label strong position="stacked">Password</ion-label> -->
+              <ion-input required  [type]="showPass?'text':'password'" clear-input placeholder="Password" name="password"
+                [(ngModel)]="user.Password"></ion-input>
+              <ion-icon name="lock" slot="start"></ion-icon>
+              <ion-icon  (click)="showPass=!showPass" button [name]="showPass==true?'eye-off':'eye'" slot="end"></ion-icon>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col padding>
+            <ion-button [disabled]="!loginForm.form.valid" color="secondary" expand="block" (click)="signIn()" >
+                <ion-icon *ngIf="!loading" slot="start" name="checkmark-circle"></ion-icon>
+                <ion-spinner color="light" *ngIf="loading" slot="start"></ion-spinner>
+                INGRESAR
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        <!-- <ion-row>
+          <ion-col text-left padding size="7">
+            <ion-button class="btn-forgot" strong expand="block" fill="clear" >OLVIDÉ MI CONTRASEÑA</ion-button>
+          </ion-col>
+          <ion-col text-right padding size="5">
+            <ion-button class="btn-signup" strong expand="block" fill="clear" >REGISTRARME</ion-button>
+          </ion-col>
+        </ion-row> -->
+
+       <ion-row text-center>
+         <!-- <ion-col size="12">
+            <div class="fingerprint"  tappable *ngIf="touchId && _sesion.GetThirdPartieBio()!=undefined && _sesion.GetThirdPartieBio()!=null"  >
+                <img tappable (click)="logTouchId()" src="assets/imgs/fingerprintdark.svg">
+              </div>
+         </ion-col> -->
+       </ion-row>
+        <ion-row>
+          <ion-col text-center>
+            <ion-label class="lbl_login_or">O</ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col padding>
+              <!-- <ion-button class="btn-facebook"  expand="block"  >INGRESAR CON FACEBOOK</ion-button> -->
+              <ion-button (click)="changeBusiness()"  class="btn-google" expand="block"  >
+                <ion-icon slot="start" name="sync"></ion-icon>
+                CAMBIAR EMPRESA</ion-button>
+             
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col padding>
+              <!-- <ion-button class="btn-facebook"  expand="block"  >INGRESAR CON FACEBOOK</ion-button> -->
+              <ion-button (click)="cleanSessions()"  class="btn-google" expand="block"  >
+                <ion-icon slot="start" name="refresh-circle"></ion-icon>
+                RESTABLECER</ion-button>
+             
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </div>
+
+
+
+
+
+
+
+
+
+</ion-content>
+
+<ion-footer style="text-align: center;background-color: #F2F2F2;">
+ <ion-label >
+  <small>Version {{ currentVersion}}</small>
+ </ion-label>
+</ion-footer>

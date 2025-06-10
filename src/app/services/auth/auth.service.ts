@@ -178,6 +178,10 @@ export class AuthService {
     }
   }
 
+  goProgramming(){
+    this._nav.navigateRoot("tabs/programming")
+  }
+
   // SetOneSignalId() {
   //   this._sesion.getOneSignalId().then((resp) => {
   //     if (resp !== undefined && resp !== null) {
