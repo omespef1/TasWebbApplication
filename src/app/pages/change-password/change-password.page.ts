@@ -23,11 +23,14 @@ export class ChangePasswordPage implements OnInit {
   }
 changePasswordUser(form:NgForm){
   
-
+let isPassenger = false;
   this.sending=true;
   this.changePassword.idEmpresa = this._sesion.GetBussiness().CodigoEmpresa;
   this.changePassword.identificacion = this._sesion.GetThirdPartie().Identificacion;
 
+
+  if(this.isPassenger())
+    this.changePassword.isPassenger = true;
   this._login.changePassword(this.changePassword).subscribe(resp=>{
     this.sending=false;
     if(resp.Retorno==0){
@@ -41,9 +44,15 @@ changePasswordUser(form:NgForm){
     
     this.sending=false;
   })
+  
+
 
 }
 
+
+isPassenger(){
+return true;
+}
 
   
 }

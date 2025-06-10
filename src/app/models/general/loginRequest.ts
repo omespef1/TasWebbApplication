@@ -12,10 +12,12 @@ export class changePassword {
     password:string;
     newPassword:string;
     reNewPassword:string;
+    isPassenger:boolean;
     constructor(){
         this.idEmpresa=0;
         this.identificacion="";
         this.newPassword="";
         this.password="";
+        this.isPassenger=false;
     }
 }
