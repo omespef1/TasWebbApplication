@@ -37,9 +37,9 @@ import { Camera, CameraOptions } from "@ionic-native/camera/ngx";
   styleUrls: ["./programming-detail.page.scss"],
 })
 export class ProgrammingDetailPage implements OnInit {
-  showExternPassengerButton=false;
+  showExternPassengerButton = false;
   programming: any = {};
-  serviceInit=false;
+  serviceInit = false;
   loadingMap = true;
   theHtmlString: any;
   sending = false;
@@ -53,11 +53,13 @@ export class ProgrammingDetailPage implements OnInit {
   oldDriver: ThirdPartie = new ThirdPartie();
   targetChanged = false;
   oldTarget: { id: number, text: string } = { id: 0, text: "" };
-  Firma:string="";
-  kilometraje:number=0;
-  signatureRejected=false;
-  loadingPhoto=false;
+  Firma: string = "";
+  kilometraje: number = 0;
+  signatureRejected = false;
+  loadingPhoto = false;
   allPointsControls: BehaviorSubject<DtoPointControl[]> = new BehaviorSubject<DtoPointControl[]>([]);
+  isPassengerRoute = false;
+  isFromQr = false;
   constructor(
     private router: Router,
     private _san: DomSanitizer,
@@ -78,33 +80,38 @@ export class ProgrammingDetailPage implements OnInit {
     private gessolicitudServiciosService: ServicesRequestService,
     private nav: NavController,
     private route: ActivatedRoute,
-  private camera: Camera,
-      private geolocation: Geolocation,) {
+    private camera: Camera,
+    private geolocation: Geolocation,) {
     this.programming.details = [];
     this.programming.GENPasajerosServicios = [];
   }
 
   ngOnInit() {
-    const idServicioQR = this.route.snapshot.queryParamMap.get('serviceId');
+   debugger;
+    this.loading=true;
+    const vinculationIdParam = this.route.snapshot.queryParamMap.get('serviceId');
     const modoProximo = this.route.snapshot.queryParamMap.get('nearest');
-
-    if (idServicioQR) {
-      const companyId = this._sesion.GetThirdPartie().IdEmpresa;
-      const serviceId = +idServicioQR;
-      this._service.GetServicesDetailById(companyId, serviceId).subscribe(resp => {
-        if (resp?.Retorno === 0) {
-          this.programming = resp.ObjTransaction;
+    const qrParam = this.route.snapshot.queryParamMap.get('isFromQr');
+    this.isFromQr = qrParam == 'true';
+    this.isPassengerRoute = this.checkIsPassengerRouteReady();
+    if (vinculationIdParam) {
+      const companyId = this._sesion.GetBussiness().CodigoEmpresa;
+    
+      this._service.GetServicesByVinculationId(companyId, vinculationIdParam).subscribe(resp => {
+        if (resp.Retorno === 0) {
+          this.programming = resp.ObjTransaction[0];
           this.initializeAfterProgrammingLoaded();
         } else {
           this._alert.errorSweet('No se pudo cargar el servicio por ID');
         }
       });
     } else if (modoProximo === 'true') {
-      const companyId = this._sesion.GetThirdPartie().IdEmpresa;
-      const thirdPartieId = this._sesion.GetThirdPartie().Id;
-      this._service.GetCurrentService(companyId, thirdPartieId).subscribe(resp => {
-        if (resp?.Retorno === 0) {
-          this.programming = resp.ObjTransaction;
+      const companyId =this._sesion.GetBussiness().CodigoEmpresa;
+      const thirdPartieId = this._sesion.GetUser().IdPasajero;
+      this._service.GetNearestService(companyId, thirdPartieId).subscribe(resp => {
+       let services:any[] =  resp.ObjTransaction;
+        if (resp.ObjTransaction && services.length>0 && resp.Retorno === 0) {
+          this.programming = resp.ObjTransaction[0];
           this.initializeAfterProgrammingLoaded();
         } else {
           this._alert.errorSweet('No se encontró servicio próximo.');
@@ -116,17 +123,30 @@ export class ProgrammingDetailPage implements OnInit {
     }
   }
 
-    initializeAfterProgrammingLoaded() {
+  initializeAfterProgrammingLoaded() {
     this.oldDriver = this.programming.ConductorId;
     this.getContrato();
     this.getDrivers();
     this.getPointsControl();
-  }
-
-  ionViewDidEnter() {
-    if (this.programming?.EmpresaId && this.programming?.SolicitudId) {
+     if (this.programming.SolicitudId) {
       this.loadDetail();
     }
+  }
+
+  // ionViewDidEnter() {
+  //   if (this.programming.EmpresaId && this.programming.SolicitudId) {
+  //     this.loadDetail();
+  //   }
+  // }
+
+
+  checkIsPassengerRouteReady() {
+    console.log(this._sesion.GetUser());
+    console.log(this.isFromQr);
+    const user = this._sesion.GetUser();
+    if (user && user.IdPasajero && user.Grupo == 'PASAJERO_RUTA')
+      return true;
+    else return false;
   }
 
 
@@ -151,7 +171,7 @@ export class ProgrammingDetailPage implements OnInit {
         this.programming.SolicitudId
       )
       .subscribe((resp) => {
-
+        this.loading=false;
         if (resp.ObjTransaction) {
           this.programming.details = resp.ObjTransaction;
           this.oldTarget = { id: this.programming.DestinoCiudad, text: this.programming.Destino };
@@ -165,10 +185,10 @@ export class ProgrammingDetailPage implements OnInit {
 
 
 
-  getPointsControl(){  
-    if(this._sesion.GetThirdPartie()!=undefined){
-      this.gessolicitudServiciosService.getPointsControl(this._sesion.GetThirdPartie().IdEmpresa,this.programming.SolicitudId).subscribe(resp=>{
-        if(resp && resp.Retorno==0){
+  getPointsControl() {
+    if (this._sesion.GetThirdPartie() != undefined) {
+      this.gessolicitudServiciosService.getPointsControl(this._sesion.GetThirdPartie().IdEmpresa, this.programming.SolicitudId).subscribe(resp => {
+        if (resp && resp.Retorno == 0) {
           this.allPointsControls.next(resp.ObjTransaction);
         }
       })
@@ -183,101 +203,101 @@ export class ProgrammingDetailPage implements OnInit {
 
   }
 
-    takePicture(point: DtoPointControl) {
-     this.loadingPhoto = true;         
-      // Verificar si la aplicación se está ejecutando en un navegador
-      const isBrowser = !window.hasOwnProperty('cordova');
-    
-      if (isBrowser) {
-        // La aplicación se está ejecutando en un navegador, solicitar imagen de la fototeca
-        const inputElement = document.createElement('input');
-        inputElement.type = 'file';
-        inputElement.accept = 'image/jpeg';
-    
-        inputElement.addEventListener('change', (event: Event) => {
-          const target = event.target as HTMLInputElement;
-          if (target.files && target.files.length > 0) {
-            const file = target.files[0];
-    
-            const reader = new FileReader();
-    
-            reader.onload = () => {
-             this.loadingPhoto = false;
-             point.ImageUrl = this.eliminarEncabezadoBase64(reader.result) as string;
-            };
-    
-            reader.readAsDataURL(file);
-          }
-        });
-    
-        inputElement.click();
-      } else {
-        // La aplicación se está ejecutando en un dispositivo móvil, utilizar la cámara
-        const options: CameraOptions = {
-          quality: 40,
-          destinationType: this.camera.DestinationType.DATA_URL,
-          encodingType: this.camera.EncodingType.JPEG,
-          mediaType: this.camera.MediaType.PICTURE,
-        };
-    
-        this.camera.getPicture(options).then(
-          (imageData) => {
-            this.loadingPhoto= false;
-            point.ImageUrl = imageData;
-          },
-          (err) => {
-            console.log(err);
-          }
-        );
-      }
+  takePicture(point: DtoPointControl) {
+    this.loadingPhoto = true;
+    // Verificar si la aplicación se está ejecutando en un navegador
+    const isBrowser = !window.hasOwnProperty('cordova');
+
+    if (isBrowser) {
+      // La aplicación se está ejecutando en un navegador, solicitar imagen de la fototeca
+      const inputElement = document.createElement('input');
+      inputElement.type = 'file';
+      inputElement.accept = 'image/jpeg';
+
+      inputElement.addEventListener('change', (event: Event) => {
+        const target = event.target as HTMLInputElement;
+        if (target.files && target.files.length > 0) {
+          const file = target.files[0];
+
+          const reader = new FileReader();
+
+          reader.onload = () => {
+            this.loadingPhoto = false;
+            point.ImageUrl = this.eliminarEncabezadoBase64(reader.result) as string;
+          };
+
+          reader.readAsDataURL(file);
+        }
+      });
+
+      inputElement.click();
+    } else {
+      // La aplicación se está ejecutando en un dispositivo móvil, utilizar la cámara
+      const options: CameraOptions = {
+        quality: 40,
+        destinationType: this.camera.DestinationType.DATA_URL,
+        encodingType: this.camera.EncodingType.JPEG,
+        mediaType: this.camera.MediaType.PICTURE,
+      };
+
+      this.camera.getPicture(options).then(
+        (imageData) => {
+          this.loadingPhoto = false;
+          point.ImageUrl = imageData;
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
     }
-    eliminarEncabezadoBase64(variable) {
-      const encabezado = 'data:image/jpeg;base64,';
-      
-      if (variable.startsWith(encabezado)) {
-        return variable.substring(encabezado.length);
-      }
-      
-      return variable;
+  }
+  eliminarEncabezadoBase64(variable) {
+    const encabezado = 'data:image/jpeg;base64,';
+
+    if (variable.startsWith(encabezado)) {
+      return variable.substring(encabezado.length);
     }
 
-    checkServiceInit(){
-    const detials: any[] =  this.programming.details;
-      this.serviceInit =  detials.filter(x=>x.Estado=='I').length>0;
-          }
-    sendPointControl(point:DtoPointControl){
-        this.locating=true;
-      this.geolocation
+    return variable;
+  }
+
+  checkServiceInit() {
+    const detials: any[] = this.programming.details;
+    this.serviceInit = detials.filter(x => x.Estado == 'I').length > 0;
+  }
+  sendPointControl(point: DtoPointControl) {
+    this.locating = true;
+    this.geolocation
       .getCurrentPosition()
       .then((resp) => {
-        this.locating=false;
-        this.postPointControl(point,resp.coords.latitude, resp.coords.longitude);
+        this.locating = false;
+        this.postPointControl(point, resp.coords.latitude, resp.coords.longitude);
       })
       .catch((error) => {
-        this.locating=false;
+        this.locating = false;
         //console.log("Error getting location", error);
-        this.postPointControl(point,0, 0);
+        this.postPointControl(point, 0, 0);
       });
-    }
+  }
 
-    postPointControl(point:DtoPointControl,latitude:number,longitude:number){      
-        point.Longitude = longitude;
-        point.Latitude = latitude;
-        this.gessolicitudServiciosService.postPointControl(point).subscribe(
+  postPointControl(point: DtoPointControl, latitude: number, longitude: number) {
+    point.Longitude = longitude;
+    point.Latitude = latitude;
+    this.gessolicitudServiciosService.postPointControl(point).subscribe(
 
-          resp=>{  
+      resp => {
 
-            if(resp!=null && resp.Retorno==0){
-              this._alert.successSweet('Punto de control guardado!')
-            }
-            else {
-              this._alert.errorSweet(resp.TxtError)
-            }
-          }, err=>{
-            this._alert.errorSweet('Error inesperado');
-          }
-        )
-    }
+        if (resp != null && resp.Retorno == 0) {
+          this._alert.successSweet('Punto de control guardado!')
+        }
+        else {
+          this._alert.errorSweet(resp.TxtError)
+        }
+      }, err => {
+        this._alert.errorSweet('Error inesperado');
+      }
+    )
+  }
   setState() {
     const buttons: any[] = [
       {
@@ -288,36 +308,34 @@ export class ProgrammingDetailPage implements OnInit {
         text: "Aceptar",
         role: "OK",
         handler: (value: any) => {
-          let passengers: any[] = this.programming.GENPasajerosServicios;    
-          if(!this.contract.InteraccionPasajero)    {
-            if(value =='F')
-            {
-              this.showKilometerModal().then(resp=>{                 
-                if(this.kilometraje==0){
-                  this._alert.showAlert('Kilometraje','El kilometraje no puede ser 0');
+          let passengers: any[] = this.programming.GENPasajerosServicios;
+          if (!this.contract.InteraccionPasajero) {
+            if (value == 'F') {
+              this.showKilometerModal().then(resp => {
+                if (this.kilometraje == 0) {
+                  this._alert.showAlert('Kilometraje', 'El kilometraje no puede ser 0');
                   return;
                 }
-                this.showModalSignature(value,passengers);
+                this.showModalSignature(value, passengers);
               })
             }
-            if(value=='I')
-            {
-              this.showKilometerModal().then(resp=>{
-                
-                if(this.kilometraje==0){
-                  this._alert.showAlert('Kilometraje','El kilometraje no puede ser 0');
+            if (value == 'I') {
+              this.showKilometerModal().then(resp => {
+
+                if (this.kilometraje == 0) {
+                  this._alert.showAlert('Kilometraje', 'El kilometraje no puede ser 0');
                   return;
                 }
                 this.setNewLog(value, passengers != undefined && passengers.length > 0 ? true : false);
               })
             }
-       
-         
-          }  
-          else{
+
+
+          }
+          else {
             this.setNewLog(value, passengers != undefined && passengers.length > 0 ? true : false);
           }
-         
+
         },
       },
     ];
@@ -349,7 +367,7 @@ export class ProgrammingDetailPage implements OnInit {
       },
     ];
 
-    let radiosNoInteraccion: any[] = [        
+    let radiosNoInteraccion: any[] = [
       {
         type: "radio",
         value: "I",
@@ -374,36 +392,36 @@ export class ProgrammingDetailPage implements OnInit {
     );
   }
 
-  showKilometerModal(){
+  showKilometerModal() {
 
-    let promise : Promise<Boolean>  = new Promise<Boolean>( (resolve, reject) => {
+    let promise: Promise<Boolean> = new Promise<Boolean>((resolve, reject) => {
 
-        const buttons: any[] = [           
-            {
-              text: "Aceptar",
-              role: "OK",
-              handler: (value: any) => {                                 
-                this.kilometraje = value.kilometraje; 
-                resolve(true);
-              },
-            },
-          ];
-      
-          let inputs: any[] = [
-            {
-              name: 'kilometraje',
-              type: 'text',
-              placeholder: 'kilometraje'
-            }]
-      
-          this._alert.showCustomAlert(
-            "kilometraje",
-            "Digite el kilometraje actual del vehículo",
-            "",
-            buttons,
-            inputs,
-            true
-          );
+      const buttons: any[] = [
+        {
+          text: "Aceptar",
+          role: "OK",
+          handler: (value: any) => {
+            this.kilometraje = value.kilometraje;
+            resolve(true);
+          },
+        },
+      ];
+
+      let inputs: any[] = [
+        {
+          name: 'kilometraje',
+          type: 'text',
+          placeholder: 'kilometraje'
+        }]
+
+      this._alert.showCustomAlert(
+        "kilometraje",
+        "Digite el kilometraje actual del vehículo",
+        "",
+        buttons,
+        inputs,
+        true
+      );
 
 
     })
@@ -411,13 +429,13 @@ export class ProgrammingDetailPage implements OnInit {
     return promise;
 
 
-}
+  }
 
   isVip() {
     return !!this._sesion.GetUser() && this._sesion.GetUser().Grupo === "VIP";
   }
 
-  setNewLog(value: any, confirmed: boolean, code: number = 0) {    
+  setNewLog(value: any, confirmed: boolean, code: number = 0) {
     if (value != "I" || confirmed == true || !this.contract.UsoCodigo) {
       this.textButton = "Localizando...";
       this.sending = true;
@@ -439,63 +457,63 @@ export class ProgrammingDetailPage implements OnInit {
           log.observations = this.observations;
           log.rejectedSign = this.signatureRejected;
           // Guardamos el intento en los fallidos en caso de que falle        
-   if(this.contract.InteraccionPasajero){
-    this._service.PostServicesDetail(log).subscribe(
-      (resp: any) => {
-        this.sending = false;
-        // Borramos el intento ya que el servidor si respondió
-        this._request.deleteTransportFailed();
-        if (resp.Retorno === 0) {
-          this.textButton = "Nuevo seguimiento";
-          this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
-          this.loadDetail();
-          if (value == "I") {
-            this.getPassengersService();
+          if (this.contract.InteraccionPasajero) {
+            this._service.PostServicesDetail(log).subscribe(
+              (resp: any) => {
+                this.sending = false;
+                // Borramos el intento ya que el servidor si respondió
+                this._request.deleteTransportFailed();
+                if (resp.Retorno === 0) {
+                  this.textButton = "Nuevo seguimiento";
+                  this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
+                  this.loadDetail();
+                  if (value == "I") {
+                    this.getPassengersService();
+                  }
+                  if (value === 'F') {
+                    this.nav.navigateBack("tabs/programming");
+                  }
+                } else {
+                  this.textButton = "Nuevo seguimiento";
+                  this._alert.showAlert("Error", resp.TxtError);
+                }
+              },
+              (err) => {
+                this.sending = false;
+                this.textButton = "Error";
+                // console.log(err);
+              }
+            );
           }
-          if (value === 'F') {
-            this.nav.navigateBack("tabs/programming");
+          else {
+            log.Kilometraje = this.kilometraje;
+            this._service.PostServicesDetailNoInteraccion(log).subscribe(
+              (resp: any) => {
+                this.sending = false;
+                // Borramos el intento ya que el servidor si respondió
+                this._request.deleteTransportFailed();
+                if (resp.Retorno === 0) {
+                  this.textButton = "Nuevo seguimiento";
+                  this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
+                  this.loadDetail();
+                  if (value == "I") {
+                    this.getPassengersService();
+                  }
+                  if (value === 'F') {
+                    this.nav.navigateBack("tabs/programming");
+                  }
+                } else {
+                  this.textButton = "Nuevo seguimiento";
+                  this._alert.showAlert("Error", resp.TxtError);
+                }
+              },
+              (err) => {
+                this.sending = false;
+                this.textButton = "Error";
+                // console.log(err);
+              }
+            );
           }
-        } else {
-          this.textButton = "Nuevo seguimiento";
-          this._alert.showAlert("Error", resp.TxtError);
-        }
-      },
-      (err) => {
-        this.sending = false;
-        this.textButton = "Error";
-        // console.log(err);
-      }
-    );
-   }
-   else {
-    log.Kilometraje = this.kilometraje;
-    this._service.PostServicesDetailNoInteraccion(log).subscribe(
-      (resp: any) => {
-        this.sending = false;
-        // Borramos el intento ya que el servidor si respondió
-        this._request.deleteTransportFailed();
-        if (resp.Retorno === 0) {
-          this.textButton = "Nuevo seguimiento";
-          this._alert.showAlert("Perfecto!", "Seguimiento ingresado");
-          this.loadDetail();
-          if (value == "I") {
-            this.getPassengersService();
-          }
-          if (value === 'F') {
-            this.nav.navigateBack("tabs/programming");
-          }
-        } else {
-          this.textButton = "Nuevo seguimiento";
-          this._alert.showAlert("Error", resp.TxtError);
-        }
-      },
-      (err) => {
-        this.sending = false;
-        this.textButton = "Error";
-        // console.log(err);
-      }
-    );
-   }
         }, 3000);
       });
       // })
@@ -596,13 +614,13 @@ export class ProgrammingDetailPage implements OnInit {
       }))
       .subscribe(resp => {
         if (resp != null && resp.Retorno == 0) {
-          
+
           this.programming.GENPasajerosServicios = resp.ObjTransaction;
           // Si no tiene pasajeros detalle, es decir , no usa modelo de pasajeros no muestra el modal
           if (resp.ObjTransaction != null && resp.ObjTransaction != undefined)
             this.showModalGenPassengers();
           else
-        this._alert.showAlert('Sin pasajeros','El servicio no tiene pasajeros');
+            this._alert.showAlert('Sin pasajeros', 'El servicio no tiene pasajeros');
         }
       })
   }
@@ -735,14 +753,14 @@ export class ProgrammingDetailPage implements OnInit {
       component: PoliticalDivisionComponent,
     });
     modal.onDidDismiss().then((resp) => {
-      
+
       if (resp.data != undefined) {
         this.programming.DestinoCiudad = resp.data.IdDivisionPolitica;
         this.programming.Destino = resp.data.DescripcionCorta;
         let observations = this.SetObservationsTargetChangued();
         this.observations = this.SetObservationsTargetChangued();
         this.gessolicitudServiciosService.ChagueTarget(this.programming.SolicitudId,
-          this.programming.DestinoCiudad, this.programming.Destino, this.programming.EmpresaId,observations).subscribe(resp => {
+          this.programming.DestinoCiudad, this.programming.Destino, this.programming.EmpresaId, observations).subscribe(resp => {
             if (resp != null && resp.Retorno == 0) {
               this._alert.successSweet('Destino actualizado!');
               this.modalController.dismiss();
@@ -783,7 +801,7 @@ export class ProgrammingDetailPage implements OnInit {
 
   }
 
-  async showModalSignature(value:string,passengers:any[]) {
+  async showModalSignature(value: string, passengers: any[]) {
     const modal = await this.modalController.create({
       component: SignatureComponent,
       componentProps: {
@@ -791,24 +809,24 @@ export class ProgrammingDetailPage implements OnInit {
       }
     });
     modal.onDidDismiss().then(resp => {
-      
-      if(resp.data!=undefined){
-        if(resp.data==false){
+
+      if (resp.data != undefined) {
+        if (resp.data == false) {
           this.signatureRejected = true;
         }
-        else {          
-          this.Firma = resp.data;           
+        else {
+          this.Firma = resp.data;
+        }
+        this.setNewLog(value, passengers != undefined && passengers.length > 0 ? true : false);
       }
-      this.setNewLog(value, passengers != undefined && passengers.length > 0 ? true : false);
-      }
-   
 
-   
+
+
     });
     return await modal.present();
   }
 
-  shouldShowValidatePassengerButton() {    
+  shouldShowValidatePassengerButton() {
     // Suponemos que cuando no hay usuario (this._sesion.isUser() === false) se está logueando como conductor
     // Y que el contrato debe existir y tener la propiedad PasajerosExternos en true.
     this.showExternPassengerButton = !this._sesion.isUser() && this.contract && this.contract.PasajerosExternos;
@@ -818,7 +836,7 @@ export class ProgrammingDetailPage implements OnInit {
 
   async openValidatePassengerModal() {
     const modal = await this.modalController.create({
-      component:  ValidCodeComponent,
+      component: ValidCodeComponent,
       componentProps: {
         requestId: this.programming.SolicitudId
       }
@@ -826,11 +844,42 @@ export class ProgrammingDetailPage implements OnInit {
     modal.onDidDismiss().then(resp => {
       if (resp.data != undefined) {
         // console.log(resp);
-        
-       
+
+
       }
     });
     return await modal.present();
+  }
+
+
+  createPassengerRegister(typeEntry:string) {
+    this.locating=true;
+    return this.geo.getCurrentPosition().then((data) => {
+      this.locating=false;
+      let passenger = {
+        Id: 0,
+        companyId: this._sesion.GetBussiness().CodigoEmpresa,
+        RequestId: this.programming.SolicitudId,
+        TypeEntry: typeEntry,
+        PassengerId: this._sesion.GetUser().IdPasajero,
+        Identification: this._sesion.GetUser().Identificacion,
+        Longitude: data.coords.longitude,
+        Latitude: data.coords.latitude
+
+      }
+
+      this.gessolicitudServiciosService.setPassengerRoute(passenger).subscribe(resp=>{
+        if(resp.Retorno==0){
+          this._alert.successSweet('Pefecto');
+        }
+        else{
+           this._alert.errorSweet(resp.TxtError);
+        }
+      })
+
+    });
+
+
   }
 
 }

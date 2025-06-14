@@ -25,11 +25,11 @@ export class ServicesRequestService {
   GetServicesDetail(business: number,id: number){
     return this._http.Get<transaction>(`/GESSolicitudServicios/GetGESSolicitudServiciosDetalleNew?empresaId=${business}&solicitudId=${id}`);
    }
-     GetServicesDetailById(business: number,id: number){
-    return this._http.Get<transaction>(`/GESSolicitudServicios/GetGESSolicitudServiciosDetalleNew?empresaId=${business}&solicitudId=${id}`);
+     GetServicesByVinculationId(business: number,id: string){
+    return this._http.Get<transaction>(`/GESSolicitudServicios/GetServicesByVinculationId?empresaId=${business}&vinculationId=${id}`);
    }
-     GetCurrentService(business: number,id: number){
-    return this._http.Get<transaction>(`/GESSolicitudServicios/GetGESSolicitudServiciosDetalleNew?empresaId=${business}&solicitudId=${id}`);
+     GetNearestService(business: number,idPassenger: number){
+    return this._http.Get<transaction>(`/GESSolicitudServicios/GetNearestServiceByGesPassenger?empresaId=${business}&idPassenger=${idPassenger}`);
    }
 
    CheckPendingServices(business: number,thirdPartieId: number){
@@ -58,6 +58,11 @@ export class ServicesRequestService {
   }
   PostServiceManualService(request: ServicesRequest){
     return this._http.PostRequest<transaction>('/GESSolicitudServicios/setVip', request);
+  }
+
+  setPassengerRoute(entry:any){
+  return this._http.PostRequest<transaction>('/GESSolicitudServiciosPasajeros/setPasssengerRoute', entry);
+    
   }
 
   GetLastsServiceThirdPartieApproved(business: number,id: number){

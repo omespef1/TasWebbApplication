@@ -31,13 +31,8 @@ changePasswordUser(form:NgForm){
   this.changePassword.idEmpresa = this._sesion.GetBussiness().CodigoEmpresa;
   this.changePassword.identificacion = this._sesion.GetThirdPartie().Identificacion;
     }
-   
+
   this.sending=true;
-
-
-
-
-debugger;
   console.log('pasajero es', this.isPassenger())
   this._login.changePassword(this.changePassword).subscribe(resp=>{
     this.sending=false;

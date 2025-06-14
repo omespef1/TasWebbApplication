@@ -100,7 +100,7 @@ export class AuthService {
       ) {
         this._thirdParties.addThirdPartie(this._sesion.GetThirdPartie());
       }
-      this.goApp();
+      this.goApp(true,true);
   }
 }
 
@@ -142,7 +142,7 @@ export class AuthService {
     return this._http.Post<transaction>("/login/ChangePassword", changePass);
   }
 
-  goApp(shownName=true) {
+  goApp(shownName=true,direct=false) {
     
     // this.SetOneSignalId();
 
@@ -162,6 +162,11 @@ export class AuthService {
       if (this._sesion.GetUser().Grupo === "CLIENTE"){
         this._nav.navigateRoot("tabs/programming");
       }
+
+      if (this._sesion.GetUser().Grupo === 'PASAJERO_RUTA' && !direct){ 
+
+          this.goProgramming();
+      }
       if(shownName)
       this._alert.showAlert(
         "Bienvenido!",
@@ -179,7 +184,7 @@ export class AuthService {
   }
 
   goProgramming(){
-    this._nav.navigateRoot("tabs/programming")
+    this._nav.navigateRoot("tabs/programming/programming-detail?nearest=true")
   }
 
   // SetOneSignalId() {

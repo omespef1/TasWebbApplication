@@ -23,7 +23,6 @@ export class LoginDedicatedPage implements OnInit {
   loading = false;
   showPass = false;
   user: loginRequest = new loginRequest();
-  touchId: boolean = false;
   businessName:string='INGRESO';
   logoApp: string = "assets/imgs/icon.png"; // URL predeterminada
   currentVersion = config.currentVersion;

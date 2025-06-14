@@ -87,7 +87,7 @@ export class LoginPage implements OnInit {
             this._alert.showAlert("Ingreso fallido", `${resp.TxtError}`);
           } else {                       
             // this._nav.setDirection('root');
-            this._auth.goApp();
+            this._auth.goApp(true,false);
           }
         },
         err => {
