@@ -182,6 +182,27 @@ export class ProgrammingDetailPage implements OnInit {
       });
   }
 
+    checkDetailAndInRoute() {
+    this._service
+      .GetServicesDetail(
+        this.programming.EmpresaId,
+        this.programming.SolicitudId
+      )
+      .subscribe((resp) => {
+        this.loading=false;
+        if (resp.ObjTransaction) {
+          this.programming.details = resp.ObjTransaction;          
+          let details: ServiceRequestDetail[] = this.programming.details;         
+         if(details.filter(x => x.Estado == 'R').length > 0){
+            this.locateDriver();
+         }
+         else {
+            this._alert.errorSweet('El servicio no está en ruta aún, por favor espere a que el servicio esté en ruta antes de consultar su ubicación nuevamente.');
+         }
+        }
+      });
+  }
+
 
 
 
@@ -265,6 +286,7 @@ export class ProgrammingDetailPage implements OnInit {
     const detials: any[] = this.programming.details;
     this.serviceInit = detials.filter(x => x.Estado == 'I').length > 0;
   }
+
   sendPointControl(point: DtoPointControl) {
     this.locating = true;
     this.geolocation
@@ -695,6 +717,8 @@ export class ProgrammingDetailPage implements OnInit {
 
   locateDriver() {
     this.locating = true;
+
+    this.gessolicitudServiciosService.GetServicesDetail
     this.monitoreoService.GetLastPosition(this.programming.VehiculoId, this.programming.EmpresaId)
       .pipe(
         finalize(() => {

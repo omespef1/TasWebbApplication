@@ -23,7 +23,7 @@
     <ion-icon name="locate"></ion-icon>
         Compartir ubicación
   </ion-button>
-  <ion-button *ngIf="_sesion.isUser() && contract?.GpsMonitoreo" (click)="locateDriver()" expand="block"
+  <ion-button *ngIf="_sesion.isUser() && contract?.GpsMonitoreo" (click)="checkDetailAndInRoute()" expand="block"
   color="danger">
   <ion-spinner *ngIf="locating" slot="end"></ion-spinner>
   <ion-icon name="car"></ion-icon>
@@ -35,12 +35,12 @@
   <ion-icon name="arrow-round-up"></ion-icon>
      Registrar subida
 </ion-button>
- <ion-button *ngIf="isPassengerRoute" (click)="createPassengerRegister('B')" expand="block"
+ <!-- <ion-button *ngIf="isPassengerRoute" (click)="createPassengerRegister('B')" expand="block"
   color="danger">
   <ion-spinner *ngIf="locating" slot="end"></ion-spinner>
   <ion-icon name="arrow-round-down"></ion-icon>
      Registrar bajada
-</ion-button>
+</ion-button> -->
 <ion-button expand="block"
 *ngIf="showExternPassengerButton"
 (click)="openValidatePassengerModal()">
