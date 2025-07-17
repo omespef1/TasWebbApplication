@@ -111,7 +111,7 @@ request:any;
       if(resp!=undefined && resp.Retorno==0){
         passenger = resp.ObjTransaction;
         if(!!passenger.PassengerLatitude && !!passenger.PassengerLongitude)
-        this.positionService.openMapPosition(passenger.PassengerLatitude,passenger.PassengerLongitude,passenger.CreaFecha);
+        this.positionService.openMapPosition(passenger.PassengerLatitude,passenger.PassengerLongitude,passenger.CreaFecha,true);
         else
         this.alert.showAlert('Oops!','El pasajero no ha compartido su ubicación aún.')
       }

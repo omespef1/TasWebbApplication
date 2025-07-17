@@ -126,4 +126,42 @@ async showConfirmationAlert(
 
   await alert.present();
 }
+
+async showServiceSelectionAlert(
+  services: any[],
+  confirmHandler: (selectedService: any) => void,
+  cancelHandler?: () => void
+) {
+
+   const inputs:any = services.map((s, i) => {
+    const hora = new Date(s.FechaServicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return {    
+      type: 'radio',
+     label: `${s.Nombre} ${hora }`,
+      value: i,
+      checked: i === 0,
+    };
+  });
+  const alert = await this._alert.create({
+    header: 'Selecciona un servicio',
+    subHeader: 'Tienes más de un servicio disponible en este momento',
+    inputs: inputs,
+    buttons: [
+      {
+        text: 'Cancelar',
+        role: 'cancel',
+        cssClass: 'secondary',
+        handler: cancelHandler || (() => console.log('Selección cancelada')),
+      },
+      {
+        text: 'Seleccionar',
+        handler: (selectedIndex: number) => {
+          confirmHandler(services[selectedIndex]);
+        },
+      },
+    ],
+  });
+
+  await alert.present();
+}
 }

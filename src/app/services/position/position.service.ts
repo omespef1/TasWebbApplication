@@ -16,13 +16,13 @@ export class PositionService {
     }
 
 
-    async openMapPosition(lat:string,long:string,time:Date){
+    async openMapPosition(lat:string,long:string,time:Date,isDriver:boolean){
 
         const modal = await this.modalController.create({
             component:  LocationComponent,
             componentProps: {
-              'detail': { Latitude:lat,Longitude:long,Time:time}
-             
+              'detail': { Latitude:lat,Longitude:long,Time:time},
+              'isDriver': isDriver
             }
           });
           modal.onDidDismiss().then(resp => {

@@ -1,3 +1,5 @@
+import { business } from './../business/business';
+
 export class ThirdPartie {
     IdEmpresa: number;
     IdTercero: number;
@@ -12,6 +14,16 @@ export class ThirdPartie {
     IdPasajero?:number;
 }
 
+
+export class ThirdPartieWithCompany extends ThirdPartie {
+  CodigoEmpresa: number;
+  NombreEmpresa: string;
+  Estado: number;
+  EmpresaSigla: string;
+  LogoApp?:string;
+  LogoAppHori?:string;
+
+}
 
 export class ThirdPartiePublic extends ThirdPartie {
    

@@ -1,4 +1,4 @@
 export class config {
   public static readonly  url = 'https://tas.com.co/taswebapi/api';
-  public static readonly currentVersion = '25.0.6.1';
+  public static readonly currentVersion = '25.0.7.3';
 }

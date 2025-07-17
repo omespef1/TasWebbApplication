@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { business } from "../../models/business/business";
 import { SessionService } from "../../services/session/session.service";
 import { HttpManagerService } from "../../services/httpManager/http-manager.service";
@@ -12,7 +12,8 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
   styleUrls: ["./business.page.scss"]
 })
 export class BusinessPage implements OnInit {
-  businessList: business;
+   @Input() allowedCompanies: number[] = []; // <-- nuevo input
+  businessList: business[]=[];  
   loading=false;
   constructor(
     private _sesion: SessionService,
@@ -24,17 +25,27 @@ export class BusinessPage implements OnInit {
     this.GetBusinessList();
   }
 
+
   GetBusinessList() {
-    this.loading=true;
-    this._http.Get<transaction>("/business").subscribe(resp => {
-      this.loading=false;
-      //console.log(resp);
-      if (resp.Retorno === 0) {
-        this.businessList = resp.ObjTransaction;
+    this.loading = true;
+    this._http.Get<transaction>("/business").subscribe(
+      resp => {
+        this.loading = false;
+        if (resp.Retorno === 0) {
+          let data = resp.ObjTransaction;
+
+          // Si hay empresas permitidas, filtrar
+          if (this.allowedCompanies && this.allowedCompanies.length > 0) {
+            data = data.filter((b: business) => this.allowedCompanies.includes(b.CodigoEmpresa));
+          }
+
+          this.businessList = data;
+        }
+      },
+      err => {
+        this.loading = false;
       }
-    },err=>{
-      this.loading=false;
-    });
+    );
   }
 
    async SetBusiness(business: business) {

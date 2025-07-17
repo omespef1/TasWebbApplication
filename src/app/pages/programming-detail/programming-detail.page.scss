@@ -50,3 +50,7 @@ ion-spinner {
 
     --color:white;
  }
+
+::ng-deep .alert-radio-label.sc-ion-alert-ios {
+    font-size: 10px !important;
+ }

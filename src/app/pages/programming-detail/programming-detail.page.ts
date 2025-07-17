@@ -89,32 +89,30 @@ export class ProgrammingDetailPage implements OnInit {
   ngOnInit() {
    debugger;
     this.loading=true;
-    const vinculationIdParam = this.route.snapshot.queryParamMap.get('serviceId');
     const modoProximo = this.route.snapshot.queryParamMap.get('nearest');
-    const qrParam = this.route.snapshot.queryParamMap.get('isFromQr');
-    this.isFromQr = qrParam == 'true';
     this.isPassengerRoute = this.checkIsPassengerRouteReady();
-    if (vinculationIdParam) {
-      const companyId = this._sesion.GetBussiness().CodigoEmpresa;
-    
-      this._service.GetServicesByVinculationId(companyId, vinculationIdParam).subscribe(resp => {
-        if (resp.Retorno === 0) {
-          this.programming = resp.ObjTransaction[0];
-          this.initializeAfterProgrammingLoaded();
-        } else {
-          this._alert.errorSweet('No se pudo cargar el servicio por ID');
-        }
-      });
-    } else if (modoProximo === 'true') {
+     if (modoProximo === 'true') {
       const companyId =this._sesion.GetBussiness().CodigoEmpresa;
       const thirdPartieId = this._sesion.GetUser().IdPasajero;
       this._service.GetNearestService(companyId, thirdPartieId).subscribe(resp => {
+        debugger;
        let services:any[] =  resp.ObjTransaction;
-        if (resp.ObjTransaction && services.length>0 && resp.Retorno === 0) {
-          this.programming = resp.ObjTransaction[0];
-          this.initializeAfterProgrammingLoaded();
+        if (resp.ObjTransaction && resp.Retorno === 0 && services && services.length > 0) {
+
+          if( services && services.length == 1) {
+            this.programming = resp.ObjTransaction[0];
+            this.initializeAfterProgrammingLoaded();
+          }
+          if( services && services.length > 1) {
+             this._alert.showServiceSelectionAlert(services, (selectedService) => {
+    this.programming = selectedService;
+    this.initializeAfterProgrammingLoaded();
+  });
+          }
+         
         } else {
-          this._alert.errorSweet('No se encontró servicio próximo.');
+          this._alert.errorSweet('No se encontró servicio próximo.');           
+               this.loading=false;
         }
       });
     } else {
@@ -193,11 +191,11 @@ export class ProgrammingDetailPage implements OnInit {
         if (resp.ObjTransaction) {
           this.programming.details = resp.ObjTransaction;          
           let details: ServiceRequestDetail[] = this.programming.details;         
-         if(details.filter(x => x.Estado == 'R').length > 0){
+         if(details.filter(x => x.Estado == 'I').length > 0){
             this.locateDriver();
          }
          else {
-            this._alert.errorSweet('El servicio no está en ruta aún, por favor espere a que el servicio esté en ruta antes de consultar su ubicación nuevamente.');
+            this._alert.errorSweet('El servicio no ha iniciado aún, por favor espere a que el servicio esté en inicio antes de consultar su ubicación nuevamente.');
          }
         }
       });
@@ -727,7 +725,7 @@ export class ProgrammingDetailPage implements OnInit {
       )
       .subscribe(resp => {
         if (resp != null && resp.Retorno == 0) {
-          this.positionService.openMapPosition(resp.ObjTransaction.Latitud, resp.ObjTransaction.Longitud, new Date());
+          this.positionService.openMapPosition(resp.ObjTransaction.Latitud, resp.ObjTransaction.Longitud, new Date(),false);
         }
         else {
           this._alert.errorSweet(resp.TxtError);

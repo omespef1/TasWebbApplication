@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ModalController, NavParams } from '@ionic/angular';
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
@@ -9,14 +9,16 @@ import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
   styleUrls: ['./location.component.scss'],
 })
 export class LocationComponent implements OnInit {
+   isDriver = false;
   theHtmlString: any;
   // latitude: number; long: number;
   detail:any;
+  
   constructor(  private _san: DomSanitizer,private navParams:NavParams,private modalCtrl:ModalController,    private browserTab: InAppBrowser) { 
 
     this.detail = this.navParams.get("detail");
     
-  
+   this.isDriver = this.navParams.get("isDriver");
   }
  
 

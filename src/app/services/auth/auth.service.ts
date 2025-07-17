@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { Observable, of, BehaviorSubject, observable } from "rxjs";
-import { filter, tap, take, map } from "rxjs/operators";
+import { Observable, of, BehaviorSubject, observable, from } from "rxjs";
+import { filter, tap, take, map, switchMap } from "rxjs/operators";
 import { transaction, transactionObj } from "src/app/models/general/transaction";
 import { HttpManagerService } from "../httpManager/http-manager.service";
 import { loginRequest } from "../../models/general/loginRequest";
 import { SessionService } from "../session/session.service";
 import { AlertService } from "../alert/alert.service";
-import { ThirdPartie } from "src/app/models/general/user";
-import { NavController } from "@ionic/angular";
+import { ThirdPartie, ThirdPartieWithCompany } from "src/app/models/general/user";
+import { ModalController, NavController } from "@ionic/angular";
 import { ThirdPartiesService } from "../third-parties/third-parties.service";
 import { NotificationsService } from "../push/notifications.service";
 // import { OneSignalThirdPartiesService } from "../OneSignalThirdParties/one-signal-third-parties.service";
@@ -16,6 +16,8 @@ import { OneSignalEntitie } from "../../models/one-signal-third-parties/one-sign
 import { OneSignalUsersService } from "../oneSignalUsers/one-signal-users.service";
 import { OneSignalThirdPartiesService } from "../OneSignalThirdParties/one-signal-third-parties.service";
 import { GESListaPasajerosRutas } from "src/app/models/geslistapasajerosrutas/geslistapasajerosrutas.model";
+import { BusinessPage } from "src/app/pages/business/business.page";
+import { business } from "src/app/models/business/business";
 
 @Injectable({
   providedIn: "root",
@@ -32,22 +34,23 @@ export class AuthService {
     private _push: NotificationsService,
     private _thirdPartieOneSignal: OneSignalThirdPartiesService,
     private usersOneSignal: OneSignalUsersService,
-    private oneSignalService:NotificationsService
-  ) {}
+    private oneSignalService: NotificationsService,
+    private _modal: ModalController,
+  ) { }
 
   signIn(credentials: loginRequest) {
     //console.log(credentials);
-   
+
     return this._http.Post<transaction>("/login", credentials).pipe(
       tap(async (userData: transaction) => {
         if (userData) {
           if (userData.Retorno === 0) {
             const thirdPartie: ThirdPartie = userData.ObjTransaction;
             if (
-              thirdPartie.IdTercero == 0  || !!thirdPartie.IdPasajero           
+              thirdPartie.IdTercero == 0 || !!thirdPartie.IdPasajero
             ) {
               this.oneSignalService.setExternal(thirdPartie.NombreCompleto);
-              this._sesion.SetUser(thirdPartie);     
+              this._sesion.SetUser(thirdPartie);
               //this._thirdParties.addThirdPartie(userData.ObjTransaction);       
             } else {
               this.oneSignalService.setExternal(thirdPartie.Identificacion);
@@ -100,15 +103,15 @@ export class AuthService {
       ) {
         this._thirdParties.addThirdPartie(this._sesion.GetThirdPartie());
       }
-      this.goApp(true,true);
+      this.goApp(true);
+    }
   }
-}
 
   signInDirectTouch() {
     const thirdPartieBio: ThirdPartie = this._sesion.GetThirdPartieBio();
     const userBio: ThirdPartie = this._sesion.GetUserBio();
     if (userBio != undefined && userBio != null) {
-      this._sesion.SetUser(userBio);    
+      this._sesion.SetUser(userBio);
       this._sesion.removeThirdPartieBio();
       this._sesion.removeThirdPartie();
     } else {
@@ -131,7 +134,7 @@ export class AuthService {
 
   async signOut() {
     //await   this.RemoveOneSignalId();
-    
+
     this._thirdParties.removeThirdPartiesSession();
     this.nav.navigateRoot("login");
     this._sesion.removeThirdPartie();
@@ -142,51 +145,123 @@ export class AuthService {
     return this._http.Post<transaction>("/login/ChangePassword", changePass);
   }
 
-  goApp(shownName=true,direct=false) {
-    
+  goApp(shownName = true) {
+
     // this.SetOneSignalId();
 
     debugger;
     console.log(this._sesion.isUser());
-    
-    if (this._sesion.isUser()) {  
-      if (this._sesion.GetUser().Grupo === "SUPERVISOR"){
+
+    if (this._sesion.isUser()) {
+      if (this._sesion.GetUser().Grupo === "SUPERVISOR") {
         console.log('supervisor');
-        this._nav.navigateRoot("tabs/vehicle");      
+        this._nav.navigateRoot("tabs/vehicle");
       }
 
-      if (this._sesion.GetUser().Grupo === "VIP" || this._sesion.GetUser().Grupo === "VIP0"){
-        this._nav.navigateRoot("tabs/programming");
-      }
-       
-      if (this._sesion.GetUser().Grupo === "CLIENTE"){
+      if (this._sesion.GetUser().Grupo === "VIP" || this._sesion.GetUser().Grupo === "VIP0") {
         this._nav.navigateRoot("tabs/programming");
       }
 
-      if (this._sesion.GetUser().Grupo === 'PASAJERO_RUTA' && !direct){ 
-
-          this.goProgramming();
+      if (this._sesion.GetUser().Grupo === "CLIENTE") {
+        this._nav.navigateRoot("tabs/programming");
       }
-      if(shownName)
-      this._alert.showAlert(
-        "Bienvenido!",
-        `Ingresaste como usuario ${this._sesion.GetUser().NombreCompleto}`
-      );
+
+      if (this._sesion.GetUser().Grupo === 'PASAJERO_RUTA') {
+        this.goProgramming();
+      }
+      if (shownName)
+        this._alert.showAlert(
+          "Bienvenido!",
+          `Ingresaste como usuario ${this._sesion.GetUser().NombreCompleto}`
+        );
     } else {
-      if(shownName)
-      this._alert.showAlert(
-        "Bienvenido!",
-        `Ingresaste como ${this._sesion.GetThirdPartie().NombreCompleto}`
-      );
+      if (shownName)
+        this._alert.showAlert(
+          "Bienvenido!",
+          `Ingresaste como ${this._sesion.GetThirdPartie().NombreCompleto}`
+        );
 
       this._nav.navigateRoot("tabs/vehicle");
     }
   }
 
-  goProgramming(){
+  goProgramming() {
     this._nav.navigateRoot("tabs/programming/programming-detail?nearest=true")
   }
+  signInAutoEmpresa(credentials: loginRequest) {
 
+    return this._http.Post<transactionObj<ThirdPartieWithCompany[]>>("/login/nobusiness", credentials).pipe(
+      tap(async (userData) => {
+       
+          if (userData.Retorno === 1) {
+            this._alert.showAlert("Error", userData.TxtError);
+          }
+        
+      })
+    );
+
+  }
+  // return this._http.Post<transactionObj<ThirdPartieWithCompany>>("/login/nobusiness", credentials).pipe(
+  //   map(async (userData: transaction) => {
+  //     if (userData.Retorno === 1) throw userData.TxtError;
+
+  //     const results: ThirdPartieWithCompany[] = userData.ObjTransaction;
+
+  //     if (results.length === 1) {
+  //       const tp = results[0];
+  //       this.configureSessionAndPush(tp);
+
+  //       return {
+  //         loginType: 'single',
+  //         visual: {
+  //           businessName: tp.NombreEmpresa,
+  //           logoApp: tp.LogoApp || 'assets/imgs/icon.png'
+  //         }
+  //       };
+  //     }
+
+  //     return {
+  //       loginType: 'multiple',
+  //       multipleOptions: results
+  //     };
+  //   }),
+  //   switchMap(p => from(p))
+  // );
+
+  
+
+
+setSessionUser(tp: ThirdPartieWithCompany): void {
+
+  const thirdPartie: ThirdPartieWithCompany = tp
+            if(
+    thirdPartie.IdTercero == 0 || !!thirdPartie.IdPasajero           
+            ) {
+  this.oneSignalService.setExternal(thirdPartie.NombreCompleto);
+  this._sesion.SetUser(thirdPartie);
+  //this._thirdParties.addThirdPartie(userData.ObjTransaction);       
+} else {
+  this.oneSignalService.setExternal(thirdPartie.Identificacion);
+  this._sesion.SetThirdPartie(thirdPartie);
+  this._sesion.SetThirdPartieBio(thirdPartie);
+  this._sesion.setOfflineUser(thirdPartie);
+  this._thirdParties.addThirdPartie(thirdPartie);
+}
+          }
+
+
+
+
+setSessionCompany(tp: ThirdPartieWithCompany): void {
+  this._sesion.SetBusiness({
+    CodigoEmpresa: tp.IdEmpresa,
+    NombreEmpresa: tp.NombreEmpresa,
+    EmpresaSigla: tp.EmpresaSigla,
+    Estado: tp.Estado,
+    LogoApp: tp.LogoApp,
+    LogoAppHori: tp.LogoAppHori
+  });
+}
   // SetOneSignalId() {
   //   this._sesion.getOneSignalId().then((resp) => {
   //     if (resp !== undefined && resp !== null) {
@@ -256,7 +331,7 @@ export class AuthService {
   //       resolve(true);
   //     });
 
-       
+
 
   //   })
 
