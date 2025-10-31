@@ -17,5 +17,6 @@ export class GESContratos {
     GpsMonitoreo:boolean;
     InteraccionPasajero:boolean;
     PasajerosExternos:boolean;
+    PideKilometraje:boolean
     
 }

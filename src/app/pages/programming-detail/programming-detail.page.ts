@@ -329,18 +329,26 @@ export class ProgrammingDetailPage implements OnInit {
         role: "OK",
         handler: (value: any) => {
           let passengers: any[] = this.programming.GENPasajerosServicios;
-          if (!this.contract.InteraccionPasajero) {
+          if (!this.contract.InteraccionPasajero) {          
             if (value == 'F') {
-              this.showKilometerModal().then(resp => {
+                if(this.contract.PideKilometraje ){
+                this.showKilometerModal().then(resp => {
                 if (this.kilometraje == 0) {
                   this._alert.showAlert('Kilometraje', 'El kilometraje no puede ser 0');
                   return;
                 }
                 this.showModalSignature(value, passengers);
               })
+                } 
+                else {
+                   this.showModalSignature(value, passengers);
+                }
+           
             }
             if (value == 'I') {
-              this.showKilometerModal().then(resp => {
+              if(this.contract.PideKilometraje ){
+
+                    this.showKilometerModal().then(resp => {
 
                 if (this.kilometraje == 0) {
                   this._alert.showAlert('Kilometraje', 'El kilometraje no puede ser 0');
@@ -348,6 +356,14 @@ export class ProgrammingDetailPage implements OnInit {
                 }
                 this.setNewLog(value, passengers != undefined && passengers.length > 0 ? true : false);
               })
+               }
+               else {
+
+                this.setNewLog(value, passengers != undefined && passengers.length > 0 ? true : false);
+               }
+
+
+          
             }
 
 
@@ -875,8 +891,7 @@ export class ProgrammingDetailPage implements OnInit {
 
 
   createPassengerRegister(typeEntry:string) {
-    this.locating=true;
-    return this.geo.getCurrentPosition().then((data) => {
+    this.locating=true;   
       this.locating=false;
       let passenger = {
         Id: 0,
@@ -885,8 +900,8 @@ export class ProgrammingDetailPage implements OnInit {
         TypeEntry: typeEntry,
         PassengerId: this._sesion.GetUser().IdPasajero,
         Identification: this._sesion.GetUser().Identificacion,
-        Longitude: data.coords.longitude,
-        Latitude: data.coords.latitude
+        Longitude:0,
+        Latitude: 0
 
       }
 
@@ -899,7 +914,7 @@ export class ProgrammingDetailPage implements OnInit {
         }
       })
 
-    });
+   
 
 
   }
