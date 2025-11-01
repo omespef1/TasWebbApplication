@@ -80,35 +80,58 @@ export class LoginPage implements OnInit {
         next: async resp => {
           this.loading = false;
           debugger;
-          if (resp.ObjTransaction && resp.ObjTransaction.length == 1) {
-            this.auth.setSessionUser(resp.ObjTransaction[0]);
-            this.setCompanySession(resp.ObjTransaction[0]);
-            this._auth.goApp();
-          }
-          if (resp.ObjTransaction && resp.ObjTransaction.length > 1) {
-            const empresasUnicas = Array.from(
-              new Set(resp.ObjTransaction.map(x => x.IdEmpresa))
-            );
-            const modal = await this._modal.create({
-              component: BusinessPage,
-              componentProps: {
-                allowedCompanies: empresasUnicas
-              }
-            });
-            modal.onDidDismiss().then(res => {
-              const selectedCompany: business = res.data;
-              const selectedThirdPartie = resp.ObjTransaction.find(
-                tp => tp.IdEmpresa === selectedCompany.CodigoEmpresa
-              );
+          const trans: ThirdPartieWithCompany[] = resp.ObjTransaction || [];
 
-              if (selectedThirdPartie) {
-                this.auth.setSessionUser(selectedThirdPartie);
-                this.setCompanySession(selectedThirdPartie);
-                this._auth.goApp();
-              }
-            });
-            await modal.present();
+          if (trans.length === 1) {
+            // Caso simple: un solo resultado
+            this.auth.setSessionUser(trans[0]);
+            this.setCompanySession(trans[0]);
+            this._auth.goApp();
+            return;
           }
+
+            if (trans.length > 1) {
+              // Verificar si todas las empresas son la misma
+              const empresasUnicas = Array.from(new Set(trans.map(x => x.IdEmpresa)));
+
+              if (empresasUnicas.length === 1) {
+                // Misma empresa: verificar coexistencia de roles especiales
+                const pasajeroRuta = trans.find(t => t.Grupo === 'PASAJERO_RUTA');
+                const vip = trans.find(t => ['VIP', 'VIP0', 'VIP1'].includes(t.Grupo));
+
+                if (pasajeroRuta && vip) {
+                  // Mostrar selección de funcionalidad (multi-rol misma empresa)
+                  this.showRoleSelectionAlert(pasajeroRuta, vip);
+                  return;
+                }
+                // Si no están ambos roles, tomamos el primero (comportamiento fallback)
+                this.auth.setSessionUser(trans[0]);
+                this.setCompanySession(trans[0]);
+                this._auth.goApp();
+                return;
+              }
+
+              // Empresas diferentes: flujo original (selección de empresa)
+              const modal = await this._modal.create({
+                component: BusinessPage,
+                componentProps: {
+                  allowedCompanies: empresasUnicas
+                }
+              });
+              modal.onDidDismiss().then(res => {
+                const selectedCompany: business = res.data;
+                if (!selectedCompany) { return; }
+                const selectedThirdPartie = trans.find(
+                  tp => tp.IdEmpresa === selectedCompany.CodigoEmpresa
+                );
+                if (selectedThirdPartie) {
+                  this.auth.setSessionUser(selectedThirdPartie);
+                  this.setCompanySession(selectedThirdPartie);
+                  this._auth.goApp();
+                }
+              });
+              await modal.present();
+            }
         },
         error: err => {
           this.loading = false;
@@ -119,6 +142,59 @@ export class LoginPage implements OnInit {
       this.auth.signInDirectOffline();
       this._auth.goApp();
     }
+  }
+
+  /**
+   * Muestra un alert para seleccionar funcionalidad cuando el usuario
+   * tiene dos roles (PASAJERO_RUTA y VIP/VIP0/VIP1) en la misma empresa.
+   */
+  private showRoleSelectionAlert(pasajeroRuta: ThirdPartieWithCompany, vip: ThirdPartieWithCompany) {
+    const header = 'Selecciona funcionalidad';
+    const subHeader = '';
+    const message = '¿Qué funcionalidad desea usar?';
+
+    // IDs solicitados para cada opción
+    const INPUT_ID_SERVICIOS = 'SERVICIOS_PROGRAMADOS';
+    const INPUT_ID_RUTAS = 'RUTAS_INSTITUCIONALES';
+
+    const inputs = [
+      {
+        name: 'feature',
+        type: 'radio',
+        label: 'Servicios programados',
+        value: INPUT_ID_SERVICIOS,
+        checked: true
+      },
+      {
+        name: 'feature',
+        type: 'radio',
+        label: 'Rutas institucionales',
+        value: INPUT_ID_RUTAS
+      }
+    ];
+
+    const buttons = [
+      {
+        text: 'Cancelar',
+        role: 'cancel'
+      },
+      {
+        text: 'Aceptar',
+        handler: (selectedValue: string) => {
+          let chosen: ThirdPartieWithCompany;
+          if (selectedValue === INPUT_ID_RUTAS) {
+            chosen = pasajeroRuta; // Rutas institucionales => PASAJERO_RUTA
+          } else {
+            chosen = vip; // Servicios programados => VIP/VIP0/VIP1
+          }
+          this.auth.setSessionUser(chosen);
+          this.setCompanySession(chosen);
+          this._auth.goApp();
+        }
+      }
+    ];
+
+    this._alert.showCustomAlert(header, subHeader, message, buttons, inputs, true);
   }
 
   setCompanySession(tp: ThirdPartieWithCompany) {

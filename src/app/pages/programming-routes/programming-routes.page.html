@@ -1,0 +1,210 @@
+<app-header headerName="Rutas institucionales">
+  
+</app-header>
+
+<ion-content fullscreen class="ion-padding">
+  
+  <ion-refresher slot="fixed" (ionRefresh)="ionViewWillEnter($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="!loading">        
+    <ion-list lines="none" *ngFor="let programming of programmings" inset="true">
+      <ion-item class="header" lines="none" color="secondary">
+        <ion-icon slot="start" name="clipboard"></ion-icon>
+        <ion-label>#{{programming.SolicitudId}}</ion-label> 
+        <ion-button   color="light" slot="end"(click)="goProgrammingDetail(programming)" fill="outline">
+            <ion-icon  slot="start" name="eye"></ion-icon>           
+            VER DETALLES 
+          </ion-button>   
+      </ion-item> 
+     
+       <ion-item >
+        <ion-icon slot="start" name="git-merge"></ion-icon>
+        <ion-label>Ruta Nombre</ion-label>
+         <ion-note slot="end"> {{ programming.RutaId}} {{ programming.RutaNombre}}</ion-note>
+      </ion-item>  
+      <ion-item *ngIf="!programming.ManejaRuta">
+        <ion-icon slot="start" name="person"></ion-icon>
+        <ion-label>Conductor</ion-label>
+         <ion-note slot="end"> {{programming.Conductor}}</ion-note>
+      </ion-item>  
+      <ion-item (click)="call(programming.CelularConductor)">
+        <ion-icon slot="start" name="call"></ion-icon>
+        <ion-label>Celular conductor</ion-label>
+         <ion-note slot="end"> {{programming.CelularConductor}}</ion-note>
+      </ion-item>   
+     
+      <ion-item >
+        <ion-icon slot="start" name="car"></ion-icon>
+        <ion-label>Placa</ion-label>
+         <ion-note slot="end"> {{programming.PlacaVehiculo}}</ion-note>
+      </ion-item>   
+          
+      <ion-item>
+        <ion-icon slot="start" name="calendar"></ion-icon>
+        <ion-label>Fecha Servicio</ion-label>
+         <ion-note slot="end"> {{ programming.FechaServicio | date:'dd/MM/yyyy HH:mm'}}</ion-note>
+      </ion-item> 
+      <ion-item >
+        <ion-icon slot="start" name="book"></ion-icon>
+        <ion-label>Tipo servicio</ion-label>
+         <ion-note slot="end"> {{programming.TipoServicio}}</ion-note>
+      </ion-item> 
+      <ion-item *ngIf="_session.isUser() && canEdit  && programming.Estado=='S'" button (click)="confirmCancelService(programming)" color="secondary">
+        <ion-icon slot="start" name="close-circle">
+
+        </ion-icon>
+        <ion-label>
+        CANCELAR
+        </ion-label>
+      </ion-item>  
+      
+      <ion-item *ngIf="_session.isUser() && canEdit && programming.Estado=='T'" color="tertiary">
+        <ion-icon slot="start" name="help-circle-outline"></ion-icon>        
+        <ion-button color="light" slot="end" (click)="setCalification(programming)" fill="outline">
+            <ion-icon  slot="start" [name]="programming.Calificacion == null ||  programming.Calificacion==0? 'heart-empty':'heart-half'"></ion-icon>           
+            {{programming.Calificacion == null ||  programming.Calificacion==0? 'CALIFICAR SERVICIO':'CAMBIAR CALIFICACION' }}   
+          </ion-button>   
+      </ion-item> 
+      
+    </ion-list>
+  </div>
+  <div *ngIf="loading">
+    <ion-list id="skeleton">
+      <ion-list-header>
+        <ion-skeleton-text animated style="width: 80px"></ion-skeleton-text>
+      </ion-list-header>
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <ion-skeleton-text></ion-skeleton-text>
+        </ion-thumbnail>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <ion-skeleton-text></ion-skeleton-text>
+        </ion-thumbnail>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <ion-skeleton-text></ion-skeleton-text>
+        </ion-thumbnail>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <ion-skeleton-text></ion-skeleton-text>
+        </ion-thumbnail>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <ion-skeleton-text></ion-skeleton-text>
+        </ion-thumbnail>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <ion-skeleton-text></ion-skeleton-text>
+        </ion-thumbnail>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <ion-skeleton-text></ion-skeleton-text>
+        </ion-thumbnail>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <ion-skeleton-text></ion-skeleton-text>
+        </ion-thumbnail>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+
+    </ion-list>
+  </div>
+
+</ion-content>
