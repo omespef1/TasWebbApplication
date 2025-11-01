@@ -1,27 +1,33 @@
 <ion-tabs>
 
   <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="vehicle">
+    <ion-tab-button tab="vehicle" *ngIf="!isPassenger()">
       <ion-icon name="logo-model-s"></ion-icon>
       <ion-label>Alistamiento</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="last-enlistments">
+    <ion-tab-button tab="last-enlistments" *ngIf="!isPassenger()">
       <ion-icon name="clock"></ion-icon>
       <ion-label>Histórico</ion-label>
     </ion-tab-button>
     <!-- Botón de Pánico centrado y personalizado -->
-    <ion-tab-button (click)="showDefaultAlert()" class="panic-button">
+    <!-- <ion-tab-button (click)="showDefaultAlert()" class="panic-button">
      
-    </ion-tab-button>
-    <ion-tab-button tab="fueqs">
+    </ion-tab-button> -->
+    <ion-tab-button tab="fueqs" *ngIf="!isPassenger()">
       <ion-icon name="copy"></ion-icon>
       <ion-label>Fuec</ion-label>
+    </ion-tab-button>
+     <ion-tab-button tab="programming-routes" *ngIf="isRoutesEnable()">
+      <ion-icon name="calendar"></ion-icon>
+      <ion-label>Rutas</ion-label>
     </ion-tab-button>
     <ion-tab-button tab="programming">
       <ion-icon name="calendar"></ion-icon>
       <ion-label>Programación</ion-label>
     </ion-tab-button>
+
+    
   </ion-tab-bar>
 
 

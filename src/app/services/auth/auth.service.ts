@@ -186,7 +186,7 @@ export class AuthService {
   }
 
   goProgramming() {
-    this._nav.navigateRoot("tabs/programming/programming-detail?nearest=true")
+    this._nav.navigateRoot("tabs/programming-routes")
   }
   signInAutoEmpresa(credentials: loginRequest) {
 

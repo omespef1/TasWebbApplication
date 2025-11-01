@@ -11,6 +11,7 @@ import { vehicle } from '../../models/vehicle/vehicle';
 import { ServicesRequest } from '../../models/service-request/programmings';
 import { CallService } from "src/app/services/call/call.service";
 import { AuthService } from "src/app/services/auth/auth.service";
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: "app-programming-routes",
@@ -24,6 +25,7 @@ export class ProgrammingRoutesPage implements OnInit {
   canEdit = true;
   locating=false;
   activeService : ServicesRequest = new ServicesRequest();
+  selectedServiceId:number=0;
   constructor(
     private _serviceRequest: ServicesRequestService,
     public _session: SessionService,
@@ -37,43 +39,69 @@ export class ProgrammingRoutesPage implements OnInit {
     private auth:AuthService
     
     ) { }
-  ngOnInit() { }
-  ionViewWillEnter(event: any = null) {
+
  
-        this.GetProgramming(event);
-    
+  ionViewWillEnter(){
+   this.GetProgramming();
   }
-
- 
-
+     
+   
+  
   GetProgramming(event = null) {
+    debugger;
   // console.log( this._session.GetThirdPartie());
     this.loading = true;
     this._serviceRequest
       .GetServicesRequestRoutes(
-        this._session.GetThirdPartie().IdEmpresa       
+        this._session.GetUser().IdEmpresa     , this._session.GetUser().IdTercero  
       )
+      .pipe( finalize(() => {
+          this.loading = false;
+        }))       
       .subscribe((resp) => {
         if (event) {
           event.target.complete();
         }
         this.loading = false;
-        if (resp.ObjTransaction) {
+        if (resp.Retorno==0 && resp.ObjTransaction) {
           this.programmings = resp.ObjTransaction;
+          if(this.programmings.length==0){
+            this._alert.presentToast('No hay rutas programadas',3000,'top');
+          }
+        }else {
+          this._alert.presentToast(resp.TxtError,3000,'top');
+          this.programmings=[];
         }
       });
   }
 
 
-  goProgrammingDetail(data: any) {
-    let params: NavigationExtras = {
-      state: {
-        programming: data,
-      },
-    };
-    this.nav.navigateForward("tabs/programming/programming-detail", params);
-  }
+  // goProgrammingDetail(data: any) {
+  //   let params: NavigationExtras = {
+  //     state: {
+  //       programming: data,
+  //     },
+  //   };
+  //   this.nav.navigateForward("tabs/programming/programming-detail", params);
+  // }
 
+  singUp(requestId:number){
+  
+    this.selectedServiceId=requestId;
+    this._serviceRequest.signUpPassenger(requestId, this._session.GetUser().IdEmpresa, this._session.GetUser().IdTercero)
+    .pipe( finalize(() => {
+      this.loading = false;
+      this.selectedServiceId=0;
+    }))
+    .subscribe((resp)=>{
+      if (resp.Retorno==0) {
+        this._alert.successSweet("Inscripción exitosa");
+        this.GetProgramming();
+      }else {
+        this._alert.presentToast(resp.TxtError,3000,'top');       
+      }
+    });
+  }
 
 
 

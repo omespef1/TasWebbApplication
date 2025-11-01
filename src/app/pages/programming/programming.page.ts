@@ -65,7 +65,7 @@ export class ProgrammingPage implements OnInit {
   }
 
   isPassenger(){
-    return !!this._session.GetUser() &&  (this._session.GetUser().Grupo === "VIP" || this._session.GetUser().Grupo === "VIP0")
+    return !!this._session.GetUser() &&  (this._session.GetUser().Grupo === "VIP" || this._session.GetUser().Grupo === "VIP0" || this._session.GetUser().Grupo === "PASAJERO_RUTA");
   }
 
   async showModalThirdParties() {
@@ -136,7 +136,7 @@ export class ProgrammingPage implements OnInit {
       // console.log(this._session.GetUser());
       if (
         this._session.GetUser().Grupo !== "VIP" && this._session.GetUser().Grupo !== "VIP0" &&
-        this._session.GetUser().Grupo !== "CLIENTE"
+        this._session.GetUser().Grupo !== "CLIENTE" && this._session.GetUser().Grupo !== "PASAJERO_RUTA"
       ) {
         this._alert.showAlert(
           "Acceso no autorizado",

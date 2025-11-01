@@ -31,17 +31,19 @@ export class AlertService {
     alert.present();
   }
 
-  async presentToast(msg: string, time: number) {
+  async presentToast(msg: string, time: number,position:'bottom'|'top'|'middle'='bottom') {
     const toast = await this._toast.create({
       message: msg,
       duration: time,
-      position: "bottom",
+      position: position,
       closeButtonText: "Cerrar",
       showCloseButton: true,
       translucent: true,
     });
     toast.present();
   }
+
+
 
   async showCustomAlert(
     header: string,

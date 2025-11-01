@@ -21,8 +21,8 @@ export class ServicesRequestService {
   }
 
   
-  GetServicesRequestRoutes(business: number){
-   return this._http.Get<transaction>(`/GESSolicitudServicios?empresaId=${business}`);
+  GetServicesRequestRoutes(business: number,passengerId: number){
+   return this._http.Get<transaction>(`/GESSolicitudServicios/routes?empresaId=${business}&passengerId=${passengerId}  `);
   }
   GetServicesRequestBeneficiario(business: number,idPasajero: number){
     return this._http.Get<transaction>(`/GESSolicitudServiciosClient?empresaId=${business}&idPasajero=${idPasajero}`);
@@ -77,6 +77,11 @@ export class ServicesRequestService {
    CancelService(requestId: number,companyCode: number){
     return this._http.Get<transactionObj<ServicesRequest>>(`/GESSolicitudServicios/cancelServiceApp?requestId=${requestId}&companyCode=${companyCode}`);
    }
+
+      signUpPassenger(requestId: number,companyCode: number,passengerId:number){
+    return this._http.Get<transactionObj<ServicesRequest>>(`/GESSolicitudServicios/signUpPassenger?requestId=${requestId}&empresaId=${companyCode}&passengerId=${passengerId}`);
+   }
+
 
    updateDriver(companyCode:number,driverId:number,requestId:number){
     return this._http.Get<transactionObj<any>>(`/GESSolicitudServicios/updateDriver?companyCode=${companyCode}&driverId=${driverId}&requestId=${requestId}`);
