@@ -39,12 +39,23 @@
      </ion-list>
     <ion-list lines="none" *ngFor="let programming of programmings" inset="true">
       <ion-item class="header" lines="none" color="secondary">
-        <ion-icon slot="start" name="clipboard"></ion-icon>
+        <ng-container *ngIf="!isPassengerRoute()">
+          <ion-icon slot="start" name="clipboard"></ion-icon>
         <ion-label>#{{programming.SolicitudId}}</ion-label> 
         <ion-button [disabled]="programming.UsuarioCrea=='APP'"  color="light" slot="end"(click)="goProgrammingDetail(programming)" fill="outline">
             <ion-icon  slot="start" name="eye"></ion-icon>           
             VER DETALLES 
-          </ion-button>   
+          </ion-button>  
+        </ng-container>
+        <ng-container *ngIf="isPassengerRoute()">
+        <ion-icon slot="start" name="git-merge"></ion-icon>
+        <ion-label>#{{programming.RutaNombre}}</ion-label> 
+        <ion-button [disabled]="programming.UsuarioCrea=='APP'"  color="light" slot="end"(click)="goProgrammingDetail(programming)" fill="outline">
+            <ion-icon  slot="start" name="eye"></ion-icon>           
+            VER DETALLES 
+          </ion-button>  
+        </ng-container>
+      
       </ion-item> 
      
       

@@ -13,10 +13,16 @@
       <ion-item class="header" lines="none" color="secondary">
       <ion-icon slot="start" name="git-merge"></ion-icon>
         <ion-label>{{programming.RutaNombre}}</ion-label>
+        <!-- Botón de inscripción cuando aún NO está inscrito -->
         <ion-button color="light" slot="end" (click)="singUp(programming.SolicitudId)" fill="outline" [disabled]="selectedServiceId==programming.SolicitudId" *ngIf="!programming.IsSignedUp">
           <ion-icon slot="start" name="eye"></ion-icon>
           INSCRIBIRME
           <ion-spinner *ngIf="selectedServiceId==programming.SolicitudId" slot="start"></ion-spinner>
+        </ion-button>
+        <!-- Nuevo botón dorado cuando YA está inscrito -->
+        <ion-button class="already-signed" slot="end" fill="outline" *ngIf="programming.IsSignedUp" disabled>
+          <ion-icon slot="start" name="checkmark-circle" class="gold-icon"></ion-icon>
+          Ya estás inscrito
         </ion-button>
       </ion-item>
 

@@ -3,3 +3,19 @@
     padding-left: 15px;
     padding-right: 15px;
  }
+
+// Estilos botón dorado (outline) cuando el usuario ya está inscrito
+.already-signed {
+    --border-color: #d4af37; // dorado
+    --color: #d4af37;        // texto dorado
+    --background: transparent;
+    --background-activated: rgba(212,175,55,0.1);
+    --background-focused: rgba(212,175,55,0.15);
+    --background-hover: rgba(212,175,55,0.08);
+    font-weight: 600;
+    letter-spacing: .5px;
+}
+
+.gold-icon {
+    color: #d4af37;
+}

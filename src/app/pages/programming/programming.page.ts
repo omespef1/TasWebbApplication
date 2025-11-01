@@ -68,6 +68,14 @@ export class ProgrammingPage implements OnInit {
     return !!this._session.GetUser() &&  (this._session.GetUser().Grupo === "VIP" || this._session.GetUser().Grupo === "VIP0" || this._session.GetUser().Grupo === "PASAJERO_RUTA");
   }
 
+  isPassengerRoute(){
+    if(!!this._session.GetUser() && this._session.GetUser().Grupo === "PASAJERO_RUTA"){
+      return true;
+    }
+    return false; 
+  }
+
+
   async showModalThirdParties() {
     this.canEdit = false;
     const modal = await this._modal.create({

@@ -18,7 +18,7 @@ import { finalize } from 'rxjs/operators';
   templateUrl: "./programming-routes.page.html",
   styleUrls: ["./programming-routes.page.scss"],
 })
-export class ProgrammingRoutesPage implements OnInit {
+export class ProgrammingRoutesPage  {
   programmings: any[] = [];
   vehicleApprobed:vehicle;
   loading = false;
