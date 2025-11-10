@@ -37,6 +37,7 @@ export class VehiclePage {
   working = false;
   odometerInfo:KunasofResponse|undefined;
   calculating:boolean =false;
+  aliParams: aliparam | undefined;
 
   constructor(
     private _sesion: SessionService,
@@ -48,11 +49,13 @@ export class VehiclePage {
     public _thirdParties: ThirdPartiesService,
     private _modal: ModalController,
     private auth:AuthService,
-    private kunasoftService:KunasoftService
+    private kunasoftService:KunasoftService,
+    private vehicleService:VehicleService
   ) {}
 
   ionViewWillEnter() {    
     if (this.validAccess()) {
+      this.getAliParams();
       this.isUserLoogued();
       if (
        this._thirdParties.GetThirdParties().length==0
@@ -298,6 +301,16 @@ export class VehiclePage {
          vehicle.NuevoKilometraje = this.odometerInfo.ODOMETRO;
       }
       
+    })
+  }
+
+    getAliParams() {
+    this.vehicleService.GetDocumentsValidationCompany(this._sesion.GetThirdPartie().IdEmpresa).subscribe(resp => {
+      if (resp != null && resp.Retorno == 0) {
+        debugger;
+        console.log(resp.ObjTransaction);
+        this.aliParams = resp.ObjTransaction;
+      }
     })
   }
 }
