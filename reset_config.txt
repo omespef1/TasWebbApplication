@@ -1,0 +1,281 @@
+C:\Users\omar.perez\Documents\GitHub\TasWebbApplication>node -v
+v20.10.0
+
+C:\Users\omar.perez\Documents\GitHub\TasWebbApplication>npm -v     
+10.8.1
+
+
+
+C:\Users\omar.perez\Documents\GitHub\TasWebbApplication>npm ls -g --depth=0
+C:\Program Files\nodejs -> .\
+├── @angular/cli@17.0.5
+├── @ionic/cli@7.2.0
+├── bower@1.8.14
+├── cordova@12.0.0
+├── corepack@0.22.0
+├── grunt@1.6.1
+├── grupo-kfc.back-office.frontend.cross-components@0.0.0 -> .\..\..\..\..\Documents\GitHub\grupoKFC.BackOffice.Frontend.CrossComponents
+├── list@2.0.19
+├── ngx-swo-library@0.0.0-watch+1721333401380 -> .\..\..\..\..\Documents\GitHub\grupoKFC.BackOffice.Frontend.CrossComponents\dist\ngx-swo-library
+├── npm@10.8.1
+└── vsts-npm-auth@0.43.0
+
+
+
+
+
+
+C:\Users\omar.perez\Documents\GitHub\TasWebbApplication>npm ls --depth=0
+Tasweb@0.0.1 C:\Users\omar.perez\Documents\GitHub\TasWebbApplication
+├── @angular-devkit/architect@0.801.3
+├── @angular-devkit/build-angular@0.801.3
+├── @angular-devkit/core@8.1.3
+├── @angular-devkit/schematics@8.1.3
+├── @angular/cli@8.1.3
+├── @angular/common@8.1.3
+├── @angular/compiler-cli@8.1.3
+├── @angular/compiler@8.1.3
+├── @angular/core@8.1.3
+├── @angular/forms@8.1.3
+├── @angular/language-service@8.1.3
+├── @angular/platform-browser-dynamic@8.1.3
+├── @angular/platform-browser@8.1.3
+├── @angular/pwa@14.0.0
+├── @angular/router@8.1.3
+├── @angular/service-worker@8.1.3
+├── @awesome-cordova-plugins/barcode-scanner@5.45.0
+├── @awesome-cordova-plugins/core@5.45.0
+├── @awesome-cordova-plugins/onesignal@5.45.0
+├── @ionic-native/browser-tab@4.20.0
+├── @ionic-native/call-number@5.22.0-beta-1
+├── @ionic-native/camera@5.15.0
+├── @ionic-native/core@5.12.0
+├── @ionic-native/fingerprint-aio@5.19.1
+├── @ionic-native/geolocation@5.18.0
+├── @ionic-native/in-app-browser@5.36.0
+├── @ionic-native/network@5.15.0
+├── @ionic-native/onesignal@4.20.0
+├── @ionic-native/qr-scanner@4.20.0
+├── @ionic-native/splash-screen@5.12.0
+├── @ionic-native/status-bar@5.12.0
+├── @ionic/angular-toolkit@2.0.0
+├── @ionic/angular@4.8.1
+├── @ionic/app-scripts@3.2.4
+├── @ionic/storage@2.2.0
+├── @types/jasmine@3.3.16
+├── @types/jasminewd2@2.0.6
+├── @types/node@8.9.5
+├── angular2-signaturepad@3.0.4
+├── bindings@1.5.0 extraneous
+├── call-number@1.0.1
+├── codelyzer@5.1.0
+├── compare-func@2.0.0
+├── cordova-android@11.0.0
+├── cordova-browser@6.0.0
+├── cordova-ios@6.3.0
+├── cordova-plugin-camera@6.0.0
+├── cordova-plugin-device@2.0.2
+├── cordova-plugin-geolocation@4.0.2
+├── cordova-plugin-inappbrowser@4.1.0
+├── cordova-plugin-ionic-keyboard@2.2.0
+├── cordova-plugin-ionic-webview@5.0.0
+├── cordova-plugin-network-information@2.0.2
+├── cordova-plugin-splashscreen@5.0.2
+├── cordova-plugin-statusbar@2.4.2
+├── cordova-sqlite-storage@3.4.0
+├── core-js@2.6.9
+├── devextreme-angular@20.1.7
+├── devextreme@20.1.7
+├── file-uri-to-path@1.0.0 extraneous
+├── html2canvas@1.4.1
+├── ionic@5.4.16
+├── jasmine-core@3.4.0
+├── jasmine-spec-reporter@4.2.1
+├── jspdf@2.5.2
+├── karma-chrome-launcher@2.2.0
+├── karma-coverage-istanbul-reporter@2.0.6
+├── karma-jasmine-html-reporter@1.4.2
+├── karma-jasmine@2.0.1
+├── karma@4.1.0
+├── moment@2.24.0
+├── mx.ferreyra.callnumber@0.0.2
+├── onesignal-cordova-plugin@3.3.0
+├── phonegap-plugin-barcodescanner@8.1.0
+├── protractor@5.4.2
+├── release@6.1.0
+├── rxjs@6.6.7
+├── stream@0.0.2
+├── sweetalert2@11.4.29
+├── ts-node@7.0.1
+├── tslib@1.10.0
+├── tslint@5.15.0
+├── typescript@3.4.5
+└── zone.js@0.9.1
+
+
+
+
+package.json:
+
+
+{
+  "name": "Tasweb",
+  "version": "0.0.1",
+  "author": "Omar Perez",
+  "homepage": "https://ionicframework.com/",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/common": "~8.1.2",
+    "@angular/compiler": "~8.1.2",
+    "@angular/core": "~8.1.2",
+    "@angular/forms": "~8.1.2",
+    "@angular/platform-browser": "~8.1.2",
+    "@angular/platform-browser-dynamic": "~8.1.2",
+    "@angular/pwa": "^14.0.0",
+    "@angular/router": "~8.1.2",
+    "@angular/service-worker": "^8.1.3",
+    "@awesome-cordova-plugins/barcode-scanner": "^5.45.0",
+    "@awesome-cordova-plugins/core": "^5.45.0",
+    "@awesome-cordova-plugins/onesignal": "^5.45.0",
+    "@ionic-native/browser-tab": "^4.20.0",
+    "@ionic-native/call-number": "^5.22.0-beta-1",
+    "@ionic-native/camera": "^5.15.0",
+    "@ionic-native/core": "^5.0.0",
+    "@ionic-native/fingerprint-aio": "^5.19.1",
+    "@ionic-native/geolocation": "^5.18.0",
+    "@ionic-native/in-app-browser": "^5.36.0",
+    "@ionic-native/network": "^5.15.0",
+    "@ionic-native/onesignal": "^4.20.0",
+    "@ionic-native/qr-scanner": "^4.20.0",
+    "@ionic-native/splash-screen": "^5.0.0",
+    "@ionic-native/status-bar": "^5.0.0",
+    "@ionic/angular": "^4.7.1",
+    "@ionic/app-scripts": "^3.2.4",
+    "@ionic/storage": "^2.2.0",
+    "angular2-signaturepad": "^3.0.4",
+    "compare-func": "^2.0.0",
+    "cordova-plugin-geolocation": "^4.0.2",
+    "cordova-plugin-network-information": "^2.0.2",
+    "cordova-sqlite-storage": "^3.4.0",
+    "core-js": "^2.5.4",
+    "devextreme": "20.1.7",
+    "devextreme-angular": "20.1.7",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
+    "moment": "^2.24.0",
+    "release": "6.1.0",
+    "rxjs": "^6.6.7",
+    "stream": "0.0.2",
+    "sweetalert2": "^11.1.9",
+    "tslib": "^1.9.0",
+    "zone.js": "~0.9.1"
+  },
+  "devDependencies": {
+    "@angular-devkit/architect": "~0.801.2",
+    "@angular-devkit/build-angular": "~0.801.2",
+    "@angular-devkit/core": "~8.1.2",
+    "@angular-devkit/schematics": "~8.1.2",
+    "@angular/cli": "~8.1.2",
+    "@angular/compiler": "~8.1.2",
+    "@angular/compiler-cli": "~8.1.2",
+    "@angular/language-service": "~8.1.2",
+    "@ionic/angular-toolkit": "~2.0.0",
+    "@types/jasmine": "~3.3.8",
+    "@types/jasminewd2": "~2.0.3",
+    "@types/node": "~8.9.4",
+    "call-number": "^1.0.1",
+    "codelyzer": "^5.0.0",
+    "cordova-android": "^11.0.0",
+    "cordova-browser": "^6.0.0",
+    "cordova-ios": "^6.3.0",
+    "cordova-plugin-camera": "^6.0.0",
+    "cordova-plugin-device": "^2.0.2",
+    "cordova-plugin-inappbrowser": "^4.1.0",
+    "cordova-plugin-ionic-keyboard": "^2.2.0",
+    "cordova-plugin-ionic-webview": "^5.0.0",
+    "cordova-plugin-splashscreen": "^5.0.2",
+    "cordova-plugin-statusbar": "^2.4.2",
+    "ionic": "^5.4.16",
+    "jasmine-core": "~3.4.0",
+    "jasmine-spec-reporter": "~4.2.1",
+    "karma": "~4.1.0",
+    "karma-chrome-launcher": "~2.2.0",
+    "karma-coverage-istanbul-reporter": "~2.0.1",
+    "karma-jasmine": "~2.0.1",
+    "karma-jasmine-html-reporter": "^1.4.0",
+    "mx.ferreyra.callnumber": "0.0.2",
+    "onesignal-cordova-plugin": "^3.3.0",
+    "phonegap-plugin-barcodescanner": "^8.1.0",
+    "protractor": "~5.4.0",
+    "ts-node": "~7.0.0",
+    "tslint": "~5.15.0",
+    "typescript": "~3.4.3"
+  },
+  "description": "An Ionic project",
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-geolocation": {},
+      "cordova-plugin-network-information": {},
+      "cordova-sqlite-storage": {},
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-ionic-keyboard": {},
+      "cordova-plugin-camera": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+",
+        "ANDROIDX_CORE_VERSION": "1.6.+"
+      },
+      "cordova-plugin-inappbrowser": {},
+      "phonegap-plugin-barcodescanner": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      },
+      "mx.ferreyra.callnumber": {},
+      "cordova-plugin-ionic-webview": {},
+      "onesignal-cordova-plugin": {},
+      "call-number": {}
+    },
+    "platforms": [
+      "browser",
+      "android",
+      "ios"
+    ]
+  }
+}
+
+
+
+C:\Users\omar.perez\Documents\GitHub\TasWebbApplication>ionic info      
+
+Ionic:
+
+   Ionic CLI                     : 5.4.16
+   Ionic Framework               : @ionic/angular 4.8.1
+   @angular-devkit/build-angular : 0.801.3
+   @angular-devkit/schematics    : 8.1.3
+   @angular/cli                  : 8.1.3
+   @ionic/angular-toolkit        : 2.0.0
+
+Cordova:
+
+   Cordova CLI       : 12.0.0 (cordova-lib@12.0.1)
+   Cordova Platforms : android 11.0.0
+   Cordova Plugins   : cordova-plugin-ionic-keyboard 2.2.0, cordova-plugin-ionic-webview 5.0.0, cordova-plugin-ionic 5.5.3, (and 11 other plugins)
+
+Utility:
+
+   cordova-res : not installed
+   native-run  : not installed
+
+System:
+
+   NodeJS : v20.10.0 (C:\Program Files\nodejs\node.exe)
+   npm    : 10.8.1
+   OS     : Windows 10
