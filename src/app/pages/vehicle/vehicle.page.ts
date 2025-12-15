@@ -53,7 +53,8 @@ export class VehiclePage {
     private vehicleService:VehicleService
   ) {}
 
-  ionViewWillEnter() {    
+  ionViewWillEnter() {   
+    debugger; 
     if (this.validAccess()) {
       this.getAliParams();
       this.isUserLoogued();
@@ -305,12 +306,26 @@ export class VehiclePage {
   }
 
     getAliParams() {
-    this.vehicleService.GetDocumentsValidationCompany(this._sesion.GetThirdPartie().IdEmpresa).subscribe(resp => {
+      
+      if(this._sesion.GetThirdPartie()!=undefined){
+            this.vehicleService.GetDocumentsValidationCompany(this._sesion.GetThirdPartie().IdEmpresa).subscribe(resp => {
       if (resp != null && resp.Retorno == 0) {
         debugger;
         console.log(resp.ObjTransaction);
         this.aliParams = resp.ObjTransaction;
       }
     })
+      }
+      else {
+                 this.vehicleService.GetDocumentsValidationCompany(this._sesion.GetUser().IdEmpresa).subscribe(resp => {
+      if (resp != null && resp.Retorno == 0) {
+        debugger;
+        console.log(resp.ObjTransaction);
+        this.aliParams = resp.ObjTransaction;
+      }
+    })
+      }
+
+      
   }
 }

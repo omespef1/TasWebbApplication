@@ -97,7 +97,6 @@
   <div style="display: none;">
     <ion-input required name="CiudadId" [(ngModel)]="model.CiudadId"></ion-input>
     <ion-input required name="tipoContratoId" [(ngModel)]="model.TipoContratoId"></ion-input>
-    <ion-input required name="tipoContratoId" [(ngModel)]="model.TipoContratoId"></ion-input>
   </div>
   <ion-button [disabled]= "!contractForm.form.valid || sendingContract" type="submit"  expand="full"  color="secondary">      
     <ion-spinner  color="primary" *ngIf="sendingContract" slot="end"></ion-spinner>

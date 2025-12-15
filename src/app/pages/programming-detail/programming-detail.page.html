@@ -154,7 +154,7 @@ Validar pasajero
     </ion-item>
   </ion-item>     
   
-  <ng-container *ngIf="serviceInit && (allPointsControls | async).length>0 ">
+  <ng-container *ngIf="serviceInit && (allPointsControls | async)?.length > 0">
     <ion-item class="header" lines="none" color="secondary">
       <ion-icon slot="start" name="locate"></ion-icon>
       <ion-label>PUNTOS DE CONTROL</ion-label>
