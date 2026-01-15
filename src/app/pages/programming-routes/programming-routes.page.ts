@@ -18,14 +18,14 @@ import { finalize } from 'rxjs/operators';
   templateUrl: "./programming-routes.page.html",
   styleUrls: ["./programming-routes.page.scss"],
 })
-export class ProgrammingRoutesPage  {
+export class ProgrammingRoutesPage {
   programmings: any[] = [];
-  vehicleApprobed:vehicle;
+  vehicleApprobed: vehicle;
   loading = false;
   canEdit = true;
-  locating=false;
-  activeService : ServicesRequest = new ServicesRequest();
-  selectedServiceId:number=0;
+  locating = false;
+  activeService: ServicesRequest = new ServicesRequest();
+  selectedServiceId: number = 0;
   constructor(
     private _serviceRequest: ServicesRequestService,
     public _session: SessionService,
@@ -34,43 +34,43 @@ export class ProgrammingRoutesPage  {
     private _nav: NavController,
     private _modal: ModalController,
     private genTercerosService: GENTercerosService,
-    private alertController:AlertController,
-    private callService:CallService,
-    private auth:AuthService
-    
-    ) { }
+    private alertController: AlertController,
+    private callService: CallService,
+    private auth: AuthService
 
- 
-  ionViewWillEnter(){
-   this.GetProgramming();
+  ) { }
+
+
+  ionViewWillEnter() {
+    this.GetProgramming();
   }
-     
-   
-  
+
+
+
   GetProgramming(event = null) {
     debugger;
-  // console.log( this._session.GetThirdPartie());
+    // console.log( this._session.GetThirdPartie());
     this.loading = true;
     this._serviceRequest
       .GetServicesRequestRoutes(
-        this._session.GetUser().IdEmpresa     , this._session.GetUser().IdTercero  
+        this._session.GetUser().IdEmpresa, this._session.GetUser().IdTercero
       )
-      .pipe( finalize(() => {
-          this.loading = false;
-        }))       
+      .pipe(finalize(() => {
+        this.loading = false;
+      }))
       .subscribe((resp) => {
         if (event) {
           event.target.complete();
         }
         this.loading = false;
-        if (resp.Retorno==0 && resp.ObjTransaction) {
+        if (resp.Retorno == 0 && resp.ObjTransaction) {
           this.programmings = resp.ObjTransaction;
-          if(this.programmings.length==0){
-            this._alert.presentToast('No hay rutas programadas',3000,'top');
+          if (this.programmings.length == 0) {
+            this._alert.presentToast('No hay rutas programadas', 3000, 'top');
           }
-        }else {
-          this._alert.presentToast(resp.TxtError,3000,'top');
-          this.programmings=[];
+        } else {
+          this._alert.presentToast(resp.TxtError, 3000, 'top');
+          this.programmings = [];
         }
       });
   }
@@ -85,29 +85,29 @@ export class ProgrammingRoutesPage  {
   //   this.nav.navigateForward("tabs/programming/programming-detail", params);
   // }
 
-  singUp(requestId:number){
-  
-    this.selectedServiceId=requestId;
+  singUp(requestId: number) {
+
+    this.selectedServiceId = requestId;
     this._serviceRequest.signUpPassenger(requestId, this._session.GetUser().IdEmpresa, this._session.GetUser().IdTercero)
-    .pipe( finalize(() => {
-      this.loading = false;
-      this.selectedServiceId=0;
-    }))
-    .subscribe((resp)=>{
-      if (resp.Retorno==0) {
-        this._alert.successSweet("Inscripción exitosa");
-        this.GetProgramming();
-      }else {
-        this._alert.presentToast(resp.TxtError,3000,'top');       
-      }
-    });
+      .pipe(finalize(() => {
+        this.loading = false;
+        this.selectedServiceId = 0;
+      }))
+      .subscribe((resp) => {
+        if (resp.Retorno == 0) {
+          this._alert.successSweet("Inscripción exitosa");
+          this.GetProgramming();
+        } else {
+          this._alert.presentToast(resp.TxtError, 3000, 'top');
+        }
+      });
   }
 
 
 
-  goService(){
+  goService() {
 
-    if(this.activeService.SolicitudId>0){
+    if (this.activeService.SolicitudId > 0) {
 
       let params: NavigationExtras = {
         state: {
@@ -121,17 +121,33 @@ export class ProgrammingRoutesPage  {
     }
   }
 
-  goServiceVip(){
+  goServiceVip() {
 
-      this._nav.navigateForward("tabs/programming/programming-user-new");
-  
+    this._nav.navigateForward("tabs/programming/programming-user-new");
+
+  }
+
+  cancelService(requestId: number) {
+    this.selectedServiceId = requestId;
+    this._serviceRequest.PostCancelServicePassenger(this._session.GetUser().IdEmpresa, requestId, this._session.GetUser().IdTercero)
+      .pipe(finalize(() => {
+        this.loading = false;
+        this.selectedServiceId = 0;
+      }))
+      .subscribe((resp) => {
+        if (resp.Retorno == 0) {
+          this._alert.successSweet("Cancelación exitosa");
+          this.GetProgramming();
+        } else {
+          this._alert.presentToast(resp.TxtError, 3000, 'top');
+        }
+      });
   }
 
 
 
-
-  call(callNumber:string){
-  this.callService.call(callNumber);
+  call(callNumber: string) {
+    this.callService.call(callNumber);
 
   }
 

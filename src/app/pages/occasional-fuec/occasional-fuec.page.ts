@@ -58,7 +58,8 @@ export class OccasionalFuecPage implements OnInit {
   thirdDriver: ThirdPartie = new ThirdPartie();
   carSelected: vehicle = new vehicle();
   monthShortNames = "Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Sep, Oct, Nov, Dic"
-  today = new Date().toISOString();
+  today = this.getLocalISOString(new Date());
+  nextYear = this.getLocalISOString(new Date(new Date().setFullYear(new Date().getFullYear() + 1)));
   existClient=false;
   ngOnInit() {
 
@@ -66,6 +67,13 @@ export class OccasionalFuecPage implements OnInit {
     this.loadTravehicle();
 
   }
+
+  getLocalISOString(date: Date): string {
+    const offset = date.getTimezoneOffset();
+    const localDate = new Date(date.getTime() - (offset * 60 * 1000));
+    return localDate.toISOString();
+  }
+
   scrollTop() {
     this.ionContent.scrollToTop(300);
   }
