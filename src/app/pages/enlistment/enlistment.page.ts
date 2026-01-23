@@ -43,7 +43,7 @@ export class EnlistmentPage implements OnInit {
   @ViewChildren(IonRadioGroup) divs: QueryList<IonRadioGroup>;
   constructor(
     private _service: EnlistmentService,
-    private _sesion: SessionService,
+    public _sesion: SessionService,
     private router: Router,
     private _alert: AlertService,
     private camera: Camera,
@@ -53,6 +53,7 @@ export class EnlistmentPage implements OnInit {
     private _auth: AuthService,
     private _thirdParties: ThirdPartiesService
   ) {}
+  numeroViaje='.';
   enlistment: enlistment[] = [];
   manchecklist: manchecklist;
   car: vehicle;
@@ -160,7 +161,7 @@ export class EnlistmentPage implements OnInit {
         Estado: "",
         Observaciones: "",
         Acepto: "",
-        NumeroViaje: ".",
+        NumeroViaje: this.numeroViaje,
         Kilometraje: this.car.NuevoKilometraje,
         IdTercero: this.third.IdTercero,
         Reviso: reviso,

@@ -35,17 +35,23 @@ export class PendingsPage implements OnInit {
   Guardar() {
     try {
       this.saving = true;
-      if (this.pendings.filter(x => x.Restinge === "S" && x.Resuelto === "N").length> 0) {
-      throw new Error("Existen pendientes por resolver de tipo restrictivo.No puedes continuar");        
-      }
-      this._service.UpdatePendings(this.pendings).subscribe(resp => {
-        this.saving = false;
-        if (resp.Retorno === 1) {          
-         this.alert.showAlert('Error',resp.TxtError);
-         return;
-        }       
-        if(resp.Retorno==0){
-          this._vehicle
+      // if (this.pendings.filter(x => x.Restinge === "S" && x.Resuelto === "N").length> 0) {
+      // throw new Error("Existen pendientes por resolver de tipo restrictivo.No puedes continuar");        
+      // }
+      // this._service.UpdatePendings(this.pendings).subscribe(resp => {
+      //   this.saving = false;
+      //   if (resp.Retorno === 1) {          
+      //    this.alert.showAlert('Error',resp.TxtError);
+      //    return;
+      //   }       
+      //   if(resp.Retorno==0){
+    
+         
+          
+      //   }
+      // });
+
+            this._vehicle
           .ArmaProtocolo(
             this._sesion.GetBussiness(),
             this.car,
@@ -64,10 +70,6 @@ export class PendingsPage implements OnInit {
             this.alert.presentToast('Pendientes actualizados',3000);
             this._nav.navigateForward("tabs/vehicle/enlistemnt", params);
           });
-         
-          
-        }
-      });
     } catch (err) {
       //console.log(err);
       this.saving=false;

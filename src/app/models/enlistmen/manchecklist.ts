@@ -8,7 +8,7 @@ export class manchecklist {
   Estado: string;
   Observaciones: string;
   Acepto: string;
-  NumeroViaje: string;
+  NumeroViaje: string ;
   Kilometraje: number;
   CentroId: number;
   detalle: manchecklistDetalle[];

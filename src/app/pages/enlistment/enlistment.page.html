@@ -82,6 +82,18 @@
           </ion-list>
         </ng-container>
       </div>
+
+       <ion-list inset="true" *ngIf="_sesion.GetUser()!=undefined && _sesion.GetUser().Grupo == 'SUPERVISOR'">
+        <ion-list-header color="secondary">
+          <ion-label>INFORMACIÓN ADICIONAL</ion-label>
+        </ion-list-header>
+        <ion-item>
+          <ion-icon slot="start" name="document-text" color="secondary"></ion-icon>
+          <ion-label position="floating">Número de Viaje</ion-label>
+          <ion-input type="text" name="numeroViaje" [(ngModel)]="numeroViaje" 
+                     placeholder="Ingrese el número de viaje"></ion-input>
+        </ion-item>
+      </ion-list>
   
       <ion-button [disabled]="!enlistmentForm.form.valid || saving || done " expand="block" type="submit">
        

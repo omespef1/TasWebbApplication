@@ -35,8 +35,8 @@ export class VehiclePage {
   vehicleFavorite: vehicle = new vehicle();
   loading = false;
   working = false;
-  odometerInfo:KunasofResponse|undefined;
-  calculating:boolean =false;
+  odometerInfo: KunasofResponse | undefined;
+  calculating: boolean = false;
   aliParams: aliparam | undefined;
 
   constructor(
@@ -48,22 +48,22 @@ export class VehiclePage {
     private _nav: NavController,
     public _thirdParties: ThirdPartiesService,
     private _modal: ModalController,
-    private auth:AuthService,
-    private kunasoftService:KunasoftService,
-    private vehicleService:VehicleService
-  ) {}
+    private auth: AuthService,
+    private kunasoftService: KunasoftService,
+    private vehicleService: VehicleService
+  ) { }
 
-  ionViewWillEnter() {   
-    debugger; 
+  ionViewWillEnter() {
+    debugger;
     if (this.validAccess()) {
       this.getAliParams();
       this.isUserLoogued();
       if (
-       this._thirdParties.GetThirdParties().length==0
+        this._thirdParties.GetThirdParties().length == 0
       ) {
         this.goThirdParties();
-      } else {        
-       // this.thirdPartie = this._sesion.GetThirdPartie();
+      } else {
+        // this.thirdPartie = this._sesion.GetThirdPartie();
         this.GetVehicleInformation();
         if (
           this._thirdParties.GetThirdParties() != undefined &&
@@ -142,9 +142,9 @@ export class VehiclePage {
   }
 
 
-  getKilometrajeFavoritecards(){
+  getKilometrajeFavoritecards() {
     this.calculating = true;
-    this.vehiclesFilter.forEach(item=>{
+    this.vehiclesFilter.forEach(item => {
       this.getKilometraje(item)
 
     })
@@ -166,12 +166,13 @@ export class VehiclePage {
             car
           )
           .subscribe((resp) => {
-            try {              
+            try {
+              debugger;
               if (resp.Retorno === 1) {
                 throw error(resp.TxtError);
               }
 
-              if(resp.Retorno===2){
+              if (resp.Retorno === 2) {
                 this._alert.showAlert("Advertencia", resp.TxtError);
               }
               //console.log(car);
@@ -187,28 +188,43 @@ export class VehiclePage {
                   `Nuevo Kilometraje no puede ser superior al tope estipulado: ${paramValid.Par_TopeKilometraje}`
                 );
               }
-              this._vehicle
-              .ArmaProtocolo(
-                this._sesion.GetBussiness(),
-                car,
-                this._sesion.GetThirdPartie()
-              )
-              .subscribe((resp) => {
-                if (resp.Retorno === 1) {
-                  throw Error(resp.TxtError);
-                }
-                this._sesion.SetKilometerCar(car.NuevoKilometraje);
-                let params: NavigationExtras = {
-                  state: {
-                    car: car,
-                    params: paramValid
-                  },
-                };
-                car.loading = false;
 
-                // this.router.navigateByUrl("tabs/enlistment", params);
-                this.goEnlistment(params);
-              });
+
+              if (paramValid.MostrarPendientesApp) {
+                this._vehicle
+                  .GetManPendientes(this._sesion.GetBussiness(), car)
+                  .subscribe((resp) => {
+                    if (resp.Retorno === 0) {
+                      car.loading = false;
+                      let pendings: pending[] = resp.ObjTransaction;
+                      if (pendings != null && pendings.length > 0) {
+                        let paramsPendings: NavigationExtras = {
+                          state: {
+                            pendings: pendings,
+                            car: car,
+                          },
+                        };
+                        this._nav.navigateForward(
+                          "tabs/vehicle/pendings",
+                          paramsPendings
+                        );
+                      }
+                      else {
+                         this.continueEnlistment(car, paramValid);
+                      }
+                    }
+                  });
+
+              }
+
+              else {
+
+                this.continueEnlistment(car, paramValid);
+
+              }
+
+
+
             } catch (err) {
               //console.log(err);
               car.loading = false;
@@ -224,7 +240,7 @@ export class VehiclePage {
         this._sesion.SetKilometerCar(car.NuevoKilometraje);
         let params: NavigationExtras = {
           state: {
-            car: car,           
+            car: car,
           },
         };
         car.loading = false;
@@ -234,6 +250,37 @@ export class VehiclePage {
         this._alert.showAlert("Error", "Ingrese kilometraje del vehículo");
       }
     }
+  }
+
+  continueEnlistment(car: vehicle, paramValid: aliparam) {
+
+
+                this._vehicle
+                  .ArmaProtocolo(
+                    this._sesion.GetBussiness(),
+                    car,
+                    this._sesion.GetThirdPartie()
+                  )
+                  .subscribe((resp) => {
+                    if (resp.Retorno === 1) {
+                      throw Error(resp.TxtError);
+                    }
+
+
+
+                    this._sesion.SetKilometerCar(car.NuevoKilometraje);
+                    let params: NavigationExtras = {
+                      state: {
+                        car: car,
+                        params: paramValid
+                      },
+                    };
+                    car.loading = false;
+
+                    // this.router.navigateByUrl("tabs/enlistment", params);
+                    this.goEnlistment(params);
+                  });
+
   }
 
   filterVehicles(event) {
@@ -276,14 +323,14 @@ export class VehiclePage {
       component: ThirdPartiesPage,
     });
     modal.present();
-    modal.onDidDismiss().then(data=>{
-      if(this._thirdParties.GetThirdParties().length>0){
+    modal.onDidDismiss().then(data => {
+      if (this._thirdParties.GetThirdParties().length > 0) {
         this.GetVehicleInformation();
         this.thirdPartiesSelected = this._thirdParties.GetThirdParties();
       }
-       
-    
-    
+
+
+
     })
   }
 
@@ -292,40 +339,40 @@ export class VehiclePage {
   }
 
 
-  getKilometraje(vehicle:vehicle){
-    this.calculating=true;
-    this.kunasoftService.getKilometraje(this._sesion.GetThirdPartie().IdEmpresa,vehicle.PlacaVehiculo )
-    .subscribe(resp=>{
-      this.calculating=false;
-      if(resp!= null && resp.Retorno==0){
+  getKilometraje(vehicle: vehicle) {
+    this.calculating = true;
+    this.kunasoftService.getKilometraje(this._sesion.GetThirdPartie().IdEmpresa, vehicle.PlacaVehiculo)
+      .subscribe(resp => {
+        this.calculating = false;
+        if (resp != null && resp.Retorno == 0) {
           this.odometerInfo = resp.ObjTransaction;
-         vehicle.NuevoKilometraje = this.odometerInfo.ODOMETRO;
-      }
-      
-    })
+          vehicle.NuevoKilometraje = this.odometerInfo.ODOMETRO;
+        }
+
+      })
   }
 
-    getAliParams() {
-      
-      if(this._sesion.GetThirdPartie()!=undefined){
-            this.vehicleService.GetDocumentsValidationCompany(this._sesion.GetThirdPartie().IdEmpresa).subscribe(resp => {
-      if (resp != null && resp.Retorno == 0) {
-        debugger;
-        console.log(resp.ObjTransaction);
-        this.aliParams = resp.ObjTransaction;
-      }
-    })
-      }
-      else {
-                 this.vehicleService.GetDocumentsValidationCompany(this._sesion.GetUser().IdEmpresa).subscribe(resp => {
-      if (resp != null && resp.Retorno == 0) {
-        debugger;
-        console.log(resp.ObjTransaction);
-        this.aliParams = resp.ObjTransaction;
-      }
-    })
-      }
+  getAliParams() {
 
-      
+    if (this._sesion.GetThirdPartie() != undefined) {
+      this.vehicleService.GetDocumentsValidationCompany(this._sesion.GetThirdPartie().IdEmpresa).subscribe(resp => {
+        if (resp != null && resp.Retorno == 0) {
+          debugger;
+          console.log(resp.ObjTransaction);
+          this.aliParams = resp.ObjTransaction;
+        }
+      })
+    }
+    else {
+      this.vehicleService.GetDocumentsValidationCompany(this._sesion.GetUser().IdEmpresa).subscribe(resp => {
+        if (resp != null && resp.Retorno == 0) {
+          debugger;
+          console.log(resp.ObjTransaction);
+          this.aliParams = resp.ObjTransaction;
+        }
+      })
+    }
+
+
   }
 }

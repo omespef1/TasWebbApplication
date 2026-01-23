@@ -60,6 +60,11 @@
       <ion-label>Coordenadas</ion-label>
       <ion-note slot="end">{{ enlistment.Latitude }}, {{ enlistment.Longitude }}</ion-note>
     </ion-item>
+      <ion-item>
+      <ion-icon slot="start" name="airplane"></ion-icon>
+      <ion-label>Número Viaje</ion-label>
+      <ion-note slot="end">{{ enlistment.NumeroViaje }}</ion-note>
+    </ion-item>
 
   </ion-list>
   <ion-list-header color="secondary" tappable (click)="showLocation=!showLocation">

@@ -4,9 +4,12 @@ export class aliparam {
   ValidaDocAlis: string;
   Predefinidos:Boolean;
   BusquedaPlaca:boolean;
+  MostrarPendientesApp:boolean;
+  
 
   constructor(){
     this.Predefinidos = true;
     this.BusquedaPlaca = true;
+    this.MostrarPendientesApp = false;
   }
 }
