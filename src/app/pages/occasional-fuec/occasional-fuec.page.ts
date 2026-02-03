@@ -23,6 +23,7 @@ import { Router } from '@angular/router';
 import { PoliticalDivisionService } from '../../services/political-division/political-division.service';
 import { ContractTypeService } from '../../services/contracts-type/contract-type.service';
 import { GENTercerosService } from 'src/app/services/GENTerceros/genterceros.service';
+import { FueqService } from 'src/app/services/fueq/fueq.service';
 
 
 @Component({
@@ -36,7 +37,7 @@ export class OccasionalFuecPage implements OnInit {
     private sesion: SessionService, private vehicleService: VehicleService, private ocasionalFuec: OccasionalFuecService,
     private alertService: AlertService, private router: NavController,
     private politicalService: PoliticalDivisionService,
-    private typeContractService: ContractTypeService,private genTercerosService:GENTercerosService) {
+    private typeContractService: ContractTypeService,private genTercerosService:GENTercerosService,private fuecService:FueqService) {
 
 
     this.thirdPartie = this.sesion.GetThirdPartie();
@@ -61,13 +62,23 @@ export class OccasionalFuecPage implements OnInit {
   today = this.getLocalISOString(new Date());
   nextYear = this.getLocalISOString(new Date(new Date().setFullYear(new Date().getFullYear() + 1)));
   existClient=false;
+  fueParams: { TipoListaVehiculosFuec:number }= { TipoListaVehiculosFuec: 0 };
   ngOnInit() {
 
     this.getMyCar();
     this.loadTravehicle();
+    this.getFueParams();
 
   }
 
+
+  getFueParams(){
+    this.fuecService.GetFueqParams(this.thirdPartie.IdEmpresa).subscribe(resp=>{
+      if (resp.Retorno == 0 && resp.ObjTransaction != null) {
+        this.fueParams = resp.ObjTransaction;
+      }
+  } )
+  }
   getLocalISOString(date: Date): string {
     const offset = date.getTimezoneOffset();
     const localDate = new Date(date.getTime() - (offset * 60 * 1000));

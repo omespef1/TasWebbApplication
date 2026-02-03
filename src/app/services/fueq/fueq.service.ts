@@ -13,4 +13,8 @@ export class FueqService {
   GetFueqs(EmpresaId:number,ConductorId1:number){
    return this._http.Get<transaction>(`/fueq?EmpresaId=${EmpresaId}&ConductorId1=${ConductorId1}`)
   }
+
+    GetFueqParams(EmpresaId:number){
+   return this._http.Get<transaction>(`/Fueq/GetFueParams?EmpresaId=${EmpresaId}`)
+  }
 }

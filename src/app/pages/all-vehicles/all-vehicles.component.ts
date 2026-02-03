@@ -31,7 +31,7 @@ export class AllVehiclesComponent implements OnInit {
 
   GetData() {
     this.loading=true;
-    this.vehiclesService.GetAllActiveVehicles(this.thirdPartie.IdEmpresa).subscribe(resp=>{
+    this.vehiclesService.GetVehiclesByFuecConfig(this.thirdPartie.IdEmpresa,this.thirdPartie.IdTercero).subscribe(resp=>{
       this.loading=false;     
       if (resp.Retorno === 0 && resp.ObjTransaction!=null) {
         this.dataList = resp.ObjTransaction;

@@ -32,6 +32,12 @@ export class VehicleService {
     //console.log('consultando vehículos...')
    return this._http.Get<transaction>(`/Vehicles/GetAllVehicles?companyId=${ companyId}`)
   }
+
+  
+  GetVehiclesByFuecConfig(companyId:number,idTercero:number){
+    //console.log('consultando vehículos...')
+   return this._http.Get<transaction>(`/Vehicles/GetAllVehiclesFuecConfig?companyId=${ companyId}&conductorId=${idTercero}`)
+  }
   getMyCar(companyId:number,thirdPartieId:number){
     //console.log('consultando vehículos...')
    return this._http.Get<transactionObj<vehicle>>(`/Vehicles/mycar?companyId=${companyId}&thirdPartieId=${thirdPartieId}`)
