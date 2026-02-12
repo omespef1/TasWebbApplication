@@ -144,7 +144,7 @@
     <ion-list-header color="secondary">
       <ion-label>VEHÍCULO</ion-label>
     </ion-list-header>
-    <ion-item [disabled]="true" tappable button  (click)="showPopupVehicles()">
+    <ion-item [disabled]="fueParams.TipoListaVehiculosFuec==0" tappable button  (click)="showPopupVehicles()">
       <ion-icon slot="start" name="car"></ion-icon>
       <ion-label position="floating">Vehículo</ion-label>
       <ion-note slot="end"> {{ carSelected.PlacaVehiculo}}</ion-note>
