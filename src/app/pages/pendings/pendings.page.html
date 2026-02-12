@@ -18,7 +18,12 @@
               <ion-icon color="secondary" slot="end" [name]="'close-circle'"></ion-icon>
               <ion-label>No Resuelto</ion-label> 
               <ion-radio color="secondary" slot="start" value="N"></ion-radio>
-            </ion-item>                                 
+            </ion-item>  
+            <ion-item>
+        <ion-icon slot="start" name="clipboard"></ion-icon>
+        <ion-label position="floating">Comentarios</ion-label>
+       <ion-note slot="end"> {{ pending.Comentario }} </ion-note>
+      </ion-item>                               
           </ion-radio-group>      
       </ion-list>
 
