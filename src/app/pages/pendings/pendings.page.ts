@@ -20,18 +20,28 @@ export class PendingsPage implements OnInit {
   pendings: pending[];
   saving: boolean = false;
   car: vehicle;
+
+  // Dashboard stats
+  totalPendings: number = 0;
+  totalRestrictions: number = 0;
+
   constructor(private _service: PendingService, private router: Router,
-    private alert:AlertService,private _vehicle:VehicleService,
-    private _sesion:SessionService,private _nav:NavController) {}
+    private alert: AlertService, private _vehicle: VehicleService,
+    private _sesion: SessionService, private _nav: NavController) { }
 
   ngOnInit() {
     this.car = this.router.getCurrentNavigation().extras.state.car;
-
     this.pendings = this.router.getCurrentNavigation().extras.state.pendings;
+
+    // Calculate stats
+    if (this.pendings) {
+      this.totalPendings = this.pendings.filter(p => p.Resuelto !== 'S').length;
+      this.totalRestrictions = this.pendings.filter(p => p.Restinge === 'S' && p.Resuelto !== 'S').length;
+    }
   }
 
-  
- 
+
+
   Guardar() {
     try {
       this.saving = true;
@@ -45,35 +55,35 @@ export class PendingsPage implements OnInit {
       //    return;
       //   }       
       //   if(resp.Retorno==0){
-    
-         
-          
+
+
+
       //   }
       // });
 
-            this._vehicle
-          .ArmaProtocolo(
-            this._sesion.GetBussiness(),
-            this.car,
-            this._sesion.GetThirdPartie()
-          )
-          .subscribe(resp => {
-            if (resp.Retorno === 1) {
-              throw Error(resp.TxtError);
+      this._vehicle
+        .ArmaProtocolo(
+          this._sesion.GetBussiness(),
+          this.car,
+          this._sesion.GetThirdPartie()
+        )
+        .subscribe(resp => {
+          if (resp.Retorno === 1) {
+            throw Error(resp.TxtError);
+          }
+          this._sesion.SetKilometerCar(this.car.NuevoKilometraje);
+          let params: NavigationExtras = {
+            state: {
+              car: this.car
             }
-            this._sesion.SetKilometerCar(this.car.NuevoKilometraje);
-            let params: NavigationExtras = {
-              state: {
-                car: this.car
-              }
-            };
-            this.alert.presentToast('Pendientes actualizados',3000);
-            this._nav.navigateForward("tabs/vehicle/enlistemnt", params);
-          });
+          };
+          this.alert.presentToast('Pendientes actualizados', 3000);
+          this._nav.navigateForward("tabs/vehicle/enlistemnt", params);
+        });
     } catch (err) {
       //console.log(err);
-      this.saving=false;
-     this.alert.showAlert('Error',err);
+      this.saving = false;
+      this.alert.showAlert('Error', err);
     }
   }
 }

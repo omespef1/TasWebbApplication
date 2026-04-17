@@ -18,6 +18,7 @@ export class manchecklist {
   sending:boolean;
   drivers:number[];
   PlacaVehiculo:string;
+
 }
 export class manchecklistDetalle {
 constructor(){
@@ -34,4 +35,6 @@ constructor(){
   Check_Image:string;
   show:boolean;
   HasImage:number;
+    Novedad:boolean;
+  
 }

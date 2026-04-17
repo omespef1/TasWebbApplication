@@ -189,6 +189,7 @@ export class EnlistmentPage implements OnInit {
           Check_Image: item.check_foto,
           show: true,
           HasImage: 0,
+          Novedad : item.respuestaUsuario != item.respuesta
         });
       });
   

@@ -1,38 +1,92 @@
-<app-header  headerName="Pendientes">
+<ion-header class="ion-no-border premium-header">
+  <ion-toolbar class="transparent-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
 
-</app-header>
-<ion-content fullscreen>
-<form #pendingForm="ngForm" (ngSubmit)="Guardar()">
-  <div *ngFor="let pending of pendings;let i = index">    
-      <ion-list inset="true">                
-          <ion-radio-group [(ngModel)]="pending.Resuelto" required [name]="'pending'+ i">
-            <ion-list-header color="primary">
-              <ion-label>{{pending.Pendiente}}</ion-label>
-            </ion-list-header>
-            <ion-item [disabled]="true">
-              <ion-icon color="secondary" slot="end" [name]="'checkmark-circle'"></ion-icon>
-              <ion-label>Resuelto</ion-label>
-              <ion-radio color="secondary" slot="start" value="S"></ion-radio>
-            </ion-item>
-          <ion-item [disabled]="true">
-              <ion-icon color="secondary" slot="end" [name]="'close-circle'"></ion-icon>
-              <ion-label>No Resuelto</ion-label> 
-              <ion-radio color="secondary" slot="start" value="N"></ion-radio>
-            </ion-item>  
-            <ion-item>
-        <ion-icon slot="start" name="clipboard"></ion-icon>
-        <ion-label position="floating">Comentarios</ion-label>
-       <ion-note slot="end"> {{ pending.Comentario }} </ion-note>
-      </ion-item>                               
-          </ion-radio-group>      
-      </ion-list>
-
+  <div class="header-title-large">
+    <h1>Pendientes</h1>
+    <p>Validación actual del vehículo</p>
   </div>
-  <ion-button [disabled]="!pendingForm.form.valid || saving " expand="block" type="submit">
-    <ion-icon *ngIf="!saving" slot="start" name="checkmark-circle"></ion-icon>
-    <ion-spinner *ngIf="saving" slot="start"></ion-spinner>
-    SIGUIENTE
-  </ion-button>
 
-</form>
+  <div class="header-summary">
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="icon-wrapper">
+          <ion-icon name="list-outline"></ion-icon>
+        </div>
+        <div class="summary-info">
+          <span class="summary-label">Total</span>
+          <span class="summary-value">{{ totalPendings }}</span>
+        </div>
+      </div>
+      <div class="summary-card restriction" [class.active]="totalRestrictions > 0">
+        <div class="icon-wrapper">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+        </div>
+        <div class="summary-info">
+          <span class="summary-label">Restringen</span>
+          <span class="summary-value">{{ totalRestrictions }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-header>
+
+<ion-content class="content-background">
+  <div class="ion-padding-top">
+    <div *ngIf="pendings && pendings.length > 0; else noPendings" class="list-container">
+
+      <div *ngFor="let pending of pendings; let i = index" class="premium-card bounce-in"
+        [style.animation-delay]="(i * 0.05) + 's'">
+
+        <div class="card-body">
+          <div class="card-top">
+            <h3 class="pending-title">{{ pending.Pendiente }}</h3>
+            <div *ngIf="pending.Restinge === 'S'" class="restriction-pill">
+              RESTRINGE
+            </div>
+          </div>
+
+          <div class="card-details">
+            <div class="status-indicator">
+              <ion-icon [name]="pending.Resuelto === 'S' ? 'checkmark-circle' : 'time'"
+                [class.text-success]="pending.Resuelto === 'S'" [class.text-warning]="pending.Resuelto !== 'S'">
+              </ion-icon>
+              <span [class.text-success]="pending.Resuelto === 'S'" [class.text-warning]="pending.Resuelto !== 'S'">
+                {{ pending.Resuelto === 'S' ? 'Resuelto' : 'Pendiente' }}
+              </span>
+            </div>
+
+            <div *ngIf="pending.Comentario" class="comment-section">
+              <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+              <span>{{ pending.Comentario }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <ng-template #noPendings>
+      <div class="empty-state">
+        <div class="empty-icon-circle">
+          <ion-icon name="shield-checkmark"></ion-icon>
+        </div>
+        <h3>Sin Pendientes</h3>
+        <p>Excelente. El vehículo cumple con todos los requisitos para operar.</p>
+      </div>
+    </ng-template>
+  </div>
 </ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar class="transparent-toolbar">
+    <ion-button expand="block" class="action-button bounce-in delay-500" (click)="Guardar()" [disabled]="saving">
+      <ion-spinner *ngIf="saving" name="crescent"></ion-spinner>
+      <span *ngIf="!saving">CONTINUAR</span>
+      <ion-icon *ngIf="!saving" slot="end" name="arrow-forward"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>
